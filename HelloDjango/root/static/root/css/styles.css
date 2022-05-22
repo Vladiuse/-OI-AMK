@@ -1,0 +1,158 @@
+.main-wrapper{
+  padding: 70px 3% 0 3%;
+}
+
+.table-wrapper{
+  padding: 0 5%;
+}
+.sn-block{
+  margin: 15px 0;
+}
+#add-camp{
+  position: absolute;
+  right: 100;
+}
+.login{
+  position: absolute;
+  right: 0;
+  text-align: right;
+}
+.sn-block-filter{
+  margin: 10px 0;
+}
+
+#site_logo{
+  margin-right: 35px;
+  font-size: 22px;
+}
+.navbar-brand{
+  padding-bottom: 0;
+}
+.bg-success, .bg-secondary{
+  color: white;
+}
+.nav-item{
+  margin-left: 15px;
+}
+.for-form{
+  position:absolute;
+  top: 40%;
+  left: 10%;
+  width: 300px;
+  display: block;
+  margin: auto;
+  /* padding: 20% 20%; */
+}
+.for-form p{
+  color: white;
+}
+#button-login{
+  padding-left: 20%;
+  text-align: center;
+}
+.form-login-wraper{
+  margin-top: 25%;
+  text-align: center;
+  align-items: center;
+
+}
+.pixel-block{
+  font-size: 12px;
+}
+/* Реквизиты */
+.coll-block {
+  margin-top: 50px;
+  display: inline-block;
+  width: 49%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 13px;
+}
+.buttons{
+  margin: 15px 0;
+}
+.buttons a{
+  margin-right: 5px;
+}
+/* Статус кампании*/
+#main-table .camp-status button{
+  font-size: 0.8rem;
+}
+#sites-table .site-status a{
+  font-size: 0.8rem;
+}
+#domains-table .domain-status button{
+  font-size: 0.8rem;
+}
+/* ICONS */
+.fa-check-circle{
+  font-size: 13px;
+  color: green;
+}
+#main-table .fa-cogs{
+  margin: 0;
+}
+
+.fa-play-circle{
+  font-size: 25px;
+  color: green;
+}
+
+
+/* .icon-block{
+  display: inline-block;
+  } */
+  
+  .fas{
+  color: #74c0fc;
+  position: right;
+  margin-right: 10px;
+  }
+  .icon-block .fa-address-book{
+  font-size: 25px;
+
+
+  }
+
+  .tools-col .fa-user-secret{
+  font-size: 25px;
+  }
+
+  .icon-block .fa-lock {
+  font-size: 18px;
+  /* margin-left: 20px; */
+  }
+  
+  .icon-block .fa-user-edit{
+  font-size: 22px;
+  }
+  div .sn-block .fab{
+    font-size: 18px;
+    /* color: white; */
+  }
+  .icon-block .fab{
+    font-size: 24px;
+
+  }
+/* Flags */
+.flag-icon.flag-icon-squared{
+  /* width: 1.5em !important;
+  width: 30px !important; */
+  /* height: 21px; */
+  border-radius: 13px;
+  font-size: 22px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  /* filter: brightness(90%); */
+}
+/* Спиннер запуска кампании */
+#save-comp .spinner-border{
+  width: 1rem;
+  height: 1rem;
+}
+
+#old-lands i{
+  color: black;
+}
+.fa-play-circle{
+  color: green;
+}

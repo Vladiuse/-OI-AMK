@@ -1,0 +1,92 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>DjForce</title>
+    <!-- CSS -->
+<!-- <link rel="stylesheet" href="{% static 'office/bootstrap.min.css' %}"> -->
+<link rel="stylesheet" href="{% static 'bootstrap/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'root/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'root/css/flag-icon.min.css' %}">
+<!-- JS -->
+<script src="{% static 'jquery/jq.js' %}"></script>
+<script src="{% static 'bootstrap/popper.min.js' %}"></script>
+<!-- <script src="{% static 'office/bootstrap.bundle.js' %}"></script> -->
+<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'office/main.js' %}"></script>-->
+
+<!--ICONS-->
+<script src="https://kit.fontawesome.com/0960a95ef5.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="container-fluid">
+
+          <!-- <a class="navbar-brand" href="#">
+          </a> -->
+          <a class="navbar-brand  h5"  href="#" id="site_logo"><span style="color:#20aa76;">D</span>JANGO</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse clearfix" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="#">Ctrl+C</a>
+              </li>
+                                <li class="nav-item">
+                <a class="nav-link" href="#">JOIN</a>
+              </li>
+                                   <li class="nav-item">
+                <a class="nav-link" href="#">Spends</a>
+              </li>
+                                              <li class="nav-item">
+                <a class="nav-link" href="#">UrlChecker</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Архив</a>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Ссылки
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#" target="_blank">Задания Сайты</a></li>
+                  <li><a class="dropdown-item" href="#">Домены Кейтаро</a></li>
+                  <li><a class="dropdown-item" href="#" target="_blank">Admin</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown login" >
+                <a class="nav-link dropdown-toggle" ata-bs-display="static" href="#" id="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ user.username  }}
+                </a>
+                <ul class="dropdown-menu position-sticky dropdown-menu-dark"  aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#">Информация</a></li>
+<li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                </ul>
+
+              </li>
+              {% else %}
+              <style>
+                #navbarNavDropdown{
+                  flex-grow: 0;
+                }
+              </style>
+              <li class="nav-item ">
+<a class="nav-link" href="{% url 'login' %}">Войти</a>
+              </li>
+              {% endif %}
+            </ul>
+
+          </div>
+
+        </div>
+
+      </nav>
+{% block content %}
+{% endblock %}
+</body>
+</html>

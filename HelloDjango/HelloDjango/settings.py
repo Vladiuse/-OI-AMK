@@ -11,9 +11,24 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import json
+import os
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# get secret keys
+with open(os.path.join(BASE_DIR, 'secrets.json')) as secrets_file:
+    secrets = json.load(secrets_file)
+
+
+def get_secret(setting, secrets=secrets):
+    """Get secret setting or fail with ImproperlyConfigured"""
+    try:
+        return secrets[setting]
+    except KeyError:
+        raise ImproperlyConfigured("Set the {} setting".format(setting))
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +40,9 @@ SECRET_KEY = 'django-insecure-lzb2di94m4n32ogltf12736iorhyj1c3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vim-store.ru']
+ALLOWED_HOSTS = ['vim-store.ru', '127.0.0.1']
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login'
 
 
 # Application definition
@@ -37,6 +54,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps
+    'root.apps.RootConfig',
+
+    # extensions
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -67,16 +89,41 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'HelloDjango.wsgi.application'
+# WSGI_APPLICATION = 'HelloDjango.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# for MySql local server
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vladiuse_kma',
+        'USER': 'vladiuse_kma',
+        'PASSWORD':  get_secret('vladiuse_kma'),
+        'HOST': 'localhost',
+
+    }
+}
+
+# for MySql database remote
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vladiuse_kma',
+        'USER': 'vladiuse_kma',
+        'PASSWORD': get_secret('vladiuse_kma'),
+        'HOST': 'vladiuse.beget.tech',
+        'PORT': '3306',
+
     }
 }
 
