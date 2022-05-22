@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps
     'root.apps.RootConfig',
+    'kma.apps.KmaConfig',
 
     # extensions
     'django_extensions',

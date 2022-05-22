@@ -1,0 +1,54 @@
+{% extends 'root/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main-wrapper">
+    <h1>Номера для тестов</h1>
+    <div class="to-copy">
+          <h5>Пробный_заказ</h5>
+          <h5>Probniy_zakaz</h5>
+    <a href="https://ru.wikipedia.org/wiki/ISO_3166-1" target="_blank">Коды Стран ISO</a>
+      <a href="https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D1%8F%D0%B7%D1%8B%D0%BA%D0%BE%D0%B2" target="_blank">Коды языков</a>
+    </div>
+
+<div class="phones-table">
+  <table class="table table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Страна</th>
+      <th scope="col">Код ISO</th>
+      <th scope="col">Номер</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for phone in phones %}
+    <tr>
+      <th scope="row">{{phone.short}}</th>
+      <td>{{phone.ru_full_name}}</td>
+      <td>{{phone.phone}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+</div>
+</div>
+
+<style>
+  .phones-table{
+  display: flex;
+  justify-content: flex-start;
+  }
+  table{
+  max-width: 600px;
+  }
+  .to-copy{
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px 0;
+  }
+  .to-copy h5, .to-copy a{
+  margin: 0 5px;
+  }
+</style>
+
+{% endblock %}
