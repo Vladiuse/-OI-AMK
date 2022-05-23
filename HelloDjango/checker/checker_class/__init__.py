@@ -7,6 +7,8 @@ from django.conf import settings
 
 SPAN_CLASS_BACK = '__back-date '
 SPAN_DATE_ERROR = ' __debug_date_error'
+SPAN_CLASS_PERCENT = '__back-percent '
+
 TOOLBAR_HTML_FILE = str(settings.BASE_DIR) + '/checker/checker_class/front_data/block.html'
 TOOLBAR_STYLES_FILE = str(settings.BASE_DIR) + '/checker/checker_class/front_data/styles.css'
 TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker/checker_class/front_data/script.js'
@@ -52,7 +54,19 @@ class TextFixxer:
         # старая '>.*(\d{1,2}[.\\/-]\d{1,2}[.\\/-]\d{2,4}).*?<|>.*(\d\d\d\d).*?<'
         # работает но летят тэги path svg
         # self.text = re.sub(r'[<>\s]{1}(\d{1,2}[.\\/-]\d{1,2}[.\\/-]\d{2,4}|\d\d\d\d)[<>.\s]{1}', self.wrap_dates, self.text)
-        self.text = re.sub(r'<[\w\s]+>[\s.\d]*(\d\d\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4})[\s.\d]*<[/\w\s]+>', self.wrap_dates, self.text)
+        # self.text = re.sub(r'<[\w\s]+>[\s.\d]*(\d\d\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4})[\s.\d]*<[/\w\s]+>', self.wrap_dates, self.text)
+        # self.text = re.sub(r'<[\w\s]+>[\s\wА-Яа-я]*(\d\d\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4})[\s\wА-Яа-я]*<[/\w\s]+>', # добавил русские буквы
+        #                    self.wrap_dates,
+        #                    self.text)
+        self.text = re.sub(r'<[\w\s]+>[\s\wА-Яа-я.,;:"!?@#$%&*(){}\']*(\D\d\d\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4})[\s\wА-Яа-я.,;:"!?@#$%&*(){}\']*<[/\w\s]+>', # добавил Спецсимолы
+                           self.wrap_dates,
+                           self.text)
+        # ONE
+        # self.text = re.sub(r'(\d{1,3}[\s-]?%[^;])',
+        #                    self.wrap_percent,
+        #                    self.text)
+
+
 
     @staticmethod
     def span_wrap(date_s):
@@ -67,12 +81,28 @@ class TextFixxer:
     def wrap_dates(string):
         """Поиск дат хх.хх.хххх и оборачивание в тэг"""
         date_string = string.group(0)
-        # drop <svg> and <path>\d{1,2}[.\\/\-]\d{1,2}[.\\/\-]\d{2,4}
-        print(date_string)
-        # if 'svg' in date_string:
-        #     return date_string
         date = re.sub(r'\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}|\d\d\d\d', TextFixxer.span_wrap, date_string)
         return date
+
+
+    # @staticmethod
+    # def span_wrap_percent(percent):
+    #     percent = percent.group(0)
+    #     span_class = SPAN_CLASS_PERCENT
+    #     res = f'<span class="{span_class}" >{percent}</span>'
+    #     return res
+
+    # @staticmethod
+    # def wrap_percent(string):
+    #     """Поиск процентов xxx%"""
+    #     percent = string.group(0)
+    #     date = re.sub(r'(\d{1,3}[\s-]?%[^;])', TextFixxer.span_wrap_percent, percent)
+    #     return date
+
+
+
+
+
 
     def add_test_dates(self):
         with open(TEST_DATES) as file:
@@ -175,13 +205,10 @@ class DomFixxer:
         for src in double_imgs_src:
             imgs = self.soup.find_all('img')
             for img in imgs:
-                print(img)
                 try:
                     if img['src'] == src:
                         img['class'] = ' '.join(img['class']) + css_tyle
                 except KeyError:
-                    pass
-                    print('KEy Error')
                     img['class'] = css_tyle
 
     def add_checked_url_in_toolbar(self):

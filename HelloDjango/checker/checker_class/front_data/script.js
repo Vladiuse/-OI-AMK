@@ -33,8 +33,10 @@
                 findCurrency();
                 findImgLink();
                 findSpanWarning();
+                findSpanPercent();
                 findSriptsDate();
                 findImgDouble();
+                findDiscount();
             }
             else{
                 removeAllDebug()
@@ -108,17 +110,14 @@
 
         // Выборка всех ссылок
         function findAlla(){
-            // поиск ссылок
             let links = $('a')
             links.addClass(debugClass)
         }
 
         // Выборка всех цен (по классу)
         function findPrice(){
-            let oldPrice = $('.price_land_s4')
-            let newPrice = $('.price_land_s1')
-            oldPrice.addClass(debugClass)
-            newPrice.addClass(debugClass)
+            let allPrices = $('.price_land_s1,.price_land_s2,.price_land_s3,.price_land_s4')
+            allPrices.addClass(debugClass)
         }
 
         // Выборка всех валют (по классу)
@@ -127,17 +126,37 @@
             currencys.addClass(debugClass)
         }
 
-        // Выборка картинок внутри ссылок
-        function findImgLink(){
-            let imgs = $('a img')
-            imgs.addClass(debugClass)
-            imgs.parent().removeClass(debugClass)
-
+        // поиск скидки
+        function findDiscount(){
+            let discounts = $('.price_land_discount')
+            discounts.addClass(debugClass)
         }
 
-        // Поиск меток с бэка
+        // Выборка картинок внутри ссылок
+        function findImgLink(){
+            let imgs = $('a img') // button input img svg path
+            imgs.addClass(debugClass)
+            imgs.each(function(){
+                let link = $(this).parent()
+                if (link.children().length == 1){
+                    link.removeClass(debugClass)
+                }
+            })
+
+            // if (link.children().length = 1){
+            //     console.log('link', link, link.children().length)
+            //     link.removeClass(debugClass)
+            // }
+        }
+
+        // Поиск меток с бэка Даты
         function findSpanWarning(){
             let elems = $('span.__back-date')
+            elems.addClass(debugClass)
+        }
+        // Удалить
+        function findSpanPercent(){
+            let elems = $('span.__back-percent')
             elems.addClass(debugClass)
         }
 
@@ -219,6 +238,45 @@
             imgBoubleCounter ++
             if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
         })
+
+        getPhoneCode()
+        function getPhoneCode(){
+            url = 'http://127.0.0.1:8000/kma/get_phone_code/'
+            if (typeof(country) == 'string'){
+                data = {'country_code': country}
+                $.get(url, data, function(response){
+                    console.log(response)
+                    if (response['success'] == true){$('#oi-phone-code').text('+'+response['phone_code'])}
+                    else{$('#oi-phone-code').text(response['message'])}
+                })
+            } else {
+                $('#oi-phone-code').text('Страна не задана')
+            }
+        }
+        getDiscount()
+        function getDiscount(){
+            if (typeof(country_list)=='object'){
+                let discount = country_list[country].discount
+                $('#oi-admin-discount').text(discount+'%')
+            } else {
+                $('#oi-admin-discount').text('Ошибка')
+            }
+        }
+        getPricesAdmin()
+        function getPricesAdmin(){
+            s1 = country_list[country].s1
+            s2 = country_list[country].s2
+            s3 = country_list[country].s3
+            s4 = country_list[country].s4
+            curr = country_list[country].curr
+            let price_text = `${s1}(${s4})${curr}`
+            if (s2 != 0) {text+= ` Доставка - (${s2})`}
+            $('#oi-admin-price').text(price_text)
+        }
+        getRekvAdmin()
+        function getRekvAdmin(){
+            $('#oi-rekv').html('Реквизиты:<br>' + country_list[country].rekv)  
+        }
 
 
         // Включение тулбара клавишами

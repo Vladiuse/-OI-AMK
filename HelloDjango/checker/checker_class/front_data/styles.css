@@ -1,5 +1,8 @@
     :root {
     --link-color: rgb(0, 183, 255);
+    --price-color: rgb(57, 202, 0);
+    --currency-color: rgb(47, 167, 0);
+    --discount-color: rgb(118, 0, 141);
     }
 #oi-toolbar{
         position: fixed;
@@ -11,6 +14,9 @@
         border-radius: 10px;
         font-size: 15px !important;
     }
+    /* #oi-toolbar .header{
+        margin-bottom: 10px;
+    } */
 
     #oi-toolbar.__close{
         opacity: 0.6;
@@ -41,14 +47,30 @@
         height: 30px;
         background-color: #fcffff;
     }
+    #oi-toolbar .oi-info{
+        color: #fcffff;
+        margin: 6px 0;
+        font-weight: 600;
+    }
+    #oi-toolbar #oi-rekv{
+        max-width: 200px;
+        font-size: 11px !important;
+    }
 
     #oi-toolbar .original-link,
     #oi-toolbar .io-logo{
-        padding: 0 10px;
+        padding: 0 10px;   
     }
 
     a.__debug{
-        border: 2px solid var(--link-color) !important;
+        /* border: 2px solid var(--link-color) !important; */
+        outline:2px solid var(--link-color) !important;
+        outline-offset:-1px;    
+    }
+    a img.__debug{
+        /* border: 2px solid var(--link-color); */
+        outline:2px solid var(--link-color) !important;
+        outline-offset:-1px; 
     }
     form.__debug_no_select{
         border: 2px solid red !important;
@@ -57,20 +79,26 @@
         background-color: red !important;
     }
 
-    /* Новая цена */
-    .price_land_s4.__debug{
-        border: 2px solid blue;
-    }
-    /* Старая цена цена */
+    /* Цены */
     .price_land_s1.__debug{
-        border: 2px solid blue;
+        border: 2px solid var(--price-color);
+    }
+    .price_land_s2.__debug{
+        border: 2px solid var(--price-color);
+    }
+    .price_land_s3.__debug{
+        border: 2px solid var(--price-color);
+    }
+    .price_land_s4.__debug{
+        border: 2px solid var(--price-color);
     }
     .price_land_curr.__debug{
-        border: 2px solid green;
+        border: 2px solid var(--currency-color);
     }
-    a img.__debug{
-        border: 2px solid var(--link-color);
+    .price_land_discount.__debug{
+        border: 2px solid var(--discount-color);
     }
+
     img.__debug.__debug_double{
         border: 1px dashed red !important;
     }
@@ -91,6 +119,11 @@
         background-color: red;
         font-weight: bold;
     }
+    span.__debug.__back-percent{
+        background-color: rgb(136, 127, 255);
+    }
+
+
     .__debug_script_date{
         background-color: #ccffcb;
         border: 2px dashed #538052;
