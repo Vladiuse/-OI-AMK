@@ -1,0 +1,193 @@
+{% extends 'root/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main-wrapper">
+    <h1>Проверка ссылки</h1>
+    <div class="form-wrapper">
+        <form action="{% url 'checker:check_url' %}" method="GET" target="_blank">
+            {% csrf_token %}
+            <input type="url" name="url" class="form-control">
+            <button class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+    <p>Открыть тулбар: <b>Ctrl+Q</b></p>
+    <div class="checker-about">
+        <h6>Спецификация:</h6>
+        <div class="item-info">
+            1. Кликабельные элементы <a class="__debug">обводяться</a>.
+        </div>
+        <div class="item-info">
+            2. У кликабельных картинок также появляеться обводка <a><img src="https://st.depositphotos.com/2274151/3274/i/600/depositphotos_32746903-stock-photo-winner-grunge-stamp.jpg" class="__debug"></a>
+        </div>
+        <div class="item-info">
+            3. Картинка, которая повторяется имеет другую обводку <img src="https://st.depositphotos.com/2274151/3274/i/600/depositphotos_32746903-stock-photo-winner-grunge-stamp.jpg" class="__debug __debug_double">
+        </div>
+    </div>
+</div>
+<style>
+    .form-wrapper {
+        margin: 10px 0;
+        max-width: 300px;
+    }
+
+    .form-wrapper button {
+        margin-top: 10px;
+    }
+    .checker-about{
+        margin-top: 30px;
+    }
+    .checker-about .item-info{
+
+    }
+    .item-info img{
+        width: 80px;
+    }
+</style>
+<style>
+        :root {
+    --link-color: rgb(0, 183, 255);
+    }
+#oi-toolbar{
+        position: fixed;
+        top: 50px;
+        left: 50px;
+        background-color: #28323b;
+        z-index: 99000;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 15px !important;
+    }
+
+    #oi-toolbar.__close{
+        opacity: 0.6;
+    }
+
+    #oi-toolbar .assistive-touch{
+        cursor: pointer;
+    }
+
+    #oi-toolbar .round{
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #oi-toolbar .round-1{
+        width: 50px;
+        height: 50px;
+        background-color: #525f65;
+    }
+    #oi-toolbar .round-2{
+        width: 40px;
+        height: 40px;
+        background-color: #8e9297;
+    }
+    #oi-toolbar .round-3{
+        width: 30px;
+        height: 30px;
+        background-color: #fcffff;
+    }
+
+    #oi-toolbar .original-link,
+    #oi-toolbar .io-logo{
+        padding: 0 10px;
+    }
+
+    a.__debug{
+        border: 2px solid var(--link-color) !important;
+    }
+    form.__debug_no_select{
+        border: 2px solid red !important;
+    }
+    input.__debug_no_tel{
+        background-color: red !important;
+    }
+
+    /* Новая цена */
+    .price_land_s4.__debug{
+        border: 2px solid blue;
+    }
+    /* Старая цена цена */
+    .price_land_s1.__debug{
+        border: 2px solid blue;
+    }
+    .price_land_curr.__debug{
+        border: 2px solid green;
+    }
+    a img.__debug{
+        border: 2px solid var(--link-color);
+    }
+    img.__debug.__debug_double{
+        border: 1px dashed red !important;
+    }
+
+    img.__debug.__debug_double.__focus_img{
+        transition: 1s;
+        -webkit-box-shadow: 0px 0px 5px 10px rgba(255, 0, 0, 0.55);
+        -moz-box-shadow: 0px 0px 5px 10px rgba(255, 0, 0, 0.55);
+        box-shadow: 0px 0px 5px 10px rgba(255, 0, 0, 0.55);
+        border: 2px solid rgb(32, 212, 32) !important;
+    }
+
+    /* Даты с Бэка */
+    span.__debug.__back-date{
+        background-color: aquamarine;
+    }
+    span.__debug.__back-date.__debug_date_error{
+        background-color: red;
+        font-weight: bold;
+    }
+    .__debug_script_date{
+        background-color: #ccffcb;
+        border: 2px dashed #538052;
+        display: inline-block;
+        color: red;
+        font-weight: bold;
+    }
+
+    #oi-toolbar .container-toolbar{
+        display: flex
+    }
+     /* удалить */
+    #oi-toolbar .marker{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #oi-toolbar .info{
+        display: inline-block;
+    }
+    #oi-toolbar .io-logo{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        color: #fcffff;
+        font-weight: 700;
+    }
+    #oi-toolbar #back-info{
+        color: #fcffff;
+    }
+    #oi-toolbar #back-info img{
+        width: 60px;
+        height: 60px;
+
+    }
+    #oi-toolbar .original-link{
+        display: flex;
+        align-items: center;
+    }
+    #oi-toolbar .original-link p{
+        color: rgb(142, 194, 236);
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
