@@ -223,10 +223,9 @@
 
         // Включение тулбара клавишами
         $(document).keyup(function(e) {
-            // i = 73 p = 80 q = 81
+            // i = 73 p = 80 q = 81 y = 17 b = 66
             let oiToolbar = $('#oi-toolbar')
-            console.log(e.keyCode)
-            if (e.ctrlKey && e.keyCode == 81) {
+            if (e.ctrlKey && e.keyCode == 66) {
                 console.log('INTEGRATIONS')
                 if (isDebug){isDebug = false}else{isDebug = true}
                 oiToolbar.toggle(500)
