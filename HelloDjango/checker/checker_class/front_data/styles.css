@@ -52,6 +52,9 @@
         margin: 6px 0;
         font-weight: 600;
     }
+    #oi-toolbar #oi-admin-price span{
+        color: red;
+    }
     #oi-toolbar #oi-rekv{
         max-width: 200px;
         font-size: 11px !important;
@@ -119,6 +122,7 @@
         background-color: red;
         font-weight: bold;
     }
+    /* Удалить! */
     span.__debug.__back-percent{
         background-color: rgb(136, 127, 255);
     }

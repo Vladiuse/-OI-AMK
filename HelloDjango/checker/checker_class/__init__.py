@@ -61,6 +61,9 @@ class TextFixxer:
         self.text = re.sub(r'<[\w\s]+>[\s\wА-Яа-я.,;:"!?@#$%&*(){}\']*(\D\d\d\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4})[\s\wА-Яа-я.,;:"!?@#$%&*(){}\']*<[/\w\s]+>', # добавил Спецсимолы
                            self.wrap_dates,
                            self.text)
+        self.text = re.sub(r'<[=\w\d\s"\-]*>[\t\r\n]?\d\d\d\d[\t\r\n\s]?<[/\w\s]+>', 
+                           self.wrap_dates,
+                           self.text)
         # ONE
         # self.text = re.sub(r'(\d{1,3}[\s-]?%[^;])',
         #                    self.wrap_percent,

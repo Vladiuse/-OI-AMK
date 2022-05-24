@@ -6,11 +6,20 @@ class DefaultWeb(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Веб по умолчанию'
+        verbose_name_plural = 'Вебы по умолчаниюа'
+
+
 class PhoneNumber(models.Model):
-    short = models.CharField(max_length=2, verbose_name='Код страны', unique=True)
+    short = models.CharField(max_length=2, verbose_name='Код страны ISO', unique=True)
     phone = models.CharField(max_length=15, verbose_name='Валидный номер')
     ru_full_name = models.CharField(max_length=20, verbose_name='Русское название', blank=True, unique=True)
     phone_code = models.CharField(max_length=15, verbose_name='Моб код страны', blank=True)
+
+    class Meta:
+        verbose_name = 'Валидный номер'
+        verbose_name_plural = 'Валидные номера'
 
 
 

@@ -1,6 +1,8 @@
 // $(document).ready(function(){
 
-        let toogleTime = 300;
+
+        let currentUrl = window.location.origin
+        let toggleTime = 300;
         let isDebug = false;
         let errorCount = 0;
         let debugClass = '__debug';
@@ -9,17 +11,18 @@
         let fromInputNotelClass = '__debug_no_tel';
         let debugScritpDate = '__debug_script_date'
         let doubleImgStyle = '__debug_double'
-        let lastDoubleScr = ''
+
 
         let imgBoubleCounter = 0;
         let imgBoubleLen = 0;
+        let lastDoubleScr = ''
 
-        $.fn.removeClassStartingWith = function (filter) {
-        $(this).removeClass(function (index, className) {
-            return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
-            });
-        return this;
-        };
+        // $.fn.removeClassStartingWith = function (filter) {
+        // $(this).removeClass(function (index, className) {
+        //     return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
+        //     });
+        // return this;
+        // };
 
 
         // MAIN
@@ -165,7 +168,7 @@
             errorCount ++
             updateErrorMarker()
         }
-
+        // УДалить!
         // Обновить кол-во ошибок в тулбаре
         function updateErrorMarker(){
             let marker = $('#oi-toolbar .error-counter .marker')
@@ -181,7 +184,7 @@
 
         // показать\скрыть тулбар
         $('#oi-toolbar .header').click(function(){
-            $('#oi-toolbar .__oi_close').toggle(toogleTime)
+            $('#oi-toolbar .__oi_close').toggle(toggleTime)
             $('#oi-toolbar').toggleClass('__close')
             // $('#oi-toolbar #back-info').toggle(300)
         })
@@ -241,7 +244,7 @@
 
         getPhoneCode()
         function getPhoneCode(){
-            url = 'http://127.0.0.1:8000/kma/get_phone_code/'
+            url = currentUrl+ '/kma/get_phone_code/'
             if (typeof(country) == 'string'){
                 data = {'country_code': country}
                 $.get(url, data, function(response){
@@ -270,13 +273,25 @@
             s4 = country_list[country].s4
             curr = country_list[country].curr
             let price_text = `${s1}(${s4})${curr}`
-            if (s2 != 0) {text+= ` Доставка - (${s2})`}
-            $('#oi-admin-price').text(price_text)
+            if (s2 != 0) {price_text+= `<br>Доставка: <span>(${s2})</span>`}
+            $('#oi-admin-price').html(price_text)
         }
         getRekvAdmin()
         function getRekvAdmin(){
-            $('#oi-rekv').html('Реквизиты:<br>' + country_list[country].rekv)  
+            if ($('rekv,js-agreement-rekv').length ==0){
+                $('#oi-rekv').text('Тэг не найден')  
+            } else {
+                $('#oi-rekv').text('Стоят')  
+            }
+            
         }
+        $('#test-click').click(function(){
+            let url = currentUrl + '/checker/analiz_land_text/'
+            data = {'land_text': $('body').html()}
+            $.post(url, data, function(response){
+                console.log(response)
+            })
+        })
 
 
         // Включение тулбара клавишами
@@ -284,7 +299,7 @@
             // i = 73 p = 80 q = 81 y = 17 b = 66
             let oiToolbar = $('#oi-toolbar')
             if (e.ctrlKey && e.keyCode == 66) {
-                console.log('INTEGRATIONS')
+                console.log('INTEGRATION')
                 if (isDebug){isDebug = false}else{isDebug = true}
                 oiToolbar.toggle(500)
                 onOffDebug()
