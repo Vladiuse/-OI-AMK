@@ -10,7 +10,7 @@ from checker.checker_class import TOOLBAR_STYLES_FILE
 # Create your views here.
 
 def index(requests):
-    with open(TOOLBAR_STYLES_FILE) as file:
+    with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
         debug_styles = file.read()
     content = {
         'debug_styles': debug_styles,
