@@ -110,7 +110,7 @@ class TextFixxer:
 
 
     def add_test_dates(self):
-        with open(TEST_DATES) as file:
+        with open(TEST_DATES, encoding='utf-8') as file:
             dates = file.read()
         body_pos = self.text.find('</body>')
         self.text = self.text[:body_pos] + dates + self.text[body_pos:]
