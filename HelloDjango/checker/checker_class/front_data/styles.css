@@ -13,6 +13,10 @@
         padding: 10px;
         border-radius: 10px;
         font-size: 15px !important;
+        max-width: 300px;
+    }
+    #oi-toolbar p{
+        margin: 0px;
     }
     /* #oi-toolbar .header{
         margin-bottom: 10px;

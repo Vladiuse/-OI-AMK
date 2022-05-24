@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .checker_class import DomFixxer, TextFixxer
+from .checker_class import DomFixxer, TextFixxer, TextAnaliz
+from kma.models import OfferPosition, PhoneNumber
 import requests as req
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
@@ -51,16 +52,25 @@ def check_url(request):
 def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
+        offers = OfferPosition.objects.values('name')
+        offers_names = [offer['name'] for offer in offers]
+        phones = PhoneNumber.objects.values('currency', 'phone_code')
+        phone_codes = [phone['phone_code'] for phone in phones]
+        currencys = [phone['currency'] for phone in phones]
+        data = {
+            'offers': offers_names,
+            'currencys': currencys,
+            'phone_codes': phone_codes,
+        }
+        analizer = TextAnaliz(land_text=land_text, data=data)
+        analizer.process()
         answer = {
             'success': True,
-            'result': len(land_text)
+            'result': analizer.result,
         }
     except BaseException as error:
         answer = {
             'success': False,
-            'error': error,
+            'error': str(error),
         }
     return JsonResponse(answer, safe=False)
- #    except BaseException as error:
- #        return HttpResponse(f'Error: {error}')
- #

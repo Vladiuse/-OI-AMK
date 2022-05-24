@@ -51,7 +51,6 @@
         function getMsg(){
             let msg = $('<span></span>')
             msg.addClass(debugMsgClass)
-            console.log(msg, 'getMsg')
             return msg
         }
 
@@ -183,7 +182,7 @@
         }
 
         // показать\скрыть тулбар
-        $('#oi-toolbar .header').click(function(){
+        $('#oi-toolbar .oi-header').click(function(){
             $('#oi-toolbar .__oi_close').toggle(toggleTime)
             $('#oi-toolbar').toggleClass('__close')
             // $('#oi-toolbar #back-info').toggle(300)
@@ -285,12 +284,53 @@
             }
             
         }
-        $('#test-click').click(function(){
+
+        // oi-back-offers oi-back-currs oi-back-phones oi-back-dates
+        // Заргузка данных анализа по тексту
+        function addTotoolbar(elem, data){
+            if (data.length=0){
+                let span=  $('<span> Нет данных </span>')
+                elem.append(span)
+            }
+            for (pos in data){
+                text = data[pos]
+                let span = $('<span>'+text+'</span>')
+                elem.append(span)
+            }
+        }
+
+        function loadBackAnalize(){
             let url = currentUrl + '/checker/analiz_land_text/'
-            data = {'land_text': $('body').html()}
+            let send_text = $('body').clone()
+            send_text.find('#oi-toolbar').remove()
+            send_text.find('#test-block').remove()
+            data = {'land_text': send_text.html()}
             $.post(url, data, function(response){
                 console.log(response)
+                if (response['success']){
+                    offers = response.result['offers']
+                    currs = response.result['currencys']
+                    dates = response.result['dates_on_land']
+                    phone_codes = response.result['phone_codes']
+
+                    // addTotoolbar($('#oi-back-offers'), offers)
+                    // addTotoolbar($('#oi-back-currs'), currs)
+                    // addTotoolbar($('#oi-back-dates'), dates)
+                    // addTotoolbar($('#oi-back-phones'), phone_codes)
+                    
+                    // $('#oi-back-offers').text(offers)
+                    // $('#oi-back-currs').text(currs)
+                    // $('#oi-back-dates').text(dates)
+                    // $('#oi-back-phones').text(phone_codes)
+
+                } else {
+                    console.log('Ошибка загрузки анализатора')
+                }
+                
             })
+        }
+        $('#test-click').click(function(){
+            loadBackAnalize()
         })
 
 

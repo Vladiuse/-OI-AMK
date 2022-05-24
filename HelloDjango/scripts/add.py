@@ -1,4 +1,4 @@
-from kma.models import PhoneNumber
+from kma.models import PhoneNumber, OfferPosition
 
 
 def add_phones():
@@ -22,10 +22,21 @@ def add_phone_codes():
         for line in file:
             if line.endswith('\n'):
                 line = line[:-1]
-            short, phone, ru_full_name, phone_code = line.split(',')
+            short, phone, ru_full_name, phone_code, currency = line.split(',')
             model = PhoneNumber.objects.get(short=short)
-            model.phone_code = phone_code
+            model.currency = currency
             model.save()
     
+
+def add_offers():
+    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/offers.csv') as file:
+        for line in file:
+            if line.endswith('\n'):
+                line=line[:-1]
+            if line.endswith("'"):
+                line = line[:-1]
+            offer = OfferPosition(name=line)
+            offer.save()
+    print('END')
 
 add_phone_codes()
