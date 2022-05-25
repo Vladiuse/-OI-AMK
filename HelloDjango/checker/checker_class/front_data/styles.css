@@ -141,7 +141,16 @@
     }
 
     #oi-toolbar .container-toolbar{
-        display: flex
+        display: flex;
+        flex-wrap: wrap;
+    }
+    #oi-toolbar .container-toolbar span,
+    #oi-toolbar .container-toolbar p
+    {
+        margin-left: 3px;
+    }
+    #oi-toolbar .container-toolbar .__error{
+        color: red;
     }
      /* удалить */
     #oi-toolbar .marker{

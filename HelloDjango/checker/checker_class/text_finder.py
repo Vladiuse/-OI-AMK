@@ -36,13 +36,13 @@ class TextAnaliz:
     def find_offers(self):
         offers = self.data['offers']
         offers = find_in_text(self.clean_land_text, offers)
-        self.result.update({'offers': offers})
+        self.result.update({'offers': list(offers)})
 
 
     def find_currensy(self):
         currensys = self.data['currencys']
         currensys = find_in_text(self.clean_land_text, currensys)
-        self.result.update({'currencys': currensys})
+        self.result.update({'currencys': list(currensys)})
 
 
     def find_phone_codes(self):
@@ -54,7 +54,7 @@ class TextAnaliz:
             res = text.count(p_code)
             if res:
                 result.update({p_code: res})
-        self.result.update({'phone_codes': result})
+        self.result.update({'phone_codes': list(result)})
 
 
     def find_dates(self):
@@ -74,6 +74,7 @@ class TextAnaliz:
             if date[0] in start_end:
                 date = date[1:]
             clean_dates.append(date)
+        clean_dates = list(set(clean_dates))
         self.result.update({'dates_on_land': clean_dates})
 
 

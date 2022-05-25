@@ -11,11 +11,13 @@
         let fromInputNotelClass = '__debug_no_tel';
         let debugScritpDate = '__debug_script_date'
         let doubleImgStyle = '__debug_double'
+        let toolbarErrorClass = '__error';
 
 
         let imgBoubleCounter = 0;
         let imgBoubleLen = 0;
         let lastDoubleScr = ''
+        let PhoneMask = '';
 
         // $.fn.removeClassStartingWith = function (filter) {
         // $(this).removeClass(function (index, className) {
@@ -224,13 +226,13 @@
         // let imgBoubleLen = 0;
             $('img.__focus_img').removeClass('__focus_img')
             let src = $(this).attr('src')
-            console.log(src, 'src дубля')
+            // console.log(src, 'src дубля')
             if (src != lastDoubleScr){imgBoubleCounter = 0}
             lastDoubleScr = src
             let imgs = $('img.'+doubleImgStyle).filter(function(){
                 if ($(this).attr('src') == src){return true}
             })
-            console.log(imgs, 'Найденые дубли')
+            // console.log(imgs, 'Найденые дубли')
             imgBoubleLen = imgs.length
             console.log(imgBoubleCounter, imgBoubleLen)
             imgs.get(imgBoubleCounter).scrollIntoView({block: "center", behavior: "smooth"});
@@ -248,7 +250,10 @@
                 data = {'country_code': country}
                 $.get(url, data, function(response){
                     console.log(response)
-                    if (response['success'] == true){$('#oi-phone-code').text('+'+response['phone_code'])}
+                    if (response['success'] == true){
+                        $('#oi-phone-code').text('+'+response['phone_code'])
+                        PhoneMask = response['phone_code'];
+                    }
                     else{$('#oi-phone-code').text(response['message'])}
                 })
             } else {
@@ -285,17 +290,40 @@
             
         }
 
-        // oi-back-offers oi-back-currs oi-back-phones oi-back-dates
-        // Заргузка данных анализа по тексту
-        function addTotoolbar(elem, data){
-            if (data.length=0){
-                let span=  $('<span> Нет данных </span>')
-                elem.append(span)
+
+        function addOffersTool(offers){
+            if (offers.length != 1){$('.oi-back-offers').addClass(toolbarErrorClass)}
+            for (pos in offers){
+                offer = offers[pos]
+                let span = '<p>' + offer + '</p>'
+                $('#oi-back-offers').after(span)
             }
-            for (pos in data){
-                text = data[pos]
-                let span = $('<span>'+text+'</span>')
-                elem.append(span)
+            
+        }
+
+        function addCurrTool(currs){
+            if (currs.length != 1){$('.oi-back-currs').addClass(toolbarErrorClass)}
+            for (pos in currs){
+                curr = currs[pos]
+                let span = '<p>' + curr + '</p>'
+                $('#oi-back-currs').after(span)
+            }
+        }
+        
+        function addPhoneMaksTool(phone_codes){
+            for (pos in phone_codes){
+                let code = phone_codes[pos]
+                let span = '<p>+' + code + '</p>'
+                $('#oi-back-phones').after(span)
+                if (code != PhoneMask) {$('.oi-back-phones').addClass(toolbarErrorClass)}
+            }
+        }
+
+        function addDatesTool(dates){
+            for (pos in dates){
+                let date = dates[pos]
+                let span = '<p>' + date + '</p>'
+                $('#oi-back-dates').after(span)
             }
         }
 
@@ -313,15 +341,10 @@
                     dates = response.result['dates_on_land']
                     phone_codes = response.result['phone_codes']
 
-                    // addTotoolbar($('#oi-back-offers'), offers)
-                    // addTotoolbar($('#oi-back-currs'), currs)
-                    // addTotoolbar($('#oi-back-dates'), dates)
-                    // addTotoolbar($('#oi-back-phones'), phone_codes)
-                    
-                    // $('#oi-back-offers').text(offers)
-                    // $('#oi-back-currs').text(currs)
-                    // $('#oi-back-dates').text(dates)
-                    // $('#oi-back-phones').text(phone_codes)
+                    addOffersTool(offers)
+                    addCurrTool(currs)
+                    addPhoneMaksTool(phone_codes)
+                    addDatesTool(dates)
 
                 } else {
                     console.log('Ошибка загрузки анализатора')
