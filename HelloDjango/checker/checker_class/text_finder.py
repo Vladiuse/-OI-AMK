@@ -75,7 +75,36 @@ class TextAnaliz:
                 date = date[1:]
             clean_dates.append(date)
         clean_dates = list(set(clean_dates))
+        clean_dates = TextAnaliz.sort_dates(clean_dates)
         self.result.update({'dates_on_land': clean_dates})
+
+    @staticmethod
+    def sort_dates(dates:list):
+        dates_correct = []
+        dates_incorrect = []
+        years = []
+        years_old = []
+        for date in dates:
+            if len(date) == 4:
+                if int(date) in range(2020,2023):
+                    years.append(date)
+                else:
+                    years_old.append(date)
+            else:
+                if date.count('.') != 2 or int(date[-2:]) not in range(20,23):
+                    dates_incorrect.append(date)
+                else:
+                    dates_correct.append(date)
+        result = {
+            'oi-dates_correct': dates_correct,
+            'oi-dates_incorrect': dates_incorrect,
+            'oi-years': years,
+            'oi-years_old': years_old,
+        }
+        for k, v in result.items():
+            v.sort()
+        return result
+
 
 
 

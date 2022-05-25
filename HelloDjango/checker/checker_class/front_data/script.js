@@ -37,6 +37,7 @@
                 findPrice();
                 findCurrency();
                 findImgLink();
+                findDivLink();
                 findSpanWarning();
                 findSpanPercent();
                 findSriptsDate();
@@ -48,14 +49,16 @@
             }
 
         }
-
-        // Если заргужены данные с бэка KMA
-        if (typeof(country_list)=='object'){
-            getDiscount();
-            getPricesAdmin();
-            loadBackAnalize();
-            getPhoneCode();
+        $(document).ready(function(){
+            // Если заргужены данные с бэка KMA
+            if (typeof(country_list)=='object'){
+                getDiscount();
+                getPricesAdmin();
+                getPhoneCode();
+                loadBackAnalize();
             }
+        })
+        
 
         // Получить обьект сообщения о ошибке
         function getMsg(){
@@ -154,12 +157,19 @@
                     link.removeClass(debugClass)
                 }
             })
-
-            // if (link.children().length = 1){
-            //     console.log('link', link, link.children().length)
-            //     link.removeClass(debugClass)
-            // }
         }
+        // Выборка <div> внутри ссылок
+        function findDivLink(){
+            let divs = $('a div') // button input img svg path
+            divs.addClass(debugClass)
+            divs.each(function(){
+                let link = $(this).parent()
+                if (link.children().length == 1){
+                    link.removeClass(debugClass)
+                }
+            })
+        }
+      
 
         // Поиск меток с бэка Даты
         function findSpanWarning(){
@@ -217,6 +227,7 @@
             let imgDouble = $('img.'+doubleImgStyle)
             imgDouble.addClass(debugClass)
         }
+        
 
 
         // Получить Маску телефона страны API
@@ -227,7 +238,7 @@
                     console.log(response)
                     if (response['success'] == true){
                         $('#oi-phone-code').text('+'+response['phone_code'])
-                        PhoneMask = response['phone_code'];
+                        PhoneMask = '+'+response['phone_code'];
                     }
                     else{$('#oi-phone-code').text(response['message'])}
                 })
@@ -292,18 +303,30 @@
         function addPhoneMaksTool(phone_codes){
             for (pos in phone_codes){
                 let code = phone_codes[pos]
-                let span = '<p>+' + code + '</p>'
+                let span = '<p>' + code + '</p>'
                 $('#oi-back-phones').after(span)
                 if (code != PhoneMask) {$('.oi-back-phones').addClass(toolbarErrorClass)}
             }
         }
         // Добавить даты в тулбар
         function addDatesTool(dates){
-            for (pos in dates){
-                let date = dates[pos]
-                let span = '<p>' + date + '</p>'
-                $('#oi-back-dates').after(span)
+            console.log(dates)
+            let keys = ['oi-dates_correct', 'oi-dates_incorrect', 'oi-years', 'oi-years_old']
+            for (pos in keys){
+                let id = keys[pos]
+                // console.log(id, typeof(id),id=='io-dates_correct', 'io-dates_correct')
+                for (pos in dates[id]){
+                        let date = dates[id][pos]
+                        let span = '<p>' + date + '</p>'
+                        $('#'+id).after(span)
+                    }
+
             }
+            // for (pos in dates){
+            //     let date = dates[pos]
+            //     let span = '<p>' + date + '</p>'
+            //     $('#oi-back-dates').after(span)
+            // }
         }
 
         // Загрузда данных анализа текста API
@@ -312,6 +335,8 @@
             let send_text = $('body').clone()
             send_text.find('#oi-toolbar').remove()
             send_text.find('#test-block').remove()
+            send_text.find('#polit').remove()
+            send_text.find('#agreement').remove()
             data = {'land_text': send_text.html()}
             $.post(url, data, function(response){
                 console.log(response)
@@ -333,7 +358,7 @@
             })
         }
         $('#test-click').click(function(){
-            // loadBackAnalize()
+            loadBackAnalize()
             })
 
         // открытие оригинальной ссылки
