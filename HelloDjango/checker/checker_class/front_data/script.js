@@ -4,7 +4,7 @@
         let currentUrl = window.location.origin
         let toggleTime = 300;
         let isDebug = false;
-        let errorCount = 0;
+        // let errorCount = 0;
         let debugClass = '__debug';
         let debugMsgClass = '__debug_msg';
         let formNoSelectClass = '__debug_no_select';
@@ -49,6 +49,14 @@
 
         }
 
+        // Если заргужены данные с бэка KMA
+        if (typeof(country_list)=='object'){
+            getDiscount();
+            getPricesAdmin();
+            loadBackAnalize();
+            getPhoneCode();
+            }
+
         // Получить обьект сообщения о ошибке
         function getMsg(){
             let msg = $('<span></span>')
@@ -89,10 +97,10 @@
             })
 
             formsNoSelect.addClass(formNoSelectClass)
-            console.log(formsNoSelect.length, 'xxxxx')
+            // console.log(formsNoSelect.length, 'xxxxx')
             formsNoSelect.each(function(){
                 let msg = getMsg()
-                msg.text('No select')
+                msg.text('Нет селекта страны')
                 $(this).append(msg)
                 // plusError()
             })
@@ -165,30 +173,25 @@
         }
 
         // УДалить!
-        function plusError(){
-            errorCount ++
-            updateErrorMarker()
-        }
+        // function plusError(){
+        //     errorCount ++
+        //     updateErrorMarker()
+        // }
         // УДалить!
         // Обновить кол-во ошибок в тулбаре
-        function updateErrorMarker(){
-            let marker = $('#oi-toolbar .error-counter .marker')
-            let markerInfo = $('#oi-toolbar .error-counter .info')
-            if (errorCount == 0){
-                marker.css('background-color', 'green')
+        // function updateErrorMarker(){
+        //     let marker = $('#oi-toolbar .error-counter .marker')
+        //     let markerInfo = $('#oi-toolbar .error-counter .info')
+        //     if (errorCount == 0){
+        //         marker.css('background-color', 'green')
 
-            } else {
-                marker.css('background-color', 'red')
-            }
-            markerInfo.text(errorCount)
-        }
+        //     } else {
+        //         marker.css('background-color', 'red')
+        //     }
+        //     markerInfo.text(errorCount)
+        // }
 
-        // показать\скрыть тулбар
-        $('#oi-toolbar .oi-header').click(function(){
-            $('#oi-toolbar .__oi_close').toggle(toggleTime)
-            $('#oi-toolbar').toggleClass('__close')
-            // $('#oi-toolbar #back-info').toggle(300)
-        })
+
 
         // закрытие тулбара при скроле
         // $(window).scroll(function (event) {
@@ -207,12 +210,7 @@
             elems.text('!!!')
         }
 
-        // открытие оригинальной ссылки
-        $('#oi-toolbar .original-link p').click(function(){
-            let url = $(this).attr('data-href')
-            console.log(url)
-            window.open(url, '_blank').focus();
-        })
+
 
         // Поиск и добавление рамки для дублей картинок
         function findImgDouble(){
@@ -220,34 +218,11 @@
             imgDouble.addClass(debugClass)
         }
 
-        // Скролл по дублям картинок
-        $('#back-info img').click(function(){
-        // let imgBoubleCounter = 0;
-        // let imgBoubleLen = 0;
-            $('img.__focus_img').removeClass('__focus_img')
-            let src = $(this).attr('src')
-            // console.log(src, 'src дубля')
-            if (src != lastDoubleScr){imgBoubleCounter = 0}
-            lastDoubleScr = src
-            let imgs = $('img.'+doubleImgStyle).filter(function(){
-                if ($(this).attr('src') == src){return true}
-            })
-            // console.log(imgs, 'Найденые дубли')
-            imgBoubleLen = imgs.length
-            console.log(imgBoubleCounter, imgBoubleLen)
-            imgs.get(imgBoubleCounter).scrollIntoView({block: "center", behavior: "smooth"});
 
-            $(imgs.get(imgBoubleCounter)).addClass('__focus_img') // xxx
-
-            imgBoubleCounter ++
-            if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
-        })
-
-        getPhoneCode()
+        // Получить Маску телефона страны API
         function getPhoneCode(){
             url = currentUrl+ '/kma/get_phone_code/'
-            if (typeof(country) == 'string'){
-                data = {'country_code': country}
+            data = {'country_code': country}
                 $.get(url, data, function(response){
                     console.log(response)
                     if (response['success'] == true){
@@ -256,11 +231,11 @@
                     }
                     else{$('#oi-phone-code').text(response['message'])}
                 })
-            } else {
-                $('#oi-phone-code').text('Страна не задана')
-            }
         }
-        getDiscount()
+
+        // typeof(country_list)=='object'
+  
+        // Получить скитку из обьекта js
         function getDiscount(){
             if (typeof(country_list)=='object'){
                 let discount = country_list[country].discount
@@ -269,28 +244,32 @@
                 $('#oi-admin-discount').text('Ошибка')
             }
         }
-        getPricesAdmin()
+        
+
+        // Получить цены из обьекта js
         function getPricesAdmin(){
             s1 = country_list[country].s1
             s2 = country_list[country].s2
             s3 = country_list[country].s3
             s4 = country_list[country].s4
             curr = country_list[country].curr
-            let price_text = `${s1}(${s4})${curr}`
+            let price_text = `${s1}(${s4}) ${curr}`
             if (s2 != 0) {price_text+= `<br>Доставка: <span>(${s2})</span>`}
             $('#oi-admin-price').html(price_text)
         }
-        getRekvAdmin()
-        function getRekvAdmin(){
-            if ($('rekv,js-agreement-rekv').length ==0){
-                $('#oi-rekv').text('Тэг не найден')  
-            } else {
-                $('#oi-rekv').text('Стоят')  
-            }
+
+        // getRekvAdmin()
+        // Получить реквизиты из обьекта js
+        // function getRekvAdmin(){
+        //     if ($('rekv,js-agreement-rekv').length ==0){
+        //         $('#oi-rekv').text('Тэг не найден')  
+        //     } else {
+        //         $('#oi-rekv').text('Стоят')  
+        //     }
             
-        }
+        // }
 
-
+        // Добавить офферы в тулбар
         function addOffersTool(offers){
             if (offers.length != 1){$('.oi-back-offers').addClass(toolbarErrorClass)}
             for (pos in offers){
@@ -300,7 +279,7 @@
             }
             
         }
-
+        // Добавить валюты в тулбар
         function addCurrTool(currs){
             if (currs.length != 1){$('.oi-back-currs').addClass(toolbarErrorClass)}
             for (pos in currs){
@@ -309,7 +288,7 @@
                 $('#oi-back-currs').after(span)
             }
         }
-        
+        // Добавить маски в тулбар
         function addPhoneMaksTool(phone_codes){
             for (pos in phone_codes){
                 let code = phone_codes[pos]
@@ -318,7 +297,7 @@
                 if (code != PhoneMask) {$('.oi-back-phones').addClass(toolbarErrorClass)}
             }
         }
-
+        // Добавить даты в тулбар
         function addDatesTool(dates){
             for (pos in dates){
                 let date = dates[pos]
@@ -327,6 +306,7 @@
             }
         }
 
+        // Загрузда данных анализа текста API
         function loadBackAnalize(){
             let url = currentUrl + '/checker/analiz_land_text/'
             let send_text = $('body').clone()
@@ -353,8 +333,41 @@
             })
         }
         $('#test-click').click(function(){
-            loadBackAnalize()
-        })
+            // loadBackAnalize()
+            })
+
+        // открытие оригинальной ссылки
+        $('#oi-toolbar .original-link p').click(function(){
+            let url = $(this).attr('data-href')
+            console.log(url)
+            window.open(url, '_blank').focus();
+            })
+
+        // показать\скрыть тулбар
+        $('#oi-toolbar .oi-header').click(function(){
+            $('#oi-toolbar .__oi_close').toggle(toggleTime)
+            $('#oi-toolbar').toggleClass('__close')
+            // $('#oi-toolbar #back-info').toggle(300)
+            })
+
+        // Скролл по дублям картинок
+        $('#back-info img').click(function(){
+            $('img.__focus_img').removeClass('__focus_img')
+            let src = $(this).attr('src')
+            // console.log(src, 'src дубля')
+            if (src != lastDoubleScr){imgBoubleCounter = 0}
+            lastDoubleScr = src
+            let imgs = $('img.'+doubleImgStyle).filter(function(){
+                if ($(this).attr('src') == src){return true}
+            })
+            // console.log(imgs, 'Найденые дубли')
+            imgBoubleLen = imgs.length
+            console.log(imgBoubleCounter, imgBoubleLen)
+            imgs.get(imgBoubleCounter).scrollIntoView({block: "center", behavior: "smooth"});
+            $(imgs.get(imgBoubleCounter)).addClass('__focus_img') // xxx
+            imgBoubleCounter ++
+            if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
+            })
 
 
         // Включение тулбара клавишами

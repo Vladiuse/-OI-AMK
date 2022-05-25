@@ -58,11 +58,11 @@ class TextAnaliz:
 
 
     def find_dates(self):
-        pattern = '\D\d\d\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'
+        # pattern = '\D\d\d\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'
+        pattern = '\D[12]{1}[890]{1}\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}' # выкидывает неактуальные года
         text = self.clean_land_text
         dates = re.findall(pattern, text)
         dates = list(set(dates))
-        print(dates)
         chars = '\n() /'
         start_end = ' -.'
         clean_dates = []
