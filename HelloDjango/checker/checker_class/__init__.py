@@ -51,7 +51,8 @@ class TextFixxer:
         self.text = text
 
     def process(self):
-        self.add_test_dates()
+        # self.add_test_dates()
+
         # старая '>.*(\d{1,2}[.\\/-]\d{1,2}[.\\/-]\d{2,4}).*?<|>.*(\d\d\d\d).*?<'
         # работает но летят тэги path svg
         # self.text = re.sub(r'[<>\s]{1}(\d{1,2}[.\\/-]\d{1,2}[.\\/-]\d{2,4}|\d\d\d\d)[<>.\s]{1}', self.wrap_dates, self.text)
@@ -182,7 +183,7 @@ class DomFixxer:
         styles_tag = self.soup.new_tag('style')
         styles_tag.string = self.styles
         # self.soup.html.head.insert(0, styles_tag)
-        self.soup.html.head.append(styles_tag)
+        self.soup.html.body.append(styles_tag)
 
     def add_js(self):
         """Добавить скрипт на сайт"""

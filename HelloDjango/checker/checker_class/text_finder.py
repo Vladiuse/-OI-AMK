@@ -1,13 +1,14 @@
 from bs4 import BeautifulSoup
 import requests as req
 import re
-
+from pprint import pprint
 
 def find_in_text(text: str, offers: list):
     text = text.lower()
     result = {}
     for offer in offers:
         pettern = f'\W{offer.lower()}\W'
+        # pettern = f'[\.\s<>\-\d«»]{1}{offer.lower()}[\.\s<>\-«»\d]{1}'
         res = re.findall(pettern, text)
         if res:
             result.update({offer: len(res)})
@@ -26,12 +27,13 @@ class TextAnaliz:
         self.clean_land_text = self.soup.text
 
 
+
     def process(self):
         self.find_offers()
         self.find_currensy()
         self.find_phone_codes()
         self.find_dates()
-        print(self.result)
+        # print(self.result)
 
     def find_offers(self):
         offers = self.data['offers']
@@ -63,8 +65,8 @@ class TextAnaliz:
         text = self.clean_land_text
         dates = re.findall(pattern, text)
         dates = list(set(dates))
-        chars = '\n() /'
-        start_end = ' -.'
+        chars = '\n() \xa0'
+        start_end = ' -.,:;"'
         clean_dates = []
         for date in dates:
             for char in chars:
@@ -102,7 +104,7 @@ class TextAnaliz:
             'oi-years_old': years_old,
         }
         for k, v in result.items():
-            v.sort()
+            v.sort(reverse=True)
         return result
 
 

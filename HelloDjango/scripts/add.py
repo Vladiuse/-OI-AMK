@@ -28,15 +28,39 @@ def add_phone_codes():
             model.save()
     
 
-def add_offers():
-    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/offers.csv') as file:
-        for line in file:
-            if line.endswith('\n'):
-                line=line[:-1]
-            if line.endswith("'"):
-                line = line[:-1]
-            offer = OfferPosition(name=line)
-            offer.save()
-    print('END')
+# def add_offers():
+#     with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/offers.csv') as file:
+#         for line in file:
+#             if line.endswith('\n'):
+#                 line=line[:-1]
+#             if line.endswith("'"):
+#                 line = line[:-1]
+#             offer = OfferPosition(name=line)
+#             offer.save()
+#     print('END')
 
-add_phone_codes()
+# def add_offers():
+#     error_count = 0
+#     with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/offers.csv') as file:
+#         for line in file:
+#             offer, *_ = line.split('-')
+#             offer = offer.strip()
+#             try:
+#                 new = OfferPosition(name=offer)
+#                 new.save()
+#                 print(new.name)
+#             except:
+#                 error_count += 1
+#     print(error_count)
+
+def fix_offers_names():
+    offers = OfferPosition.objects.all()
+    for offer in offers:
+        if '+' in offer.name and not offer.name.endswith('+'):
+            print(offer)
+
+            
+            
+
+
+fix_offers_names()

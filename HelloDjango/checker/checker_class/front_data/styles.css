@@ -3,6 +3,7 @@
     --price-color: rgb(57, 202, 0);
     --currency-color: rgb(47, 167, 0);
     --discount-color: rgb(118, 0, 141);
+    --white-color: #fcffff;
     }
 #oi-toolbar{
         position: fixed;
@@ -13,10 +14,14 @@
         padding: 10px;
         border-radius: 10px;
         font-size: 15px !important;
-        max-width: 300px;
+        line-height: 18px !important;
+        max-width: 320px;
     }
     #oi-toolbar p{
         margin: 0px;
+    }
+    #oi-toolbar hr{
+        background-color: var(--white-color);
     }
 
     /* #oi-toolbar .header{
@@ -142,7 +147,9 @@
     span.__debug.__back-percent{
         background-color: rgb(136, 127, 255);
     }
-
+    .__debug.geocity, .__debug.user-city{
+        border: 2px solid blue;
+    }
 
     .__debug_script_date{
         background-color: #ccffcb;
@@ -154,6 +161,7 @@
 
     #oi-toolbar .container-toolbar{
         display: flex;
+        margin: 3px 0;
         /* flex-wrap: wrap; */
     }
     #oi-toolbar .oi-dates{

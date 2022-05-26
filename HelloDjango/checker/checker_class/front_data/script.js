@@ -43,6 +43,8 @@
                 findSriptsDate();
                 findImgDouble();
                 findDiscount();
+                findCity();
+                loadBackAnalize();
             }
             else{
                 removeAllDebug()
@@ -55,7 +57,6 @@
                 getDiscount();
                 getPricesAdmin();
                 getPhoneCode();
-                loadBackAnalize();
             }
         })
         
@@ -212,15 +213,17 @@
 
         // Поиск элементов с script внутри (возможно это скрипт даты)
         function findSriptsDate(){
-        let elems = $('body script')
-            elems = elems.filter(function(){
-                if ($(this).parent().is('body') != true) {return true}
-            })
-            elems.addClass(debugScritpDate)
-            elems.text('!!!')
+            let elems = $('body script')
+                elems = elems.filter(function(){
+                    if ($(this).parent().is('body') != true) {return true}
+                })
+                elems.addClass(debugScritpDate)
+                elems.text('!!!')
+            }
+        
+        function findCity(){
+            $('.geocity,.user-city').addClass(debugClass)
         }
-
-
 
         // Поиск и добавление рамки для дублей картинок
         function findImgDouble(){
