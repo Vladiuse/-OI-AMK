@@ -27,12 +27,12 @@ class TextAnaliz:
         self.clean_land_text = self.soup.text
 
 
-
     def process(self):
         self.find_offers()
         self.find_currensy()
         self.find_phone_codes()
         self.find_dates()
+        self.find_geo_words()
         # print(self.result)
 
     def find_offers(self):
@@ -79,6 +79,18 @@ class TextAnaliz:
         clean_dates = list(set(clean_dates))
         clean_dates = TextAnaliz.sort_dates(clean_dates)
         self.result.update({'dates_on_land': clean_dates})
+
+    def find_geo_words(self):
+        geo_words = self.data['geo_words']
+        text = self.clean_land_text.lower()
+        result = {}
+        for geo_short, words in geo_words.items():
+            res = find_in_text(text, words)
+            if res:
+                result.update({geo_short: list(res)})
+        pprint(result)
+        self.result.update({'geo_words': result})
+
 
     @staticmethod
     def sort_dates(dates:list):

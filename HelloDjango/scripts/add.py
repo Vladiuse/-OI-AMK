@@ -6,16 +6,20 @@ def add_phones():
         for line in file:
             if line.endswith('\n'):
                 line = line[:-1]
-            short, phone, ru_full_name = line.split(',')
+            short, phone, ru_full_name, phone_code, currency = line.split(',')
             model = PhoneNumber(
                 short=short,
                 phone=phone,
-                ru_full_name=ru_full_name
+                ru_full_name=ru_full_name,
+                phone_code=phone_code,
+                currency=currency,
             )
             try:
                 model.save()
+                print(model)
             except BaseException:
                 pass
+
 
 def add_phone_codes():
     with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/Тесты - Лист13.csv') as file:
@@ -26,6 +30,7 @@ def add_phone_codes():
             model = PhoneNumber.objects.get(short=short)
             model.currency = currency
             model.save()
+
     
 
 # def add_offers():
@@ -63,4 +68,16 @@ def fix_offers_names():
             
 
 
-fix_offers_names()
+def add_geo_words():
+    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/geo_words.csv') as file:
+        for line in file:
+            if line.endswith('\n'):
+                line = line[:-1]
+            name, short, *words = line.split(',')
+            try:
+                phone = PhoneNumber.objects.get(short=short)
+                phone.words['words'] = words
+                phone.save()
+                print(phone.words)
+            except:
+                print(name, short)

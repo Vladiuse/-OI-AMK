@@ -62,8 +62,8 @@
         margin: 0px 0;
         flex-wrap: wrap;
     }
-    #oi-toolbar .oi-info .oi-bold,
-    #oi-toolbar .oi-dates .oi-bold
+
+    #oi-toolbar .oi-bold
     {
         font-weight: 600;
     }
@@ -158,6 +158,9 @@
         color: red;
         font-weight: bold;
     }
+    .__debug_msg{
+        font-weight: bold;
+    }
 
     #oi-toolbar .container-toolbar{
         display: flex;
@@ -168,7 +171,11 @@
         justify-content: space-between;
         color: #fcffff;
     }
-    #oi-toolbar .oi-dates .oi-col{
+    #oi-toolbar .oi-geo-words{
+        justify-content: space-between;
+        color: #fcffff;
+    }
+    #oi-toolbar .oi-col{
         width: 50%;
     }
     /* #oi-toolbar .oi-header{

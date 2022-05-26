@@ -17,6 +17,7 @@ class PhoneNumber(models.Model):
     ru_full_name = models.CharField(max_length=20, verbose_name='Русское название', blank=True, unique=True)
     phone_code = models.CharField(max_length=15, verbose_name='Моб код страны', blank=True)
     currency = models.CharField(max_length=5, verbose_name='Валюта', blank=True)
+    words = models.JSONField(default={'words': []}, verbose_name='Слова под гео')
 
     class Meta:
         verbose_name = 'Валидный номер'

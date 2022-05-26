@@ -104,7 +104,7 @@
             // console.log(formsNoSelect.length, 'xxxxx')
             formsNoSelect.each(function(){
                 let msg = getMsg()
-                msg.text('Нет селекта страны')
+                msg.text('Нет селекта страны!!!')
                 $(this).append(msg)
                 // plusError()
             })
@@ -313,7 +313,6 @@
         }
         // Добавить даты в тулбар
         function addDatesTool(dates){
-            console.log(dates)
             let keys = ['oi-dates_correct', 'oi-dates_incorrect', 'oi-years', 'oi-years_old']
             for (pos in keys){
                 let id = keys[pos]
@@ -331,15 +330,34 @@
             //     $('#oi-back-dates').after(span)
             // }
         }
+        // Добавить слова/падежы гео в туллбар 
+        function addGeoWordsTool(geo_words){
+            for (geo in geo_words){
+                let words = geo_words[geo]
+                console.log(geo, words)
+                if (geo != country){$('#oi-geo-words').addClass(toolbarErrorClass)}
+                let span = '<p>' + geo + '</p>'
+                $('#oi-geo-words').after(span)
+                for (pos in words){
+                    let word = words[pos]
+                    let span = '<p>' + word + '</p>'
+                    $('#oi-geo-words-words').after(span)
+                }
+            }
+        }
 
         // Загрузда данных анализа текста API
         function loadBackAnalize(){
             let url = currentUrl + '/checker/analiz_land_text/'
+            let page_title = $('title').clone()
             let send_text = $('body').clone()
             send_text.find('#oi-toolbar').remove()
             send_text.find('#test-block').remove()
             send_text.find('#polit').remove()
             send_text.find('#agreement').remove()
+
+            send_text += page_title.html()
+            
             data = {'land_text': send_text.html()}
             $.post(url, data, function(response){
                 console.log(response)
@@ -348,11 +366,13 @@
                     currs = response.result['currencys']
                     dates = response.result['dates_on_land']
                     phone_codes = response.result['phone_codes']
+                    geo_words = response.result['geo_words']
 
                     addOffersTool(offers)
                     addCurrTool(currs)
                     addPhoneMaksTool(phone_codes)
                     addDatesTool(dates)
+                    addGeoWordsTool(geo_words)
 
                 } else {
                     console.log('Ошибка загрузки анализатора')
