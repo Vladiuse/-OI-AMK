@@ -15,6 +15,19 @@ def find_in_text(text: str, offers: list):
 
     return result
 
+def find_word_template_in_text(word_template, text):
+    """Поиск шаблона слова по тексту"""
+    regEx = '\W'+word_template+'[\W\w]{0,6}[\s.\-;:,]'
+    symbols_to_clean = ' .-;:,\n'
+    res = re.findall(regEx, text)
+    clean_result = []
+    for word in res:
+        word = word.strip()
+        for char in symbols_to_clean:
+            word = word.replace(char, '')
+        clean_result.append(word)
+    return clean_result
+
 
 class TextAnaliz:
 
@@ -26,13 +39,28 @@ class TextAnaliz:
         self.soup = BeautifulSoup(self.land_text, 'lxml')
         self.clean_land_text = self.soup.text
 
+    def add_placeholders_text(self):
+        inputs = self.soup.find_all('input')
+        placeholders_text = ['']
+        for inpt in inputs:
+            try:
+                placeholder = inpt['placeholder']
+                placeholders_text.append(placeholder)
+            except KeyError:
+                pass
+        placeholders_text = ' '.join(placeholders_text)
+        self.clean_land_text += placeholders_text
+
 
     def process(self):
+        self.add_placeholders_text()
+
         self.find_offers()
         self.find_currensy()
         self.find_phone_codes()
         self.find_dates()
         self.find_geo_words()
+        self.find_geo_templates_words()
         # print(self.result)
 
     def find_offers(self):
@@ -81,6 +109,7 @@ class TextAnaliz:
         self.result.update({'dates_on_land': clean_dates})
 
     def find_geo_words(self):
+        """Поиск статичных слов относящихся к стране"""
         geo_words = self.data['geo_words']
         text = self.clean_land_text.lower()
         result = {}
@@ -90,6 +119,26 @@ class TextAnaliz:
                 result.update({geo_short: list(res)})
         pprint(result)
         self.result.update({'geo_words': result})
+
+    def find_geo_templates_words(self):
+        """Поиск слов по шаблонам"""
+        geo_words_templates = self.data['geo_words_templates']
+        text = self.clean_land_text.lower()
+        result = {}
+        for geo, word_templates in geo_words_templates.items():
+            res = []
+            for template in word_templates:
+                find = find_word_template_in_text(word_template=template, text=text)
+                res.extend(find)
+            res = list(set(res))
+            if res:
+                result.update({geo: res})
+        self.result.update({'geo_words_templates': result})
+
+
+
+
+
 
 
     @staticmethod
@@ -123,6 +172,11 @@ class TextAnaliz:
 
 
 if __name__ == '__main__':
-    dates = [' 2030\n', ' 4444-', '1.10.20', '10.01.1020', '1/10/20', '1.1.20', '01.10.2020', '/2020 ', ' 2022)', '(2030)', '24.05.2022', ' 2030 ', '01.10.20', '01.1.2020', '\n1111\n', '01-10-20', '1-1.20', ' 2020 ', '\n2030\n']
-    chars = '() /'
-    start_end = ' -.'
+
+    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/test/coutrys_find/text.txt') as file:
+        text = file.read()
+    russia_text = text.lower()
+    print(russia_text)
+
+    result = find_word_template_in_text('росси', russia_text)
+    print(result)

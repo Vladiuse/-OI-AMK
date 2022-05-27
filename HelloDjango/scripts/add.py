@@ -1,3 +1,5 @@
+import os
+
 from kma.models import PhoneNumber, OfferPosition
 
 
@@ -18,7 +20,8 @@ def add_phones():
                 model.save()
                 print(model)
             except BaseException:
-                pass
+                print(line)
+
 
 
 def add_phone_codes():
@@ -31,32 +34,6 @@ def add_phone_codes():
             model.currency = currency
             model.save()
 
-    
-
-# def add_offers():
-#     with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/offers.csv') as file:
-#         for line in file:
-#             if line.endswith('\n'):
-#                 line=line[:-1]
-#             if line.endswith("'"):
-#                 line = line[:-1]
-#             offer = OfferPosition(name=line)
-#             offer.save()
-#     print('END')
-
-# def add_offers():
-#     error_count = 0
-#     with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/offers.csv') as file:
-#         for line in file:
-#             offer, *_ = line.split('-')
-#             offer = offer.strip()
-#             try:
-#                 new = OfferPosition(name=offer)
-#                 new.save()
-#                 print(new.name)
-#             except:
-#                 error_count += 1
-#     print(error_count)
 
 def fix_offers_names():
     offers = OfferPosition.objects.all()
@@ -64,8 +41,6 @@ def fix_offers_names():
         if '+' in offer.name and not offer.name.endswith('+'):
             print(offer)
 
-            
-            
 
 
 def add_geo_words():
@@ -73,11 +48,23 @@ def add_geo_words():
         for line in file:
             if line.endswith('\n'):
                 line = line[:-1]
-            name, short, *words = line.split(',')
+            name, short, *templates = line.split(',')
+            templates = set(templates)
+            templates.remove('')
+            print(name, short, templates)
             try:
                 phone = PhoneNumber.objects.get(short=short)
-                phone.words['words'] = words
+                dic = {'templates': list(templates)}
+                phone.words.update(dic)
                 phone.save()
-                print(phone.words)
+                print(phone)
             except:
-                print(name, short)
+                print(short, 'Not Found')
+
+
+phones = PhoneNumber.objects.all()
+for p in phones:
+    print(p.short,p.words['templates'])
+
+
+

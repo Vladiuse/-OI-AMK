@@ -113,7 +113,6 @@
         // Поиск инпутов с некоректным атрибутом type
         function formInputType(){
             let inputs = $('form input[name=phone]')
-            console.log(inputs)
             let inputsNoTel = inputs.filter(function(){
                 if ($(this).attr('type') != 'tel'){
                     return true
@@ -334,7 +333,6 @@
         function addGeoWordsTool(geo_words){
             for (geo in geo_words){
                 let words = geo_words[geo]
-                console.log(geo, words)
                 if (geo != country){$('#oi-geo-words').addClass(toolbarErrorClass)}
                 let span = '<p>' + geo + '</p>'
                 $('#oi-geo-words').after(span)
@@ -356,9 +354,11 @@
             send_text.find('#polit').remove()
             send_text.find('#agreement').remove()
 
+
+            send_text = send_text.html()
             send_text += page_title.html()
             
-            data = {'land_text': send_text.html()}
+            data = {'land_text': send_text}
             $.post(url, data, function(response){
                 console.log(response)
                 if (response['success']){
@@ -366,7 +366,8 @@
                     currs = response.result['currencys']
                     dates = response.result['dates_on_land']
                     phone_codes = response.result['phone_codes']
-                    geo_words = response.result['geo_words']
+                    //geo_words = response.result['geo_words']
+                    geo_words = response.result['geo_words_templates']
 
                     addOffersTool(offers)
                     addCurrTool(currs)
@@ -417,7 +418,57 @@
             if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
             })
 
+        // $('*').click( function(){
+        //     if ($(this).children().length == 1){
+        //         console.log($(this))
+        //     }
+        // })
 
+        var entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+          };
+          
+          function escapeHtml (string) {
+            return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+              return entityMap[s];
+            });
+          }
+
+        var body = document.querySelector('body');
+        body.onclick = function(event) {
+            if (event.ctrlKey){
+                console.log('click')
+                $('#oi-message-result').removeClass('__true')
+                let dateWindow = $('#oi-message-text')
+                let elem = $(event.target)
+                elemHtml = elem.parent().html()
+                let parentHtml = elem.parent().parent().html()
+                new_text = escapeHtml(elemHtml)
+
+                new_text = new_text.replaceAll('↓', '<br>')
+                new_text = new_text.replaceAll('__back-date', '') 
+                new_text = new_text.replaceAll('__debug_script_date', '') 
+                new_text = new_text.replaceAll('date', '<span>date</span>')
+                if (new_text.length > 600) {new_text='Слишком много букв'}
+                dateWindow.html(new_text)
+                console.log(new_text.length)
+                if (new_text.includes('date')|| new_text.includes('year')) {
+                    $('#oi-message-result').text('Скрипт')
+                    $('#oi-message-result').addClass('__true')
+                } else {
+                    $('#oi-message-result').text('Нет скрипта')
+                }
+                $('#oi-date-pop-wrapper').fadeIn(300).delay(2000).fadeOut(700);
+                // console.log(elemHtml)
+            }
+            };
         // Включение тулбара клавишами
         $(document).keyup(function(e) {
             // i = 73 p = 80 q = 81 y = 17 b = 66

@@ -230,3 +230,26 @@
         text-decoration: underline;
         cursor: pointer;
     }
+
+    #oi-date-pop-wrapper{
+        position: fixed;
+        bottom: 30px;
+        left: 0px;
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    #oi-date-pop span{
+        background-color: red;
+    }
+    #oi-date-pop-wrapper .oi-message{
+        width: 250px;
+        background-color: #28323b;
+        padding: 15px;
+        border-radius: 10px;
+        color: var( --white-color);
+    }
+    #oi-message-result.__true{
+        color:rgb(32, 212, 32)
+    }
