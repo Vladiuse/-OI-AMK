@@ -37,41 +37,41 @@ def check_url(request):
 
 @csrf_exempt
 def analiz_land_text(request):
-    try:
-        land_text = request.POST['land_text']
-        # print('россииа' in land_text)
-        offers = OfferPosition.objects.values('name')
-        offers_names = [offer['name'] for offer in offers]
-        phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
-        phone_codes = [phone['phone_code'] for phone in phones]
-        currencys = [phone['currency'] for phone in phones]
-        geo_words = {}
-        geo_words_templates = {}
-        for phone in phones:
-            if phone['words']['words']:
-                dic = {phone['short']: phone['words']['words']}
-                geo_words.update(dic)
-        for phone in phones:
-            print(phone['words'], phone['short'])
-            if phone['words']['templates']:
-                dic = {phone['short']: phone['words']['templates']}
-                geo_words_templates.update(dic)
-        data = {
-            'offers': offers_names,
-            'currencys': currencys,
-            'phone_codes': phone_codes,
-            'geo_words': geo_words,
-            'geo_words_templates': geo_words_templates,
-        }
-        analizer = TextAnaliz(land_text=land_text, data=data)
-        analizer.process()
-        answer = {
-            'success': True,
-            'result': analizer.result,
-        }
-    except BaseException as error:
-        answer = {
-            'success': False,
-            'error': str(error),
-        }
+    # try:
+    land_text = request.POST['land_text']
+    # print('россииа' in land_text)
+    offers = OfferPosition.objects.values('name')
+    offers_names = [offer['name'] for offer in offers]
+    phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
+    phone_codes = [phone['phone_code'] for phone in phones]
+    currencys = [phone['currency'] for phone in phones]
+    geo_words = {}
+    geo_words_templates = {}
+    for phone in phones:
+        if phone['words']['words']:
+            dic = {phone['short']: phone['words']['words']}
+            geo_words.update(dic)
+    for phone in phones:
+        print(phone['words'], phone['short'])
+        if phone['words']['templates']:
+            dic = {phone['short']: phone['words']['templates']}
+            geo_words_templates.update(dic)
+    data = {
+        'offers': offers_names,
+        'currencys': currencys,
+        'phone_codes': phone_codes,
+        'geo_words': geo_words,
+        'geo_words_templates': geo_words_templates,
+    }
+    analizer = TextAnaliz(land_text=land_text, data=data)
+    analizer.process()
+    answer = {
+        'success': True,
+        'result': analizer.result,
+    }
+    # except BaseException as error:
+    #     answer = {
+    #         'success': False,
+    #         'error': str(error),
+    #     }
     return JsonResponse(answer, safe=False)
