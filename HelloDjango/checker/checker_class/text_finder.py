@@ -117,7 +117,7 @@ class TextAnaliz:
             res = find_in_text(text, words)
             if res:
                 result.update({geo_short: list(res)})
-        pprint(result)
+        # pprint(result)
         self.result.update({'geo_words': result})
 
     def find_geo_templates_words(self):
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/test/coutrys_find/text.txt') as file:
         text = file.read()
     russia_text = text.lower()
-    print(russia_text)
-
-    result = find_word_template_in_text('росси', russia_text)
-    print(result)
+    # print(russia_text)
+    #
+    # result = find_word_template_in_text('росси', russia_text)
+    # print(result)

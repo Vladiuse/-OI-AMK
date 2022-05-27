@@ -39,7 +39,7 @@ def check_url(request):
 def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
-        print('россииа' in land_text)
+        # print('россииа' in land_text)
         offers = OfferPosition.objects.values('name')
         offers_names = [offer['name'] for offer in offers]
         phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')

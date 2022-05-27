@@ -196,9 +196,9 @@ if __name__ == '__main__':
     TOOLBAR_JS_FILE = './checker/checker_class/front_data/script.js'
     url = 'https://blog-feed.org/blog-dialux-ge/?ufl=14153'
     res = req.get(url)
-    print(res.text)
-    print('href="css/A.bmmfp.css.pagespeed.c' in res.text)
-    exit()
+    # print(res.text)
+    # print('href="css/A.bmmfp.css.pagespeed.c' in res.text)
+    # exit()
     soup = BeautifulSoup(res.text, 'lxml')
     dom = DomFixxer(soup, url)
     dom.process()
