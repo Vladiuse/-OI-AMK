@@ -45,6 +45,7 @@
                 findDiscount();
                 findCity();
                 loadBackAnalize();
+                showInputTypes();
             }
             else{
                 removeAllDebug()
@@ -70,6 +71,7 @@
 
         // Удаление всех классов и элементов debug
         function removeAllDebug(){
+            RemoveIoPlaceholder();
             let forms = $('form.'+formNoSelectClass)
             forms.removeClass(formNoSelectClass)
             let scriptDate = $('.' + debugScritpDate).removeClass(debugScritpDate)
@@ -180,6 +182,28 @@
         function findSpanPercent(){
             let elems = $('span.__back-percent')
             elems.addClass(debugClass)
+        }
+
+        function showInputTypes(){
+            let inputs = $('input')
+            inputs.each(function(){
+                if ($(this).attr('placeholder') != undefined){
+                    $(this).attr('oi-placeholder', $(this).attr('placeholder'))
+                    let new_placeholder = $(this).attr('placeholder') + ' | type=' + $(this).attr('type')
+                    $(this).attr('placeholder', new_placeholder)
+                } else {
+                    $(this).attr('oi-placeholder', '')
+                    $(this).attr('placeholder', 'type=' + $(this).attr('type'))
+                }
+                
+                
+            })
+        }
+        function RemoveIoPlaceholder(){
+            let inputs = $('input')
+            inputs.each(function(){
+                $(this).attr('placeholder',$(this).attr('oi-placeholder') )
+            })
         }
 
         // УДалить!
