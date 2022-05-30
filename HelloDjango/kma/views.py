@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import DefaultWeb, PhoneNumber
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def default_webs(request):
     webs = DefaultWeb.objects.all()
     content = {
@@ -11,6 +13,7 @@ def default_webs(request):
     }
     return render(request, 'kma/default_webs.html', content)
 
+@login_required
 def phones(request):
     phones = PhoneNumber.objects.all().order_by('short')
     content = {
@@ -20,6 +23,7 @@ def phones(request):
 
 
 @csrf_exempt
+@login_required
 def get_phone_code(request):
     try:
         country_code = request.GET['country_code']

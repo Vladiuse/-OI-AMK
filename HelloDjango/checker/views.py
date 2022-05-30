@@ -7,8 +7,10 @@ import requests as req
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
 from pprint import pprint
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required
 def index(requests):
     with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
         debug_styles = file.read()
@@ -17,6 +19,7 @@ def index(requests):
     }
     return render(requests, 'checker/index.html', content)
 
+@login_required
 def check_url(request):
     # try:
     url = request.GET['url']
@@ -35,6 +38,7 @@ def check_url(request):
     return HttpResponse(htm_page)
 
 
+@login_required
 @csrf_exempt
 def analiz_land_text(request):
     try:
