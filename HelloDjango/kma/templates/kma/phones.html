@@ -8,6 +8,30 @@
           <h5>Probniy_zakaz</h5>
     <a href="https://ru.wikipedia.org/wiki/ISO_3166-1" target="_blank">Коды Стран ISO</a><br>
       <a href="https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D1%8F%D0%B7%D1%8B%D0%BA%D0%BE%D0%B2" target="_blank">Коды языков</a>
+      <br>
+      <div class="copypaste">
+        <!-- <p>@Славик#6278</p>
+        <p>**Тест интеграции**</p>
+        <p>Оффер: xxxx</p>
+        <p>Таска: xxxx</p>
+        <p>Рекл: xxxx</p>
+        <p>Гео: xxxx</p>
+        <p>Внешний ID: xxxx</p> -->
+        <textarea class="form-control" name="" id="" cols="30" rows="8">
+        <!-- @Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx -->
+        </textarea>
+      </div>
+     <div class="managers">
+      <button class="btn btn-primary">@Max KMA#6702 </button>
+      <button class="btn btn-secondary">@Nadezhda Sokolova#1960</button><br>
+      <button class="btn btn-warning">@Наталья Полищук#3551</button>
+      <button class="btn btn-info">@Olya KMA#4825</button>
+     </div>
+      <div class="container1">
+        <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+            
+
+      </div>
     </div>
 
 <div class="phones-table">
@@ -52,6 +76,29 @@
   .to-copy h5, .to-copy a{
   margin: 0 5px;
   }
+  .copypaste{
+    margin: 30px 0;
+  }
+   p{
+    margin: 0 0;
+  }
+  .managers button{
+    margin-top: 8px;
+  }
+  .managers{
+    margin: 10px 0;
+  }
 </style>
+<script>
+      let string = '@Max KMA#6702' + "\nОффер: xxxxx\nПускаем оффер? паблик/эксклюзив/приват?\nГео: xxx\nТаск: xxxx";
+      $('.container1 textarea').val(string)
+  $('.managers button').click(function(){
+    let string = $(this).text() + "\nОффер: xxxxx\nПускаем оффер? паблик/эксклюзив/приват?\nГео: xxx\nТаск: xxxx"
+    $('.container1 textarea').val(string)
+    
+    
+  })
+  $('.copypaste textarea').val('@Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx')
+</script>
 
 {% endblock %}

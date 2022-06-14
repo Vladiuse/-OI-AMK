@@ -31,7 +31,7 @@ def check_url(request):
     t_fix = TextFixxer(text)
     t_fix.process()
     text = t_fix.text
-    soup = BeautifulSoup(text, 'lxml')
+    soup = BeautifulSoup(text, 'html5lib')
     dom = DomFixxer(soup, url=url)
     dom.process()
     htm_page = str(dom.soup)

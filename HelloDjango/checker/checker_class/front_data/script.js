@@ -190,6 +190,7 @@
                 if ($(this).attr('placeholder') != undefined){
                     $(this).attr('oi-placeholder', $(this).attr('placeholder'))
                     let new_placeholder = $(this).attr('placeholder') + ' | type=' + $(this).attr('type')
+                    new_placeholder.replaceAll('  ', ' ')
                     $(this).attr('placeholder', new_placeholder)
                 } else {
                     $(this).attr('oi-placeholder', '')

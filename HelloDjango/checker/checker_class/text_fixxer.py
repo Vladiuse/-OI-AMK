@@ -164,14 +164,17 @@ class DomFixxer:
         pass
 
     def add_base_tag(self):
+        url = self.url
+        if '?' in self.url:
+            url = self.url.split('?')[0]
         base = self.soup.find('base')
         if not base:
-            url = self.url
-            if '?' in self.url:
-                url = self.url.split('?')[0]
             new_base = self.soup.new_tag('base')
             new_base['href'] = url
             self.soup.html.head.insert(0, new_base)
+        else:
+            base['href'] = url
+
 
     def fix_style_link(self):
         href = 'css/bmmfp.css'
