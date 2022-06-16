@@ -69,7 +69,7 @@ class Site(models.Model):
 class SiteLocal(Site):
     """Сайт хранящийся на сервере"""
 
-    SITE_DOMAIN = 'http://vladiuse.beget.tech/'
+    SITE_DOMAIN = 'http://vladiuse.beget.tech/_kma/'
     SITE_URL = 'lands_json.php'
 
     class Meta:
@@ -170,4 +170,4 @@ class Tag(models.Model):
 
 class Test(models.Model):
     name = models.CharField(max_length=30)
-    phone = models.CharField(max_length=30)
+    phone = models.CharField(max_length=30, unique=True)

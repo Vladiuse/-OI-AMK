@@ -1,4 +1,4 @@
-{% extends 'office/base.html' %}
+{% extends 'root/base.html' %}
 {% load static %}
 {% block content %}
 <style>
@@ -330,13 +330,13 @@
   {% endfor %}
 
   <h1>Dirs</h1>
-  <i class="fas fa-user-edit" aria-hidden="true"></i>
-  <i class="fas fa-trash" aria-hidden="true"></i>
-  <i class="fas fa-cog" aria-hidden="true"></i>
-  <i class="fas fa-cogs" aria-hidden="true"></i>
-  <i class="fas fa-flask" aria-hidden="true"></i>
-  <i class="fas fa-trash" aria-hidden="true"></i>
-  <i class="fas fa-folder" aria-hidden="true"></i>
+<!--  <i class="fas fa-user-edit" aria-hidden="true"></i>-->
+<!--  <i class="fas fa-trash" aria-hidden="true"></i>-->
+<!--  <i class="fas fa-cog" aria-hidden="true"></i>-->
+<!--  <i class="fas fa-cogs" aria-hidden="true"></i>-->
+<!--  <i class="fas fa-flask" aria-hidden="true"></i>-->
+<!--  <i class="fas fa-trash" aria-hidden="true"></i>-->
+<!--  <i class="fas fa-folder" aria-hidden="true"></i>-->
   <br>
   <button class="btn btn-secondary" id="addRemoteSite" data-bs-toggle="modal" data-bs-target="#addRemoteSiteModal">Добавить сайт</button>
  <div class="catogorys-bar">
@@ -501,7 +501,7 @@
         let description = cardData['description']
         if (description == '') {description='Нет описания'}
         let languageID = cardData['languege_id']
-        if (languageID != null){languege = langueges[languageID]['full']} else{languege="Язык не выбран"}
+        if (languageID != null || languageID=="" ){languege = langueges[languageID]['full']} else{languege="Язык не выбран"}
         let dirPath = cardData['path']
         let categoryId = cardData['category_id']
         let category = getCatNameById(categoryId)
@@ -941,6 +941,8 @@
           LoadCardS(curentCategoryID);
           $('#addRemoteSiteModal .send-data').show()
           $('#addRemoteSiteModal .load-process').hide()
+          $('#addRemoteSiteModal form').find('input, textarea').val('')
+          form.classList.remove('was-validated')
         })
         }
         form.classList.add('was-validated')

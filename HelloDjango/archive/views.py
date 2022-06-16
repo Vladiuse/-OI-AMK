@@ -245,13 +245,15 @@ def add_remote_site(request):
             site_desc = request.POST['site-desc']
             site_url = request.POST['site-url']
             lang_id = request.POST['site-lang']
-            lang = Languege.objects.get(pk=lang_id)
+            try:
+                lang = Languege.objects.get(pk=lang_id)
+            except:
+                lang = None
             site_remote = Siteremote(
                 name=site_name, 
                 description=site_desc,
                 languege=lang,
                 path=site_url,
-
             )
             site_remote.save()
             site_remote.load_screenshot()
@@ -262,7 +264,7 @@ def add_remote_site(request):
                 'description': site_desc,
                 'path': site_remote.path,
                 'tag_id': None,
-                'languege_id': lang_id,
+                'languege_id': site_remote.languege,
                 'image': site_remote.image.name,
                 'category_id': None,
                 'cataloge_id': None,
