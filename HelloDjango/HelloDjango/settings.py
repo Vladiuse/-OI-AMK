@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'root.apps.RootConfig',
     'kma.apps.KmaConfig',
     'checker.apps.CheckerConfig',
+    'archive.apps.ArchiveConfig',
 
     # extensions
     'django_extensions',
@@ -173,3 +174,6 @@ STATIC_ROOT = '/home/v/vladiuse/kma_oi/public_html/static'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
