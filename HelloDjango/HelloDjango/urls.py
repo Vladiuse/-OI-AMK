@@ -25,4 +25,5 @@ urlpatterns = [
     path('', include('root.urls')),
     path('kma/', include('kma.urls')),
     path('checker/', include('checker.urls')),
+    path('checker/', include('archive.urls')),
 ]

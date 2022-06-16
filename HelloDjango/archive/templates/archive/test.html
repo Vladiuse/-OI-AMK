@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for test in tests %}
+
+<p>{{test.name}} {{test.phone}}</p>
+{% endfor %}
+<form method="POST">
+    {% csrf_token %}
+  <input name="name"><br>
+  <input name="phone"><br>
+  <button>Send</button>
+</form>
+</body>
+</html>

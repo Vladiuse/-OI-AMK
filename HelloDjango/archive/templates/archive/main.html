@@ -1,0 +1,957 @@
+{% extends 'office/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+   /* Категории лэндов */
+      .catogorys-bar{
+        display: flex;
+        margin: 10px 0;
+      }
+      .categorys{
+        margin-right: 10px;
+      }
+      .categorys button{
+        margin-right: 5px;
+      }
+      .add-categorys{
+
+      }
+
+      .add-categorys #add-category-data,
+      .add-categorys
+      {
+        display: flex;
+        /* width: 100px; */
+      }
+      .add-categorys input{
+        margin: 0 5px;
+      }
+      .card .blockquote-footer{
+        margin-top: 0;
+      }
+      .card-btn-group {
+        display: flex;
+        justify-content: space-between;
+        
+      }
+      .card i{
+        margin: 0;
+        margin: 4px;
+        color: #333;
+      }
+      #add-cataloge i{
+        margin: 0;
+
+      }
+      #add-cataloge{
+        margin-left: 5px;
+      }
+      .catogorys-bar .fa-ban{
+        margin: 4px;
+        color: white;
+      }
+      .cataloge-card .card-btn-group{
+        justify-content: flex-end;
+      }
+
+      /* стили Тэгов */
+      .tag{
+        display: inline-block;
+        padding: 5px;
+        color: #333;
+        border-radius: 15px;
+      }
+      .tag.mad-cat{
+        background-color: rgb(132, 51, 156);
+        color: white;
+      }
+      .tag.pp-kma{
+        background-color: rgb(136, 209, 75);
+
+      }
+      .tag.spyer{
+        background-color: rgb(51, 51, 51);
+        color: white;
+      }
+  </style>
+
+<!-- Модалка настройки  сайта -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-card-id="">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Настройки сайта</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3 site-name">
+            <label for="recipient-name" class="col-form-label">Название:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="mb-3 site-description">
+            <label for="message-text" class="col-form-label">Описание:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+          <label for="message-text" class="col-form-label">Язык:</label>
+          <select class="form-select languege" aria-label="Default select example">
+          </select>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary send-data">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Модалка настройки  сайта -->
+
+
+<!-- Модалка Добавления Папки -->
+<div class="modal fade" id="catalogeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-card-id="">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить папку</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3 site-name">
+            <label for="recipient-name" class="col-form-label">Категория:</label>
+            <input type="text" class="form-control" id="recipient-name" disabled>
+          </div>
+          <div class="mb-3 site-description">
+            <label for="message-text" class="col-form-label">Название:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary send-data">Создать</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Модалка Добавления Папки -->
+
+
+<!-- Модалка Добавления Сайта в Папку -->
+<div class="modal fade" id="siteFolderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-site-id="">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить сайт в папку</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="list-group">
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Модалка Добавления Сайта в Папку -->
+
+<!-- Модалка Удаления папки -->
+<div class="modal fade" id="trashFolderModal" tabindex="-1" aria-labelledby="trashFolderModal" aria-hidden="true" data-site-id="">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Удаление папки</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Удалить папку <span class="cataloge-name"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger send-data">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Модалка Удаления папки -->
+
+<!-- Модалка добавления Удаленного сайта -->
+<div class="modal fade needs-validation" id="addRemoteSiteModal" tabindex="-1" aria-labelledby="addRemoteSiteModal" aria-hidden="true" data-card-id="" novalidate>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить сайт по ссылке</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3 site-name">
+            <label for="recipient-name" class="col-form-label">Название:</label>
+            <input type="text" class="form-control" id="recipient-name" name="site-name" required>
+            <div class="invalid-feedback">
+              Укажите название
+            </div>
+          </div>
+          <div class="mb-3 site-name">
+            <label for="recipient-link" class="col-form-label">Ссылка:</label>
+            <input type="url" class="form-control" id="recipient-link" name="site-url" required>
+            <div class="invalid-feedback">
+              Укажите ссылку
+            </div>
+          </div>
+          <div class="mb-3 site-description">
+            <label for="message-text" class="col-form-label">Описание:</label>
+            <textarea class="form-control" id="message-text" name="site-desc"></textarea>
+          </div>
+          <label for="message-text" class="col-form-label">Язык:</label>
+          <select class="form-select languege" aria-label="Default select example" name="site-lang">
+          </select>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary send-data">Добавить Сайт
+        </button>
+        <button class="btn btn-primary load-process" type="button" disabled style="display:none;">
+          <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+          Loading...
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Модалка добавления Удаленного сайта -->
+
+
+
+  <!-- Блоки для копирования -->
+  <div style="display: none" id="copy-block">
+    <button class="btn btn-primary" data-cat-id=""></button>
+
+    <!-- Карточка сайта -->
+    <div class="col" id="card-exsample">
+      <div class="card h-100">
+        <a href="{{site.get_site_url}}" class="site_url" target="_blank">
+            <img src="media/{{site.image}}" class="card-img-top" alt="...">
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">{{site.path}}</h5>
+          <footer class="blockquote-footer description">site description</footer>
+
+          <!-- <p class="card-text category">Категория: {{site.category}}</p> -->
+          <p class="card-text language" data-site-lang="">Язык: {{site.language}}</p>
+          <div class="card-btn-group">
+            <div class="dropdown">
+              <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Нет категории
+              </a>          
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+              </ul>
+            </div>
+      
+            <div>
+              <button class="btn btn-outline-secondary site-drop-from-folder" style="display: none;">
+                <i class="fas fa-reply" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-outline-secondary site-add-to-folder" data-bs-toggle="modal" data-bs-target="#siteFolderModal" style="display:none;">
+                <i class="fas fa-folder" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-outline-secondary site-settings" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="fas fa-cog" aria-hidden="true"></i>
+              </button>
+            </div>
+
+          </div>
+
+        
+        </div>
+        <div class="card-footer">
+          <small class="text-muted path">Last updated 3 mins ago</small>
+        </div>
+      </div>
+    </div>
+      <!-- Карточка сайта -->
+
+
+    <!-- Карточка Каталога -->
+    <div class="col cataloge-card" id="cataloge-exsample">
+      <div class="card h-100">
+        <a href="#" class="cataloge_url" target="_blank">
+            <img src="media/tech/folder_d82hd31d.png" class="card-img-top" alt="..." >
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">Название Папки</h5>
+          <footer class="blockquote-footer description">cataloge description</footer>
+
+          <!-- <p class="card-text category">Категория: {{site.category}}</p> -->
+          <!-- <p class="card-text language" data-site-lang="">Язык: {{site.language}}</p> -->
+          <div class="card-btn-group">
+            <!-- <div class="dropdown">
+              <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Нет категории
+              </a>
+            
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </div> -->
+            <button class="btn btn-outline-secondary cataloge-remove" data-bs-toggle="modal" data-bs-target="#trashFolderModal">
+              <i class="fas fa-trash" aria-hidden="true"></i>
+            </button>
+            <!-- <button class="btn btn-outline-secondary site-settings" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <i class="fas fa-cog" aria-hidden="true"></i>
+            </button> -->
+          </div>
+
+        
+        </div>
+        <div class="card-footer">
+          <small class="text-muted path">Last updated 3 mins ago</small>
+        </div>
+      </div>
+    </div>
+      <!-- Карточка Каталога -->
+  </div>
+
+
+
+<div class="main-wrapper">
+  {% for tag in tags %}
+  <div class="tag {{tag.html_class}}">{{tag.text}}{{tag.smile|safe}}</div>
+  {% endfor %}
+
+  <h1>Dirs</h1>
+  <i class="fas fa-user-edit" aria-hidden="true"></i>
+  <i class="fas fa-trash" aria-hidden="true"></i>
+  <i class="fas fa-cog" aria-hidden="true"></i>
+  <i class="fas fa-cogs" aria-hidden="true"></i>
+  <i class="fas fa-flask" aria-hidden="true"></i>
+  <i class="fas fa-trash" aria-hidden="true"></i>
+  <i class="fas fa-folder" aria-hidden="true"></i>
+  <br>
+  <button class="btn btn-secondary" id="addRemoteSite" data-bs-toggle="modal" data-bs-target="#addRemoteSiteModal">Добавить сайт</button>
+ <div class="catogorys-bar">
+    <div class="categorys">
+      <button class="btn btn-primary" data-cat-id="null">
+        <i class="fas fa-ban" aria-hidden="true"></i>
+      </button>
+
+    </div>
+    <div class="add-categorys">
+      <button class="btn btn-secondary" id="show-catogory-add">+</button>
+      <button class="btn btn-secondary" id="add-cataloge" data-bs-toggle="modal" data-bs-target="#catalogeModal" style="display:none;" data-cat-id="">
+        <i class="fas fa-folder" aria-hidden="true"></i>
+      </button>
+      <div id="add-category-data" style="display: none;">
+          <input type="text" class="form-control" placeholder="Название категории">
+        <button class="btn btn-success" id="add-category">Добавить</button>
+      </div>
+
+    </div>
+  </div>
+
+<div class="row row-cols-1 row-cols-md-6 g-4" id="cards">
+
+</div>
+</div>
+<script>
+    let SITE_URL = '{{current_domain}}archive/'
+      let categotyBunnot = $('<button class="btn btn-primary" data-cat-id=""></button>')
+      let toggleTime = 300;
+      let showAddCategory = $('#show-catogory-add');
+      let CATEGORYS = {}
+      let sites = {}
+      let langueges = {}
+      let cataloges = {}
+      let acrhiveUrl = "{{archive_url}}"
+      let curentCategoryID = null;
+      let currentCatalogID = null;
+      let isCategorysLoad = null; // есть ли в категории папки(каталог)
+      let isFolderOpen = null; // открыта ли сейчас папка
+
+
+      // При клике на категорию сайта (для обновления списка)
+      $('body').on('click', '.card .dropdown-toggle',function(){
+        let current_categoty = $(this).text()
+        curentCategoryID = $(this).attr('data-cat-id')
+        let catList = $(this).siblings()
+        catList.empty()
+        for (pos in CATEGORYS){
+          category = CATEGORYS[pos]
+          cat_name = category['name']
+          catId = category['id']
+          if (current_categoty != cat_name){
+            let cat_to_add = $('<a class="dropdown-item" href="#" data-cat-id=""></a>')
+            cat_to_add.attr('data-cat-id', catId)
+            cat_to_add.wrap('li')
+            cat_to_add.text(cat_name)
+            catList.append(cat_to_add)
+          }
+        }
+      })
+
+      function updateSiteCatInObj(site_id, new_cat_id){
+        for (pos in sites){
+          site = sites[pos]
+          if (site['id'] == site_id){
+            site['category_id'] = new_cat_id
+            break
+          }
+        }
+      }
+
+      // при выборе новой категории для сайта
+      $('body').on('click', 'ul a', function(){
+        newCatName = $(this).text()
+        newCatId = $(this).attr('data-cat-id')
+        let cardParents = $(this).parentsUntil('#cards')
+        let cardId = cardParents.filter('.col').attr('id')
+        let cardCat = $(this).parent().siblings()
+        let changeCatUrl = 'update_category'
+        let url = SITE_URL + changeCatUrl
+        data = {
+          'new_cat_name': newCatName, 
+          'card_id': cardId,
+        }
+        $.post(url, data, function(response){
+          console.log(response)
+          if (response['success'] == true){
+            cardCat.text(newCatName)
+            updateSiteCatInObj(cardId,newCatId)
+            $('#cards').empty()
+            loadCataloges(curentCategoryID);
+            LoadCardS(curentCategoryID);
+          }
+        })
+        // updateSiteCat(cardId, catId)
+      })
+
+        // получить название категории по id
+      function getCatNameById(Catid){
+        for (pos in CATEGORYS){
+          cat = CATEGORYS[pos]
+          // console.log(cat, cat['name'], Catid)
+          if (cat['id'] == Catid){
+            return cat['name']
+          }
+        }
+      }
+
+      // Добавление каталогов - если выбрана категория
+      function loadCataloges(catId){
+        console.log('Вызов loadCataloges', catId)
+        console.log(catId, 'catId')
+        if (catId != null){
+          for (pos in cataloges){
+            let catalogeData = cataloges[pos]
+            if (catalogeData['category_id'] == catId){
+              isCategorysLoad = true
+              addCatalog(catalogeData)
+            }
+          }
+            // let catalogeData = cataloges[curentCategoryID]
+            // addCatalog(catalogeData)
+        } else {
+          console.log('категория не выбрана catId')
+        }
+      }
+
+      // Добавить каталог
+      function addCatalog(catalogData){
+        console.log('Отрисовка каталога ', catalogData)
+        // console.log('catalogData', catalogData, cataloges)
+        cardsBlock = $('#cards')
+        let catalog = $('#cataloge-exsample').clone()
+        // console.log(catalog, catalog.find('.card-title'))
+        catalog.find('.card-title').text(catalogData['name'])
+        catalog.attr('id', catalogData['id'])
+        cardsBlock.append(catalog)
+      }
+
+      // загрузка набора карточек выбраной категории
+      function LoadCardS(category_id=null){
+        curentCategoryID = category_id
+        if (category_id == 'null') {category_id = null}
+        // $('#cards').empty()
+        for (pos in sites){
+          site_data = sites[pos]
+          // console.log(site_data)
+          // console.log(site_data['category_id'],category_id)
+          if (site_data['category_id'] == category_id && site_data['cataloge_id'] == null)
+          {addCard(site_data)}
+        }
+        isCategorysLoad = false
+        isFolderOpen = false
+      }
+
+      // Добавление карточки сайта в блок
+      function addCard(cardData){
+        let card = $('#card-exsample').clone()
+        let card_id = cardData['id']
+        let cardName = cardData['name']
+        let description = cardData['description']
+        if (description == '') {description='Нет описания'}
+        let languageID = cardData['languege_id']
+        if (languageID != null){languege = langueges[languageID]['full']} else{languege="Язык не выбран"}
+        let dirPath = cardData['path']
+        let categoryId = cardData['category_id']
+        let category = getCatNameById(categoryId)
+        let cardImage = 'media/' + cardData['image']
+        card.find('h5').text(cardName)
+        card.find('.path').text('Путь к папке: ' + dirPath)
+        card.find('.description').text(description)
+        card.find('.dropdown a').text(category) 
+        card.find('.language').text('Язык: ' + languege)
+        card.find('.language').attr('data-site-lang', languageID)
+        card.find('img').attr('src', cardImage)
+        card.attr('id', card_id)
+        if (dirPath.startsWith('http')){
+          card.find('.site_url').attr('href', dirPath)
+        } else {
+          card.find('.site_url').attr('href', acrhiveUrl + dirPath)
+        }
+        if (isCategorysLoad == true){card.find('.site-add-to-folder').show()}
+        if (isFolderOpen == true){card.find('.site-drop-from-folder').show()}
+
+        $('#cards').append(card)
+      }
+
+
+        // добавление кнопок категории
+      function loadCategoryButtons(){
+        for (categoryId in CATEGORYS){
+          category = CATEGORYS[categoryId]
+          addCatButton(category['name'], category['id'])
+        }
+      }
+
+      loadSitesNCategorys()
+
+        // загрузка сайтов и категорий + их отрисовка
+      function loadSitesNCategorys(){
+        LOAD_URL = 'get_sites_n_categorys'
+        url = SITE_URL + LOAD_URL
+        $.get(url, function(data){
+          CATEGORYS = data['categorys']
+          sites = data['sites']
+          langueges = data['langueges']
+          cataloges = data['cataloges']
+          loadCategoryButtons();
+          loadCataloges();
+          LoadCardS();
+        })
+      }
+      
+      // при клике на Добавить новую категорию (открывает форму)
+      $('#show-catogory-add').click(function(){
+        $('#add-category-data').toggle(toggleTime);
+        cleanCatagotyInput();
+        if ($(this).hasClass('btn-secondary')){
+          $(this).removeClass('btn-secondary')
+          $(this).addClass('btn-danger')
+          $(this).text('x')
+        }
+        else{
+          $(this).removeClass('btn-danger')
+          $(this).addClass('btn-secondary')
+          $(this).text('+')
+        }
+      })
+
+      function cleanCatagotyInput(){
+        $('#add-category-data input').val('')
+      }
+
+      $('#add-category').click(function(){
+        addNewCategory()
+      })
+
+      // отправить данные по новой категории
+      function addNewCategory(){
+        ADD_URL = 'add_site_category'
+        url = SITE_URL + ADD_URL
+        category_name = $('#add-category-data input').val()
+        data = {
+          'category_name': category_name,
+        }
+        $.post(url, data, function(data){
+          console.log(data)
+          let name = data['category_name']
+          let id = data['category_id']
+          CATEGORYS.push({'name': name, 'id': id})
+          addCatButton(name, id)
+          closeAddCatFrom()
+        })
+      }
+
+      // закрыть форму добавления категории
+      function closeAddCatFrom(){      
+        $('#add-category-data').toggle(toggleTime);
+        showAddCategory.removeClass('btn-danger')
+        showAddCategory.addClass('btn-secondary')
+        showAddCategory.text('+')
+      }
+
+
+      // Добавить одну кнопку категории
+      function addCatButton(catName, catId){
+        let catBtn = categotyBunnot.clone()
+        catBtn.text(catName)
+        catBtn.attr('data-cat-id', catId)
+        $('.catogorys-bar .categorys').append(catBtn)
+      }
+
+      // снятие добавление стилей на кнопки категорий (переключение) 
+      // и загрузка сайтов выбраной категории
+      $('.categorys').on('click', 'button', function(){
+        isFolderOpen = false
+        if ($(this).attr('data-cat-id') != 'null') {$('#add-cataloge').show(toggleTime)} else{ $('#add-cataloge').hide(toggleTime)}
+        $('#cards').empty()
+        $('.categorys button').removeClass('btn-outline-primary')
+        $('.categorys button').addClass('btn-primary')
+        $(this).removeClass('btn-primary')
+        $(this).addClass('btn-outline-primary')
+        let categoryId = $(this).attr('data-cat-id')
+        curentCategoryID = categoryId
+        loadCataloges(categoryId);
+        LoadCardS(categoryId)
+      })
+
+      // обновить категорию сайта в обьекте
+      function updateSiteCat(siteId, newCatId){
+        console.log('updateSiteCat', siteId)
+        for (pos in sites){
+          let site = sites[pos]
+          if (site['id'] == siteId){
+            site['category_id'] = newCatId
+            break
+          }
+        }
+      }
+
+      // обновить название и описание в обьекте сайтов
+      function updateSiteNameDesc(siteId, newName, newDesc, langId){
+        console.log('updateSiteCat', siteId)
+        for (pos in sites){
+          let site = sites[pos]
+          if (site['id'] == siteId){
+            site['name'] = newName
+            site['languege_id'] = langId
+            site['description'] = newDesc
+            break
+          }
+        }
+      }
+
+      // открытие модального окна и подтягивание данных сайта
+      $('body').on('click', '.card .site-settings', function(){
+        let modal = $('#exampleModal')
+        let card = $(this).parentsUntil('#cards').filter('.col')
+        let cardId = card.attr('id')
+        let cardName = card.find('.card-title').text()
+        let cardDescription = card.find('.description').text()
+        let cardLangID = card.find('.language').attr('data-site-lang') 
+        let modalSiteName = modal.find('.site-name input')
+        let modalSiteDesc = modal.find('.site-description textarea')
+        modal.attr('data-card-id', cardId)
+        modalSiteName.val(cardName)
+        modalSiteDesc.val(cardDescription)
+        addLangMadal(cardLangID)
+      })
+
+      // добавить селект с языками в модалку сайта
+      function addLangMadal(cardLangID, modalId){
+
+        let modal = $('#exampleModal')
+        if (modalId != undefined){modal = $('#'+ modalId)}
+        let selectLang = modal.find('select.languege')
+        selectLang.empty()
+        for (pos in langueges){
+          lang = langueges[pos]
+          let option = $('<option value="">Three</option>')
+          option.text(lang['full'])
+          option.val(lang['id'])
+          // console.log(lang['id'] == cardLangID, lang['full'],cardLang)
+          if (lang['id'] == cardLangID) {option.attr('selected', 'selected')}
+          if (lang['is_active']) {selectLang.append(option)}
+          // selectLang.append(option)
+        }
+      }
+
+      // отправка данных и закрытие окна
+      $('#exampleModal .send-data').click(function(){
+        console.log('SEND')
+        let modal = $('#exampleModal')
+        let modalSiteName = modal.find('.site-name input').val()
+        let modalSiteDesc = modal.find('.site-description textarea').val()
+        let modalSiteId = modal.attr('data-card-id')
+        let modalLangId = modal.find('select.languege').val()
+        console.log('modalLangId', modalLangId)
+        updateSiteNameDescServer(modalSiteId, modalSiteName,modalSiteDesc, modalLangId)
+        modal.modal('toggle');
+        updateSiteNameDesc(modalSiteId, modalSiteName, modalSiteDesc,modalLangId )
+        $('#cards').empty()
+        
+        if (isFolderOpen == true) {
+          loadCategoryCards(currentCatalogID)
+        } else {
+          loadCataloges(curentCategoryID);
+          LoadCardS(curentCategoryID)
+        }
+        
+        
+      })
+
+      // Отправка нового названия и описание на сервер
+      function updateSiteNameDescServer(siteId, name, desc, langId){
+        let updateUrl = 'update_name_n_desc'
+        let url = SITE_URL + updateUrl
+        data = {
+          'site_name': name,
+          'site_desc': desc, 
+          'site_id': siteId,
+          'lang_id': langId,
+        }
+        console.log(data, 'xxxx')
+        $.post(url, data, function(response){
+          console.log(response)
+        })
+      }
+
+      function loadCategoryCards(catalogId){
+        $('#cards').empty()
+        for (pos in sites){
+          site = sites[pos]
+          if (site['cataloge_id'] == catalogId){
+            addCard(site)
+          }
+        }
+        // isFolderOpen = false
+        
+      }
+
+      // При клике на каталог (папку)
+      $('body').on('click', '.cataloge_url', function(){
+        // let catalogId = $(this).attr('id')
+        let catalogId = $(this).parentsUntil('#cards').filter('.cataloge-card').attr('id')
+        isFolderOpen = true
+        currentCatalogID = catalogId
+        loadCategoryCards(catalogId)
+      })
+
+      // При клике на добавление папки
+      $('#add-cataloge').click(function(){
+        let catalogModal = $('#catalogeModal')
+        let categoryName = getCatNameById(curentCategoryID)
+        catalogModal.find('input').val(categoryName)
+        catalogModal.find('input').attr('data-cat-id', curentCategoryID)
+      }) 
+
+        // Отправить на сервер данные по новой папке
+        $('#catalogeModal .send-data').click(function(){
+        let modal = $('#catalogeModal')
+        let sendUrl = 'add_cataloge'
+        let url = SITE_URL + sendUrl
+        let name = modal.find('textarea').val()
+        let categoryId = modal.find('input').attr('data-cat-id')
+        data = {
+          'catalog_name': name,
+          'category_id': categoryId,
+        }
+        console.log(data, 'New Folder')
+        $.post(url, data, function(response){
+          console.log(response)
+          if (response['success'] == true){
+            let newCataloge = response['cataloge']
+            let newCatalogeId = newCataloge['id']
+            cataloges[newCatalogeId] = newCataloge
+            console.log('cataloges Update', cataloges)
+            $('#cards').empty()
+            loadCataloges(curentCategoryID);
+            LoadCardS(curentCategoryID);
+          }
+        })
+        isFolderOpen = false;
+        modal.modal('toggle')
+        modal.find('textarea').val('')
+        modal.find('input').attr('data-cat-id', '')
+        
+      })
+
+      // При клике на добавить сайт в папку
+      $('body').on('click', '.card .site-add-to-folder', function(){
+        let siteId = $(this).parentsUntil('#cards').filter('.col').attr('id')
+        let cardCatalog = $('#siteFolderModal .list-group')
+        cardCatalog.empty()
+        cardCatalog.attr('data-site-id', siteId)
+        for (pos in cataloges){
+          let catalog = cataloges[pos]
+          if (catalog['category_id'] == curentCategoryID){
+            let liElem  = $('<a href="#" class="list-group-item list-group-item-action" data-catalog-id="" data-site-id=""></a>')
+            liElem.text(catalog['name'])
+            liElem.attr('data-catalog-id', catalog['id'])
+            liElem.attr('data-site-id', siteId)
+            cardCatalog.append(liElem)
+          }
+        }
+      })
+
+      // При выборе папки в которую добавляем сайт
+      $('body').on('click', '#siteFolderModal .list-group-item-action', function(){
+        let modal = $('#siteFolderModal')
+        let siteId = $(this).attr('data-site-id')
+        let catalogId = $(this).attr('data-catalog-id')
+        console.log(siteId, catalogId)
+        let addUrl = 'add_site_to_cataloge'  // !повтор кода
+        let url = SITE_URL + addUrl
+        data = {
+          'site_id': siteId,
+          'cataloge_id': catalogId,
+        }
+        $.post(url, data, function(response){
+          console.log(response)
+          updateSiteCatalog(siteId, catalogId)
+          modal.modal('toggle')
+          $('#cards').empty()
+          loadCataloges(curentCategoryID);
+          LoadCardS(curentCategoryID);
+
+        })
+      })
+
+      // обновить id папки в обьекте
+      function updateSiteCatalog(siteId, catalogId){
+        for (pos in sites){
+          site = sites[pos]
+          if (site['id'] == siteId){
+            site['cataloge_id'] = catalogId;
+          }
+        }
+      }
+
+      // при клике - убрать сайт из каталога(папки)
+      $('body').on('click', '.col .site-drop-from-folder', function(){
+        isFolderOpen = false
+        let siteId = $(this).parentsUntil('#cards').filter('.col').attr('id')
+        let catalogId = null
+        let addUrl = 'add_site_to_cataloge'  // !повтор кода
+        let url = SITE_URL + addUrl
+        data = {
+          'site_id': siteId,
+          'cataloge_id': catalogId,
+        }
+        $.post(url, data, function(response){
+          console.log(response)
+          updateSiteCatalog(siteId, catalogId)
+          $('#cards').empty()
+          loadCataloges(curentCategoryID);
+          LoadCardS(curentCategoryID);
+        })
+
+      })
+
+      // при клике удалить каталог
+      $('body').on('click', '.cataloge-remove', function(){
+        let catalogId = $(this).parentsUntil('#cards').filter('.cataloge-card').attr('id')
+        let catalogName = cataloges[catalogId]['name']
+        let removeCatalogModal = $('#trashFolderModal')
+        console.log(catalogName)
+        removeCatalogModal.find('span.cataloge-name').text(catalogName)
+        removeCatalogModal.attr('data-cataloge-id', catalogId)
+      })
+
+      // удаление папки сервер
+      $('body').on('click', '#trashFolderModal .send-data', function(){
+          let modal = $('#trashFolderModal')
+          let catalogeId = modal.attr('data-cataloge-id')
+          delete cataloges[catalogeId]
+          let delUrl = 'remove_cataloge'
+          let url = SITE_URL + delUrl
+          data = {
+            'cataloge_id': catalogeId,
+          }
+          $.post(url, data, function(response){
+            console.log(response)
+            if (response['success'] == true){
+              sites_in_catalogId = response['sites_in_cataloge']
+              
+              updateSiteCataloges(sites_in_catalogId)
+              $('#cards').empty()
+              loadCataloges(curentCategoryID);
+              LoadCardS(curentCategoryID);
+            }
+            modal.modal('toggle')
+          })
+      }) 
+
+      function updateSiteCataloges(sitesIds){
+        isFolderOpen = false
+        for (pos in sitesIds){
+          siteID = sitesIds[pos]
+          for (pos in sites){
+            site = sites[pos]
+            if (site['id'] == siteID){
+              site['cataloge_id'] = null
+              console.log(site, 'сайт который выкинули из папки')
+            }
+          }
+        }
+      }
+      
+      $('#addRemoteSite').click(function(){
+        addLangMadal(null, 'addRemoteSiteModal')
+      })
+      $('#addRemoteSiteModal .send-data').click(function(){
+        let form = $('#addRemoteSiteModal form')[0]
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+          console.log('NOt valid')
+        } else {
+          var data = {};
+        // переберём все элементы input, textarea и select формы с id="myForm "
+        $('#addRemoteSiteModal form').find ('input, textarea, select').each(function() {
+          // добавим новое свойство к объекту $data
+          // имя свойства – значение атрибута name элемента
+          // значение свойства – значение свойство value элемента
+          data[this.name] = $(this).val();
+        });
+        console.log(data)
+        ADD_SITE_URL = 'add_remote_site'
+        url = SITE_URL + ADD_SITE_URL
+        $('#addRemoteSiteModal .send-data').hide()
+        $('#addRemoteSiteModal .load-process').show()
+        $.post(url, data, function(response){
+          console.log(response)
+          if (response['success']){
+            sites.push(response['site'])
+          }
+          $('#addRemoteSiteModal').modal('toggle')
+          $('#cards').empty()
+          loadCataloges(curentCategoryID);
+          LoadCardS(curentCategoryID);
+          $('#addRemoteSiteModal .send-data').show()
+          $('#addRemoteSiteModal .load-process').hide()
+        })
+        }
+        form.classList.add('was-validated')
+        
+      })
+
+
+      // заглушить ссылки
+      $('body').on('click', 'a[href="#"]', function(e){
+      e.preventDefault();
+        })
+</script>
+
+{% endblock %}
