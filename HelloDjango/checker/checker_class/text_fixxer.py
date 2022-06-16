@@ -14,6 +14,9 @@ TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker/checker_class/front_data/sc
 TEST_DATES = str(settings.BASE_DIR) + '/checker/checker_class/front_data/test_dates.html'
 
 
+TOOLBAR_NO_JS_FILE = str(settings.BASE_DIR) + '/checker/checker_class/wb/wb.js'
+
+
 def is_date_correct(date):
     """Проверка коректности даты"""
     for char in '-/\\':
@@ -191,6 +194,16 @@ class DomFixxer:
 
     def fix_relativ_path(self):
         pass
+
+    def load_wb(self):
+        with open(TOOLBAR_NO_JS_FILE, encoding='utf-8') as file:
+            self.script = file.read()
+    
+    def add_wb(self):
+        script_tag = self.soup.new_tag("script")
+        script_tag.string = self.script
+        self.soup.html.body.append(script_tag)
+
 
 
 if __name__ == '__main__':

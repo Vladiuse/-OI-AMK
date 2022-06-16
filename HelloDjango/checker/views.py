@@ -78,3 +78,23 @@ def analiz_land_text(request):
             'error': str(error),
         }
     return JsonResponse(answer, safe=False)
+
+
+@login_required
+def check_url_no_js(request):
+    url = request.GET['url']
+    # url = '1https://blog-feed.org/blog2-herbamanan/?ufl=14114'
+    res = req.get(url)
+    if res.status_code != 200:
+        return HttpResponse(f'Error: res.status_code != 200, Ссылка не работает!')
+    text = res.text
+    soup = BeautifulSoup(text, 'lxml')
+    for script in soup.find_all('script'):
+        script.decompose()
+    jq = soup.new_tag('script')
+    jq['src'] = 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+    soup.html.head.append(jq)
+    dom_fixxer = DomFixxer(soup, url)
+    dom_fixxer.load_wb()
+    dom_fixxer.add_wb()
+    return HttpResponse(str(dom_fixxer.soup))

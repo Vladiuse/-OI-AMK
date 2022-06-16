@@ -39,3 +39,7 @@ def get_phone_code(request):
             'message': str(error)
         }
     return JsonResponse(answer, safe=False)
+
+@login_required
+def manual(request):
+    return render(request, 'kma/manual/index.html')
