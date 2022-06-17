@@ -1,5 +1,5 @@
 // $(document).ready(function(){
-
+        const full = location.protocol + '//' + location.host + '/';
 
         let currentUrl = window.location.origin
         let toggleTime = 300;
@@ -19,18 +19,12 @@
         let lastDoubleScr = ''
         let PhoneMask = '';
 
-        // $.fn.removeClassStartingWith = function (filter) {
-        // $(this).removeClass(function (index, className) {
-        //     return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
-        //     });
-        // return this;
-        // };
-
+        let yamImg = full+ 'static/checker/scripts/yam.png'
+        let spyImg = full+ 'static/checker/scripts/spy.png'
 
         // MAIN
         function onOffDebug(){
             if (isDebug){
-                // updateErrorMarker();
                 findAlla();
                 FormSelectBebug();
                 formInputType();
@@ -72,6 +66,7 @@
         // Удаление всех классов и элементов debug
         function removeAllDebug(){
             RemoveIoPlaceholder();
+            removeDebugMsg()
             let forms = $('form.'+formNoSelectClass)
             forms.removeClass(formNoSelectClass)
             let scriptDate = $('.' + debugScritpDate).removeClass(debugScritpDate)
@@ -83,7 +78,6 @@
                     elem.classList.remove(debugClass);
                 }
             }
-            removeDebugMsg()
         }
 
         // удаление сообщений о ошибках с лэндинга
@@ -207,33 +201,6 @@
             })
         }
 
-        // УДалить!
-        // function plusError(){
-        //     errorCount ++
-        //     updateErrorMarker()
-        // }
-        // УДалить!
-        // Обновить кол-во ошибок в тулбаре
-        // function updateErrorMarker(){
-        //     let marker = $('#oi-toolbar .error-counter .marker')
-        //     let markerInfo = $('#oi-toolbar .error-counter .info')
-        //     if (errorCount == 0){
-        //         marker.css('background-color', 'green')
-
-        //     } else {
-        //         marker.css('background-color', 'red')
-        //     }
-        //     markerInfo.text(errorCount)
-        // }
-
-
-
-        // закрытие тулбара при скроле
-        // $(window).scroll(function (event) {
-        //     var scroll = $(window).scrollTop();
-        //     let toolbar = $('#oi-toolbar #back-info')
-        //     console.log(toolbar.css('display'))
-        // });
 
         // Поиск элементов с script внутри (возможно это скрипт даты)
         function findSriptsDate(){
@@ -296,17 +263,6 @@
             $('#oi-admin-price').html(price_text)
         }
 
-        // getRekvAdmin()
-        // Получить реквизиты из обьекта js
-        // function getRekvAdmin(){
-        //     if ($('rekv,js-agreement-rekv').length ==0){
-        //         $('#oi-rekv').text('Тэг не найден')  
-        //     } else {
-        //         $('#oi-rekv').text('Стоят')  
-        //     }
-            
-        // }
-
         // Добавить офферы в тулбар
         function addOffersTool(offers){
             if (offers.length != 1){$('.oi-back-offers').addClass(toolbarErrorClass)}
@@ -348,11 +304,6 @@
                     }
 
             }
-            // for (pos in dates){
-            //     let date = dates[pos]
-            //     let span = '<p>' + date + '</p>'
-            //     $('#oi-back-dates').after(span)
-            // }
         }
         // Добавить слова/падежы гео в туллбар 
         function addGeoWordsTool(geo_words){
@@ -373,20 +324,32 @@
             let block = $('#oi-scripts')
             if (scripts_on_land['duhost'] == true){
                 let img = $('<img>')
-                img.attr('src', 'https://st3.depositphotos.com/20524830/34680/v/600/depositphotos_346805690-stock-illustration-spy-icon-vector-style-is.jpg')
+                img.attr('src', spyImg)
                 img.attr('style', '')
                 block.append(img)
             }
             if (scripts_on_land['yametrica'] == true){
                 let img = $('<img>')
-                img.attr('src', 'https://avatars.mds.yandex.net/get-yablogs/51163/file_1499117901049/orig')
+                img.attr('src', yamImg)
                 img.attr('style', '')
                 block.append(img)
             }
         }
 
+        // Удаление из тулбара заргуженных данных
+        function cleanDataToolbar(){
+            $('#oi-toolbar #oi-scripts img').remove()
+            let added_data = $('#oi-toolbar p').filter(function(){
+                if(!$(this).hasClass('info-desc')){return true}
+            })
+            added_data.remove()
+        }
+
         // Загрузда данных анализа текста API
         function loadBackAnalize(){
+            $('#test-click').hide()
+            $('#load-ring').show()
+            cleanDataToolbar()
             let url = currentUrl + '/checker/analiz_land_text/'
             let page_title = $('title').clone()
             let send_text = $('html').clone()
@@ -417,6 +380,9 @@
                     addDatesTool(dates)
                     addGeoWordsTool(geo_words)
                     AddBadgeScripts(scripts_on_land)
+
+                    $('#test-click').show()
+                    $('#load-ring').hide()
 
                 } else {
                     console.log('Ошибка загрузки анализатора')
@@ -460,12 +426,6 @@
             imgBoubleCounter ++
             if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
             })
-
-        // $('*').click( function(){
-        //     if ($(this).children().length == 1){
-        //         console.log($(this))
-        //     }
-        // })
 
         var entityMap = {
             '&': '&amp;',
