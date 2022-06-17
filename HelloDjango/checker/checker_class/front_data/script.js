@@ -368,16 +368,32 @@
                 }
             }
         }
+        // Добавить бэйджы скриптов в тулбар
+        function AddBadgeScripts(scripts_on_land){
+            let block = $('#oi-scripts')
+            if (scripts_on_land['duhost'] == true){
+                let img = $('<img>')
+                img.attr('src', 'https://st3.depositphotos.com/20524830/34680/v/600/depositphotos_346805690-stock-illustration-spy-icon-vector-style-is.jpg')
+                img.attr('style', '')
+                block.append(img)
+            }
+            if (scripts_on_land['yametrica'] == true){
+                let img = $('<img>')
+                img.attr('src', 'https://avatars.mds.yandex.net/get-yablogs/51163/file_1499117901049/orig')
+                img.attr('style', '')
+                block.append(img)
+            }
+        }
 
         // Загрузда данных анализа текста API
         function loadBackAnalize(){
             let url = currentUrl + '/checker/analiz_land_text/'
             let page_title = $('title').clone()
-            let send_text = $('body').clone()
-            send_text.find('#oi-toolbar').remove()
-            send_text.find('#test-block').remove()
-            send_text.find('#polit').remove()
-            send_text.find('#agreement').remove()
+            let send_text = $('html').clone()
+            // send_text.find('#oi-toolbar').remove()
+            // send_text.find('#test-block').remove()
+            // send_text.find('#polit').remove()
+            // send_text.find('#agreement').remove()
 
 
             send_text = send_text.html()
@@ -393,12 +409,14 @@
                     phone_codes = response.result['phone_codes']
                     //geo_words = response.result['geo_words']
                     geo_words = response.result['geo_words_templates']
+                    scripts_on_land = response.result['scripts']
 
                     addOffersTool(offers)
                     addCurrTool(currs)
                     addPhoneMaksTool(phone_codes)
                     addDatesTool(dates)
                     addGeoWordsTool(geo_words)
+                    AddBadgeScripts(scripts_on_land)
 
                 } else {
                     console.log('Ошибка загрузки анализатора')

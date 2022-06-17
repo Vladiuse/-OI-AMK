@@ -90,15 +90,18 @@
   }
 </style>
 <script>
-      let string = '@Max KMA#6702' + "\nОффер: xxxxx\nПускаем оффер? паблик/эксклюзив/приват?\nГео: xxx\nТаск: xxxx";
-      $('.container1 textarea').val(string)
+  let string = '@Max KMA#6702' + "\nОффер: xxxxx\nПускаем оффер? паблик/эксклюзив/приват?\nГео: xxx\nТаск: xxxx";
+  $('.container1 textarea').val(string)
   $('.managers button').click(function(){
     let string = $(this).text() + "\nОффер: xxxxx\nПускаем оффер? паблик/эксклюзив/приват?\nГео: xxx\nТаск: xxxx"
     $('.container1 textarea').val(string)
     
-    
   })
   $('.copypaste textarea').val('@Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx')
+
+  $('textarea').click(function(){
+    $(this).select()
+  })
 </script>
 
 {% endblock %}

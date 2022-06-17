@@ -53,7 +53,9 @@ class TextAnaliz:
 
 
     def process(self):
+        self.drop_some_tags()
         self.add_placeholders_text()
+        self.clean_land_text = self.soup.text
 
         self.find_offers()
         self.find_currensy()
@@ -61,7 +63,23 @@ class TextAnaliz:
         self.find_dates()
         self.find_geo_words()
         self.find_geo_templates_words()
+        self.find_scripts()
         # print(self.result)
+
+    def drop_some_tags(self):
+        """Убрать элементы тулбара и полиси"""
+        ids = ['oi-toolbar', 'test-block', 'polit', 'agreement']
+        for id in ids:
+            print(id, id in str(self.soup))
+            elem = self.soup.find(id=id)
+            if elem:
+                elem.decompose()
+            
+
+            #         // send_text.find('#oi-toolbar').remove()
+            # // send_text.find('#test-block').remove()
+            # // send_text.find('#polit').remove()
+            # // send_text.find('#agreement').remove()
 
     def find_offers(self):
         offers = self.data['offers']
@@ -120,6 +138,30 @@ class TextAnaliz:
         # pprint(result)
         self.result.update({'geo_words': result})
 
+    def find_scripts(self):
+        yaMetrika = 'yametrica'
+        someKMA = 'duhost'
+        to_find = [
+            {'name': someKMA, 'find': 'duhost'},
+             {'name': yaMetrika, 'find': 'https://mc.yandex.ru/metrika'},
+             ]
+        soup = BeautifulSoup(self.land_text, 'lxml')
+        scripts = soup.find_all('script')
+        scripts_block = '' 
+        for script in scripts: 
+            scripts_block += str(script)
+        result = {
+            someKMA: False,
+            yaMetrika : False
+        }
+        for i in to_find:
+            if i['find'] in scripts_block:
+                result[i['name']] = True
+        self.result.update({
+            'scripts': result,
+        })
+
+
     def find_geo_templates_words(self):
         """Поиск слов по шаблонам"""
         geo_words_templates = self.data['geo_words_templates']
@@ -134,11 +176,6 @@ class TextAnaliz:
             if res:
                 result.update({geo: res})
         self.result.update({'geo_words_templates': result})
-
-
-
-
-
 
 
     @staticmethod
