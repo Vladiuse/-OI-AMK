@@ -1,4 +1,5 @@
 import re
+import hashlib
 from bs4 import BeautifulSoup
 import requests as req
 from django.conf import settings
@@ -13,7 +14,6 @@ TOOLBAR_STYLES_FILE = str(settings.BASE_DIR) + '/checker/checker_class/front_dat
 TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker/checker_class/front_data/script.js'
 TEST_DATES = str(settings.BASE_DIR) + '/checker/checker_class/front_data/test_dates.html'
 
-
 TOOLBAR_NO_JS_FILE = str(settings.BASE_DIR) + '/checker/checker_class/wb/wb.js'
 
 
@@ -23,6 +23,67 @@ def is_date_correct(date):
         if char in date:
             return False
     return True
+
+
+class Img:
+    css_tyle = ' __debug_double'
+    oi_double_attr = 'data-oi-img-double'
+    ATTRS = [
+        'data-src',
+        'data-pagespeed-lazy-src',
+    ]
+
+    ALL_IMG_SRCS = []
+    IMG_SRC_DOUBLES = dict()
+
+    def __init__(self, img_soup):
+        self.img = img_soup
+        self.src = None
+        self.attrs_src = set()
+        self.main_src = None
+
+    def process(self):
+        self._get_src()
+        self._get_attrs_srcs()
+        self._get_main_src()
+        Img.ALL_IMG_SRCS.append(self.main_src)
+
+    def set_img_as_double(self):
+        if Img.ALL_IMG_SRCS.count(self.main_src) > 1:
+            try:
+                self.img['class'] = ' '.join(self.img['class']) + Img.css_tyle
+            except KeyError:
+                self.img['class'] = Img.css_tyle
+            sha_hash = hashlib.sha256(str(self.img).encode('utf-8')).hexdigest()[:-6]
+            self.img[Img.oi_double_attr] = sha_hash
+            Img.IMG_SRC_DOUBLES[sha_hash] = self.main_src
+
+
+
+
+    def _get_main_src(self):
+        """Определить главный src"""
+        if self.src:
+            if self.src.endswith('.gif') and self.attrs_src:
+                for src in self.attrs_src:
+                    self.main_src = src
+            else:
+                self.main_src = self.src
+
+    def _get_src(self):
+        """Получить src картинки"""
+        try:
+            self.src = self.img['src']
+        except KeyError:
+            pass
+
+    def _get_attrs_srcs(self):
+        """Получить все остальные scr с других аттрибутов"""
+        for attr in Img.ATTRS:
+            try:
+                self.attrs_src.add(self.img[attr])
+            except KeyError:
+                pass
 
 
 def find_img_double(soup) -> set:
@@ -76,7 +137,6 @@ class TextFixxer:
         date = re.sub(r'\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}|\d\d\d\d', TextFixxer.span_wrap, date_string)
         return date
 
-
     def add_test_dates(self):
         with open(TEST_DATES, encoding='utf-8') as file:
             dates = file.read()
@@ -106,7 +166,6 @@ class DomFixxer:
         self.add_css()
         self.add_js()
 
-
     def load_files(self):
         with open(TOOLBAR_HTML_FILE, encoding='utf-8') as file:
             self.toolbar = file.read()
@@ -134,6 +193,11 @@ class DomFixxer:
         script_tag.string = self.script
         self.soup.html.body.append(script_tag)
 
+    def find_double_img(self):
+        imgs_tags = self.soup.find_all('img')
+        imgs = [Img(img) for img in imgs_tags]
+        [img.process() for img in imgs]
+
     def add_bouble_img_in_tool(self):
         double_imgs_src = find_img_double(self.soup)
         self.add_calss_img_boudle()
@@ -148,7 +212,6 @@ class DomFixxer:
 
     def add_calss_img_boudle(self):
         """Добавление стиля обводки для дублей картинки"""
-        # TODO Проверить работу на картинках без класса (по идее вылетит - а должет добавить класс)
         css_tyle = ' __debug_double'
         double_imgs_src = find_img_double(self.soup)
         for src in double_imgs_src:
@@ -162,7 +225,6 @@ class DomFixxer:
 
     def add_checked_url_in_toolbar(self):
         self.toolbar.find(id="original-link")['data-href'] = self.url
-
 
     def fix_all_tags(self):
         pass
@@ -178,7 +240,6 @@ class DomFixxer:
             self.soup.html.head.insert(0, new_base)
         else:
             base['href'] = url
-
 
     def fix_style_link(self):
         href = 'css/bmmfp.css'
@@ -199,12 +260,11 @@ class DomFixxer:
     def load_wb(self):
         with open(TOOLBAR_NO_JS_FILE, encoding='utf-8') as file:
             self.script = file.read()
-    
+
     def add_wb(self):
         script_tag = self.soup.new_tag("script")
         script_tag.string = self.script
         self.soup.html.body.append(script_tag)
-
 
 
 if __name__ == '__main__':

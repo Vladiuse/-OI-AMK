@@ -276,6 +276,7 @@
         // Добавить валюты в тулбар
         function addCurrTool(currs){
             if (currs.length != 1){$('.oi-back-currs').addClass(toolbarErrorClass)}
+            console.log(currs)
             for (pos in currs){
                 curr = currs[pos]
                 let span = '<p>' + curr + '</p>'
