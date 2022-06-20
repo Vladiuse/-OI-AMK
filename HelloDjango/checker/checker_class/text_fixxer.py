@@ -27,6 +27,7 @@ def is_date_correct(date):
 
 class Img:
     css_tyle = ' __debug_double'
+    to_find_img_attr = 'data-oi-img'
     oi_double_attr = 'data-oi-img-double'
     ATTRS = [
         'data-src',
@@ -48,13 +49,19 @@ class Img:
         self._get_main_src()
         Img.ALL_IMG_SRCS.append(self.main_src)
 
+    def reset():
+        Img.IMG_SRC_DOUBLES.clear()
+        Img.ALL_IMG_SRCS.clear()
+
     def set_img_as_double(self):
+        print(self.main_src, Img.ALL_IMG_SRCS.count(self.main_src))
         if Img.ALL_IMG_SRCS.count(self.main_src) > 1:
             try:
                 self.img['class'] = ' '.join(self.img['class']) + Img.css_tyle
             except KeyError:
                 self.img['class'] = Img.css_tyle
-            sha_hash = hashlib.sha256(str(self.img).encode('utf-8')).hexdigest()[:-6]
+            sha_hash = hashlib.sha256(str(self.main_src).encode('utf-8')).hexdigest()
+            sha_hash = sha_hash[-6:]
             self.img[Img.oi_double_attr] = sha_hash
             Img.IMG_SRC_DOUBLES[sha_hash] = self.main_src
 
@@ -156,7 +163,8 @@ class DomFixxer:
 
     def process(self):
         self.load_files()
-        self.add_bouble_img_in_tool()
+        # self.add_bouble_img_in_tool()
+        self.find_double_img()
         self.add_checked_url_in_toolbar()
         self.add_base_tag()
         self.fix_style_link()
@@ -165,6 +173,8 @@ class DomFixxer:
         self.add_html()
         self.add_css()
         self.add_js()
+
+
 
     def load_files(self):
         with open(TOOLBAR_HTML_FILE, encoding='utf-8') as file:
@@ -195,8 +205,21 @@ class DomFixxer:
 
     def find_double_img(self):
         imgs_tags = self.soup.find_all('img')
+        print(len(imgs_tags), 'imgs_tags')
+        Img.reset()
         imgs = [Img(img) for img in imgs_tags]
         [img.process() for img in imgs]
+        print(len(Img.ALL_IMG_SRCS), 'ALL_IMG_SRCS')
+        [img.set_img_as_double() for img in imgs]
+        div_toolbar = self.toolbar.find('div', {"id": "back-info"})
+        if Img.IMG_SRC_DOUBLES:
+            p_info = self.soup.new_tag('p')
+            p_info.string = 'Картинки дубли:'
+            div_toolbar.append(p_info)
+        for hash, src in Img.IMG_SRC_DOUBLES.items():
+            new_img = self.toolbar.new_tag('img', src=src)
+            new_img[Img.to_find_img_attr] = hash
+            div_toolbar.append(new_img)
 
     def add_bouble_img_in_tool(self):
         double_imgs_src = find_img_double(self.soup)
@@ -231,6 +254,7 @@ class DomFixxer:
 
     def add_base_tag(self):
         url = self.url
+        url = url.replace('http://', 'https://')
         if '?' in self.url:
             url = self.url.split('?')[0]
         base = self.soup.find('base')
