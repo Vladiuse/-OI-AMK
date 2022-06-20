@@ -322,17 +322,20 @@
         // Добавить бэйджы скриптов в тулбар
         function AddBadgeScripts(scripts_on_land){
             let block = $('#oi-scripts')
-            if (scripts_on_land['duhost'] == true){
+            if (scripts_on_land['socialFish'] == true){
                 let img = $('<img>')
                 img.attr('src', spyImg)
                 img.attr('style', '')
                 block.append(img)
             }
-            if (scripts_on_land['yametrica'] == true){
+            if (scripts_on_land['yam'] != false){
                 let img = $('<img>')
                 img.attr('src', yamImg)
                 img.attr('style', '')
                 block.append(img)
+                let yamId = $('<p></p>')
+                yamId.text(scripts_on_land['yam'])
+                block.append(yamId)
             }
         }
 

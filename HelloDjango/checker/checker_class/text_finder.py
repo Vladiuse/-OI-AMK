@@ -139,27 +139,51 @@ class TextAnaliz:
         self.result.update({'geo_words': result})
 
     def find_scripts(self):
-        yaMetrika = 'yametrica'
-        someKMA = 'duhost'
-        to_find = [
-            {'name': someKMA, 'find': 'duhost'},
-             {'name': yaMetrika, 'find': 'https://mc.yandex.ru/metrika'},
-             ]
+        # yaMetrika = 'yametrica'
+        # to_find = [
+        #     {'name': someKMA, 'find': 'duhost'},
+        #      {'name': yaMetrika, 'find': 'https://mc.yandex.ru/metrika'},
+        #      ]
         soup = BeautifulSoup(self.land_text, 'lxml')
         scripts = soup.find_all('script')
         scripts_block = '' 
         for script in scripts: 
             scripts_block += str(script)
+        socialFish = TextAnaliz.find_social(scripts_block)
+        yam = TextAnaliz.find_yam(scripts_block)
         result = {
-            someKMA: False,
-            yaMetrika : False
+            'socialFish': socialFish,
+            'yam': yam,
         }
-        for i in to_find:
-            if i['find'] in scripts_block:
-                result[i['name']] = True
+
+        # for i in to_find:
+        #     if i['find'] in scripts_block:
+        #         result[i['name']] = True
         self.result.update({
             'scripts': result,
         })
+    @staticmethod
+    def find_yam(scripts_blocks):
+        yam_link= 'https://mc.yandex.ru/metrika'
+        yam_id = ';ym('
+        if yam_link in scripts_blocks:
+            pos = scripts_blocks.find(yam_id)
+            if pos != -1:
+                yam_id = scripts_blocks[pos+ 4:pos+12]
+                return yam_id
+            else:
+                return 'not found'
+        else:
+            return False
+
+
+    @staticmethod
+    def find_social(scripts_blocks):
+        socialFish = 'duhost'
+        if socialFish in scripts_blocks:
+            return True
+        else:
+            return False
 
 
     def find_geo_templates_words(self):

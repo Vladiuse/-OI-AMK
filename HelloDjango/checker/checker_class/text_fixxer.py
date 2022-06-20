@@ -106,6 +106,7 @@ class DomFixxer:
         self.add_css()
         self.add_js()
 
+
     def load_files(self):
         with open(TOOLBAR_HTML_FILE, encoding='utf-8') as file:
             self.toolbar = file.read()
