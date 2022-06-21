@@ -23,7 +23,8 @@ def index(requests):
 def check_url(request):
     # try:
     url = request.GET['url']
-    # url = '1https://blog-feed.org/blog2-herbamanan/?ufl=14114'
+    url = url.strip()
+    url = url.replace('https://', 'http://')
     res = req.get(url)
     if res.status_code != 200:
         return HttpResponse(f'Error: res.status_code != 200, Ссылка не работает!')

@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 import requests as req
 from django.conf import settings
 
-
 SPAN_CLASS_BACK = '__back-date '
 SPAN_DATE_ERROR = ' __debug_date_error'
 SPAN_CLASS_PERCENT = '__back-percent '
@@ -49,12 +48,12 @@ class Img:
         self._get_main_src()
         Img.ALL_IMG_SRCS.append(self.main_src)
 
+    @staticmethod
     def reset():
         Img.IMG_SRC_DOUBLES.clear()
         Img.ALL_IMG_SRCS.clear()
 
     def set_img_as_double(self):
-        print(self.main_src, Img.ALL_IMG_SRCS.count(self.main_src))
         if Img.ALL_IMG_SRCS.count(self.main_src) > 1:
             try:
                 self.img['class'] = ' '.join(self.img['class']) + Img.css_tyle
@@ -64,9 +63,6 @@ class Img:
             sha_hash = sha_hash[-6:]
             self.img[Img.oi_double_attr] = sha_hash
             Img.IMG_SRC_DOUBLES[sha_hash] = self.main_src
-
-
-
 
     def _get_main_src(self):
         """Определить главный src"""
@@ -167,14 +163,12 @@ class DomFixxer:
         self.find_double_img()
         self.add_checked_url_in_toolbar()
         self.add_base_tag()
-        self.fix_style_link()
+        # self.fix_style_link()
         # self.add_test_dates()
 
         self.add_html()
         self.add_css()
         self.add_js()
-
-
 
     def load_files(self):
         with open(TOOLBAR_HTML_FILE, encoding='utf-8') as file:
@@ -205,11 +199,9 @@ class DomFixxer:
 
     def find_double_img(self):
         imgs_tags = self.soup.find_all('img')
-        print(len(imgs_tags), 'imgs_tags')
         Img.reset()
         imgs = [Img(img) for img in imgs_tags]
         [img.process() for img in imgs]
-        print(len(Img.ALL_IMG_SRCS), 'ALL_IMG_SRCS')
         [img.set_img_as_double() for img in imgs]
         div_toolbar = self.toolbar.find('div', {"id": "back-info"})
         if Img.IMG_SRC_DOUBLES:
@@ -254,7 +246,6 @@ class DomFixxer:
 
     def add_base_tag(self):
         url = self.url
-        url = url.replace('http://', 'https://')
         if '?' in self.url:
             url = self.url.split('?')[0]
         base = self.soup.find('base')

@@ -17,9 +17,9 @@
         line-height: 18px !important;
         max-width: 320px;
     }
-    #oi-toolbar p{
+    /* #oi-toolbar p{
         margin: 0px;
-    }
+    } */
     #oi-toolbar hr{
         background-color: var(--white-color);
     }
@@ -187,6 +187,7 @@
         font-size: 15px;
         line-height: 18px;
         margin: 0;
+        padding: 0;
         margin-right: 3px;
     }
     #oi-toolbar .container-toolbar span{
@@ -194,6 +195,7 @@
         font-size: 15px;
         line-height: 18px;
         margin: 0;
+        padding: 0;
         margin-right: 3px;
     }
 
