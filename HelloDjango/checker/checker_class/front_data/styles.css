@@ -58,11 +58,16 @@
         background-color: #fcffff;
     }
     #oi-toolbar .oi-info{
-        color: #fcffff;
-        margin: 0px 0;
+        
+        margin: 0px;
         flex-wrap: wrap;
     }
 
+    /* #oi-toolbar .oi-info p{
+        color: #fcffff;
+        display: block;
+    } */
+    
     #oi-toolbar .oi-bold
     {
         font-weight: 600;
@@ -88,7 +93,12 @@
     }
     a.__debug span{
         /* border: 2px solid var(--link-color) !important; */
-        outline:2px solid var(--link-color) !important;
+        outline:1px solid var(--link-color) !important;
+        outline-offset:-1px;    
+    }
+    a.__debug span[class^="price_land"]{
+        /* border: 2px solid var(--link-color) !important; */
+        outline:0px solid var(--link-color) !important;
         outline-offset:-1px;    
     }
     a img.__debug{
@@ -172,6 +182,20 @@
         border-radius: 5px;
 
     }
+    #oi-toolbar .container-toolbar p{
+        color: var(--white-color);
+        font-size: 15px;
+        line-height: 18px;
+        margin: 0;
+        margin-right: 3px;
+    }
+    #oi-toolbar .container-toolbar span{
+        color: var(--white-color);
+        font-size: 15px;
+        line-height: 18px;
+        margin: 0;
+        margin-right: 3px;
+    }
 
     #oi-toolbar .container-toolbar{
         display: flex;
@@ -192,11 +216,6 @@
     /* #oi-toolbar .oi-header{
         flex-wrap: nowrap;
     } */
-    #oi-toolbar .container-toolbar span,
-    #oi-toolbar .container-toolbar p
-    {
-        margin-left: 3px;
-    }
     #oi-toolbar .container-toolbar .__error{
         color: red;
     }
@@ -226,10 +245,13 @@
     #oi-toolbar #back-info{
         color: #fcffff;
     }
-    #oi-toolbar #back-info img{
+    #oi-toolbar img{
         width: 40px;
         height: 40px;
         position: relative;
+        display: inline-flex;
+        margin: 0 0;
+        border: 0;
 
     }
     #oi-scripts img{

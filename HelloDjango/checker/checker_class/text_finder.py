@@ -18,7 +18,8 @@ def find_in_text(text: str, offers: list):
 def find_word_template_in_text(word_template, text):
     """Поиск шаблона слова по тексту"""
     regEx = '\W'+word_template+'[\W\w]{0,6}[\s.\-;:,]'
-    symbols_to_clean = ' .-;:,\n'
+    regEx = '\W'+word_template+'[\W\w]{0,6}[.\-;:,]'
+    symbols_to_clean = """ .-;:”,"\n"""
     res = re.findall(regEx, text)
     clean_result = []
     for word in res:

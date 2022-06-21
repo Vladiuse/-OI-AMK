@@ -83,7 +83,6 @@
         // удаление сообщений о ошибках с лэндинга
         function removeDebugMsg(){
             let msgs = $('.' + debugMsgClass)
-            console.log(msgs.length, 'msgs')
             msgs.remove()
         }
 
@@ -114,7 +113,6 @@
                     return true
                 }
             })
-            console.log(inputsNoTel)
             inputsNoTel.addClass(fromInputNotelClass)
             // if (inputsNoTel.length != 0){plusError();}
         }
@@ -276,7 +274,6 @@
         // Добавить валюты в тулбар
         function addCurrTool(currs){
             if (currs.length != 1){$('.oi-back-currs').addClass(toolbarErrorClass)}
-            console.log(currs)
             for (pos in currs){
                 curr = currs[pos]
                 let span = '<p>' + curr + '</p>'
@@ -310,7 +307,7 @@
         function addGeoWordsTool(geo_words){
             for (geo in geo_words){
                 let words = geo_words[geo]
-                if (geo != country){$('#oi-geo-words').addClass(toolbarErrorClass)}
+                if (geo.toLowerCase() != country.toLowerCase()){$('#oi-geo-words').addClass(toolbarErrorClass)}
                 let span = '<p>' + geo + '</p>'
                 $('#oi-geo-words').after(span)
                 for (pos in words){
@@ -401,7 +398,6 @@
         // открытие оригинальной ссылки
         $('#oi-toolbar .original-link p').click(function(){
             let url = $(this).attr('data-href')
-            console.log(url)
             window.open(url, '_blank').focus();
             })
 
@@ -470,7 +466,6 @@
         var body = document.querySelector('body');
         body.onclick = function(event) {
             if (event.ctrlKey){
-                console.log('click')
                 $('#oi-message-result').removeClass('__true')
                 let dateWindow = $('#oi-message-text')
                 let elem = $(event.target)
@@ -484,7 +479,6 @@
                 new_text = new_text.replaceAll('date', '<span>date</span>')
                 if (new_text.length > 600) {new_text='Слишком много букв'}
                 dateWindow.html(new_text)
-                console.log(new_text.length)
                 if (new_text.includes('date')|| new_text.includes('year')) {
                     $('#oi-message-result').text('Скрипт')
                     $('#oi-message-result').addClass('__true')
@@ -500,7 +494,7 @@
             // i = 73 p = 80 q = 81 y = 17 b = 66
             let oiToolbar = $('#oi-toolbar')
             if (e.ctrlKey && e.keyCode == 66) {
-                console.log('INTEGRATION')
+                console.log('%c OI-INTEGRATION DEBUG TOOL', 'background: #212529; color: #73BC9E; font-weight:bold; padding:3px');
                 if (isDebug){isDebug = false}else{isDebug = true}
                 oiToolbar.toggle(500)
                 onOffDebug()
