@@ -30,6 +30,7 @@ urlpatterns = [
     path('kma/', include('kma.urls')),
     path('checker/', include('checker.urls')),
     path('archive', include('archive.urls')),
+    path('manual/', include('manual.urls')),
 
 ]
 

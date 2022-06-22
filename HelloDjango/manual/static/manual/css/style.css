@@ -1,0 +1,283 @@
+/* .doc-header{
+    background-color: #2980b9;
+} */
+body{
+    background-color: #edf0f2;
+}
+p.caption, h1, h2, h3, h4, h5, h6, legend {
+    margin-top: 0;
+    font-weight: 700;
+    font-family: Roboto Slab,ff-tisa-web-pro,Georgia,Arial,sans-serif;
+}
+
+
+.nav-logo h2{
+    margin: 0;
+}
+.nav-logo img{
+    width: 50px;
+    height: 50px;
+}
+/* .rigth-col{
+    opacity: 0;
+}
+.main-col{
+    background-color: #fcfcfc;
+} */
+nav{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 2em;
+    width: 300px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    min-height: 100%;
+    color: #9b9b9b;
+    background: #343131;
+
+}
+.side-scroll{
+    width: 320px;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.main-content{
+    margin-left: 300px;
+
+    min-height: 100%;
+}
+.rst-content{
+    padding: 1.618em 3.236em;
+    height: 100%;
+    max-width: 900px;
+    margin: 0;
+    background: #fcfcfc;
+    min-height: 100vh;
+}
+.nav-logo .home{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    cursor: pointer;
+}
+.nav-logo{
+    padding: 20px;
+   
+    width: 300px;
+    padding: 0.809em;
+    margin-bottom: 0.809em;
+    background-color: #2980b9;
+    text-align: center;
+    color: #fcfcfc;
+}
+.nav-logo .home:hover{
+    background: hsla(0,0%,100%,.1);
+}
+.menu-vertival{
+    width: 300px;
+}
+p.caption{
+    color: #55a5d9;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 1.618em;
+    margin: 12px 0 0;
+    display: block;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 85%;
+    white-space: nowrap;
+}
+
+.menu-vertival a {
+    line-height: 18px;
+    padding: 0.4045em 1.618em;
+    display: block;
+    position: relative;
+    font-size: 90%;
+    color: #d9d9d9;
+    /* display: inline-block; */
+}
+/* a:visited {
+    color: #9b59b6;
+} */
+a {
+    color: #2980b9;
+    text-decoration: none;
+    cursor: pointer;
+}
+.menu-vertival a:hover,
+.menu-vertival a.active {
+    background-color: #4e4a4a;
+    cursor: pointer;
+}
+.menu-vertival a:active {
+    background-color: #2980b9;
+    cursor: pointer;
+    color: #fff;
+}
+ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    list-style-image: none;
+}
+/* ul.toctree-l button{
+    width: 0px;
+    height: 0px;
+    display: inline-block;
+}
+ul.toctree-l button::before{
+
+content: '<i class="fa fa-minus"></i>';
+} */
+i{
+    color: red;
+}
+ul.toctree-l>li button{
+    display: block;
+    float: left;
+    margin-left: -1.2em;
+    line-height: 18px;
+    color: #d9d9d9;
+    border: none;
+    background: none;
+    padding: 0;
+    font-family: "Font Awesome 5 Free"; 
+    font-weight: 600;
+}
+ul.toctree-l>li.current button{
+    color: #343131;
+ 
+}
+ul.toctree-l>li button::before{
+     content: "\f055";
+
+}
+ul.toctree-l>li.current button::before{
+    content: "\f068";
+
+}
+.menu-vertival li.current>a {
+    color: #404040;
+    font-weight: 700;
+    position: relative;
+    background: #fcfcfc;
+    border: none;
+    padding: 0.4045em 1.618em;
+}
+.menu-vertival li+ul{
+    display: none;
+}
+.menu-vertival li.current+ul{
+    background-color: #edf0f2;
+    color:#404040;
+    display: block;
+}
+.menu-vertival li.current+ul a{
+    background-color: #d6d6d6;
+}
+.menu-vertival li.current+ul a:hover,
+.menu-vertival li.current+ul a.active{
+    background-color: #c9c9c9;
+}
+.menu-vertival li.current+ul a:active{
+    background-color: #c9c9c9;
+}
+
+.rst-content .admonition{
+    clear: both;
+    padding: 12px;
+    line-height: 24px;
+    margin-bottom: 24px;
+}
+.rst-content .note{
+    background: #e7f2fa;
+}
+.rst-content .note .admonition-title{
+    background: #6ab0de;
+    font-weight: 700;
+    display: block;
+    color: #fff;
+    padding: 6px 12px;
+    margin: -12px -12px 12px;
+}
+
+.rst-content .note.good{
+    background: #e7f2fa;
+}
+.rst-content .note.good .admonition-title {
+    background: #1abc9c;
+
+}
+
+.rst-content .note.warning{
+    background: #ffedcc;
+}
+.rst-content .note.warning .admonition-title {
+    background: #f0b37e;
+
+}
+
+
+.rst-content .admonition-title:before {
+    margin-right: 4px;
+    /* content: "\f321"; */
+    content: "\f06a";
+    font-family: FontAwesome;
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: inherit;
+}
+
+.li-wrapper li{
+    list-style: disc;
+    margin-left: 24px;
+}
+.li-wrapper.numeric li{
+    list-style: decimal;
+    margin-left: 24px;
+}
+
+figure{
+    margin: auto;
+    text-align: center;
+}
+figure figcaption{
+    font-style: italic;
+}
+
+.rst-content .label {
+    background: #e7f2fa;
+    font-size: 80%;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 2.4px 6px;
+    margin: auto 2px;
+}
+.rst-content .label.note {
+    border: 1px solid #7fbbe3;
+
+}
+.rst-content .label.warning {
+    border: 1px solid #f0b37e;
+    background: #ffedcc;
+
+}
+.rst-content .label.good {
+    border: 1px solid #1abc9c;
+
+}
+nav a[href][class]{
+    color: inherit;
+    text-decoration: none;
+}
+http://127.0.0.1:8000/static/checker/scripts/yam.png
+http://127.0.0.1:8000/static/manual/css/style.css

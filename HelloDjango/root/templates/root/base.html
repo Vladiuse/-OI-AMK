@@ -47,7 +47,7 @@
                 <a class="nav-link" href="{% url 'kma:phones' %}">Номера</a>
               </li>
                                    <li class="nav-item">
-                <a class="nav-link" href="{% url 'checker:index' %}">LinkChecker</a>
+                <a class="nav-link" href="{% url 'checker:index' %}" id="checker-url">LinkChecker</a>
               </li>
                                              <li class="nav-item">
                 <a class="nav-link" href="{% url 'archive:index' %}">Архив</a>
@@ -92,5 +92,10 @@
       </nav>
 {% block content %}
 {% endblock %}
+<script>
+  const full = 'http://' + location.host + '';
+  let checker_url = full + {% url 'checker:index' %}
+  $('#checker-url').attr('href', checker_url)
+</script>
 </body>
 </html>

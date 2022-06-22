@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'kma.apps.KmaConfig',
     'checker.apps.CheckerConfig',
     'archive.apps.ArchiveConfig',
+    'manual.apps.ManualConfig',
 
     # extensions
     'django_extensions',
