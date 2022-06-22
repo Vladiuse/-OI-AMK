@@ -1,0 +1,55 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+<h1>SS оффера</h1>
+
+<div class="admonition note">
+    <p class="admonition-title">Что такое ss?</p>
+    <p>SS - тип оффера, когда клиенты приобретают товар сразу на сайте, оплата банковской картой, а не как в 90% случаев по остальным офферам - на почте.</p>
+    </div>
+<!-- <p>SS - тип оффера, когда клиенты приобретают товар сразу на сайте, оплата банковской картой, а не как в 90% случаев по остальным офферам - на почте.</p> -->
+<h3>Заведение в админке</h3>
+<p>1.  Модель оплаты - выставляем SS. Straight sale - прямая продажа.</p>
+<img src="https://i.imgur.com/yH4MLef.png" alt="" class="w-50">
+<p>2. Выставить следующие галки</p>
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+    <label class="form-check-label" for="flexCheckDefault">
+      Скрыть цены
+    </label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
+    <label class="form-check-label" for="flexCheckChecked">
+        Ретаргетинг
+    </label>
+  </div>
+<p>3. В кампании поставить цену 0 + 100% скидка</p>
+<p>4. Цель комиссию - оплаченная заявка</p>
+<h3>Добавление лэндинга</h3>
+<div class="admonition note warning">
+    <p class="admonition-title">особености ss лэндингов</p>
+    <p>SS лэндинги распологаються на сервере рекламодателя. Поэтому нам не нужно:</p>
+    <ul>
+        <li>Ставить таск на Рип промо</li>
+        <li>Ставить таск на Настройку интеграции</li>
+        <li>Тестировать лэндинг</li>
+    </ul>
+    </div>
+<p>1. Вставляем Url лэндинка в <span class="label note">Прелендинг на другом сервере</span>.</p>
+<img class="w-50" src="https://i.imgur.com/qFkhzJx.png">
+<p>2. Убираем галку свой лэндинг</p>
+<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
+<label class="form-check-label" for="flexCheckDefault">
+    Свой лендинг
+</label>
+<p>3. Галки адаптивноcти - ставим как обычно</p>
+<h3>Добавление прелэндинга</h3>
+  <div class="alert alert-danger" role="alert">
+    Прелэндинг <span class="b cap">обязательно</span> должен быть без формы заказа, с редиректом на ленд!
+  </div>
+  <h3>Тестирование</h3>
+  <p>Создаете поток как обычно - мне передаете этот поток и сам рекламодатель тестирует, так как там нужно картой проплачивать, чтобы лид получился.</p>
+  <h3>Новость</h3>
+  <p>Новость SS оффера не отличаеться от обычного оффера</p>
+{% endblock %}
