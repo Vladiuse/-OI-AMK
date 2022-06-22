@@ -237,6 +237,11 @@ ul.toctree-l>li.current button::before{
     text-decoration: inherit;
 }
 
+.admonition li{
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
 .li-wrapper li{
     list-style: disc;
     margin-left: 24px;
@@ -279,5 +284,58 @@ nav a[href][class]{
     color: inherit;
     text-decoration: none;
 }
-http://127.0.0.1:8000/static/checker/scripts/yam.png
-http://127.0.0.1:8000/static/manual/css/style.css
+img[class^="w-"]{
+    display:block;
+}
+img.w-30{
+    width: 30%;
+}
+img.w-40{
+    width: 40%;
+}
+img.w-50{
+    width: 50%;
+}
+img.w-60{
+    width: 60%;
+}
+img.w-70{
+    width: 70%;
+}
+img.w-80{
+    width: 80%;
+}
+img.w-90{
+    width: 90%;
+}
+img.w-100{
+    width: 90%;
+}
+span.b{
+font-weight: bold;
+}
+span.cap{
+    text-transform: uppercase
+}
+
+#hot-links{
+    position: fixed;
+    top: 100px;
+    right: 100px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color:#f8f9fa;
+}
+#hot-links a{
+    display: block;
+    color:#343131;
+    text-decoration: underline;
+    margin: 5px 0;
+}
+#hot-links a::before{
+    content: "# ";
+    font-weight: 900;
+    color: rgba(13,110,253,0.5);
+}
+
+

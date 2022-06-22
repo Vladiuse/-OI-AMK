@@ -15,6 +15,11 @@
     <link rel="stylesheet" href="{% static 'manual/css/style.css' %}">
 </head>
 <body>
+    <div id="hot-links">
+        <!-- <a class="referer">123</a>
+        <a class="referer">123</a>
+        <a class="referer">123</a> -->
+    </div>
     <nav>
         <div class="side-scroll">
             <div class="nav-logo">
@@ -51,10 +56,14 @@
                     </ul>
                 </ul>
                 <p class="caption">
-                    Seconde
+                    Заведение оффера
                 </p>
+                <a href="{% url 'manual:ss_offer' %}" class="">SS оффер</a>
                 <!-- <a href="" class="">other</a>
                 <a href="" class="">other</a> -->
+                <p class="caption">
+                    Баги
+                </p>
                 
 
             </div>
@@ -108,6 +117,21 @@
                 ul.find('li.cataloge').addClass('current')
 
             }
+        }
+        addHotLinks()
+        function addHotLinks(){
+            let counter = 0;
+            let hh = $('.main-content .content').find('h1,h2,h3,h4,h5,h5')
+            hh.each(function(){   
+                if (counter !=0){
+                    $(this).attr('id', 'hot-'+counter)
+                    let link = $('<a>')
+                    link.text($(this).text())
+                    link.attr('href', '#hot-'+counter)
+                    $('#hot-links').append(link)
+                }
+                counter ++
+        })
         }
         
     </script>

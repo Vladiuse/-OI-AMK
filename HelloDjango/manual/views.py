@@ -26,3 +26,9 @@ def slider(request):
 
 def slider_text(request):
     return render(request, 'manual/examples/slider_text.html')
+
+
+# OFFERS ADD 
+
+def ss_offer(request):
+    return render(request, 'manual/add_offer/ss_offer.html')

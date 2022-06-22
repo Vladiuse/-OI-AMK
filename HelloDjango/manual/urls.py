@@ -11,4 +11,6 @@ urlpatterns = [
     path('picture', views.picture, name='picture'),
     path('slider', views.slider, name='slider'),
     path('slider_text', views.slider_text, name='slider_text'),
+    # Заведение офферов 
+    path('ss_offer', views.ss_offer, name='ss_offer'),
 ]
