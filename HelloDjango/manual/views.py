@@ -45,10 +45,7 @@ class Block:
 
 def get_side_links():
     yaml_path = str(settings.BASE_DIR) + '/manual/side.yaml'
-    with open(yaml_path) as f:
-        template = yaml.safe_load(f)
-    yaml_path = str(settings.BASE_DIR) + '/manual/side.yaml'
-    with open(yaml_path) as f:
+    with open(yaml_path, encoding='utf-8') as f:
         template = yaml.safe_load(f)
     blocks = []
     for block_data in template:
