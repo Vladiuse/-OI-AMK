@@ -1,6 +1,3 @@
-/* .doc-header{
-    background-color: #2980b9;
-} */
 body{
     background-color: #edf0f2;
 }
@@ -10,7 +7,6 @@ p.caption, h1, h2, h3, h4, h5, h6, legend {
     font-family: Roboto Slab,ff-tisa-web-pro,Georgia,Arial,sans-serif;
 }
 
-
 .nav-logo h2{
     margin: 0;
 }
@@ -18,12 +14,7 @@ p.caption, h1, h2, h3, h4, h5, h6, legend {
     width: 50px;
     height: 50px;
 }
-/* .rigth-col{
-    opacity: 0;
-}
-.main-col{
-    background-color: #fcfcfc;
-} */
+
 nav{
     position: fixed;
     top: 0;
@@ -101,11 +92,8 @@ p.caption{
     position: relative;
     font-size: 90%;
     color: #d9d9d9;
-    /* display: inline-block; */
 }
-/* a:visited {
-    color: #9b59b6;
-} */
+
 a {
     color: #2980b9;
     text-decoration: none;
@@ -127,18 +115,7 @@ ul{
     list-style: none;
     list-style-image: none;
 }
-/* ul.toctree-l button{
-    width: 0px;
-    height: 0px;
-    display: inline-block;
-}
-ul.toctree-l button::before{
 
-content: '<i class="fa fa-minus"></i>';
-} */
-i{
-    color: red;
-}
 ul.toctree-l>li button{
     display: block;
     float: left;
@@ -221,13 +198,18 @@ ul.toctree-l>li.current button::before{
 }
 .rst-content .note.warning .admonition-title {
     background: #f0b37e;
-
 }
 
 
+.rst-content .note.danger{
+    background: #ffcccc;
+}
+.rst-content .note.danger .admonition-title {
+    background: #f07e7e;
+}
+
 .rst-content .admonition-title:before {
     margin-right: 4px;
-    /* content: "\f321"; */
     content: "\f06a";
     font-family: FontAwesome;
     display: inline-block;
@@ -242,14 +224,6 @@ ul.toctree-l>li.current button::before{
     margin-left: 20px;
 }
 
-.li-wrapper li{
-    list-style: disc;
-    margin-left: 24px;
-}
-.li-wrapper.numeric li{
-    list-style: decimal;
-    margin-left: 24px;
-}
 
 figure{
     margin: auto;
@@ -283,59 +257,6 @@ figure figcaption{
 nav a[href][class]{
     color: inherit;
     text-decoration: none;
-}
-img[class^="w-"]{
-    display:block;
-}
-img.w-30{
-    width: 30%;
-}
-img.w-40{
-    width: 40%;
-}
-img.w-50{
-    width: 50%;
-}
-img.w-60{
-    width: 60%;
-}
-img.w-70{
-    width: 70%;
-}
-img.w-80{
-    width: 80%;
-}
-img.w-90{
-    width: 90%;
-}
-img.w-100{
-    width: 90%;
-}
-span.b{
-font-weight: bold;
-}
-span.cap{
-    text-transform: uppercase
-}
-
-#hot-links{
-    position: fixed;
-    top: 100px;
-    right: 100px;
-    padding: 20px;
-    border-radius: 10px;
-    background-color:#f8f9fa;
-}
-#hot-links a{
-    display: block;
-    color:#343131;
-    text-decoration: underline;
-    margin: 5px 0;
-}
-#hot-links a::before{
-    content: "# ";
-    font-weight: 900;
-    color: rgba(13,110,253,0.5);
 }
 
 
