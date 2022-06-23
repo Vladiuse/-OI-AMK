@@ -16,16 +16,17 @@
 </head>
 <body>
     <div id="hot-links">
-        <!-- <a class="referer">123</a>
-        <a class="referer">123</a>
-        <a class="referer">123</a> -->
     </div>
     <nav>
         <div class="side-scroll">
             <div class="nav-logo">
                 <div class="home">
                     <img src="{% static 'manual/img/logo.png' %}">
-                    <h2>IO Manual</h2>
+                    <h2>IO Manual 1</h2>
+                    {{test}}
+ {% for i in test %}
+!!!
+ {% endfor %}
                 </div>
                 
             </div>
@@ -33,34 +34,32 @@
                 <p class="caption">
                     Элементы документации
                 </p>
-                <a href="{% url 'manual:note' %}" class="">Обратить внимание</a>
-                <a href="{% url 'manual:text_block' %}" class="">Блок с текстом</a>
+                <a href="/manual/examples.note" class="">Обратить внимание</a>
+                <a href="/manual/examples.text_block" class="">Блок с текстом</a>
                 <ul class="toctree-l">
                     <li class="cataloge">
                         <a href="" class="reference"> <button></button>Списки</a>
                     </li>
                     <ul>
-                        <li class="on"><a class="" href="{% url 'manual:list_point' %}">С точками</a></li>
-                        <li class="on"><a class="" href="{% url 'manual:list_num' %}">Нумерованый</a></li>
+                        <li class="on"><a class="" href="/manual/examples.list_point">С точками</a></li>
+                        <li class="on"><a class="" href="/manual/examples.list_num">Нумерованый</a></li>
                     </ul>
                 </ul>
-                <a href="{% url 'manual:picture' %}" class="">Картинка</a>
+                <a href="/manual/examples.picture" class="">Картинка</a>
 
                 <ul class="toctree-l">
                     <li class="cataloge">
                         <a href="" class="reference"> <button></button>Слайдеры</a>
                     </li>
                     <ul>
-                        <li class="on"><a href="{% url 'manual:slider' %}" class="">Без подписей</a></li>
-                        <li class="on"><a class="" href="{% url 'manual:slider_text' %}">С подписбю</a></li>
+                        <li class="on"><a href="/manual/examples.slider" class="">Без подписей</a></li>
+                        <li class="on"><a class="" href="/manual/examples.slider_text">С подписбю</a></li>
                     </ul>
                 </ul>
                 <p class="caption">
                     Заведение оффера
                 </p>
-                <a href="{% url 'manual:ss_offer' %}" class="">SS оффер</a>
-                <!-- <a href="" class="">other</a>
-                <a href="" class="">other</a> -->
+                <a href="/manual/add_offer.ss_offer" class="">SS оффер</a>
                 <p class="caption">
                     Баги
                 </p>
@@ -122,8 +121,10 @@
         function addHotLinks(){
             let counter = 0;
             let hh = $('.main-content .content').find('h1,h2,h3,h4,h5,h5')
+            if (hh.length >1){$('#hot-links').show()}
             hh.each(function(){   
                 if (counter !=0){
+                    
                     $(this).attr('id', 'hot-'+counter)
                     let link = $('<a>')
                     link.text($(this).text())

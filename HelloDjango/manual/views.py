@@ -2,33 +2,28 @@ from django.shortcuts import render
 
 # Create your views here.
 
+blocks = [{'ЭЛЕМЕНТЫ ДОКУМЕНТАЦИИ': [{'Обратить внимание': '/manual/note'},
+                            {'Блок с текстом': '/manual/text_block'},
+                            {'Списки': [{'С точками': '/manual/list_point'},
+                                        {'Нумерованый': '/manual/list_num'}]},
+                            {'Картинка': '/manual/picture'},
+                            {'Слайдеры': [{'Без подписи': '/manual/slider'},
+                                          {'С подписью': '/manual/slider_text'}]}]},
+ {'Заведение оффера': [{'SS оффер': '/manual/ss_offer'}]},
+ {'Баги': None}]
+
 def index(request):
-    return render(request, 'manual/index.html')
+    content = {
+        'blocks': blocks
+        }
+    return render(request, 'manual/index.html', content)
 
-def note(request):
-    return render(request, 'manual/examples/note.html')
-
-def text_block(request):
-    return render(request, 'manual/examples/text_block.html')
-
-
-def list_point(request):
-    return render(request, 'manual/examples/list_point.html')
-
-def list_num(request):
-    return render(request, 'manual/examples/list_num.html')
-
-def picture(request):
-    return render(request, 'manual/examples/picture.html')
-
-def slider(request):
-    return render(request, 'manual/examples/slider.html')
-
-def slider_text(request):
-    return render(request, 'manual/examples/slider_text.html')
+def show_page(request, page_path):
+    page_path = page_path.replace('.', '/')
+    content = {
+        'text': 'texttexttexttexttexttexttext',
+        'test': [1,2,3,4,5]
+        }
+    return render(request, f'manual/{page_path}.html', content)
 
 
-# OFFERS ADD 
-
-def ss_offer(request):
-    return render(request, 'manual/add_offer/ss_offer.html')
