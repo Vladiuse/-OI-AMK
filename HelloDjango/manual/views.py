@@ -32,7 +32,6 @@ class Block:
                     subs_li = []
                     for sub_link in link_path:
                         for name, path in sub_link.items():
-                            print(name, path)
                             sub ={}
                             sub['name'] = name
                             sub['path'] = path
