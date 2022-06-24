@@ -22,6 +22,10 @@ img[class^="w-"]{
 .rst-content .content p{
     margin: 5px 0;
 }
+p.center{
+    text-align: center;
+}
+
 img.w-30{
     width: 30%;
 }
@@ -63,6 +67,7 @@ span.cap{
 }
 
 #hot-links{
+    display: none;
     position: fixed;
     top: 100px;
     right: 100px;
@@ -81,4 +86,5 @@ span.cap{
     font-weight: 900;
     color: rgba(13,110,253,0.5);
 }
+
 

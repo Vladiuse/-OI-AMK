@@ -185,10 +185,10 @@ ul.toctree-l>li.current button::before{
     margin: -12px -12px 12px;
 }
 
-.rst-content .note.good{
+.rst-content .note.success{
     background: #e7f2fa;
 }
-.rst-content .note.good .admonition-title {
+.rst-content .note.success .admonition-title {
     background: #1abc9c;
 
 }
