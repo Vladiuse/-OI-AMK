@@ -3,11 +3,11 @@
 {% block content %}
 <div class="main-wrapper">
     <h1>Вебы по умолчанию</h1>
-
+    <h4>Всего: {{webs|length}}</h4>
 
     <div class="mb-3" >
       <label for="exampleFormControlTextarea1" class="form-label"></label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" style="width: 250px;"></textarea>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" style="width: 350px;"></textarea>
 </div>
 
 </div>
@@ -23,5 +23,8 @@
     textareaStr = textareaStr + web + '\n'
     }
     $('textarea').text(textareaStr).focus()
+    $('textarea').click(function(){
+        $(this).select()
+    })
 </script>
 {% endblock %}
