@@ -75,6 +75,13 @@ span.cap{
     border-radius: 10px;
     background-color:#f8f9fa;
 }
+
+
+@media screen and (max-width: 1450px) {
+    #hot-links{
+        display: none !important;
+    }
+}
 #hot-links a{
     display: block;
     color:#343131;
@@ -87,4 +94,12 @@ span.cap{
     color: rgba(13,110,253,0.5);
 }
 
-
+.content .code-example{
+    background: #f8f8f8;
+    border: 1px solid #e1e4e5;
+    color: #404040;
+    font-family: Lato,proxima-nova,Helvetica Neue,Arial,sans-serif;
+    font-size: 16px;
+    padding: 12px;
+    margin: 20px 0;
+}

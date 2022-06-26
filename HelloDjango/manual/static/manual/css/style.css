@@ -223,6 +223,10 @@ ul.toctree-l>li.current button::before{
     list-style-type: disc;
     margin-left: 20px;
 }
+nav a[href][class]{
+    color: inherit;
+    text-decoration: none;
+}
 
 
 figure{
@@ -233,30 +237,28 @@ figure figcaption{
     font-style: italic;
 }
 
-.rst-content .label {
+.rst-content p>span {
     background: #e7f2fa;
+    border: 1px solid #7fbbe3;
     font-size: 80%;
     font-weight: 700;
     border-radius: 4px;
     padding: 2.4px 6px;
     margin: auto 2px;
 }
-.rst-content .label.note {
-    border: 1px solid #7fbbe3;
 
-}
-.rst-content .label.warning {
+.rst-content p>span.warning {
     border: 1px solid #f0b37e;
     background: #ffedcc;
 
 }
-.rst-content .label.good {
+.rst-content p>span.success {
     border: 1px solid #1abc9c;
-
+    background: #e7faee;
 }
-nav a[href][class]{
-    color: inherit;
-    text-decoration: none;
+.rst-content p>span.danger {
+    border: 1px solid #bc1a1a;
+    background: #fae7e7;
 }
 
 

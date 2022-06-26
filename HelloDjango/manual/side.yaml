@@ -3,7 +3,7 @@
         - SS оффер: add_offer.ss_offer
 - Проверка промо:
     - Общие положения: check_land.jeneral
-    - Элементы: check_land.elements
+    - Основные элементы: check_land.elements
 - Прочее:
     - Элементы документации: other.examples
     - Глоссарий: other.glossary
