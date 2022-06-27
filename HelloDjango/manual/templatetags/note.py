@@ -93,6 +93,12 @@ class Note(Node):
             'class': 'success'
         },
     }
+    def get_content(self, output):
+        output = output.strip()
+        output = mark_safe(output)
+        self.content.update(
+            {'text': output}
+        )
 
 class Notice(Node):
     TEMPLATE_PATH = 'manual/blocks_templates/notice.html'

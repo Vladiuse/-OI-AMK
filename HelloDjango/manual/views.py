@@ -2,6 +2,11 @@ from django.shortcuts import render
 import yaml
 from django.conf import settings
 
+
+PERSONS = {
+    'test_potok_man': '@Славик'
+}
+
 class Block:
 
     def __init__(self, block_data):
@@ -57,6 +62,7 @@ def index(request):
     content = {
         'blocks': get_side_links()
         }
+    content.update(PERSONS)
     return render(request, 'manual/index.html', content)
 
 def show_page(request, page_path):
@@ -64,6 +70,7 @@ def show_page(request, page_path):
     content = {
         'blocks': get_side_links()
         }
+    content.update(PERSONS)
     return render(request, f'manual/{page_path}.html', content)
 
 

@@ -103,3 +103,17 @@ span.cap{
     padding: 12px;
     margin: 20px 0;
 }
+
+.alert{
+    margin-top:0.5rem;
+}
+
+.carousel .carousel-caption{
+    opacity: 0.6;
+    display: inline-block;
+    background: rgba(155, 155, 155); /* Цвет фона */
+    padding: 5px; /* Поля вокруг текста */
+}
+.carousel .carousel-caption{
+    color: rgba(0, 0, 0, 1)
+}
