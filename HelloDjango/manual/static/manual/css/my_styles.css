@@ -131,3 +131,26 @@ span.cap{
     text-decoration: none;
     opacity: 1;
 }
+span-x {
+    background: #e7f2fa;
+    border: 1px solid #7fbbe3;
+    font-size: 80%;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 2.4px 6px;
+    margin: auto 2px;
+}
+
+span-x.warning {
+    border: 1px solid #f0b37e;
+    background: #ffedcc;
+
+}
+span-x.success {
+    border: 1px solid #1abc9c;
+    background: #e7faee;
+}
+span-x.danger {
+    border: 1px solid #bc1a1a;
+    background: #fae7e7;
+}

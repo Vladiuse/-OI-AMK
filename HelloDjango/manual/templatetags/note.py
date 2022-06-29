@@ -27,6 +27,16 @@ def img(parser, token):
 def code(parser, token):
     return Code(parser, token=token)
 
+@register.tag
+def news(parser, token):
+    return NewsTemplate(parser, token=token)
+
+@register.tag
+def check(parser, token):
+    return Check(parser, token=token)
+
+    
+
 # @register.tag(name="note")
 # def do_note_primary(parser, token):
 #     return do_note(parser, 'primary')
@@ -185,3 +195,27 @@ class Code(Node):
             self.content.update({'text': mark_safe(output)})
         else:
             self.content.update({'text': output})
+
+class NewsTemplate(Node):
+    TEMPLATE_PATH = 'manual/blocks_templates/news_templates.html'
+
+    def get_content(self, output):
+        output = output.strip()
+        title, *lines = output.split('\n')
+        text = ''.join(lines)
+        text = mark_safe(text)
+        self.content.update(
+            {'title': title, 'text': text}
+        )
+
+class Check(Node):
+    TEMPLATE_PATH = 'manual/blocks_templates/check.html'
+
+    def get_content(self, output):
+        output = output.strip()
+        checked =''
+        if 'c' in self.attrs:
+            checked='checked'
+        self.content.update(
+            {'text': output, 'checked': checked}
+        )

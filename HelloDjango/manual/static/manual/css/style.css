@@ -237,28 +237,6 @@ figure figcaption{
     font-style: italic;
 }
 
-.rst-content p>span {
-    background: #e7f2fa;
-    border: 1px solid #7fbbe3;
-    font-size: 80%;
-    font-weight: 700;
-    border-radius: 4px;
-    padding: 2.4px 6px;
-    margin: auto 2px;
-}
 
-.rst-content p>span.warning {
-    border: 1px solid #f0b37e;
-    background: #ffedcc;
-
-}
-.rst-content p>span.success {
-    border: 1px solid #1abc9c;
-    background: #e7faee;
-}
-.rst-content p>span.danger {
-    border: 1px solid #bc1a1a;
-    background: #fae7e7;
-}
 
 

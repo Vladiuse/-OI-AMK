@@ -1,6 +1,13 @@
+- Новости:
+    - Возобновление оффера(dev): news.restart_offer
+    - Расширение гео(dev): news.new_geo
+    - Новый лэндинг / прелэндинг(dev): news.new_land
+    - Приостановка оффера(dev): news.stop_offer
 - Офферы:
     - Заведение: 
-        - SS оффер: add_offer.ss_offer
+        - SS оффер: offer.ss_offer
+    - Возобновление(dev): offer.restart_offer
+    - Особенности интеграции(dev): offer.integrations
 - Промо:
     - Проверка:
         - Общие положения(dev): check_land.jeneral
