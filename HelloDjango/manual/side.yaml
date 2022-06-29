@@ -1,9 +1,13 @@
 - Офферы:
     - Заведение: 
         - SS оффер: add_offer.ss_offer
-- Проверка промо:
-    - Общие положения: check_land.jeneral
-    - Основные элементы: check_land.elements
+- Промо:
+    - Проверка:
+        - Общие положения(dev): check_land.jeneral
+        - Основные элементы: check_land.elements
+        - Форма(dev): check_land.forms
+    - Тестирование(dev): check_land.forms
+    - Добавление(dev): check_land.forms
 - Прочее:
     - Элементы документации: other.examples
     - Глоссарий: other.glossary

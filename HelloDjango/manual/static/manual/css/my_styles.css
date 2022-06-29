@@ -1,12 +1,10 @@
 h1{
     margin-bottom: 50px;
 }
-h2{
-    margin-bottom: 30px;
+h2,h3{
+    margin: 25px 0;
 }
-h3{
-    margin-bottom: 20px;
-}
+
 .content p.center{
     text-align: center;
 }
@@ -108,12 +106,28 @@ span.cap{
     margin-top:0.5rem;
 }
 
-.carousel .carousel-caption{
+.carousel .carousel-caption h5{
     opacity: 0.6;
     display: inline-block;
     background: rgba(155, 155, 155); /* Цвет фона */
     padding: 5px; /* Поля вокруг текста */
+    padding: 6px 10px;
+    border-radius: 3px;
 }
-.carousel .carousel-caption{
-    color: rgba(0, 0, 0, 1)
+
+.anchor-link {
+    padding: 0 0.275rem;
+    font-weight: 400;
+    color: rgba(13,110,253,0.5);
+    text-decoration: none;
+    opacity: 1;
+    transition: color 0.15s ease-in-out,opacity 0.15s ease-in-out;
+}
+.anchor-link::after {
+    content: "#";
+}
+.anchor-link:hover{
+    color: #0d6efd;
+    text-decoration: none;
+    opacity: 1;
 }

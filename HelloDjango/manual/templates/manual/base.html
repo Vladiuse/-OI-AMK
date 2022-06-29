@@ -170,6 +170,12 @@
                 counter ++
         })
         }
+        $(document).ready(function(){
+            console.log('aaa')
+            let ankorLink = $('<a>')
+            ankorLink.addClass('anchor-link')
+            $('.content h2, .content h3').append(ankorLink)
+        })
         
     </script>
 </body>

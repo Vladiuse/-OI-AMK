@@ -5,17 +5,21 @@
 
 <h1>Основные элементы</h1>
 <h3>Фавикон</h3>
-    <p>В фавиконе должна быть либо картинка оффера, логотип соответствующий тематике лэнда(например если новостной сайт) либо нейтральная
+    <p>В фавиконе должна быть либо картинка оффера, логотип соответствующий тематике лэнда <i>(например если новостной сайт)</i> либо нейтральная.
     </p>
     <p><i>Примеры:</i></p>
     <p><i>С оффером:</i> 
         <img src="https://blog-feed.org/lifecontrol-blog-a/img/favicon.ico" style="width:30px">
-    </p>
+        <img src="https://blog-feed.org/medica-hernandez-recardio/am/giperium/gt-4-hba1030sb-r/img/xproduct2.png.pagespeed.ic.NOUVseH913.webp" style="width:30px">
+        
     <p><i>Новостные:</i> 
-        <img src="https://blog-feed.org/frutalica-voz-btn-blick/img/logo.jpg" style="width:30px">
+        <img src="https://1757140519.rsc.cdn77.org/blog/wp-content/uploads/sites/2/2018/10/0070_r_news-logo_26.png" style="width:30px">
+        <img src="https://play-lh.googleusercontent.com/-ujydqANij910osrJ2Et5ce64f-Qq31RSP1w7EbZ5L5ovVG9UoPvYd3hVb9oESbTsDxk" style="width:30px">
+        
     </p>
     <p><i>Нейтральный:</i> 
         <img src="https://aocc.ru/wp-content/gallery/images/snezhinka.gif" style="width:30px">
+        <img src="https://blog-feed.org/frutalica-voz-btn-blick/img/logo.jpg" style="width:30px">
     </p>
     <div class="alert alert-warning d-flex align-items-center" role="alert">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
@@ -24,7 +28,7 @@
         </div>
       </div>
 <h3>Title</h3>
-<p>Язык текста в Title должен соответствовать языку сайта. Также домускаеться title с названием оффера на лэнде.</p>
+<p>Язык текста в Title должен соответствовать языку сайта. Допускаеться title с названием оффера на лэнде.</p>
 <h3>Внутриние ссылки</h3>
 <p>У всех ссылок может быть следующие поведение:</p>
 <ul class="li-wrapper">
@@ -32,29 +36,59 @@
     <li>Скрол на определенную часть сайта</li>
     <li>Редирект на лэнд - если исходный сайт прелэнд</li>
 </ul>
-
-<div class="alert alert-danger d-flex align-items-center" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"></use></svg>
-    <div>
-        Переход на сторонние сайты не допускаеться
-    </div>
-  </div>
-
-<h3>Адаптивность</h3>
-<h3>Текст</h3>
+<a href="http://vladiuse.beget.tech/_kma/manual_redirect/">Пример сайта с редиректом</a><br>
+<a href="http://vladiuse.beget.tech/_kma/manual_scroll/">Пример сайта скроллом</a>
+{% note %}
+Скролл или редирект?
+Стандартное поведение ссылок на прелэнде - редирект на лэнд. Но иногда просят сделать скролл к форме, это лучше уточнить у поставщика задачи.
+{% end %}
+<p>Поведение инных кликабельных элементов, ссылок к шапке, кликабельных картинок и прочих, также должно быть таким же как и у ссылок</p>
+{% slider dark %}
+https://i.imgur.com/LBPCmyM.png
+https://i.imgur.com/hVknyYY.png
+https://i.imgur.com/lQVWQsz.png
+https://i.imgur.com/b5O0Aa9.png
+{% end %}
+<p class="center">Примеры кликабельных элементов</p>
+{% notice d %}
+Переход на сторонние сайты не допускаеться
+{%end%}
+{% notice w %}
+Наличие редиректа и скролла к форме у разных элементов на одном сайте не допускаеться.
+{% end %}
+<p>При наведении мышкой на кликабельные элементы, курсор должен меняться</p>
+<img src="https://i.imgur.com/hO6CtqK.png" alt="" class="w-50">
 <h3>Popup</h3>
 <p>При нажатии на крестик попапа - он должен закрываться. Также при нажатии вне его - он тоже должен закрыться</p>
 {% img %}
 https://i.imgur.com/oPSyleV.png
 {% end %}
-<p>Также он должен быть адаптивным, корректно отобрадаться на мобилкал и иных устройствах</p>
+<p>Также он должен быть адаптивным, корректно отображаться на мобилках и иных устройствах</p>
 {% slider dark%}
-Правильно$https://i.imgur.com/59vDPsJ.png 
+Правильно$https://i.imgur.com/fgv77KN.png
 Неправильно$https://i.imgur.com/59vDPsJ.png
 {% end %}
-<img src="https://i.imgur.com/8GNjq6v.png" alt="" class="w-100">
-<p class="center"><i>Пример неадаптивного попапа</i></p>
-<h3>Реквизиты</h3>
+<!-- <p class="center"><i>Пример неадаптивного попапа</i></p> -->
+<h3>Реквизиты и Полиси</h3>
+<p>В низу страницы могуть быть реквизиты и ссылки на <a href="">Потилику конфиденциальности</a> и <a href="">Пользовательское соглашение</a></p>
+{% img %}
+https://i.imgur.com/G36QMdj.png
+{% end %}
+<p>На лэнде реквизиты должны быть обязательно, на прелендингах их быть не должно</p>
+{% notice %}
+Если лэнд выглядит как прелэнд, реквизиты не нужны.
+{% end %}
+<p>Полиси должны быть рабочими - при клике открываеться окошко с текстом. Окно должно скроллиться, закрываться при нажатии на крестик или все окошка с тектом, быть адаптивным.</p>
+{% slider dark %}
+https://i.imgur.com/BnFnwXu.png
+https://i.imgur.com/V0A3RCL.png
+{%end%}
+{% note %}
+Полиси на прелэндингах
+На прелэндингах или на лэндах выглядящих как прелэнды, вместо открытия окна с полиси, на ссылках допускаеться скролл к форме или редирект <i>(если это прелэнд)</i>.
+{% end %}
+<h5>Локализация</h5>
+<p> Язык полиси должен совпадать с языком сайта. Если это Арабский язык(текст с права-налево) полиси также должны быть спара-налево.</p>
 <h3>Даты</h3>
 <p>Все даты на должны проставляться скриптами, те менять свое значение в зависимости от текущей даты</p>
 <h6>Даты по тексту должны быть в следующем формате:</h6>
@@ -69,13 +103,10 @@ https://i.imgur.com/oPSyleV.png
     <li>01/02/21</li>
     <li>2021\02\20</li>
 </ul>
-<div class="alert alert-primary d-flex align-items-center" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"></use></svg>
-    <div>
-        Допускаються дыты без указания года, либо с указанием названия месяца.
-    </div>
-  </div>
-<h4>Типы дат</h4>
+{%notice%}
+Допускаються дыты без указания года, либо с указанием названия месяца.
+{%end%}
+<h5>Типы дат</h5>
 <h6>Дата статьи, публикации</h6>
 <p>Дата публикации обычно находиться вначале сайта либо в шапке. Она может быть как сегодняшней, так и минус пару дней от текущей</p>
 <img src="https://i.imgur.com/Nt3lzWE.png" alt="" class="w-100">
@@ -86,41 +117,86 @@ https://i.imgur.com/oPSyleV.png
 <p>Дата оставления коментария должны быть не раньше даты публикации, и не позже сегодня</p>
 <p>Вместо даты также может указываться сколько прошло времени после оставления коментария, например <i>2 часа назад</i></p>
 <img src="https://i.imgur.com/JQqkp3B.png" alt="" class="w-100">
-<div class="alert alert-primary d-flex align-items-center" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
-    <div>
-      Допускаються коментарии без дат, но тогда без дат должны быть все коментарии.
-    </div>
-  </div>
+{% notice %}
+Допускаються коментарии без дат, но тогда без дат должны быть все коментарии.
+{%end%}
 <h6>Даты по тексту</h6>
 <p>Значение даты в тексте должно соответсвовать контексту. Например: если реч идет об открытии иновационого метода для лечения чего либо, год открытия должен быть -1 -2 от текущего.
 </p>
 <p>Также по тексту могут быть старые года</p>
 <p></p>
+<h2>Скролл сайта</h2>
+<p>По вертикали сайт должен без проблем скролиться как колесиком, так и при нажатии мышкой на боковуй ползунок</p>
+{% notice w %}
+Скролл влево-вправо не допускаеться.
+{%end%}
+<h2>Коментарии</h2>
+<h5>Аватарки</h5>
+<p>Все картинки должны быть в одинаковом стиле, либо квадратные либо круглые. Имя автора коментария должно соответствовать полу того кто на фото. 
+Таже нацианальность коментаторова на фото должны соответствовать гео сайта. Те если сайт на арабском языке - фото должны быть с арабами, если на европейские страны - на фото должны быть европейцы.
+</p>
+<p>Если есть коментарии от врача, фото и имя врача должно совпадать с именем и фото вначале статьи <i>(обычно он там есть)</i> </p>
+{% slider dark %}
+https://i.imgur.com/cgcjTYT.png
+https://i.imgur.com/nuWUZ7Q.png
+{% end %}
+{% notice w%}
+Не должно быть дублирование аватаров, когда фото одно, а имена разные.
+{% end %}
+<img src="https://i.imgur.com/71uuYRL.png" alt="" class="w-80">
+<h5>Даты коментариев</h5>
+<p>Даты коментариев могуть быть как датой, так и временем, сколько прошло с момента его оставления. Коментарии могуть отображаться сначала новые, потом старые, так и наоборот. Главное чтобы они небыли в перемешку.</p>
+<img src="https://i.imgur.com/GTe3KUg.png" alt="" class="w-80">
+{% note w %}
+Пропажа коментариев
+Иногда происходит пропадание коментариев в мобильной версии сайта. Например в десктоп версии коментариев 10 - а в мобильной версии 7. <b>Такого быть не должно</b>.
+{% end %}
+<h5>Город коментатора</h5>
+<p>Город коментатора должен соответствовать той стране, для которой предназначен сайт.</p>
+<img src="https://i.imgur.com/UAspCvC.png" alt="" class="">
 <h3>Оффер</h3>
 <p>Оффер должен соответствовать тому, что установлен в админке. По тексту не должно быть никаких других офферов, за исключением когда они упонимаються специально. Например когда действие продутка сравниваеться с другими.</p>
-<p>Все картинки с продуктом должны по сайту и в коментах должны соотвецтвовать. В коментариях фото продукта должны быть "живыми".</p>
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="https://showmax.akamaized.net/i/12cdc789-bff1-47db-9f18-622c8565fa33/format=webp/q=70/850x" class="d-block w-100" alt="...">
-      </div>
-      <div class="carousel-item">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJxYybxutY-YHG5zu75tjq-kEza8fbakB_nB4XDq8tWFnBcx2v2tM7qlgLDSUJ1yMamls&usqp=CAU" class="d-block w-100" alt="...">
-      </div>
-      <div class="carousel-item">
-        <img src="https://cdn.vox-cdn.com/thumbor/JZqRTXoDIuGVYJLm9EA6oBeSmYc=/0x0:1024x576/1200x800/filters:focal(431x207:593x369)/cdn.vox-cdn.com/uploads/chorus_image/image/70093218/spongebob_rainbow_meme_video_16x9.0.jpg" class="d-block w-100" alt="...">
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
+{%img%}
+https://i.imgur.com/kYjHl7I.png
+{%end%}
+<p>Все картинки с продуктом по сайту и в коментах должны соотвецтвовать. В коментариях фото продукта должны быть "живыми".</p>
 
+{% slider %}
+https://i.imgur.com/my9v7Vi.png
+https://i.imgur.com/UTTGkQ0.png
+https://i.imgur.com/NS1LR6g.png
+{%end%}
+<h4>Вариации упаковок</h4>
+<p>У одного оффера бывает разный дизайн упаковки. <b>Важно</b> чтобы на сайте был только один вариант <i>(какой имеено ,возможно, притеться уточнять)</i></p>
+{% slider dark%}
+https://i.imgur.com/fPvJPdt.png
+https://i.imgur.com/ygjc1cY.png
+{%end%}
+<h2>Баги</h2>
+<h4>Баги скриптов</h4>
+<p>иногда после выкачики сайта, данные которые проставляються скриптом, могут начать дублироваться.</p>
+{% img %}
+Выглядит это примерно так $ https://i.imgur.com/Bwe2Kyp.png
+{%end%}
+<h4>Баг кэша</h4>
+<p>Тк сайты <a href="check_land.jeneral">кэшируються</a>, могут возникать подобные ошибки</p>
+{%img%}
+https://i.imgur.com/6SNnNu2.png
+{%end%}
+<p>Баг связан с ошибкой в постороении кеша. И дабы ее решить - нужно сбросить кеш на этом ленде.</p>
+{%code safe%}
+https://ваша_ссылка?<b>PageSpeed=off</b>
+{%end%}
+<p>PageSpeed  - фича, предназначенная для ускорения открытия промо. Добавив ей значение <b>off</b>, можно сбросить кэш сайта.</p>
 <h3>Прочее</h3>
+<h4>Сертификаты</h4>
+<p>На странице могут присутствовать сертификаты продукта.</p>
+{% slider dark %}
+https://i.imgur.com/soOPEin.png
+https://i.imgur.com/bOuSyjr.png
+https://i.imgur.com/4k2Vu0i.png
+https://i.imgur.com/gBijS9d.png
+{% end %}
+<p>Необходимо обращать внимание на язык, товар указаный в сертификате, различные логотипы. В случае какого-то не соответствия он либо убираеться <i>(обязательно уточнять)</i>, либо блюриться <i>(делаеться нечитаемым)</i>.</p>
 {% endblock %}
+

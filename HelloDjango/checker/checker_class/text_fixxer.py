@@ -31,6 +31,7 @@ class Img:
     ATTRS = [
         'data-src',
         'data-pagespeed-lazy-src',
+        
     ]
 
     ALL_IMG_SRCS = []
@@ -248,6 +249,8 @@ class DomFixxer:
         url = self.url
         if '?' in self.url:
             url = self.url.split('?')[0]
+        if not url.endswith('/'):
+            url += '/'
         base = self.soup.find('base')
         if not base:
             new_base = self.soup.new_tag('base')

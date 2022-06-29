@@ -171,7 +171,7 @@ ul.toctree-l>li.current button::before{
     clear: both;
     padding: 12px;
     line-height: 24px;
-    margin-bottom: 24px;
+    margin: 16px 0 24px 0;
 }
 .rst-content .note{
     background: #e7f2fa;

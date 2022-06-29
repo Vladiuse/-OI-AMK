@@ -1,20 +1,60 @@
 {% extends 'manual/base.html' %}
 {% block content %}
 {% load static %}
+{% load note %}
 <h1>Общие положения</h1>
 <h2>Лэнд и прелэнд</h2>
-<p class="center"><i>description of slider</i></p>
-<h2>Скролл и редирект</h2>
+<p>Есть два типа сайтов - лэнд и прелэнд. Визуально они легко отличимы. Лэнд это сайт о продукте, он стилизован, похощ на стандартные однастоаничники. Прелэнды обычно выглядят как новостные сайты,медицинские порталы или блоги</p>
+{%slider dark%}
+https://i.imgur.com/0r3Pp4h.png
+https://i.imgur.com/bkpbRiM.png
+https://i.imgur.com/vKfMeeh.png
+https://i.imgur.com/tietdru.png
+{%end%}
+<p class="center"><i>Лэндинг</i></p>
+{%slider dark%}
+https://i.imgur.com/4EFDGKd.png
+https://i.imgur.com/TQehnQb.png
+https://i.imgur.com/Hxl5RUc.png
+https://i.imgur.com/wAiYUB4.png
+https://i.imgur.com/J6wxeNf.png
+https://i.imgur.com/f4mmwWp.png
+{%end%}
+<p class="center"><i>Прелэндинг</i></p>
+<h2>Адаптивность</h2>
+<p>Адаптивность — одно из ключевых требований, предъявляемых к современным сайтам. Ресурс должен одинаково хорошо демонстрироваться на экране компьютера, планшете, смартфоне. </p>
+{%slider dark%}
+десктоп$https://i.imgur.com/jqgETjz.png
+Планшет$https://i.imgur.com/Dsg8I60.png
+Сматрфон$https://i.imgur.com/PWZRxdE.png
+{%end%}
+<h2>Локализация</h2>
+<p>На одном сайте может быть несколько вариантов переводов. Если они есть, сбоку будет присутствовать окошка с флагами стран, нажав на который можно попасть на нужный перевод.</p>
+{% img %}
+переход между языками$https://i.imgur.com/sYyBZ8j.png
+{%end%}
+<p>После перехода на выбраный язык у ссылки появиться utm-мета lang="xx", где вместо xx будет указан iso код выбраного языка.</p>
+{% code safe%}
+https://apolloss-new.com/?<b>lang=bg</b>
+{%end %}
+<h4>Справа налево</h4>
+<p>В арабском языке текст идет справа налево, соотвественно весь текст на араском сайте должен идти справа налево <i>(включаю инпуты, плэйсхолдеры, селекты и прочее)</i>.</p>
+{% slider dark%}
+https://i.imgur.com/ZBkl03N.png
+https://i.imgur.com/8ihxOQM.png
+https://i.imgur.com/1Mva13h.png
+{%end%}
 
-<div class="admonition note danger">
-    <p class="admonition-title">Критические элементы</p>
-    <p>Критически важно</p>
-    <div class="li-wrapper">
-        <ul>
-            <li class="toctree-l1">Рабочая форма</li>
-            <li class="toctree-l1">Наличие правильной картинки оффера</li>
-            <li class="toctree-l1">Правильной цены и валюты</li>
-            <li class="toctree-l1">Локализация лэнда</li>
-    </div>
-    </div>
+<h2>Приоритетные элементы</h2>
+{% note d%}
+Критические элементы
+Критически важно
+<div class="li-wrapper">
+    <ul>
+        <li class="toctree-l1">Рабочая форма</li>
+        <li class="toctree-l1">Наличие правильной картинки оффера</li>
+        <li class="toctree-l1">Правильной цены и валюты</li>
+        <li class="toctree-l1">Локализация лэнда</li>
+</div>
+{% end %}
 {% endblock %}
