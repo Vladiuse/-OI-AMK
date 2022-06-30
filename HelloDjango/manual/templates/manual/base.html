@@ -178,5 +178,23 @@
         })
         
     </script>
+      <script>
+        //Скрипт для карточек описания новостей
+    function cardShowLang(card,lang){
+        card.find('p').hide()
+        card.find('p.'+lang).show()
+    }
+    $('.news_desc a.nav-link').click(function(e){
+        e.preventDefault()
+        let lang = $(this).attr('data-lang')
+        console.log(lang)
+        let card = $(this).closest('.card')
+        card.find('a').removeClass('active')
+        $(this).addClass('active')
+        cardShowLang(card,lang)
+    })
+    $('.news_desc a').click(function(e){
+        e.preventDefault()})
+  </script>
 </body>
 </html>

@@ -35,6 +35,12 @@ def news(parser, token):
 def check(parser, token):
     return Check(parser, token=token)
 
+@register.tag
+def news_desc(parser, token):
+    return NewsDesc(parser, token=token)
+
+
+
     
 
 # @register.tag(name="note")
@@ -219,3 +225,15 @@ class Check(Node):
         self.content.update(
             {'text': output, 'checked': checked}
         )
+
+class NewsDesc(Node):
+    TEMPLATE_PATH = 'manual/blocks_templates/news_description.html'
+    def get_content(self, output):
+        output = output.strip()
+        if S in output:
+            ru, eng = output.split(S)
+            ru, eng = ru.strip(), eng.strip()
+            result = {'ru': mark_safe(ru), 'eng': mark_safe(eng)}
+        else:
+            result = {'ru': mark_safe(output)}
+        self.content.update(result)

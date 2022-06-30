@@ -154,3 +154,15 @@ span-x.danger {
     border: 1px solid #bc1a1a;
     background: #fae7e7;
 }
+
+.news_desc p{
+    text-align: left;
+    font-size: 12px;
+}
+.news_templates{
+    width: 50%;
+    margin-bottom: 30px;
+}
+.news_templates label{
+    margin: 0.5rem 0;
+}

@@ -6,8 +6,9 @@
 - Офферы:
     - Заведение: 
         - SS оффер: offer.ss_offer
+    - Расширение географии: offer.new_geo
     - Возобновление(dev): offer.restart_offer
-    - Особенности интеграции(dev): offer.integrations
+    - Приостановка: offer.stop
 - Промо:
     - Проверка:
         - Общие положения(dev): check_land.jeneral
@@ -18,3 +19,4 @@
 - Прочее:
     - Элементы документации: other.examples
     - Глоссарий: other.glossary
+    - Особенности интеграции(dev): offer.integrations
