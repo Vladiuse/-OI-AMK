@@ -1,22 +1,36 @@
+- Админка:
+    - Комиссии: admin.comms
+    - Рекламная компания: admin.rek_comm
 - Новости:
     - Возобновление оффера(dev): news.restart_offer
-    - Расширение гео(dev): news.new_geo
     - Новый лэндинг / прелэндинг(dev): news.new_land
     - Приостановка оффера(dev): news.stop_offer
+    - Расширение гео(dev): news.new_geo
+    - Изменение офферов:
+        - Изменение отчислений(dev): news.comm_change
+        - Изменение условий: news.condition_change
+        - Изменение цены: news.price_change
 - Офферы:
+    - Правила оформления:
+        - Основная информация: offer.rules_main
+        - Рекламные кампании: offer.rules_rk
+        - Комиссии: offer.rules_comm
+
     - Заведение: 
+        - CPA оффер: offer.cpa_offer
         - SS оффер: offer.ss_offer
-    - Расширение географии: offer.new_geo
-    - Возобновление(dev): offer.restart_offer
-    - Приостановка: offer.stop
+    - Расширение гео: offer.new_geo
+    - Изменение: 
+        - Возобновление(dev): offer.restart_offer
+        - Приостановка оффера/гео: offer.stop
+        - Изменение условий работы: offer.change_work
 - Промо:
     - Проверка:
         - Общие положения(dev): check_land.jeneral
         - Основные элементы: check_land.elements
         - Форма(dev): check_land.forms
     - Тестирование(dev): check_land.forms
-    - Добавление(dev): check_land.forms
 - Прочее:
     - Элементы документации: other.examples
     - Глоссарий: other.glossary
-    - Особенности интеграции(dev): offer.integrations
+    - Особенности интеграции(dev): other.integrations

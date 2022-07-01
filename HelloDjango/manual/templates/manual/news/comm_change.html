@@ -1,0 +1,28 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Изменение отчислений по офферу</h1>
+<h3>Повышение отчислений</h3>
+{% news %}
+Изменение офферов
+Повышение отчислений по офферу
+{%end%}
+{% news_desc %}
+Повышены отчисления по офферу <b>"Телевизионная антенна HQClearTv | низкая цена"</b> , за подтвержденную заявку (RU): c <b>880 RUB</b> до <b>1200 RUB</b>.
+$
+Deductions on the offer <b>"TV antenna HQClearTv | low price"</b> have been increased, for approved order (RU): from <b>880 RUB</b> to <b>1200 RUB</b>.
+{% end %}
+<h3>Снижение отчислений</h3>
+{% news %}
+Изменение офферов
+Снижение отчислений по офферу
+{%end%}
+{% news_desc %}
+Изменены отчисления по офферу <b>"Проктомицин - крем от геморроя | низкая цена"</b>.
+Новые отчисления (KZ) - <b>10 USD</b> за подтвержденную заявку.
+$
+Deductions have been changed on the offer <b>"Proctomycin - hemorrhoid cream | low price"</b>. 
+New deductions (KZ) - <b>10 USD</b> for approved order.
+{%end%}
+{%endblock%}

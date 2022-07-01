@@ -4,6 +4,12 @@ h1{
 h2,h3{
     margin: 25px 0;
 }
+h4,h5{
+    margin:15px 0 10px 0;
+}
+h6{
+    margin-top: 15px;
+}
 
 .content p.center{
     text-align: center;
@@ -158,11 +164,12 @@ span-x.danger {
 .news_desc p{
     text-align: left;
     font-size: 12px;
-}
-.news_templates{
-    width: 50%;
+    width: 80%;
     margin-bottom: 30px;
 }
 .news_templates label{
     margin: 0.5rem 0;
+}
+.news_templates{
+    width: 50%;
 }

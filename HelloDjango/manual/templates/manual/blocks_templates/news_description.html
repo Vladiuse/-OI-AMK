@@ -1,0 +1,23 @@
+{% if desc %}
+<label class="form-label">{{desc}}</label>
+{% endif %}
+<div class="card text-center news_desc">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="true" href="#" data-lang="ru">
+            <img src="https://cpanel.kma.biz/assets/f8f68746/img/flags/ru.png" alt="">
+            RU</a>
+        </li>
+        <li class="nav-item">        
+            <a class="nav-link" href="#" data-lang="eng">
+            <img src="https://cpanel.kma.biz/assets/f8f68746/img/flags/en.png" alt="">
+            ENG</a>
+        </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <p class="card-text ru" data-lang="ru">{{ru}}</p>
+        <p class="card-text eng" data-lang="eng" style="display: none;">{{eng}}</p>
+    </div>
+</div>

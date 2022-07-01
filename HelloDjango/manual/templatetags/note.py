@@ -39,6 +39,12 @@ def check(parser, token):
 def news_desc(parser, token):
     return NewsDesc(parser, token=token)
 
+@register.tag
+def select(parser, token):
+    return Select(parser, token=token)
+
+    
+
 
 
     
@@ -220,7 +226,7 @@ class Check(Node):
     def get_content(self, output):
         output = output.strip()
         checked =''
-        if 'c' in self.attrs:
+        if 'on' in self.attrs or 'c' in self.attrs:
             checked='checked'
         self.content.update(
             {'text': output, 'checked': checked}
@@ -230,10 +236,28 @@ class NewsDesc(Node):
     TEMPLATE_PATH = 'manual/blocks_templates/news_description.html'
     def get_content(self, output):
         output = output.strip()
+        if 'work' in self.attrs:
+            desc = 'Условия работы'
+        elif 'warning' in self.attrs:
+            desc = 'Предупреждение'
+        else:
+            desc = ''
         if S in output:
             ru, eng = output.split(S)
             ru, eng = ru.strip(), eng.strip()
-            result = {'ru': mark_safe(ru), 'eng': mark_safe(eng)}
+            result = {'ru': mark_safe(ru), 'eng': mark_safe(eng),'desc': desc}
         else:
-            result = {'ru': mark_safe(output)}
+            result = {'ru': mark_safe(output),'desc': desc}
+        self.content.update(result)
+
+class Select(Node):
+    TEMPLATE_PATH = 'manual/blocks_templates/select.html'
+    def get_content(self, output):
+        output = output.strip()
+        if S in output:
+            title, text = output.split(S)
+            title, text = title.strip(), text.strip()
+            result = {'title': title, 'text': text}
+        else:
+            result = {'text':  output}
         self.content.update(result)
