@@ -1,27 +1,28 @@
 - Админка:
-    - Комиссии: admin.comms
-    - Рекламная компания: admin.rek_comm
+    - Комиссии(dev): admin.comms
+    - Рекламная компания(dev): admin.rek_comm
 - Новости:
-    - Возобновление оффера(dev): news.restart_offer
-    - Новый лэндинг / прелэндинг(dev): news.new_land
-    - Приостановка оффера(dev): news.stop_offer
-    - Расширение гео(dev): news.new_geo
+    - Новый оффер: news.new_offer
+    - Возобновление оффера: news.restart_offer
+    - Новый лэндинг / прелэндинг: news.new_land
+    - Приостановка оффера: news.stop_offer
+    - Расширение гео: news.new_geo
     - Изменение офферов:
-        - Изменение отчислений(dev): news.comm_change
+        - Изменение отчислений: news.comm_change
         - Изменение условий: news.condition_change
         - Изменение цены: news.price_change
 - Офферы:
     - Правила оформления:
-        - Основная информация: offer.rules_main
-        - Рекламные кампании: offer.rules_rk
-        - Комиссии: offer.rules_comm
+        - Основная информация(dev): offer.rules_main
+        - Рекламные кампании(dev): offer.rules_rk
+        - Комиссии(dev): offer.rules_comm
 
     - Заведение: 
         - CPA оффер: offer.cpa_offer
         - SS оффер: offer.ss_offer
     - Расширение гео: offer.new_geo
     - Изменение: 
-        - Возобновление(dev): offer.restart_offer
+        - Возобновление: offer.restart_offer
         - Приостановка оффера/гео: offer.stop
         - Изменение условий работы: offer.change_work
 - Промо:

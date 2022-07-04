@@ -160,7 +160,9 @@ span-x.danger {
     border: 1px solid #bc1a1a;
     background: #fae7e7;
 }
-
+.news_desc {
+    margin-top: 15px;
+}
 .news_desc p{
     text-align: left;
     font-size: 12px;

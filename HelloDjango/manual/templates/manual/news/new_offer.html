@@ -1,0 +1,40 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Новый оффера</h1>
+{%news%}
+Новинки
+Новый оффера
+{%end%}
+{%notice%}
+Если оффер приватный - выставить галку
+{%end%}
+{%check on%}
+Приватная
+{%end%}
+<h2>Оформление</h2>
+{%news_desc%}
+Добавлен новый оффер <b>"Savina - капсулы для похудения"</b>! <br>
+Отчисления за подтвержденную заявку (MY) - <b>18 USD</b>. Цена товара - <b>169 MYR</b>.
+$
+New offer was added - <b>"Savina - capsules for weight loss"</b>! <br>
+Deductions for approved order (MY) - <b>18 USD</b>. Product price - <b>169 MYR</b>.
+{%end%}
+<h3>Несколько гео</h3>
+{%news_desc%}
+Добавлен новый оффер <b>"Hyperdrops - капли от гипертонии"</b>! <br>
+Отчисления за подтвержденную заявку (RS) - <b>21 USD</b>, (HR) - <b>26 USD</b>. Цена товара (RS) - <b>3700 RSD</b>, (HR) - <b>287 HRK</b>.
+$
+New offer was added - <b>"Hyperdrops - drops from hypertension"</b>!  <br>
+Deductions for approved order (RS) - <b>21 USD</b>, (HR) - <b>26 USD</b>. Product price (RS) - <b>3700 RSD</b>, (HR) - <b>287 HRK</b>.
+{%end%}
+<h3>Несколько гео - одна цена</h3>
+{%news_desc%}
+Добавлен новый оффер <b>"JustHair - сыворотка для ухода за волосами"</b>! <br>
+Отчисления за подтвержденную заявку (CI, SN, ML) - <b>5 USD</b>. Цена товара - <b>25000 XOF</b>.
+$
+New offer was added - <b>"JustHair - hair care serum"</b>! <br>
+Deductions for аpproved order (CI, SN, ML) - <b>5 USD</b>. Product price - <b>25000 XOF</b>.
+{%end%}
+{%endblock%}
