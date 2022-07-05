@@ -1,16 +1,18 @@
 - Админка:
     - Комиссии(dev): admin.comms
     - Рекламная компания(dev): admin.rek_comm
+    - Доступ к эксклюзивным офферам: admin.add_exclusive
 - Новости:
-    - Новый оффер: news.new_offer
-    - Возобновление оффера: news.restart_offer
-    - Новый лэндинг / прелэндинг: news.new_land
-    - Приостановка оффера: news.stop_offer
-    - Расширение гео: news.new_geo
+    - Оффер:
+        - Новый оффер: news.new_offer
+        - Приостановка оффера: news.stop_offer
+        - Возобновление оффера: news.restart_offer
     - Изменение офферов:
         - Изменение отчислений: news.comm_change
         - Изменение условий: news.condition_change
         - Изменение цены: news.price_change
+    - Новый лэндинг / прелэндинг: news.new_land
+    - Расширение гео: news.new_geo
 - Офферы:
     - Правила оформления:
         - Основная информация(dev): offer.rules_main
@@ -21,17 +23,19 @@
         - CPA оффер: offer.cpa_offer
         - SS оффер: offer.ss_offer
     - Расширение гео: offer.new_geo
+    - Вывод в паблик/эксклюзив: offer.to_publik
     - Изменение: 
         - Возобновление: offer.restart_offer
         - Приостановка оффера/гео: offer.stop
         - Изменение условий работы: offer.change_work
 - Промо:
+    - Общие положения(dev): check_land.jeneral
     - Проверка:
-        - Общие положения(dev): check_land.jeneral
         - Основные элементы: check_land.elements
         - Форма(dev): check_land.forms
-    - Тестирование(dev): check_land.forms
+    - Тестирование(dev): check_land.tests
 - Прочее:
-    - Элементы документации: other.examples
     - Глоссарий: other.glossary
     - Особенности интеграции(dev): other.integrations
+    - Элементы документации: other.examples
+    - ЛикБез(dev): other.lic_bez

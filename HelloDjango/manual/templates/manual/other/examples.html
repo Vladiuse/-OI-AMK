@@ -84,6 +84,27 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 {% templatetag openblock %} end {% templatetag closeblock %}
 {% end%}
 <!-- --- -->
+<h2>Окно Рунглишь</h2>
+{%news_desc%}
+<b>Ru</b> text
+$
+<b>Eng</b> Text
+{%end%}
+
+<h5>Синтаксис</h5>
+<!-- --- -->
+{% code safe %}
+{% templatetag openblock %} news_desc {% templatetag closeblock %} <br>
+Ru text <br>
+$<br>
+Eng tex<br>
+{% templatetag openblock %} end {% templatetag closeblock %}
+{% end%}
+<!-- --- -->
+
+
+
+<!-- --- -->
 <h2>Бэйджы</h2>
 <p>
   <span-x>Badge</span-x>
