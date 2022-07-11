@@ -1,0 +1,33 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Изменение цены и отчислений</h1>
+<p>В зависимости от изменение цены и отчислений, что-то повышено, чтото понижено, может быть 4 шаблона новости.</p>
+<h2>Цена <span-x>+</span-x> и отчисления <span-x>+</span-x></h2>
+{%news%}
+Изменение офферов
+Повышение цены и повышение отчислений
+{%end%}
+<h4>Описание</h4>
+{%news_desc%}
+Изменена цена товара по офферу <b>"Диафон - комплекс от диабета | низкая цена (приват)"</b>. <br>
+Новая цена (MD) - <b>67 MDL</b>. Также были повышены отчисления (MD): с <b>13 USD</b> до <b>16 USD</b> за подтвержденную заявку. <br>
+$
+Product price on the offer <b>"Diafon - complex for diabetes | low price (private)"</b> was changed. <br>
+New price (MD) - <b>67 MDL</b>. Deductions were also increased (MD): from <b>13 USD</b> to <b>16 USD</b> for approved order. <br>
+{%end%}
+{%news%}
+Изменение офферов
+Повышение цены и снижение отчислений
+{%end%}
+{%news%}
+Изменение офферов
+Снижение цены и повышение отчислений
+{%end%}
+{%news%}
+Изменение офферов
+Снижение цены и снижение отчислений
+{%end%}
+
+{%endblock%}

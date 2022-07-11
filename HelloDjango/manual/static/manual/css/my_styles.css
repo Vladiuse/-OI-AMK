@@ -1,5 +1,6 @@
 h1{
     margin-bottom: 50px;
+    border-bottom: 1px solid #e1e4e5;
 }
 h2,h3{
     margin: 25px 0;
@@ -166,7 +167,7 @@ span-x.danger {
 .news_desc p{
     text-align: left;
     font-size: 12px;
-    width: 80%;
+    width: 90%;
     margin-bottom: 30px;
 }
 .news_templates label{
@@ -174,4 +175,7 @@ span-x.danger {
 }
 .news_templates{
     width: 50%;
+}
+.space-footer{
+    margin: 40px 0;
 }

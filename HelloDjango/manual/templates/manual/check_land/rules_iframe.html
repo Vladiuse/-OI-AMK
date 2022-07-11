@@ -1,0 +1,38 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Оформление iFrame</h1>
+<h2>Url</h2>
+{%code safe%}
+http://power-life.org/iframer/<br>
+http://power-life.org/iframer2/<br>
+http://power-life.org/iframer3/<br>
+{%end%}
+{%notice w%}
+Cсылка должна заканчиваться символом <b>"/"</b>
+{%end%}
+<h2>Название</h2>
+{%code safe%}
+Iframe форма заказа #1 <br>
+Iframe форма заказа #2 <br>
+{%end%}
+<p>Допускаються сделующие варианты:</p>
+{%code safe%}
+Iframe форма заказа #2 (без товара)<br>
+Iframe форма заказа #4 (без доставки)<br>
+{%end%}
+{%notice%}
+Приписка в скобочках не влияет на нумерацию
+{%end%}
+{%notice s%}
+Eng название проставиться автоматически
+{%end%}
+<h2>Модальное окно колл-центра</h2>
+<p>Должно быть отключенo</p>
+{%check off%}
+Отображать модальное окно
+{%end%}
+<h2>Чек-боксы</h2>
+<p>Не нужны.</p>
+{%endblock%}
