@@ -101,6 +101,7 @@
             let a = $(`a[href="${url}"]`);
 
             a.addClass('active')
+            // a.scroll()
             parent = a.parent()
             console.log(parent,parent.hasClass('on'))
             if (parent.hasClass('on')){
@@ -138,7 +139,6 @@
         })
         }
         $(document).ready(function(){
-            console.log('aaa')
             let ankorLink = $('<a>')
             ankorLink.addClass('anchor-link')
             $('.content h2, .content h3').append(ankorLink)

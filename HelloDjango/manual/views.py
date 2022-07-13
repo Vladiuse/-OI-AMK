@@ -6,6 +6,7 @@ from django.conf import settings
 PERSONS = {
     'test_potok_man': '@Славик',
     'test_integration': '@Славик', # ответственный за тест интеграции с реклом
+    'чат_верстка_ои': 'kma_oi_правки',
 }
 
 class Block:

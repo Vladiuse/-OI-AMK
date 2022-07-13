@@ -2,7 +2,7 @@
     - Комиссии(dev): admin.comms
     - Рекламная компания(dev): admin.rek_comm
     - Доступ к эксклюзивным офферам: admin.add_exclusive
-    - Трекер: admin.trecker_lead
+    - Трекер(dev): admin.trecker_lead
 - Новости:
     - Оффер:
         - Новый оффер: news.new_offer
@@ -21,8 +21,10 @@
         - Рекламные кампании(dev): offer.rules_rk
         - Комиссии(dev): offer.rules_comm
     - Заведение: 
+        - Порядок заведения: offer.order
         - CPA оффер: offer.cpa_offer
         - SS оффер: offer.ss_offer
+
     - Расширение гео: offer.new_geo
     - Вывод в паблик/эксклюзив: offer.to_publik
     - Изменение: 
@@ -39,6 +41,7 @@
     - Проверка:
         - Основные элементы: check_land.elements
         - Форма(dev): check_land.forms
+    - Запрос iFrame: check_land.get_iframe
     - Тестирование(dev): check_land.tests
 - Интеграция:
     - Особенности интеграции(dev): integration.jeneral
