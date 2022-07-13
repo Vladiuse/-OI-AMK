@@ -1,0 +1,81 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Таск Рип пропо</h1>
+{%notice s%}
+Создаеться на доске Верстка
+{%end%}
+<h2>Оформление</h2>
+<h4>Название</h4>
+{%code safe%}
+Рип промо под {Указываем оффер}
+{%end%}
+
+<h4>Тип</h4>
+{%code safe%}
+Рип промо
+<img src="https://i.imgur.com/0z2w4cd.png" alt="" class="w-40">
+{%end%}
+
+<h4>Участники</h4>
+<p>Ставим себя и {{распределение_таски_промо}}</p>
+
+<h4>Срок</h4>
+<p>Копируем у основной карточки</p>
+<h4>Метки</h4>
+<p>Копируем у основной карточки + добавляем <span-x>Лидген</span-x> и<span-x>Рессел</span-x></p>
+<img src="https://i.imgur.com/ZQYYMF5.png" alt="" class="w-40">
+<h4>Связи</h4>
+<p>Добавляем основную карточку как родительскую</p>
+<img src="https://i.imgur.com/c9TH2rX.png" alt="" class="w-40">
+<h4>Описание</h4> 
+<p>Указываем оффер, ссылка на него в админке</p>
+{%code safe%}
+KetoExpert - капсулы для похудения <br>
+https://cpanel.kma.biz/offer/module/offer/update?offer_id=6348 <br>
+{%end%}
+<h4>Как расписывать лэнды?</h4>
+<p>При постановке таска на рип лэндов мы должны указать на какой домен нужно "посадить" новый сайт. Если мы заводим новый оффер, в основной таске будет указан домен, который выделили на этот оффер.</p>
+{%img%}
+https://i.imgur.com/rgl0pQv.png
+{%end%}
+<p>Если же мы добавляем промо уже в существующему офферу, домен можно подсмотреть в админке, в <a href="https://cpanel.kma.biz/offer/module/landing/index?offer_id=144">лэндингах</a>. Какой ссылке какой домен/поддомен назначить смотри <a href="check_land.rules_land">Правила оформления лэндинги(Url)</a></p>
+{%code safe%}
+Ленды: <br>
+<a href="">https://varicoten.com/part/land/1/</a> ——— varicoten-new.com/ (в админке добавил) <br>
+<a href="">https://varicoten.com/part/land/2/</a> ——— a.varicoten-new.com/ (в админке добавил) <br>
+{%end%}
+<h4>Как расписывать прелэнды?</h4>
+<p>В расписывании лэндов никаких  особеностей нет</p>
+{%code safe%}
+Ленды: <br>
+<a href="">https://www.healthydaily.news/part/land/1/</a> <br>
+<a href="">https://www.healthydaily.news/part/land/2/</a>  <br>
+{%end%}
+<h2>Промо переводом</h2>
+<p>В исходной задаче могут идти лэндинги с разным переводом, но с одинаковой версткой. В описании таска на рип тогда нужно просить рипнуть эти сайты переводом.</p>
+{%code safe%}
+<b>Сделать переводом</b> <br>
+Черногория - <a href="">https://prirodnolijecite.com/v3/me/testox/prelp-lp/102/index.php?test_mode=1</a> <br>
+Албания - <a href="">https://prirodnolijecite.com/v3/al/testoy/prelp-lp/102/index.php?test_mode=1</a> <br>
+Словения - <a href="">https://prirodnolijecite.com/v3/si/testoy/prelp-lp/102/index.php?test_mode=1</a> <br>
+Хорватия - <a href="">https://prirodnolijecite.com/v3/hr/testox/prelp-lp/102/index.php?test_mode=1</a> <br>
+{%end%}
+<p>Тасже, если мы рипаем промо к офферу на котором уже есть лэнды, их необходимо пересмотреть, на предмет:</p>
+<ul class="li-wrapper numeric">
+    <li>Нет ли уже таких готовых промо на оффере</li>
+    <li>Нет ли промо с такой же версткой на других языках</li>
+</ul>
+<p>Если такое промо уже есть - ссылку пожно не рипать<i>(но лучше этот момент уточнить)</i>. Если есть промо с такой же версткой - но на другом языке - в описаии указать что эту ссылку нужно сделать переводом.</p>
+{%code safe%}
+<b>Ленд</b> <br>
+<a href="">https://www.promosalenow.com/</a> сделать переводом к <a href="">https://a.ketoexpert-new.com/</a> <br><br>
+<b>Прелэнд</b> <br>
+<a href="">https://www.healthydaily.news/333768?</a> сделать переводом к <a href="">https://blog-feed.org/cnn-ketoexpert/?ufl=14678</a> <br><br>
+{%end%}
+<h2>Отстутствие формы на прелэндах</h2>
+<p>Если на прелэндинге отстуствует ворма заказа - необходимо попросить верстальщиков ее добавить. Тольео если в таске прямо указано, что прелэнд должен быть без формы - мы не просим ее поставить.</p>
+<h2>Скролл к форме или редирект</h2>
+<p>Если в таске не указано поведение кликабельных элементов - поведение как на исходном промо.</p>
+{%endblock%}

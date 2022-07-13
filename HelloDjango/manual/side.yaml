@@ -24,7 +24,6 @@
         - Порядок заведения: offer.order
         - CPA оффер: offer.cpa_offer
         - SS оффер: offer.ss_offer
-
     - Расширение гео: offer.new_geo
     - Вывод в паблик/эксклюзив: offer.to_publik
     - Изменение: 
@@ -46,6 +45,13 @@
 - Интеграция:
     - Особенности интеграции(dev): integration.jeneral
     - Тестирование: integration.test
+- Таски Kaiten:
+    - Общая инфа: tasks.jeneral
+    - Создание и оформление: tasks.make
+    - Постановка задач: 
+        - Настройка интеграции: tasks.make_integration
+        - Рип промо: tasks.rip_promo
+        - Правки промо: tasks.rip_promo_check
 - Прочее:
     - Глоссарий: other.glossary
     - Хаки: other.haks

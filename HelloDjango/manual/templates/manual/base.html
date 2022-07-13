@@ -32,7 +32,7 @@
     <div id="hot-links">
     </div>
     <nav>
-        <div class="side-scroll">
+        <div class="side-scroll" id="left-side-scroll">
             <div class="nav-logo">
                 <div class="home">
                     <img src="{% static 'manual/img/logo.png' %}">
@@ -101,18 +101,28 @@
             let a = $(`a[href="${url}"]`);
 
             a.addClass('active')
-            // a.scroll()
+            let leftBar = document.getElementById('left-side-scroll')
+            console.log(a, 'ссылка', a.offset())
+            let to_srool = a.position().top
             parent = a.parent()
+            console.log(parent, '<li>', parent.position())
             console.log(parent,parent.hasClass('on'))
             if (parent.hasClass('on')){
-                console.log(123)
                 let ul = a.parentsUntil('.menu-vertival')
                 // console.log(ul)
                 // console.log(ul.find('li.cataloge').addClass('current'))
                 ul.find('li.cataloge').addClass('current')
-
+                console.log(ul.position(), '<ul>')
+                let scroll_ul  =  ul.position().top
+                if (to_srool == 0){to_srool =scroll_ul}
             }
+                leftBar.scrollBy({
+                top: to_srool,
+                left: 0,
+                behavior: "smooth",
+                    })
         }
+            
         addHotLinks()
         // Добавление горячих ссылок
         function addHotLinks(){
@@ -154,7 +164,6 @@
     $('.news_desc a.nav-link').click(function(e){
         e.preventDefault()
         let lang = $(this).attr('data-lang')
-        console.log(lang)
         let card = $(this).closest('.card')
         card.find('a').removeClass('active')
         $(this).addClass('active')
@@ -162,6 +171,7 @@
     })
     $('.news_desc a').click(function(e){
         e.preventDefault()})
+    
   </script>
 </body>
 </html>
