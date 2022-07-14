@@ -41,7 +41,11 @@ def news_desc(parser, token):
 
 @register.tag
 def select(parser, token):
-    return Select(parser, token=token)
+    return Select(parser, token=token) 
+
+@register.tag
+def correct(parser, token):
+    return CorrectIncorrect(parser, token=token)
 
     
 
@@ -260,4 +264,31 @@ class Select(Node):
             result = {'title': title, 'text': text}
         else:
             result = {'text':  output}
+        self.content.update(result)
+
+        
+
+class CorrectIncorrect(Node):
+    TEMPLATE_PATH = 'manual/blocks_templates/correct_incorrect.html'
+
+    def get_content(self, output):
+        output = output.strip()
+        result = {
+            'text': True,
+            }
+        if 'text' in self.attrs:
+            correct, incorrect = output.split(S)
+            result.update({
+                'correct': mark_safe(correct),
+                'incorrect': mark_safe(incorrect),
+            })
+        
+        else:
+            result['text'] = False
+            correct, incorrect = output.split('\n')
+            correct, incorrect = correct.strip(), incorrect.strip()
+            result.update({
+                'correct': correct,
+                'incorrect': incorrect,
+            })
         self.content.update(result)

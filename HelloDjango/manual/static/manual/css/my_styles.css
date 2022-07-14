@@ -179,3 +179,12 @@ span-x.danger {
 .space-footer{
     margin: 40px 0;
 }
+.correct i.fa-check-circle{
+    color: #1abc9c;
+}
+.correct i.fa-times{
+    color: #bc1a1a;
+}
+.correct img{
+    width: 100%;
+}

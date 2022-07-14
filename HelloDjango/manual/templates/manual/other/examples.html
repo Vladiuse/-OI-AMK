@@ -64,6 +64,16 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 {% templatetag openblock %} note d {% templatetag closeblock %} - красный <i>(danger)</i> <br>
 {% end %}
 <!-- --- -->
+
+<!-- --- -->
+<h2>Бэйджы</h2>
+<p>
+  <span-x>Badge</span-x>
+  <span-x class="success">Badge</span-x>
+  <span-x class="warning">Badge</span-x>
+  <span-x class="danger">Badge</span-x>
+</p>
+
 <h2>Картинка</h2>
 {% img %}
 Отписание картинки $ https://docs.readthedocs.io/en/stable/_images/rtd-first-light.png
@@ -103,19 +113,43 @@ Eng tex<br>
 <!-- --- -->
 
 
-
-<!-- --- -->
-<h2>Бэйджы</h2>
-<p>
-  <span-x>Badge</span-x>
-  <span-x class="success">Badge</span-x>
-  <span-x class="warning">Badge</span-x>
-  <span-x class="danger">Badge</span-x>
-</p>
 <h5>Синтаксис</h5>
 {% code %}
 <span>Badge</span>
 {% end %}
+<h2>Правильно / Неправильно</h2>
+<h5>Картинка</h5>
+{%correct%}
+https://i.imgur.com/UMkNBl3.png
+https://i.imgur.com/6GwVgF5.png
+{%end%}
+<h5>Синтаксис</h5>
+<!-- --- -->
+{% code safe %}
+{% templatetag openblock %} correct {% templatetag closeblock %} <br>
+https://ссылка_на_картинку
+<br>
+https://ссылка_на_картинку <br>
+{% templatetag openblock %} end {% templatetag closeblock %}
+{% end%}
+<!-- --- -->
+<h5>Текст</h5>
+{%correct text%}
+Правильно
+$
+Не <b>правильно</b>
+{%end%}
+<h5>Синтаксис</h5>
+<!-- --- -->
+{% code safe %}
+{% templatetag openblock %} correct text{% templatetag closeblock %} <br>
+###text...
+<br>$<br>
+###text... <br>
+{% templatetag openblock %} end {% templatetag closeblock %}
+{% end%}
+<!-- --- -->
+
 <h2>Пример</h2>
 {% code %}
 Утро вечера мудренее.

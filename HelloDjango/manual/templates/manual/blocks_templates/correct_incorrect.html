@@ -1,0 +1,29 @@
+{% if desc %}
+<label class="form-label">{{desc}}</label>
+{% endif %}
+<div class="card text-center news_desc correct">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="true" href="#" data-lang="ru">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+            Правильно</a>
+        </li>
+        <li class="nav-item">        
+            <a class="nav-link" href="#" data-lang="eng">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            Неправильно</a>
+        </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        {% if text %}
+        <p class="card-text ru" data-lang="ru">{{correct}}</p>
+        <p class="card-text eng" data-lang="eng" style="display: none;">{{incorrect}}</p>
+        {% else %}
+        <img src="{{correct}}" alt="" class="ru">
+        <img src="{{incorrect}}" alt="" class="eng" style="display: none;">
+        {%endif%}
+
+    </div>
+</div>
