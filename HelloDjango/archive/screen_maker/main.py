@@ -34,9 +34,10 @@ def api_load_image(url, path_to_save, image_name):
     """Загрузка сриншота через сервис"""
     service_url = 'https://render-tron.appspot.com/screenshot/'
     res = req.get(service_url + url, stream=True)
-    with open(path_to_save + image_name, 'wb') as file:
-        for chunk in res:
-            file.write(chunk)
+    if res.status_code == 200:
+        with open(path_to_save + image_name, 'wb') as file:
+            for chunk in res:
+                file.write(chunk)
 
 
 if __name__ == '__main__':

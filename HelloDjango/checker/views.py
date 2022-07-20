@@ -2,13 +2,25 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .checker_class.text_fixxer import DomFixxer, TextFixxer, TOOLBAR_STYLES_FILE
 from .checker_class.text_finder import TextAnaliz
+from .checker_class.kma_info import get_rekl_by_id
 from kma.models import OfferPosition, PhoneNumber
 import requests as req
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
 from pprint import pprint
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 # Create your views here.
+import yaml
+
+def read_check_list():
+    yaml_path = str(settings.BASE_DIR) + '/checker/check_list.yaml'
+    with open(yaml_path, encoding='utf-8') as f:
+        template = yaml.safe_load(f)
+    for k,v in template.items():
+        if v is None:
+            template[k] = []
+    return template
 
 @login_required
 def index(requests):
@@ -16,6 +28,7 @@ def index(requests):
         debug_styles = file.read()
     content = {
         'debug_styles': debug_styles,
+        'checker_list': read_check_list(),
     }
     return render(requests, 'checker/index.html', content)
 
@@ -79,6 +92,24 @@ def analiz_land_text(request):
             'error': str(error),
         }
     return JsonResponse(answer, safe=False)
+
+@login_required
+def get_kma_rekl(request):
+    try:
+        offer_id = request.GET['offer_id']
+        camp_id = request.GET['camp_id']
+        rekl = get_rekl_by_id(offer_id, camp_id)
+        answer = {
+            'success': True,
+            'result': rekl, 
+        }
+    except BaseException as error:
+        answer = {
+            'success': False,
+            'error': str(error),
+        }
+    return JsonResponse(answer, safe=False)
+
 
 
 @login_required

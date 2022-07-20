@@ -10,6 +10,24 @@
             <button class="btn btn-primary">Отправить</button>
         </form>
     </div>
+    <h2>Чеклист проверки <button class="btn btn-secondary" id="clear-check-list">Отчистить</button></h2>
+    <div class="check_list">
+        <div class="list-group">            
+        {%for name, sub_list in checker_list.items %}
+          <label class="list-group-item">
+            <input class="form-check-input me-1" type="checkbox" value="">
+            {{name}}
+          </label>
+          {%for sub in sub_list%}
+            <label class="list-group-item sub">
+                <input class="form-check-input me-1 " type="checkbox" value="">
+                {{sub}}
+            </label>
+          {%endfor%}
+        {%endfor%}
+        </div>
+    </div>
+    <h2>Описание чекера</h2>
     <p>Включить/выключить тулбар: <b>Ctrl+B</b></p>
     <div class="checker-about">
         <h6>Спецификация:</h6>
@@ -121,5 +139,17 @@
     /* .item-info img{
         width: 80px;
     } */
+    .check_list {
+        width: 500px
+    }
+    .list-group-item.sub{
+        padding-left: 40px;
+    }
 </style>
+<script>
+    $('#clear-check-list').click(function(){
+        $('.check_list input').prop('checked', false);
+    })
+</script>
+
 {% endblock %}

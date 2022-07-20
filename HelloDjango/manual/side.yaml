@@ -46,7 +46,7 @@
     - Особенности интеграции(dev): integration.jeneral
     - Тестирование: integration.test
 - Таски Kaiten:
-    - Общая инфа: tasks.jeneral
+    - Общая инфа(dev): tasks.jeneral
     - Создание и оформление: tasks.make
     - Постановка задач: 
         - Настройка интеграции: tasks.make_integration
@@ -57,3 +57,4 @@
     - Хаки: other.haks
     - Элементы документации: other.examples
     - ЛикБез(dev): other.lic_bez
+    - Полезные ссылки: other.links

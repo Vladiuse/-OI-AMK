@@ -40,6 +40,8 @@
                 findCity();
                 loadBackAnalize();
                 showInputTypes();
+
+                get_rekl();
             }
             else{
                 removeAllDebug()
@@ -463,6 +465,16 @@
             });
           }
 
+        function get_rekl(){
+            offer_id = list_of_form_parameters['offer_id']
+            camp_id = list_of_parameters['campaign']
+            url = '/checker/get_kma_rekl/?offer_id='+offer_id+'&camp_id='+camp_id
+            url = URL + url
+            $.get(url, function(response){
+                console.log(response, 'xxxx')
+            })
+
+        }
         var body = document.querySelector('body');
         body.onclick = function(event) {
             if (event.ctrlKey){
@@ -501,3 +513,11 @@
             }
     });
 // })
+
+// let h = $('.content').find('h2, h3,h4,h5,h6')
+// $.each(h, function(){
+//     if ($(this).prop("tagName") == 'H2' || $(this).prop("tagName") == 'H3')
+//     {console.log($(this).text())}
+//     else {console.log('-  '+$(this).text())}
+// })
+
