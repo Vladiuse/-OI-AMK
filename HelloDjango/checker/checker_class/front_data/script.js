@@ -521,3 +521,17 @@
 //     else {console.log('-  '+$(this).text())}
 // })
 
+// let a = $('.Menu a')
+// $.each(a, function(){
+// console.log($(this).text(), $(this).css('cursor'))
+// })
+// $('selector').css('cursor', 'pointer')
+
+// let all = $('*')
+// let cursor_elems = all.filter(function(){
+//     if ($(this).css('cursor') == 'pointer'){
+//         return true
+//     }
+// })
+// console.log(cursor_elems)
+// cursor_elems.css('border', '2px solid red')
