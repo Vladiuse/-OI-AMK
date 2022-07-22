@@ -102,25 +102,21 @@
 
             a.addClass('active')
             let leftBar = document.getElementById('left-side-scroll')
-            console.log(a, 'ссылка', a.offset())
-            let to_srool = a.position().top
+        
             parent = a.parent()
-            console.log(parent, '<li>', parent.position())
-            console.log(parent,parent.hasClass('on'))
             if (parent.hasClass('on')){
                 let ul = a.parentsUntil('.menu-vertival')
-                // console.log(ul)
-                // console.log(ul.find('li.cataloge').addClass('current'))
                 ul.find('li.cataloge').addClass('current')
-                console.log(ul.position(), '<ul>')
-                let scroll_ul  =  ul.position().top
-                if (to_srool == 0){to_srool =scroll_ul}
             }
+            // скролл для текущего пунтка меню сйд-бара
+            let to_srool = a.position().top
+            if (screen.height *0.8 < to_srool) {
                 leftBar.scrollBy({
                 top: to_srool,
                 left: 0,
                 behavior: "smooth",
                     })
+            }                
         }
             
         addHotLinks()
@@ -160,8 +156,8 @@
     function cardShowLang(card,lang){
         card.find('p').hide()
         card.find('p.'+lang).show()
-        card.find('img').hide()
-        card.find('img.'+lang).show()
+        card.find('.card-body img').hide()
+        card.find('.card-body img.'+lang).show()
     }
     $('.news_desc a.nav-link').click(function(e){
         e.preventDefault()
