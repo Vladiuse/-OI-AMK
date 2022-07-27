@@ -171,7 +171,6 @@ console.log('MY SCRIPNT START')
         })
     }
     
-
     // Выборка всех цен (по классу)
     function findPrice(){
         let allPrices = $('.price_land_s1,.price_land_s2,.price_land_s3,.price_land_s4')
@@ -213,7 +212,6 @@ console.log('MY SCRIPNT START')
         })
     }
 
-
     // Поиск элементов с script внутри (возможно это скрипт даты)
     function findSriptsDate(){
         let elems = $('body script')
@@ -234,8 +232,6 @@ console.log('MY SCRIPNT START')
         imgDouble.addClass(debugClass)
     }
     
-
-
     // Скролл по дублям картинок
 
     $('#back-info img').click(function(){
@@ -268,61 +264,4 @@ console.log('MY SCRIPNT START')
             onOffDebug()
         }
 });
-////////////////////////////////////////////
-// let currentUrl = window.location.origin;
-// const full = location.protocol + '//' + location.host + '/';
-// let yamImg = full+ 'static/checker/scripts/yam.png';
-// let spyImg = full+ 'static/checker/scripts/spy.png';
-// let PhoneMask = '';
-
-
-//     // Загрузда данных анализа текста API
-//     function loadBackAnalize(){
-//         $('#test-click').hide()
-//         $('#load-ring').show()
-//         cleanDataToolbar()
-//         let url = currentUrl + '/checker/analiz_land_text/'
-//         let page_title = $('title').clone()
-//         let send_text = $('html').clone()
-//         // send_text.find('#oi-toolbar').remove()
-//         // send_text.find('#test-block').remove()
-//         // send_text.find('#polit').remove()
-//         // send_text.find('#agreement').remove()
-
-
-//         send_text = send_text.html()
-//         send_text += page_title.html()
-        
-//         data = {'land_text': send_text}
-//         $.post(url, data, function(response){
-//             console.log(response)
-//             if (response['success']){
-//                 offers = response.result['offers']
-//                 currs = response.result['currencys']
-//                 dates = response.result['dates_on_land']
-//                 phone_codes = response.result['phone_codes']
-//                 //geo_words = response.result['geo_words']
-//                 geo_words = response.result['geo_words_templates']
-//                 scripts_on_land = response.result['scripts']
-
-//                 addOffersTool(offers)
-//                 addCurrTool(currs)
-//                 addPhoneMaksTool(phone_codes)
-//                 addDatesTool(dates)
-//                 addGeoWordsTool(geo_words)
-//                 AddBadgeScripts(scripts_on_land)
-
-//                 $('#test-click').show()
-//                 $('#load-ring').hide()
-
-//             } else {
-//                 console.log('Ошибка загрузки анализатора')
-//             }
-            
-//         })
-//     }
-
-
-
-// })
 console.log('MY SCRIPNT END')

@@ -13,14 +13,14 @@ from django.conf import settings
 # Create your views here.
 import yaml
 
-# def read_check_list():
-#     yaml_path = str(settings.BASE_DIR) + '/checker_2/check_list.yaml'
-#     with open(yaml_path, encoding='utf-8') as f:
-#         template = yaml.safe_load(f)
-#     for k,v in template.items():
-#         if v is None:
-#             template[k] = []
-#     return template
+def read_check_list():
+    yaml_path = str(settings.BASE_DIR) + '/checker_2/check_list.yaml'
+    with open(yaml_path, encoding='utf-8') as f:
+        template = yaml.safe_load(f)
+    for k,v in template.items():
+        if v is None:
+            template[k] = []
+    return template
 
 @login_required
 def index(requests):
@@ -28,13 +28,12 @@ def index(requests):
         debug_styles = file.read()
     content = {
         'debug_styles': debug_styles,
-        # 'checker_list': read_check_list(),
     }
     return render(requests, 'checker_2/index.html', content)
 
 @login_required
 def check_url(request):
-    # try:
+    # получения кода для iframe
     url = request.GET['url']
     url = url.strip()
     url = url.replace('https://', 'http://')
@@ -52,7 +51,8 @@ def check_url(request):
     htm_page = htm_page.replace('"', '&quot;')
     htm_page = htm_page.replace("'", '&apos;')
     content = {
-        'land': htm_page
+        'land': htm_page,
+        'checker_list': read_check_list(),
     }
     return render(request, 'checker_2/frame.html', content)
     return HttpResponse(htm_page)
@@ -63,7 +63,6 @@ def check_url(request):
 def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
-        # print('россииа' in land_text)
         offers = OfferPosition.objects.values('name')
         offers_names = [offer['name'] for offer in offers]
         phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
