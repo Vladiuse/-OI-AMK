@@ -1,13 +1,8 @@
 console.log('MY SCRIPNT START')
-
 // $(document).ready(function(){
-    const full = location.protocol + '//' + location.host + '/';
-
-    let currentUrl = window.location.origin;
     let toggleTime = 300;
 
     let isDebug = false;
-    // let errorCount = 0;
     let debugClass = '__debug';
     let debugMsgClass = '__debug_msg';
     let formNoSelectClass = '__debug_no_select';
@@ -20,46 +15,72 @@ console.log('MY SCRIPNT START')
     let imgBoubleCounter = 0;
     let imgBoubleLen = 0;
     let lastDoubleScr = ''
-    let PhoneMask = '';
 
-    let yamImg = full+ 'static/checker/scripts/yam.png';
-    let spyImg = full+ 'static/checker/scripts/spy.png';
+
+    function showCkickEmems(){
+        // кликабельные элементы
+        findAlla();
+        findImgLink();
+        findDivLink();
+    }
+
+    function showFormEmels(){
+        // форма
+        FormSelectBebug(); 
+        formInputType();
+        showInputTypes();
+
+    }
+
+    function showPrices(){
+        // цены и скидки
+        findPrice();
+        findCurrency();
+        findDiscount();
+        findCity();
+    }
+
+    function showDates(){
+        // Даты
+        findSriptsDate();
+    }
+
+    function showImages(){
+        // Картинки
+        findImgDouble();
+    }
 
     // MAIN
     function onOffDebug(){
         if (isDebug){
-            findAlla();
-            FormSelectBebug();
-            formInputType();
-            findPrice();
-            findCurrency();
-            findImgLink();
-            findDivLink();
-            findSpanWarning();
-            findSpanPercent();
-            findSriptsDate();
-            findImgDouble();
-            findDiscount();
-            findCity();
-            loadBackAnalize();
-            showInputTypes();
+            // кликабельные элементы
+            // findAlla();
+            // findImgLink();
+            // findDivLink();
+            
+            // форма
+            // FormSelectBebug(); 
+            // formInputType();
+            // showInputTypes();
+            
+            // цены и скидки
+            // findPrice();
+            // findCurrency();
+            // findDiscount();
+            // findCity();
 
-            get_rekl();
+            // Даты
+            // findSriptsDate();
+
+            // Картинки
+            findImgDouble();
+
         }
         else{
             removeAllDebug()
         }
 
     }
-    $(document).ready(function(){
-        // Если заргужены данные с бэка KMA
-        if (typeof(country_list)=='object'){
-            getDiscount();
-            getPricesAdmin();
-            getPhoneCode();
-        }
-    })
-    
 
     // Получить обьект сообщения о ошибке
     function getMsg(){
@@ -101,12 +122,10 @@ console.log('MY SCRIPNT START')
         })
 
         formsNoSelect.addClass(formNoSelectClass)
-        // console.log(formsNoSelect.length, 'xxxxx')
         formsNoSelect.each(function(){
             let msg = getMsg()
             msg.text('Нет селекта страны!!!')
             $(this).append(msg)
-            // plusError()
         })
     }
 
@@ -119,7 +138,6 @@ console.log('MY SCRIPNT START')
             }
         })
         inputsNoTel.addClass(fromInputNotelClass)
-        // if (inputsNoTel.length != 0){plusError();}
     }
 
     // Выборка всех ссылок
@@ -128,6 +146,31 @@ console.log('MY SCRIPNT START')
         console.log(toggleTime, 'toggleTime FROM my SCRIPT IN FUNC');
         links.addClass(debugClass)
     }
+
+    // Выборка картинок внутри ссылок
+    function findImgLink(){
+        let imgs = $('a img') // button input img svg path
+        imgs.addClass(debugClass)
+        imgs.each(function(){
+            let link = $(this).parent()
+            if (link.children().length == 1){
+                link.removeClass(debugClass)
+            }
+        })
+      }
+
+    // Выборка <div> внутри ссылок
+    function findDivLink(){
+        let divs = $('a div') // button input img svg path
+        divs.addClass(debugClass)
+        divs.each(function(){
+            let link = $(this).parent()
+            if (link.children().length == 1){
+                link.removeClass(debugClass)
+            }
+        })
+    }
+    
 
     // Выборка всех цен (по классу)
     function findPrice(){
@@ -145,41 +188,6 @@ console.log('MY SCRIPNT START')
     function findDiscount(){
         let discounts = $('.price_land_discount')
         discounts.addClass(debugClass)
-    }
-
-    // Выборка картинок внутри ссылок
-    function findImgLink(){
-        let imgs = $('a img') // button input img svg path
-        imgs.addClass(debugClass)
-        imgs.each(function(){
-            let link = $(this).parent()
-            if (link.children().length == 1){
-                link.removeClass(debugClass)
-            }
-        })
-    }
-    // Выборка <div> внутри ссылок
-    function findDivLink(){
-        let divs = $('a div') // button input img svg path
-        divs.addClass(debugClass)
-        divs.each(function(){
-            let link = $(this).parent()
-            if (link.children().length == 1){
-                link.removeClass(debugClass)
-            }
-        })
-    }
-  
-
-    // Поиск меток с бэка Даты
-    function findSpanWarning(){
-        let elems = $('span.__back-date')
-        elems.addClass(debugClass)
-    }
-    // Удалить
-    function findSpanPercent(){
-        let elems = $('span.__back-percent')
-        elems.addClass(debugClass)
     }
 
     function showInputTypes(){
@@ -228,192 +236,6 @@ console.log('MY SCRIPNT START')
     
 
 
-    // Получить Маску телефона страны API
-    function getPhoneCode(){
-        url = currentUrl+ '/kma/get_phone_code/'
-        data = {'country_code': country}
-            $.get(url, data, function(response){
-                console.log(response)
-                if (response['success'] == true){
-                    $('#oi-phone-code').text('+'+response['phone_code'])
-                    PhoneMask = '+'+response['phone_code'];
-                }
-                else{$('#oi-phone-code').text(response['message'])}
-            })
-    }
-
-    // typeof(country_list)=='object'
-
-    // Получить скитку из обьекта js
-    function getDiscount(){
-        if (typeof(country_list)=='object'){
-            let discount = country_list[country].discount
-            $('#oi-admin-discount').text(discount+'%')
-        } else {
-            $('#oi-admin-discount').text('Ошибка')
-        }
-    }
-    
-
-    // Получить цены из обьекта js
-    function getPricesAdmin(){
-        s1 = country_list[country].s1
-        s2 = country_list[country].s2
-        s3 = country_list[country].s3
-        s4 = country_list[country].s4
-        curr = country_list[country].curr
-        let price_text = `${s1}(${s4}) ${curr}`
-        if (s2 != 0) {price_text+= `<br>Доставка: <span>(${s2})</span>`}
-        $('#oi-admin-price').html(price_text)
-    }
-
-    // Добавить офферы в тулбар
-    function addOffersTool(offers){
-        if (offers.length != 1){$('.oi-back-offers').addClass(toolbarErrorClass)}
-        for (pos in offers){
-            offer = offers[pos]
-            let span = '<p>' + offer + '</p>'
-            $('#oi-back-offers').after(span)
-        }
-        
-    }
-    // Добавить валюты в тулбар
-    function addCurrTool(currs){
-        if (currs.length != 1){$('.oi-back-currs').addClass(toolbarErrorClass)}
-        for (pos in currs){
-            curr = currs[pos]
-            let span = '<p>' + curr + '</p>'
-            $('#oi-back-currs').after(span)
-        }
-    }
-    // Добавить маски в тулбар
-    function addPhoneMaksTool(phone_codes){
-        for (pos in phone_codes){
-            let code = phone_codes[pos]
-            let span = '<p>' + code + '</p>'
-            $('#oi-back-phones').after(span)
-            if (code != PhoneMask) {$('.oi-back-phones').addClass(toolbarErrorClass)}
-        }
-    }
-    // Добавить даты в тулбар
-    function addDatesTool(dates){
-        let keys = ['oi-dates_correct', 'oi-dates_incorrect', 'oi-years', 'oi-years_old']
-        for (pos in keys){
-            let id = keys[pos]
-            // console.log(id, typeof(id),id=='io-dates_correct', 'io-dates_correct')
-            for (pos in dates[id]){
-                    let date = dates[id][pos]
-                    let span = '<p>' + date + '</p>'
-                    $('#'+id).after(span)
-                }
-
-        }
-    }
-    // Добавить слова/падежы гео в туллбар 
-    function addGeoWordsTool(geo_words){
-        for (geo in geo_words){
-            let words = geo_words[geo]
-            if (geo.toLowerCase() != country.toLowerCase()){$('#oi-geo-words').addClass(toolbarErrorClass)}
-            let span = '<p>' + geo + '</p>'
-            $('#oi-geo-words').after(span)
-            for (pos in words){
-                let word = words[pos]
-                let span = '<p>' + word + '</p>'
-                $('#oi-geo-words-words').after(span)
-            }
-        }
-    }
-    // Добавить бэйджы скриптов в тулбар
-    function AddBadgeScripts(scripts_on_land){
-        let block = $('#oi-scripts')
-        if (scripts_on_land['socialFish'] == true){
-            let img = $('<img>')
-            img.attr('src', spyImg)
-            img.attr('style', '')
-            block.append(img)
-        }
-        if (scripts_on_land['yam'] != false){
-            let img = $('<img>')
-            img.attr('src', yamImg)
-            img.attr('style', '')
-            block.append(img)
-            let yamId = $('<p></p>')
-            yamId.text(scripts_on_land['yam'])
-            block.append(yamId)
-        }
-    }
-
-    // Удаление из тулбара заргуженных данных
-    function cleanDataToolbar(){
-        $('#oi-toolbar #oi-scripts img').remove()
-        let added_data = $('#oi-toolbar p').filter(function(){
-            if(!$(this).hasClass('info-desc')){return true}
-        })
-        added_data.remove()
-    }
-
-    // Загрузда данных анализа текста API
-    function loadBackAnalize(){
-        $('#test-click').hide()
-        $('#load-ring').show()
-        cleanDataToolbar()
-        let url = currentUrl + '/checker/analiz_land_text/'
-        let page_title = $('title').clone()
-        let send_text = $('html').clone()
-        // send_text.find('#oi-toolbar').remove()
-        // send_text.find('#test-block').remove()
-        // send_text.find('#polit').remove()
-        // send_text.find('#agreement').remove()
-
-
-        send_text = send_text.html()
-        send_text += page_title.html()
-        
-        data = {'land_text': send_text}
-        $.post(url, data, function(response){
-            console.log(response)
-            if (response['success']){
-                offers = response.result['offers']
-                currs = response.result['currencys']
-                dates = response.result['dates_on_land']
-                phone_codes = response.result['phone_codes']
-                //geo_words = response.result['geo_words']
-                geo_words = response.result['geo_words_templates']
-                scripts_on_land = response.result['scripts']
-
-                addOffersTool(offers)
-                addCurrTool(currs)
-                addPhoneMaksTool(phone_codes)
-                addDatesTool(dates)
-                addGeoWordsTool(geo_words)
-                AddBadgeScripts(scripts_on_land)
-
-                $('#test-click').show()
-                $('#load-ring').hide()
-
-            } else {
-                console.log('Ошибка загрузки анализатора')
-            }
-            
-        })
-    }
-    $('#test-click').click(function(){
-        loadBackAnalize()
-        })
-
-    // открытие оригинальной ссылки
-    $('#oi-toolbar .original-link p').click(function(){
-        let url = $(this).attr('data-href')
-        window.open(url, '_blank').focus();
-        })
-
-    // показать\скрыть тулбар
-    $('#oi-toolbar .oi-header').click(function(){
-        $('#oi-toolbar .__oi_close').toggle(toggleTime)
-        $('#oi-toolbar').toggleClass('__close')
-        // $('#oi-toolbar #back-info').toggle(300)
-        })
-
     // Скролл по дублям картинок
 
     $('#back-info img').click(function(){
@@ -434,16 +256,6 @@ console.log('MY SCRIPNT START')
         if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
         })
 
-    function get_rekl(){
-        offer_id = list_of_form_parameters['offer_id']
-        camp_id = list_of_parameters['campaign']
-        url = '/checker/get_kma_rekl/?offer_id='+offer_id+'&camp_id='+camp_id
-        url = URL + url
-        $.get(url, function(response){
-            console.log(response, 'xxxx')
-        })
-
-    }
 
     // Включение тулбара клавишами
     $(document).keyup(function(e) {
@@ -456,6 +268,61 @@ console.log('MY SCRIPNT START')
             onOffDebug()
         }
 });
+////////////////////////////////////////////
+// let currentUrl = window.location.origin;
+// const full = location.protocol + '//' + location.host + '/';
+// let yamImg = full+ 'static/checker/scripts/yam.png';
+// let spyImg = full+ 'static/checker/scripts/spy.png';
+// let PhoneMask = '';
+
+
+//     // Загрузда данных анализа текста API
+//     function loadBackAnalize(){
+//         $('#test-click').hide()
+//         $('#load-ring').show()
+//         cleanDataToolbar()
+//         let url = currentUrl + '/checker/analiz_land_text/'
+//         let page_title = $('title').clone()
+//         let send_text = $('html').clone()
+//         // send_text.find('#oi-toolbar').remove()
+//         // send_text.find('#test-block').remove()
+//         // send_text.find('#polit').remove()
+//         // send_text.find('#agreement').remove()
+
+
+//         send_text = send_text.html()
+//         send_text += page_title.html()
+        
+//         data = {'land_text': send_text}
+//         $.post(url, data, function(response){
+//             console.log(response)
+//             if (response['success']){
+//                 offers = response.result['offers']
+//                 currs = response.result['currencys']
+//                 dates = response.result['dates_on_land']
+//                 phone_codes = response.result['phone_codes']
+//                 //geo_words = response.result['geo_words']
+//                 geo_words = response.result['geo_words_templates']
+//                 scripts_on_land = response.result['scripts']
+
+//                 addOffersTool(offers)
+//                 addCurrTool(currs)
+//                 addPhoneMaksTool(phone_codes)
+//                 addDatesTool(dates)
+//                 addGeoWordsTool(geo_words)
+//                 AddBadgeScripts(scripts_on_land)
+
+//                 $('#test-click').show()
+//                 $('#load-ring').hide()
+
+//             } else {
+//                 console.log('Ошибка загрузки анализатора')
+//             }
+            
+//         })
+//     }
+
+
 
 // })
 console.log('MY SCRIPNT END')
