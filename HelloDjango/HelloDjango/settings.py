@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'checker.apps.CheckerConfig',
     'archive.apps.ArchiveConfig',
     'manual.apps.ManualConfig',
+    'checker_2.apps.Checker2Config',
 
     # extensions
     'django_extensions',
