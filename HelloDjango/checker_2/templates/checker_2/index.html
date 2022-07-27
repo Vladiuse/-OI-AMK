@@ -1,0 +1,193 @@
+{% extends 'root/base.html' %}
+{% load static %}
+{% block content %}
+<div class="main-wrapper">
+    <h1>Checker 2</h1>
+    <div class="form-wrapper">
+        <form action="{% url 'checker_2:check_url' %}" method="GET" target="_blank">
+            {% csrf_token %}
+            <input type="url" name="url" class="form-control" required>
+            <button class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+    <h2>Чеклист проверки <button class="btn btn-secondary" id="clear-check-list">Отчистить</button></h2>
+    <div class="check_list">
+        <div class="list-group">            
+        {%for name, sub_list in checker_list.items %}
+        <div class="group-id-{{ forloop.counter }}">
+          <label class="list-group-item d-flex justify-content-between">
+            <!-- <input class="form-check-input me-1" type="checkbox" value=""> -->
+            <b>{{name}}</b>
+            <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
+            <!-- <span class="badge bg-primary rounded-pill">отметить все</span> -->
+          </label>
+          {%for sub in sub_list%}
+            <label class="list-group-item sub">
+                <input class="form-check-input me-1 " type="checkbox" value="">
+                {{sub}}
+            </label>
+          {%endfor%}
+        </div>
+        {%endfor%}
+        </div>
+    </div>
+    <!-- <div class="check_list">
+        <div class="list-group">            
+        {%for name, sub_list in checker_list.items %}
+          <label class="list-group-item">
+            <input class="form-check-input me-1" type="checkbox" value="">
+            {{name}}
+          </label>
+          {%for sub in sub_list%}
+            <label class="list-group-item sub">
+                <input class="form-check-input me-1 " type="checkbox" value="">
+                {{sub}}
+            </label>
+          {%endfor%}
+        {%endfor%}
+        </div>
+    </div> -->
+    <h2>Описание чекера</h2>
+    <p>Включить/выключить тулбар: <b>Ctrl+B</b></p>
+    <div class="checker-about">
+        <h6>Спецификация:</h6>
+        <div class="item-info">
+            1. При нажатии тулбар сворачивается.
+            <div id="oi-toolbar" style="position: relative; width: 70px;top: 0px; left:0px;">
+            <div class="assistive-touch">
+                <!-- <div class="marker"><span class="info"></span></div> -->
+                <div class="round round-1">
+                    <div class="round round-2">
+                        <div class="round round-3">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="item-info">
+            2. Кликабельные элементы <a class="__debug">обводяться</a>.<br> Могут быть кликабельные элементы без обводики, но если она есть - он точно кликабельный.
+        </div>
+        <div class="item-info">
+            3. У кликабельных картинок также появляеться обводка <a><img src="https://st.depositphotos.com/2274151/3274/i/600/depositphotos_32746903-stock-photo-winner-grunge-stamp.jpg" class="__debug" style="width: 80px"></a>
+        </div>
+        <div class="item-info">
+            4. Картинка, которая повторяется имеет другую обводку <img src="https://st.depositphotos.com/2274151/3274/i/600/depositphotos_32746903-stock-photo-winner-grunge-stamp.jpg" class="__debug __debug_double" style="width: 80px">
+        </div>
+        <div class="item-info">
+            5. При крике на дубль картинки в тулбаре лэнд проскролиться к этой картинке на сайте(удобно прощелкивать аватарки в коментах).
+        </div>
+        
+        <div class="item-info">
+            6. Статичные даты выделяються <span class="__debug __back-date">20.11.22</span>. Если формат даты не коректный <span class="__debug __back-date __debug_date_error">20-11-22</span>выделение другое.
+        </div>
+        <div class="item-info">
+            7. Если возле даты есть <span class="__debug_script_date">!!!</span>20.12.21 - дата проставлена скриптом.
+        </div>
+        <div class="item-info">
+            8. Все что касается цен, тоже обводяться <span class="price_land_s1 __debug">39</span> <span class="price_land_s3 __debug">78</span> <span class="price_land_s4 __debug">EURO</span> Доставка:<span class="price_land_s4 __debug">10</span>.<br>
+            Если обводики нет - значение статичное!
+        </div>
+        <div class="item-info">
+            9. Скидка тоже выделяеться <span class="price_land_discount __debug">50</span>%<br>
+            Если обводики нет - значение статичное!
+        </div>
+        <div class="item-info">
+            10. Город проставленый скриптом(нашим) обводиться (<span class="__debug geocity">Москва</span>).
+        </div>
+        <div class="item-info">
+            11. В дебаг режиме в плэйсхолдерах инпута будет прописывать тип ввода <br>
+            <img src="https://i.imgur.com/tJkdFue.png" >
+        </div>
+        <div class="item-info">
+            12. Если у формы отсутствует селект страны - форма обведеться красным и появиться сообщение <br>
+             <img src="https://i.imgur.com/Feh49Ax.png" >
+        </div>
+        <div class="item-info">
+            13. Инпут для ввода телефона без атрибута type="tel" - подсветится красным<br>
+             <img src="https://i.imgur.com/OrEQOZm.png" >
+        </div>
+        <div class="item-info">
+            14. В верхней части тулбара отображаються цены, скидка и моб код для этого гео(тянутся из админки) <br>
+            <img src="https://i.imgur.com/tluT7OE.png" >
+        </div>
+        <div class="item-info">
+            15. В этой части отображаються офферы, валюты и маски найденые по тексту на сайте <br>
+            <img src="https://i.imgur.com/UwFAvTt.png" >
+            <br>Если найдено чтото лишнее - подпись подсветиться красным
+        </div>
+        <div class="item-info">
+            16. Тут отображаються даты найденые по тексту <br>
+            <img src="https://i.imgur.com/TqSjpXq.png" >
+        </div>
+        <div class="item-info">
+            17. Поиск стран(и их падежей).Пока только испаноязычные и русскоязычние гео<br>
+             <img src="https://i.imgur.com/1tlOCgr.png" >
+        </div>
+        <div class="item-info">
+            18. Поиск скриптов соц фишинка и яндекс метрики. Если есть соответсвующая иконка - скрипт установлен.<br>
+             <img src="https://i.imgur.com/MNakt0U.png" >
+        </div>
+        </div>
+        
+</div>
+<!--<form action="{% url 'checker:check_url_no_js' %}" method="GET" target="_blank">-->
+<!--    {% csrf_token %}-->
+<!--    <input type="url" name="url" class="form-control" required>-->
+<!--    <button class="btn btn-primary">Отправить</button>-->
+<!--</form>-->
+<style>
+{{debug_styles}}
+</style>
+
+<style>
+    .form-wrapper {
+        margin: 10px 0;
+        max-width: 300px;
+    }
+
+    .form-wrapper button {
+        margin-top: 10px;
+    }
+    .checker-about{
+        margin-top: 30px;
+    }
+    .checker-about .item-info{
+
+    }
+    /* .item-info img{
+        width: 80px;
+    } */
+    .check_list {
+        width: 700px
+    }
+    .list-group-item.sub{
+        padding-left: 40px;
+    }
+    .list-group-item a{
+        font-size: 0.8rem;
+    }
+</style>
+<script>
+    $('#clear-check-list').click(function(){
+        $('.check_list input').prop('checked', false);
+    })
+
+    $('a.clear-group').click(function(e){
+        e.preventDefault()
+        let groupId = $(this).attr('data-group-id')
+        if ($(this).attr('data-group-status') == 1){
+            $('.group-id-' + groupId + ' input').prop('checked', true);
+            $(this).attr('data-group-status', '0')
+            $(this).text('Снять все')
+        } else {
+            $('.group-id-' + groupId + ' input').prop('checked', false);
+            $(this).attr('data-group-status', '1')
+            $(this).text('Отметить все')
+        }
+        
+    })
+</script>
+
+{% endblock %}

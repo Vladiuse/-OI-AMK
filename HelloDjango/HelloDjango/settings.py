@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'checker.apps.CheckerConfig',
     'archive.apps.ArchiveConfig',
     'manual.apps.ManualConfig',
+    'checker_2.apps.Checker2Config',
 
     # extensions
     'django_extensions',
@@ -119,17 +120,17 @@ DATABASES = {
 }
 
 # for MySql database remote
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vladiuse_kma',
-        'USER': 'vladiuse_kma',
-        'PASSWORD': get_secret('vladiuse_kma'),
-        'HOST': 'vladiuse.beget.tech',
-        'PORT': '3306',
-
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'vladiuse_kma',
+#         'USER': 'vladiuse_kma',
+#         'PASSWORD': get_secret('vladiuse_kma'),
+#         'HOST': 'vladiuse.beget.tech',
+#         'PORT': '3306',
+#
+#     }
+# }
 
 
 # Password validation
@@ -178,3 +179,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']

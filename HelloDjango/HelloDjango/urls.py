@@ -31,6 +31,7 @@ urlpatterns = [
     path('checker/', include('checker.urls')),
     path('archive', include('archive.urls')),
     path('manual/', include('manual.urls')),
+    path('checker_2/', include('checker_2.urls')),
 
 ]
 

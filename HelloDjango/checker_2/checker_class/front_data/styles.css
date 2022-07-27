@@ -1,0 +1,331 @@
+    :root {
+    --link-color: rgb(0, 183, 255);
+    --price-color: rgb(57, 202, 0);
+    --currency-color: rgb(47, 167, 0);
+    --discount-color: rgb(118, 0, 141);
+    --white-color: #fcffff;
+    }
+#oi-toolbar{
+        position: fixed;
+        top: 50px;
+        left: 50px;
+        background-color: #28323b;
+        z-index: 99000;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 15px !important;
+        line-height: 18px !important;
+        max-width: 320px;
+    }
+    /* #oi-toolbar p{
+        margin: 0px;
+    } */
+    #oi-toolbar hr{
+        background-color: var(--white-color);
+    }
+
+    /* #oi-toolbar .header{
+        margin-bottom: 10px;
+    } */
+
+    #oi-toolbar.__close{
+        opacity: 0.6;
+    }
+
+    #oi-toolbar .assistive-touch{
+        cursor: pointer;
+    }
+
+    #oi-toolbar .round{
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #oi-toolbar .round-1{
+        width: 50px;
+        height: 50px;
+        background-color: #525f65;
+    }
+    #oi-toolbar .round-2{
+        width: 40px;
+        height: 40px;
+        background-color: #8e9297;
+    }
+    #oi-toolbar .round-3{
+        width: 30px;
+        height: 30px;
+        background-color: #fcffff;
+    }
+    #oi-toolbar .oi-info{
+        
+        margin: 0px;
+        flex-wrap: wrap;
+    }
+
+    /* #oi-toolbar .oi-info p{
+        color: #fcffff;
+        display: block;
+    } */
+    
+    #oi-toolbar .oi-bold
+    {
+        font-weight: 600;
+    }
+
+    #oi-toolbar #oi-admin-price span{
+        color: red;
+    }
+    #oi-toolbar #oi-rekv{
+        max-width: 200px;
+        font-size: 11px !important;
+    }
+
+    #oi-toolbar .original-link,
+    #oi-toolbar .io-logo{
+        padding: 0 10px;   
+    }
+
+    a.__debug{
+        /* border: 2px solid var(--link-color) !important; */
+        outline:2px solid var(--link-color) !important;
+        outline-offset:-1px;    
+    }
+    a.__debug span{
+        /* border: 2px solid var(--link-color) !important; */
+        outline:1px solid var(--link-color) !important;
+        outline-offset:-1px;    
+    }
+    a.__debug span[class^="price_land"]{
+        /* border: 2px solid var(--link-color) !important; */
+        outline:0px solid var(--link-color) !important;
+        outline-offset:-1px;    
+    }
+    a img.__debug{
+        /* border: 2px solid var(--link-color); */
+        outline:2px solid var(--link-color) !important;
+        outline-offset:-1px; 
+    }
+    a div.__debug{
+        /* border: 2px solid var(--link-color); */
+        outline:2px solid var(--link-color) !important;
+        outline-offset:-1px; 
+    }
+    form.__debug_no_select{
+        border: 2px solid red !important;
+    }
+    input.__debug_no_tel{
+        background-color: red !important;
+    }
+
+    /* Цены */
+    .price_land_s1.__debug{
+        border: 2px solid var(--price-color);
+    }
+    .price_land_s2.__debug{
+        border: 2px solid var(--price-color);
+    }
+    .price_land_s3.__debug{
+        border: 2px solid var(--price-color);
+    }
+    .price_land_s4.__debug{
+        border: 2px solid var(--price-color);
+    }
+    .price_land_curr.__debug{
+        border: 2px solid var(--currency-color);
+    }
+    .price_land_discount.__debug{
+        border: 2px solid var(--discount-color);
+    }
+
+    img.__debug.__debug_double{
+        border: 1px dashed red !important;
+    }
+
+    img.__debug.__debug_double.__focus_img{
+        transition: 1s;
+        -webkit-box-shadow: 0px 0px 5px 10px rgba(255, 0, 0, 0.55);
+        -moz-box-shadow: 0px 0px 5px 10px rgba(255, 0, 0, 0.55);
+        box-shadow: 0px 0px 5px 10px rgba(255, 0, 0, 0.55);
+        border: 2px solid rgb(32, 212, 32) !important;
+    }
+
+    /* Даты с Бэка */
+    span.__debug.__back-date{
+        background-color: aquamarine;
+    }
+    span.__debug.__back-date.__debug_date_error{
+        background-color: red;
+        font-weight: bold;
+    }
+    /* Удалить! */
+    span.__debug.__back-percent{
+        background-color: rgb(136, 127, 255);
+    }
+    .__debug.geocity, .__debug.user-city{
+        border: 2px solid blue;
+    }
+
+    .__debug_script_date{
+        background-color: #ccffcb;
+        border: 2px dashed #538052;
+        display: inline-block;
+        color: red;
+        font-weight: bold;
+    }
+    .__debug_msg{
+        display:block;
+        font-weight: bold;
+        border: 2px solid red;
+        margin-top: 6px;
+        padding: 3px;
+        border-radius: 5px;
+
+    }
+    #oi-toolbar .container-toolbar p{
+        color: var(--white-color) !important;
+        font-size: 15px !important;
+        line-height: 18px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-right: 3px !important;
+    }
+    #oi-toolbar .container-toolbar span{
+        color: var(--white-color);
+        font-size: 15px;
+        line-height: 18px;
+        margin: 0;
+        padding: 0;
+        margin-right: 3px;
+    }
+
+    #oi-toolbar .container-toolbar{
+        display: flex;
+        margin: 3px 0;
+        /* flex-wrap: wrap; */
+    }
+    #oi-toolbar .oi-dates{
+        justify-content: space-between;
+        color: #fcffff;
+    }
+    #oi-toolbar .oi-geo-words{
+        justify-content: space-between;
+        color: #fcffff;
+    }
+    #oi-toolbar .oi-col{
+        width: 50%;
+    }
+    /* #oi-toolbar .oi-header{
+        flex-wrap: nowrap;
+    } */
+    #oi-toolbar .container-toolbar .__error{
+        color: red;
+    }
+     /* удалить */
+    #oi-toolbar .marker{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: green;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #oi-toolbar .info{
+        display: inline-block;
+    }
+    #oi-toolbar .io-logo{
+        display: flex;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        color: #fcffff;
+        font-weight: 700;
+    }
+    #oi-toolbar #back-info{
+        color: #fcffff;
+    }
+    #oi-toolbar img{
+        width: 40px;
+        height: 40px;
+        position: relative;
+        display: inline-flex;
+        margin: 0 0;
+        border: 0;
+
+    }
+    #oi-scripts img{
+        width: 33px;
+        height: 33px;
+    }
+    #oi-toolbar .original-link{
+        display: flex;
+        align-items: center;
+    }
+    #oi-toolbar .original-link p{
+        color: rgb(142, 194, 236);
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    #oi-date-pop-wrapper{
+        position: fixed;
+        bottom: 30px;
+        left: 0px;
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    #oi-date-pop span{
+        background-color: red;
+    }
+    #oi-date-pop-wrapper .oi-message{
+        width: 250px;
+        background-color: #28323b;
+        padding: 15px;
+        border-radius: 10px;
+        color: var( --white-color);
+    }
+    #oi-message-result.__true{
+        color:rgb(32, 212, 32)
+    }
+
+    .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 25px;
+        height: 25px;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        margin: 8px;
+        border: 4px solid #fff;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #fff transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
