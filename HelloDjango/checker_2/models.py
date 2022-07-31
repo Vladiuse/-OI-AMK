@@ -1,4 +1,5 @@
 from django.db import models
+from ordered_model.models import OrderedModel
 
 # Create your models here.
 
@@ -38,3 +39,19 @@ class CheckPoint(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Main(OrderedModel):
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        ordering = ['order']
+
+
+class Sub(OrderedModel):
+    name = models.CharField(max_length=50)
+    main = models.ForeignKey(Main, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['order']
+
