@@ -15,7 +15,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-  
   <div class="wrapper">
 
     <header class="header">
@@ -30,11 +29,12 @@
             </div>
             <div class="topbar__items">
               <div class="topbar__item">
-                <div class="topbar__btn" id="country">GEO</div>
+                <div class="topbar__btn" id="country">{{kma.country}}</div>
+                <div class="topbar__btn" id="language">lang: {{kma.language}}</div>
                 <div class="topbar__btn" id="phone-code">phone_code</div>
-                <div class="topbar__btn"><span id="s1"></span> (<span id="s4"></span>)</div>
-                <div class="topbar__btn"><span id="curr"></span></div>
-                <div class="topbar__btn"><span id="discount"></span>%</div>
+                <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
+                <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
+                <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
               </div>
               <div class="topbar__item">
                 <div class="topbar__btn" onclick="setDevice('desctop')" >Desctop</div>
@@ -138,11 +138,14 @@
   const full = location.protocol + '//' + location.host + '/';
   let site = iframe.contentWindow
 
+  let land_data_from_js = false;
+
+
 
   iframe.onload = function() {
     // исполнение после полной загрузки iframe
     // iframe.contentDocument.body.prepend("Hello, world!");
-    loadLandParams()
+    if (land_data_from_js){loadLandParams()}
     getPhoneCode()
 
     land_code = $(iframe.contentDocument).find('html').html()

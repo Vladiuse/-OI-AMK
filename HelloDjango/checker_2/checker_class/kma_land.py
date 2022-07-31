@@ -83,6 +83,10 @@ class KMALand:
     def discount(self):
         return self.country_list[self.country]['discount']
 
+    @property
+    def curr(self):
+        return self.country_list[self.country]['curr']
+
 
 if __name__ == '__main__':
     url = 'https://blog-feed.org/elle-breasty/?ufl=14926'

@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .checker_class.text_fixxer import DomFixxer, TextFixxer, TOOLBAR_STYLES_FILE
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_info import get_rekl_by_id
+from .checker_class.kma_land import KMALand
 from kma.models import OfferPosition, PhoneNumber
 import requests as req
 from bs4 import BeautifulSoup
@@ -40,7 +41,9 @@ def check_url(request):
     res = req.get(url)
     if res.status_code != 200:
         return HttpResponse(f'Error: res.status_code != 200, Ссылка не работает!')
+    # 
     text = res.text
+    kma = KMALand(url, text)
     t_fix = TextFixxer(text)
     t_fix.process()
     text = t_fix.text
@@ -53,6 +56,7 @@ def check_url(request):
     content = {
         'land': htm_page,
         'checker_list': read_check_list(),
+        'kma': kma,
     }
     return render(request, 'checker_2/frame.html', content)
     return HttpResponse(htm_page)
