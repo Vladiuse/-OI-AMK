@@ -23,6 +23,16 @@ class PhoneNumber(models.Model):
         verbose_name = 'Валидный номер'
         verbose_name_plural = 'Валидные номера'
 
+    @staticmethod
+    def get_phone_code_by_country(iso_code):
+        """Получить моб код по коду страны"""
+        iso_code = iso_code.lower()
+        try:
+            phone = PhoneNumber.objects.get(short=iso_code)
+            return phone.phone_code
+        except PhoneNumber.DoesNotExist as error:
+            return f'{iso_code}:{error}'
+
 
 class OfferPosition(models.Model):
     name = models.CharField(max_length=50, verbose_name='Оффер', unique=True)

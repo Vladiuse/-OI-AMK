@@ -11,11 +11,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="{% static 'checker_2/css/reset.css' %}" rel="stylesheet"> 
   <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet"> 
-  <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet"> 
+  <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'root/css/flag-icon.min.css' %}" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-  
+
   <div class="wrapper">
 
     <header class="header">
@@ -30,11 +31,18 @@
             </div>
             <div class="topbar__items">
               <div class="topbar__item">
-                <div class="topbar__btn" id="country">GEO</div>
-                <div class="topbar__btn" id="phone-code">phone_code</div>
-                <div class="topbar__btn"><span id="s1"></span> (<span id="s4"></span>)</div>
-                <div class="topbar__btn"><span id="curr"></span></div>
-                <div class="topbar__btn"><span id="discount"></span>%</div>
+                <div class="topbar__btn" id="country">{{kma.country}}
+                  <span class="flag-icon flag-icon-{{kma.country}}"></span>
+                </div>
+                {% if kma.country != kma.language %}
+                <div class="topbar__btn" id="language">lang: {{kma.language}}
+                  <span class="flag-icon flag-icon-{{kma.language}}"></span>
+                </div>
+                {% endif %}
+                <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
+                <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
+                <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
+                <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
               </div>
               <div class="topbar__item">
                 <div class="topbar__btn" onclick="setDevice('desctop')" >Desctop</div>
@@ -138,12 +146,16 @@
   const full = location.protocol + '//' + location.host + '/';
   let site = iframe.contentWindow
 
+  let land_data_from_js = false;
+  let get_phone_code_api = false;
+
+
 
   iframe.onload = function() {
     // исполнение после полной загрузки iframe
     // iframe.contentDocument.body.prepend("Hello, world!");
-    loadLandParams()
-    getPhoneCode()
+    if (land_data_from_js){loadLandParams()}
+    if (get_phone_code_api){getPhoneCode()}
 
     land_code = $(iframe.contentDocument).find('html').html()
     console.log(land_code.length)

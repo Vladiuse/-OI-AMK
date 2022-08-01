@@ -64,6 +64,7 @@ INSTALLED_APPS = [
 
     # extensions
     'django_extensions',
+    'ordered_model',
 ]
 
 MIDDLEWARE = [
@@ -120,17 +121,17 @@ DATABASES = {
 }
 
 # for MySql database remote
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'vladiuse_kma',
-#         'USER': 'vladiuse_kma',
-#         'PASSWORD': get_secret('vladiuse_kma'),
-#         'HOST': 'vladiuse.beget.tech',
-#         'PORT': '3306',
-#
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vladiuse_kma',
+        'USER': 'vladiuse_kma',
+        'PASSWORD': get_secret('vladiuse_kma'),
+        'HOST': 'vladiuse.beget.tech',
+        'PORT': '3306',
+
+    }
+}
 
 
 # Password validation

@@ -11,9 +11,7 @@ SPAN_CLASS_PERCENT = '__back-percent '
 TOOLBAR_HTML_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/block.html'
 TOOLBAR_STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
 TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
-TEST_DATES = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/test_dates.html'
 
-TOOLBAR_NO_JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/wb/wb.js'
 
 
 def is_date_correct(date):
@@ -287,16 +285,3 @@ class DomFixxer:
         self.soup.html.body.append(script_tag)
 
 
-if __name__ == '__main__':
-    TOOLBAR_HTML_FILE = './checker/checker_class/front_data/block.html'
-    TOOLBAR_STYLES_FILE = './checker/checker_class/front_data/styles.css'
-    TOOLBAR_JS_FILE = './checker/checker_class/front_data/script.js'
-    url = 'https://blog-feed.org/blog-dialux-ge/?ufl=14153'
-    res = req.get(url)
-    # print(res.text)
-    # print('href="css/A.bmmfp.css.pagespeed.c' in res.text)
-    # exit()
-    soup = BeautifulSoup(res.text, 'lxml')
-    dom = DomFixxer(soup, url)
-    dom.process()
-    # print(dom.soup)
