@@ -5,109 +5,24 @@
     --discount-color: rgb(118, 0, 141);
     --white-color: #fcffff;
     }
-#oi-toolbar{
-        position: fixed;
-        top: 50px;
-        left: 50px;
-        background-color: #28323b;
-        z-index: 99000;
-        padding: 10px;
-        border-radius: 10px;
-        font-size: 15px !important;
-        line-height: 18px !important;
-        max-width: 320px;
-    }
-    /* #oi-toolbar p{
-        margin: 0px;
-    } */
-    #oi-toolbar hr{
-        background-color: var(--white-color);
-    }
-
-    /* #oi-toolbar .header{
-        margin-bottom: 10px;
-    } */
-
-    #oi-toolbar.__close{
-        opacity: 0.6;
-    }
-
-    #oi-toolbar .assistive-touch{
-        cursor: pointer;
-    }
-
-    #oi-toolbar .round{
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    #oi-toolbar .round-1{
-        width: 50px;
-        height: 50px;
-        background-color: #525f65;
-    }
-    #oi-toolbar .round-2{
-        width: 40px;
-        height: 40px;
-        background-color: #8e9297;
-    }
-    #oi-toolbar .round-3{
-        width: 30px;
-        height: 30px;
-        background-color: #fcffff;
-    }
-    #oi-toolbar .oi-info{
-        
-        margin: 0px;
-        flex-wrap: wrap;
-    }
-
-    /* #oi-toolbar .oi-info p{
-        color: #fcffff;
-        display: block;
-    } */
-    
-    #oi-toolbar .oi-bold
-    {
-        font-weight: 600;
-    }
-
-    #oi-toolbar #oi-admin-price span{
-        color: red;
-    }
-    #oi-toolbar #oi-rekv{
-        max-width: 200px;
-        font-size: 11px !important;
-    }
-
-    #oi-toolbar .original-link,
-    #oi-toolbar .io-logo{
-        padding: 0 10px;   
-    }
 
     a.__debug{
-        /* border: 2px solid var(--link-color) !important; */
         outline:2px solid var(--link-color) !important;
         outline-offset:-1px;    
     }
     a.__debug span{
-        /* border: 2px solid var(--link-color) !important; */
         outline:1px solid var(--link-color) !important;
         outline-offset:-1px;    
     }
     a.__debug span[class^="price_land"]{
-        /* border: 2px solid var(--link-color) !important; */
         outline:0px solid var(--link-color) !important;
         outline-offset:-1px;    
     }
     a img.__debug{
-        /* border: 2px solid var(--link-color); */
         outline:2px solid var(--link-color) !important;
         outline-offset:-1px; 
     }
     a div.__debug{
-        /* border: 2px solid var(--link-color); */
         outline:2px solid var(--link-color) !important;
         outline-offset:-1px; 
     }
@@ -158,10 +73,7 @@
         background-color: red;
         font-weight: bold;
     }
-    /* Удалить! */
-    span.__debug.__back-percent{
-        background-color: rgb(136, 127, 255);
-    }
+
     .__debug.geocity, .__debug.user-city{
         border: 2px solid blue;
     }
@@ -181,117 +93,6 @@
         padding: 3px;
         border-radius: 5px;
 
-    }
-    #oi-toolbar .container-toolbar p{
-        color: var(--white-color) !important;
-        font-size: 15px !important;
-        line-height: 18px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        margin-right: 3px !important;
-    }
-    #oi-toolbar .container-toolbar span{
-        color: var(--white-color);
-        font-size: 15px;
-        line-height: 18px;
-        margin: 0;
-        padding: 0;
-        margin-right: 3px;
-    }
-
-    #oi-toolbar .container-toolbar{
-        display: flex;
-        margin: 3px 0;
-        /* flex-wrap: wrap; */
-    }
-    #oi-toolbar .oi-dates{
-        justify-content: space-between;
-        color: #fcffff;
-    }
-    #oi-toolbar .oi-geo-words{
-        justify-content: space-between;
-        color: #fcffff;
-    }
-    #oi-toolbar .oi-col{
-        width: 50%;
-    }
-    /* #oi-toolbar .oi-header{
-        flex-wrap: nowrap;
-    } */
-    #oi-toolbar .container-toolbar .__error{
-        color: red;
-    }
-     /* удалить */
-    #oi-toolbar .marker{
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background-color: green;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #oi-toolbar .info{
-        display: inline-block;
-    }
-    #oi-toolbar .io-logo{
-        display: flex;
-        align-items: center;
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-        color: #fcffff;
-        font-weight: 700;
-    }
-    #oi-toolbar #back-info{
-        color: #fcffff;
-    }
-    #oi-toolbar img{
-        width: 40px;
-        height: 40px;
-        position: relative;
-        display: inline-flex;
-        margin: 0 0;
-        border: 0;
-
-    }
-    #oi-scripts img{
-        width: 33px;
-        height: 33px;
-    }
-    #oi-toolbar .original-link{
-        display: flex;
-        align-items: center;
-    }
-    #oi-toolbar .original-link p{
-        color: rgb(142, 194, 236);
-        font-weight: bold;
-        text-decoration: underline;
-        cursor: pointer;
-    }
-
-    #oi-date-pop-wrapper{
-        position: fixed;
-        bottom: 30px;
-        left: 0px;
-
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    #oi-date-pop span{
-        background-color: red;
-    }
-    #oi-date-pop-wrapper .oi-message{
-        width: 250px;
-        background-color: #28323b;
-        padding: 15px;
-        border-radius: 10px;
-        color: var( --white-color);
-    }
-    #oi-message-result.__true{
-        color:rgb(32, 212, 32)
     }
 
     .lds-ring {
