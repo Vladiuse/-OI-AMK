@@ -27,3 +27,5 @@ $ pip install <Module-name>
 $ pwd
 /home/v/vladiuse/kma_oi/public_html/HelloDjango/HelloDjango/tmp
 $ touch restart.txt
+
+Hello world
