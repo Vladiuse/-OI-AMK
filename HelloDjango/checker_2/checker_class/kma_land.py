@@ -31,25 +31,31 @@ class KMALand:
     def _country(self) -> str:
         """Поиск в js коде переменной country - возвращает ее значение"""
         block = re.search(r"country='\w\w'", self.__kma_script)
-        country = re.search(r"'\w\w'", block.group(0))
-        country = country.group(0).replace("'", '')
-        return country
+        country_w_brackets = re.search(r"'\w\w'", block.group(0))
+        country = country_w_brackets.group(0).replace("'", '')
+        return country.lower()
 
     def _language(self) -> str:
         """Поиск в js коде переменной language - возвращает ее значение"""
         block = re.search(r'"language":"\w\w"', self.__kma_script)
-        country = re.search(r'"\w\w"', block.group(0))
-        return country.group(0).replace('"', '')
+        language_w_brackets = re.search(r'"\w\w"', block.group(0))
+        language = language_w_brackets.group(0).replace('"', '')
+        return language.lower()
 
     def _country_list(self) -> dict:
         """Поиск в js коде переменной country_list - возвращает ее значение"""
         start = self.__kma_script.find('country_list=') + len('country_list=')
         end = self.__kma_script.find(';json_quer')
         var = self.__kma_script[start:end]
-        return json.loads(var)
+        country_list = json.loads(var)
+        dic = dict()
+        for k,v in country_list.items():
+            dic[k.lower()] = v
+        return dic
 
     @property
     def discount_type(self):
+        """Получить тип скидки"""
         discount = self.country_list[self.country]['discount']
         if int(discount) < 50:
             return 'low_price'
@@ -58,6 +64,7 @@ class KMALand:
 
     @property
     def land_type(self):
+        """Получить тип сайта"""
         for domain in self.PRE_LAND_DOMAINS:
             if domain in self.url:
                 return 'pre_land'

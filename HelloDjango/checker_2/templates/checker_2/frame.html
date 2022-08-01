@@ -30,8 +30,10 @@
             <div class="topbar__items">
               <div class="topbar__item">
                 <div class="topbar__btn" id="country">{{kma.country}}</div>
+                {% if kma.country != kma.language %}
                 <div class="topbar__btn" id="language">lang: {{kma.language}}</div>
-                <div class="topbar__btn" id="phone-code">phone_code</div>
+                {% endif %}
+                <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
                 <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
@@ -139,6 +141,7 @@
   let site = iframe.contentWindow
 
   let land_data_from_js = false;
+  let get_phone_code_api = false;
 
 
 
@@ -146,7 +149,7 @@
     // исполнение после полной загрузки iframe
     // iframe.contentDocument.body.prepend("Hello, world!");
     if (land_data_from_js){loadLandParams()}
-    getPhoneCode()
+    if (get_phone_code_api){getPhoneCode()}
 
     land_code = $(iframe.contentDocument).find('html').html()
     console.log(land_code.length)

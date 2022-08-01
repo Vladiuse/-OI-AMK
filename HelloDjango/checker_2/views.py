@@ -44,6 +44,7 @@ def check_url(request):
     # 
     text = res.text
     kma = KMALand(url, text)
+    kma.phone_code = PhoneNumber.get_phone_code_by_country(kma.country)
     t_fix = TextFixxer(text)
     t_fix.process()
     text = t_fix.text
@@ -59,7 +60,6 @@ def check_url(request):
         'kma': kma,
     }
     return render(request, 'checker_2/frame.html', content)
-    return HttpResponse(htm_page)
 
 
 @login_required
