@@ -219,9 +219,21 @@
         let url = currentUrl + '/checker_2/analiz_land_text/'
         data = {'land_text': land_code}
         $.post(url, data, function(response){
-            console.log(response, 'RESPONSE ANALIZE')
+            console.log(response, 'RESPONSE ANALIZE1', response['success'])
             if (response['success']){
-                let some = 1;
+                offers = response.result['offers']
+                putDataFromAnalize('Офферы:', offers)
+                currs = response.result['currencys']
+                putDataFromAnalize('Валюты:', currs)
+                dates = response.result['dates_on_land']
+                putDataFromAnalize('Даты:', dates)
+                phone_codes = response.result['phone_codes']
+                putDataFromAnalize('Моб коды:', phone_codes)
+                geo_words = response.result['geo_words_templates']
+                putDataFromAnalize('Слова:', geo_words)
+                scripts_on_land = response.result['scripts']
+                console.log('End')
+                fixListHeight()
 
             } else {
                 console.error('Ошибка загрузки анализатора')
@@ -230,12 +242,32 @@
         })
     }
 
+    function putDataFromAnalize(desc,data){
+      // console.log(123)
+      // let p = $('p')
+      // p.text(desc)
+      $('#text-info').append(`<br>`)
+      $('#text-info').append(`<p>${desc}</p>`)
+      for (id in data){
+        let value = data[id]
+        $('#text-info').append(`<span>${value}</span>`)
+      }
+    }
+
 </script>
 <script>
+  fixListHeight()
   // для чеклиста
   $('#clear-check-list').click(function(){
       $('.check_list input').prop('checked', false);
   })
+  function fixListHeight(){
+    // Подогнать высоту чеклиста
+    let chekListWidth = $('#iframe').height() - $('#checker-data').height()
+    console.log(chekListWidth, 'chekListWidth')
+  $('#check_list').height(chekListWidth + 'px')
+  }
+  
   // Снять\Поставить все гагли в чеклисте
   $('a.clear-group').click(function(e){
       e.preventDefault()

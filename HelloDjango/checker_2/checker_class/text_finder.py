@@ -125,7 +125,7 @@ class TextAnaliz:
                 date = date[1:]
             clean_dates.append(date)
         clean_dates = list(set(clean_dates))
-        clean_dates = TextAnaliz.sort_dates(clean_dates)
+        # clean_dates = TextAnaliz.sort_dates(clean_dates)
         self.result.update({'dates_on_land': clean_dates})
 
     def find_geo_words(self):
