@@ -83,6 +83,8 @@ class DomFixxer:
         self.styles = None
         self.script = None
         self.url = url
+        self.img_doubles = list()
+        self.base_tag_url = ''
 
     def process(self):
         self.load_files()
@@ -120,20 +122,27 @@ class DomFixxer:
         self.soup.html.body.append(script_tag)
 
     def find_double_img(self):
+        """Поиск на сайте дублей картинок и добавление к ним соответствующих атрибутов"""
         imgs_tags = self.soup.find_all('img')
         Img.reset()
         imgs = [Img(img) for img in imgs_tags]
         [img.process() for img in imgs]
         [img.set_img_as_double() for img in imgs]
-        div_toolbar = self.toolbar.find('div', {"id": "back-info"})
-        if Img.IMG_SRC_DOUBLES:
-            p_info = self.soup.new_tag('p')
-            p_info.string = 'Картинки дубли:'
-            div_toolbar.append(p_info)
+        # div_toolbar = self.toolbar.find('div', {"id": "back-info"})
+        # if Img.IMG_SRC_DOUBLES:
+        #     p_info = self.soup.new_tag('p')
+        #     p_info.string = 'Картинки дубли:'
+        #     div_toolbar.append(p_info)
         for hash, src in Img.IMG_SRC_DOUBLES.items():
-            new_img = self.toolbar.new_tag('img', src=src)
-            new_img[Img.to_find_img_attr] = hash
-            div_toolbar.append(new_img)
+            dic = {
+
+                'hash': hash,
+                'src': src,
+            }
+            self.img_doubles.append(dic)
+            # new_img = self.toolbar.new_tag('img', src=src)
+            # new_img[Img.to_find_img_attr] = hash
+            # div_toolbar.append(new_img)
 
     def add_base_tag(self):
         url = self.url
@@ -148,6 +157,7 @@ class DomFixxer:
             self.soup.html.head.insert(0, new_base)
         else:
             base['href'] = url
+            self.base_tag_url = url
 
     def fix_style_link(self):
         href = 'css/bmmfp.css'

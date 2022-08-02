@@ -16,6 +16,20 @@ iframe{  display: flex;
 #check_list b,#check_list label{
   color: whitesmoke;
 }
+#check_list{
+  height: 600px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+#checker-data #img-doubles{
+display: flex;
+flex-flow: row wrap;
+}
+#checker-data #img-doubles img{
+width: 60px;
+height: 60px;
+
+}
 
 .list-group {
   font-size: 0.9rem;
@@ -54,6 +68,10 @@ iframe{  display: flex;
 }
 .link-secondary {
   color: #6c757d;
+}
+
+.list-group-item.d-flex{
+  border-bottom: 1px solid whitesmoke;
 }
 /* ------------------------------- */
 

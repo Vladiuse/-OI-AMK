@@ -58,6 +58,8 @@ def check_url(request):
         'land': htm_page,
         'checker_list': read_check_list(),
         'kma': kma,
+        'img_doubles': dom.img_doubles,
+        'base_url': dom.base_tag_url,
     }
     return render(request, 'checker_2/frame.html', content)
 

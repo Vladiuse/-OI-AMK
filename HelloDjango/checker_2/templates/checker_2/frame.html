@@ -100,7 +100,14 @@
             <div class="navigation">
               <div class="navigation__inner">
                 <div id="checker-data">
+                  <div id="img-doubles">
+                    {% for img in img_doubles %}
+                  <img data-oi-img="{{img.hash}}" src="{{base_url}}{{img.src}}">
+                  {%endfor%}
+                  </div>
+                  <div id="text-info">
 
+                  </div>
                 </div>
                 <div id="check_list">
                   <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
