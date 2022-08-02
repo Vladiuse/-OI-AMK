@@ -31,6 +31,7 @@ def find_word_template_in_text(word_template, text):
 
 
 class TextAnaliz:
+    """Класс анализа кода страницы после отрисовки"""
 
     def __init__(self, land_text, data):
         self.land_text = land_text

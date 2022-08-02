@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .checker_class.text_fixxer import DomFixxer, TextFixxer, TOOLBAR_STYLES_FILE
+from .checker_class.text_fixxer import DomFixxer, TOOLBAR_STYLES_FILE
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_info import get_rekl_by_id
 from .checker_class.kma_land import KMALand
@@ -45,9 +45,9 @@ def check_url(request):
     text = res.text
     kma = KMALand(url, text)
     kma.phone_code = PhoneNumber.get_phone_code_by_country(kma.country)
-    t_fix = TextFixxer(text)
-    t_fix.process()
-    text = t_fix.text
+    # t_fix = TextFixxer(text)
+    # t_fix.process()
+    # text = t_fix.text
     soup = BeautifulSoup(text, 'html5lib')
     dom = DomFixxer(soup, url=url)
     dom.process()
