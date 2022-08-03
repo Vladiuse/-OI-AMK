@@ -60,6 +60,7 @@ def check_url(request):
         'kma': kma,
         'img_doubles': dom.img_doubles,
         'base_url': dom.base_tag_url,
+        'title': dom.title,
     }
     return render(request, 'checker_2/frame.html', content)
 

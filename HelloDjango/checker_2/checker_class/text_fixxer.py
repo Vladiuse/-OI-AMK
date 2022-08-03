@@ -85,11 +85,13 @@ class DomFixxer:
         self.url = url
         self.img_doubles = list()
         self.base_tag_url = ''
+        self.title = ''
 
     def process(self):
         self.load_files()
         self.find_double_img()
         self.add_base_tag()
+        self.get_title()
 
         self.add_html()
         self.add_css()
@@ -158,6 +160,12 @@ class DomFixxer:
         else:
             base['href'] = url
             self.base_tag_url = url
+
+    def get_title(self):
+        """найти title сайта"""
+        title = self.soup.find('title')
+        self.title = title.text
+
 
     def fix_style_link(self):
         href = 'css/bmmfp.css'
