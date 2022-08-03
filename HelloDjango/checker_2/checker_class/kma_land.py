@@ -23,7 +23,7 @@ class KMALand:
         scripts = soup.find_all('script')
         kma_script = ''
         for s in scripts:
-            if s.text.startswith('tmp_data_to_server'):
+            if 'country_list' in s.text:
                 kma_script = s.text
                 break
         return kma_script
@@ -45,7 +45,7 @@ class KMALand:
     def _country_list(self) -> dict:
         """Поиск в js коде переменной country_list - возвращает ее значение"""
         start = self.__kma_script.find('country_list=') + len('country_list=')
-        end = self.__kma_script.find(';json_quer')
+        end = self.__kma_script.find('}};') + 2
         var = self.__kma_script[start:end]
         country_list = json.loads(var)
         dic = dict()
