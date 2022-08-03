@@ -1,18 +1,22 @@
+import yaml
+import requests as req
+from bs4 import BeautifulSoup
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+
 from .checker_class.text_fixxer import DomFixxer, TOOLBAR_STYLES_FILE
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_info import get_rekl_by_id
 from .checker_class.kma_land import KMALand
 from kma.models import OfferPosition, PhoneNumber
-import requests as req
-from bs4 import BeautifulSoup
+from .models import CheckBlock, CheckPoint
+from .check_list_view import CheckListView
 from django.views.decorators.csrf import csrf_exempt
-from pprint import pprint
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
+
 # Create your views here.
-import yaml
+
 
 def read_check_list():
     yaml_path = str(settings.BASE_DIR) + '/checker_2/check_list.yaml'
@@ -104,3 +108,15 @@ def analiz_land_text(request):
             'error': str(error),
         }
     return JsonResponse(answer, safe=False)
+
+
+def check_list(request):
+    c = CheckListView(
+    land_type='pre_land',
+    discount_type='full_price',
+    country='th',
+    lang='ru',
+    )
+    check_list = c.get_list()
+    content = {'check_list': check_list}
+    return render(request, 'checker_2/check_list.html', content)
