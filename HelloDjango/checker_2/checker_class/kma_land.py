@@ -19,17 +19,18 @@ class KMALand:
 
     def _find_kma_back_data(self) -> str:
         """Ищет и возвражает тело скрипта с переменными для лэндинга"""
-        soup = BeautifulSoup(self.land_text, 'lxml')
+        soup = BeautifulSoup(self.land_text, 'html5')
         scripts = soup.find_all('script')
         kma_script = ''
         for s in scripts:
-            if 'country_list' in s.text:
-                kma_script = s.text
+            if 'country_list' in str(s):
+                kma_script = str(s)
                 break
         return kma_script
 
     def _country(self) -> str:
         """Поиск в js коде переменной country - возвращает ее значение"""
+        print(self.__kma_script)
         block = re.search(r"country='\w\w'", self.__kma_script)
         country_w_brackets = re.search(r"'\w\w'", block.group(0))
         country = country_w_brackets.group(0).replace("'", '')
