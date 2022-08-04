@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{checker.dom.title}}</title>
+  <title>{{title}}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,11 +32,11 @@
             <div class="topbar__items">
               <div class="topbar__item">
                 <div class="topbar__btn" id="country">{{kma.country}}
-                  <span class="flag-icon flag-icon-{{checker.kma.country}}"></span>
+                  <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
                 {% if kma.country != kma.language %}
                 <div class="topbar__btn" id="language">lang: {{kma.language}}
-                  <span class="flag-icon flag-icon-{{checker.kma.language}}"></span>
+                  <span class="flag-icon flag-icon-{{kma.language}}"></span>
                 </div>
                 {% endif %}
                 <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
@@ -103,9 +103,12 @@
                   <div id="img-doubles">
                     {% for img in checker.dom.img_doubles %}
                   <img data-oi-img="{{img.hash}}" src="{{img.src}}">
-                    {%endfor%}
+                  {%endfor%}
                   </div>
                   <div id="text-info">
+                  <div class="container-toolbar" id="analize-load">
+                      <div class="lds-ring" id="load-ring"><div></div><div></div><div></div><div></div></div>
+                  </div>
 
                   </div>
                 </div>
@@ -130,7 +133,7 @@
               </div>
               </div>
             </div>
-            <div class="for-frame">
+            <div class="frame-wrapper">
               <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
             </div>
             
@@ -221,6 +224,7 @@
         $.post(url, data, function(response){
             console.log(response, 'RESPONSE ANALIZE1', response['success'])
             if (response['success']){
+                $('#analize-load').hide()
                 offers = response.result['offers']
                 putDataFromAnalize('Офферы:', offers)
                 currs = response.result['currencys']
@@ -243,9 +247,6 @@
     }
 
     function putDataFromAnalize(desc,data){
-      // console.log(123)
-      // let p = $('p')
-      // p.text(desc)
       $('#text-info').append(`<br>`)
       $('#text-info').append(`<p>${desc}</p>`)
       for (id in data){
@@ -253,7 +254,7 @@
         $('#text-info').append(`<span>${value}</span>`)
       }
     }
-    
+
     // При клике на найденые дубли картинок
     $('#img-doubles img').click(function(){
       runFuncIframe('showImages')
