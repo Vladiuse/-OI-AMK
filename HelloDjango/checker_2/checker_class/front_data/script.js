@@ -233,23 +233,26 @@ console.log('MY SCRIPNT START')
     }
     
     // Скролл по дублям картинок
-
-    $('#back-info img').click(function(){
+    function doubleImgScroll(img_hash){
         $('img.__focus_img').removeClass('__focus_img')
-        let src = $(this).attr('data-oi-img')
+        // let src = $(this).attr('data-oi-img')
+        let src = img_hash
         // console.log(src, 'src дубля')
         if (src != lastDoubleScr){imgBoubleCounter = 0}
         lastDoubleScr = src
         let imgs = $('img.'+doubleImgStyle).filter(function(){
             if ($(this).attr('data-oi-img-double') == src){return true}
         })
-        // console.log(imgs, 'Найденые дубли')
         imgBoubleLen = imgs.length
         console.log(imgBoubleCounter, imgBoubleLen)
         imgs.get(imgBoubleCounter).scrollIntoView({block: "center", behavior: "smooth"});
         $(imgs.get(imgBoubleCounter)).addClass('__focus_img') // xxx
         imgBoubleCounter ++
         if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
+    }
+
+    $('#back-info img').click(function(){
+        
         })
 
 

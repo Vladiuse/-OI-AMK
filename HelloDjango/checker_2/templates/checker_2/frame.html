@@ -253,6 +253,12 @@
         $('#text-info').append(`<span>${value}</span>`)
       }
     }
+    
+    // При клике на найденые дубли картинок
+    $('#img-doubles img').click(function(){
+      runFuncIframe('showImages')
+      iframe.contentWindow.doubleImgScroll($(this).attr('data-oi-img'))
+    })
 
 </script>
 <script>
