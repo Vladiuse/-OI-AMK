@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{title}}</title>
+  <title>{{checker.dom.title}}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,11 +32,11 @@
             <div class="topbar__items">
               <div class="topbar__item">
                 <div class="topbar__btn" id="country">{{kma.country}}
-                  <span class="flag-icon flag-icon-{{kma.country}}"></span>
+                  <span class="flag-icon flag-icon-{{checker.kma.country}}"></span>
                 </div>
                 {% if kma.country != kma.language %}
                 <div class="topbar__btn" id="language">lang: {{kma.language}}
-                  <span class="flag-icon flag-icon-{{kma.language}}"></span>
+                  <span class="flag-icon flag-icon-{{checker.kma.language}}"></span>
                 </div>
                 {% endif %}
                 <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
@@ -101,9 +101,9 @@
               <div class="navigation__inner">
                 <div id="checker-data">
                   <div id="img-doubles">
-                    {% for img in img_doubles %}
-                  <img data-oi-img="{{img.hash}}" src="{{base_url}}{{img.src}}">
-                  {%endfor%}
+                    {% for img in checker.dom.img_doubles %}
+                  <img data-oi-img="{{img.hash}}" src="{{img.src}}">
+                    {%endfor%}
                   </div>
                   <div id="text-info">
 
@@ -131,7 +131,7 @@
               </div>
             </div>
             <div class="for-frame">
-              <iframe srcdoc="{{land|safe}}" id="iframe"></iframe>
+              <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
             </div>
             
           </div>

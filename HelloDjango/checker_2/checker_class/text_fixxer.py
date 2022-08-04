@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 
 
-TOOLBAR_HTML_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/block.html'
 TOOLBAR_STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
 TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
 
@@ -15,7 +14,6 @@ class Img:
     ATTRS = [
         'data-src',
         'data-pagespeed-lazy-src',
-
     ]
 
     ALL_IMG_SRCS = []
@@ -79,37 +77,30 @@ class DomFixxer:
 
     def __init__(self, soup, url):
         self.soup = soup
-        self.toolbar = None
-        self.styles = None
-        self.script = None
         self.url = url
-        self.img_doubles = list()
         self.base_tag_url = ''
         self.title = ''
+        self.styles = None
+        self.script = None
+        self.img_doubles = list()
+
 
     def process(self):
-        self.load_files()
-        self.find_double_img()
         self.add_base_tag()
         self.get_title()
+        self.load_files()
+        self.find_double_img()
 
-        self.add_html()
         self.add_css()
         self.add_js()
 
     def load_files(self):
-        with open(TOOLBAR_HTML_FILE, encoding='utf-8') as file:
-            self.toolbar = file.read()
-        self.toolbar = BeautifulSoup(self.toolbar, 'lxml')
         with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
             self.styles = file.read()
         with open(TOOLBAR_JS_FILE, encoding='utf-8') as file:
             script = file.read()
             self.script = script
 
-    def add_html(self):
-        div_soup = self.toolbar.find('div', {"id": "oi-toolbar"})
-        self.soup.html.body.insert(0, div_soup)
 
     def add_css(self):
         """Добавить стили на сайт"""
@@ -130,21 +121,14 @@ class DomFixxer:
         imgs = [Img(img) for img in imgs_tags]
         [img.process() for img in imgs]
         [img.set_img_as_double() for img in imgs]
-        # div_toolbar = self.toolbar.find('div', {"id": "back-info"})
-        # if Img.IMG_SRC_DOUBLES:
-        #     p_info = self.soup.new_tag('p')
-        #     p_info.string = 'Картинки дубли:'
-        #     div_toolbar.append(p_info)
         for hash, src in Img.IMG_SRC_DOUBLES.items():
             dic = {
 
                 'hash': hash,
-                'src': src,
+                'src': self.base_tag_url + src,
             }
             self.img_doubles.append(dic)
-            # new_img = self.toolbar.new_tag('img', src=src)
-            # new_img[Img.to_find_img_attr] = hash
-            # div_toolbar.append(new_img)
+
 
     def add_base_tag(self):
         url = self.url
@@ -167,15 +151,3 @@ class DomFixxer:
         title = self.soup.find('title')
         self.title = title.text
 
-
-    def fix_style_link(self):
-        href = 'css/bmmfp.css'
-        new_href = 'css/A.bmmfp.css.pagespeed.cf.TbIz99oGpz.css'
-        link_style = self.soup.find('link', {'href': href})
-        if link_style:
-            new_link = self.soup.new_tag('link')
-            new_link['href'] = new_href
-            new_link['media'] = "all"
-            new_link['rel'] = "stylesheet"
-            new_link['type'] = "text/css"
-            self.soup.html.head.insert(0, new_link)

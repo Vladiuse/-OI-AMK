@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from .checker_class.text_fixxer import DomFixxer, TOOLBAR_STYLES_FILE
 from .checker_class.text_finder import TextAnaliz
@@ -11,9 +13,9 @@ from .checker_class.kma_info import get_rekl_by_id
 from .checker_class.kma_land import KMALand
 from kma.models import OfferPosition, PhoneNumber
 from .models import CheckBlock, CheckPoint
-from .check_list_view import CheckListView
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
+from .checker_class.check_list_view import CheckListView
+from .checker_class import UrlChecker
+
 
 # Create your views here.
 
@@ -40,34 +42,37 @@ def index(requests):
 def check_url(request):
     # получения кода для iframe
     url = request.GET['url']
-    url = url.strip()
-    url = url.replace('https://', 'http://')
-    res = req.get(url)
-    if res.status_code != 200:
-        return HttpResponse(f'Error: res.status_code != 200, Ссылка не работает!')
-    # 
-    text = res.text
-    kma = KMALand(url, text)
-    kma.phone_code = PhoneNumber.get_phone_code_by_country(kma.country)
-    # t_fix = TextFixxer(text)
-    # t_fix.process()
-    # text = t_fix.text
-    soup = BeautifulSoup(text, 'html5lib')
-    dom = DomFixxer(soup, url=url)
-    dom.process()
-    htm_page = str(dom.soup)
-    htm_page = htm_page.replace('"', '&quot;')
-    htm_page = htm_page.replace("'", '&apos;')
-    print(dom.base_tag_url, 'dom.base_tag_url')
+    url_checker = UrlChecker(url=url)
+    url_checker.process()
     content = {
-        'land': htm_page,
-        'checker_list': read_check_list(),
-        'kma': kma,
-        'img_doubles': dom.img_doubles,
-        'base_url': dom.base_tag_url,
-        'title': dom.title,
+        'checker': url_checker,
+        'kma': url_checker.kma,
     }
     return render(request, 'checker_2/frame.html', content)
+    # url = url.strip()
+    # url = url.replace('https://', 'http://')
+    # res = req.get(url)
+    # if res.status_code != 200:
+    #     return HttpResponse(f'Error: res.status_code != 200, Ссылка не работает!')
+    # #
+    # text = res.text
+    # kma = KMALand(url, text)
+    # kma.phone_code = PhoneNumber.get_phone_code_by_country(kma.country)
+    # soup = BeautifulSoup(text, 'html5lib')
+    # dom = DomFixxer(soup, url=url)
+    # dom.process()
+    # htm_page = str(dom.soup)
+    # htm_page = htm_page.replace('"', '&quot;')
+    # htm_page = htm_page.replace("'", '&apos;')
+    # content = {
+    #     'land': htm_page,
+    #     'checker_list': read_check_list(),
+    #     'kma': kma,
+    #     'img_doubles': dom.img_doubles,
+    #     'base_url': dom.base_tag_url,
+    #     'title': dom.title,
+    # }
+    # return render(request, 'checker_2/frame.html', content)
 
 
 @login_required

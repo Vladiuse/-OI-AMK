@@ -17,6 +17,7 @@ class KMALand:
         self.language = self._language()
         self.country_list = self._country_list()
 
+
     def _find_kma_back_data(self) -> str:
         """Ищет и возвражает тело скрипта с переменными для лэндинга"""
         soup = BeautifulSoup(self.land_text, 'html5')
@@ -30,7 +31,6 @@ class KMALand:
 
     def _country(self) -> str:
         """Поиск в js коде переменной country - возвращает ее значение"""
-        print(self.__kma_script)
         block = re.search(r"country='\w\w'", self.__kma_script)
         country_w_brackets = re.search(r"'\w\w'", block.group(0))
         country = country_w_brackets.group(0).replace("'", '')
