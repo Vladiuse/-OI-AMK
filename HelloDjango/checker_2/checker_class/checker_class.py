@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from .kma_land import KMALand
 from .text_fixxer import DomFixxer
 from .check_list_view import CheckListView
+from .check_list_view import CheckListView
 from kma.models import PhoneNumber
 
 
@@ -44,3 +45,11 @@ class UrlChecker:
         html_page = html_page.replace('"', '&quot;')
         html_page = html_page.replace("'", '&apos;')
         self.page = html_page
+
+        self.check_list = self.check_list(
+            land_type=self.kma.land_type,
+            discount_type=self.kma.discount_type,
+            country=self.kma.country,
+            lang=self.kma.language,
+        )
+        self.check_list.process()

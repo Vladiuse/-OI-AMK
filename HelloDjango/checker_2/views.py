@@ -117,12 +117,12 @@ def analiz_land_text(request):
 
 
 def check_list(request):
-    c = CheckListView(
+    check_list = CheckListView(
     land_type='pre_land',
     discount_type='full_price',
     country='th',
     lang='ru',
     )
-    check_list = c.get_list()
+    check_list.process()
     content = {'check_list': check_list}
     return render(request, 'checker_2/check_list.html', content)

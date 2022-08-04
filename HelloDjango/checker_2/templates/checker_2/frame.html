@@ -115,13 +115,13 @@
                 <div id="check_list">
                   <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
                   <div class="list-group">            
-                  {%for name, sub_list in checker_list.items %}
+                  {%for block in checker.check_list %}
                   <div class="group-id-{{ forloop.counter }}">
                     <label class="list-group-item d-flex justify-content-between">
-                      <b>{{name}}</b>
+                      <b>{{block.name}}</b>
                       <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
                     </label>
-                    {%for sub in sub_list%}
+                    {%for sub in block.subs %}
                       <label class="list-group-item sub">
                           <input class="form-check-input me-1 " type="checkbox" value="">
                           {{sub}}

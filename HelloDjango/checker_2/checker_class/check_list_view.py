@@ -8,6 +8,18 @@ class CheckListView:
         self.discount_type = discount_type
         self.country = country
         self.lang = lang
+        self.check_list = list()
+
+    def __iter__(self):
+        self.i = 0
+        return self
+
+    def __next__(self):
+        if self.i == len(self.check_list):
+            raise StopIteration
+        block = self.check_list[self.i]
+        self.i += 1
+        return block
 
     def is_need_add(self, check_point):
         if check_point.land_type in [self.land_type, None] and \
@@ -16,9 +28,8 @@ class CheckListView:
                 (self.lang in check_point.for_lang or check_point.for_lang == ''):
             return True
 
-    def get_list(self):
+    def process(self):
         all = CheckBlock.objects.prefetch_related('checkpoint_set').all()
-        res = list()
         for b in all:
             dic = {
                 'name': b.name,
@@ -28,5 +39,4 @@ class CheckListView:
                 if self.is_need_add(c):
                     dic['subs'].append(c.text)
             if dic['subs']:
-                res.append(dic)
-        return res
+                self.check_list.append(dic)
