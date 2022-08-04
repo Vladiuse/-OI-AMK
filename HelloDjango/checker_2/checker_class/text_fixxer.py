@@ -152,6 +152,7 @@ class DomFixxer:
             url = self.url.split('?')[0]
         if not url.endswith('/'):
             url += '/'
+        self.base_tag_url = url
         base = self.soup.find('base')
         if not base:
             new_base = self.soup.new_tag('base')
@@ -159,7 +160,7 @@ class DomFixxer:
             self.soup.html.head.insert(0, new_base)
         else:
             base['href'] = url
-            self.base_tag_url = url
+
 
     def get_title(self):
         """найти title сайта"""
