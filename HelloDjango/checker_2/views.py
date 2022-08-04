@@ -58,6 +58,7 @@ def check_url(request):
     htm_page = str(dom.soup)
     htm_page = htm_page.replace('"', '&quot;')
     htm_page = htm_page.replace("'", '&apos;')
+    print(dom.base_tag_url, 'dom.base_tag_url')
     content = {
         'land': htm_page,
         'checker_list': read_check_list(),
