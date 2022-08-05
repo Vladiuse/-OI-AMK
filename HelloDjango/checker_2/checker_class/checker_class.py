@@ -38,10 +38,22 @@ class UrlChecker:
     def process(self):
         self.kma = self.kma(self.url, self.land_source)
         self.kma.phone_code = PhoneNumber.get_phone_code_by_country(self.kma.country)
+        self.land_source = self.land_source.replace('&nbsp;', ' ')
+        self.land_source = self.land_source.replace('&quot;', '"')
+        self.land_source = self.land_source.replace('&apos;', "'")
+
+        self.land_source = self.land_source.replace('&&', '@@')
+        self.land_source = self.land_source.replace('&', '&amp;&amp;')
+        self.land_source = self.land_source.replace('@@', '&&')
+
+
+
         soup = BeautifulSoup(self.land_source, 'html5lib')
+
         self.dom = self.dom(soup, url=self.url)
         self.dom.process()
         html_page = str(self.dom.soup)
+        self.land_source = self.land_source.replace('&', '&amp;&amp;')
         html_page = html_page.replace('"', '&quot;')
         html_page = html_page.replace("'", '&apos;')
         self.page = html_page

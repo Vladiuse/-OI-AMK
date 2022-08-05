@@ -122,10 +122,12 @@ class DomFixxer:
         [img.process() for img in imgs]
         [img.set_img_as_double() for img in imgs]
         for hash, src in Img.IMG_SRC_DOUBLES.items():
+            if not src.startswith('https'):
+                src = self.base_tag_url + src
             dic = {
 
                 'hash': hash,
-                'src': self.base_tag_url + src,
+                'src': src,
             }
             self.img_doubles.append(dic)
 
