@@ -6,8 +6,8 @@ import requests as req
 
 
 def load_screenshot(url, path_to_save, image_name):
-    api_load_image(url, path_to_save,image_name)
-    # load_image_selenium(url, path_to_save, image_name)
+    # api_load_image(url, path_to_save,image_name)
+    load_image_selenium(url, path_to_save, image_name)
 
 
 def load_image_selenium(url, path_to_save, image_name):
