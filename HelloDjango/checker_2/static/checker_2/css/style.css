@@ -210,6 +210,12 @@ height: 60px;
    0 0 1px rgb(86,96,106);
   pointer-events: none;
 }
+#original-link{
+        color: rgb(142, 194, 236);
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+}
 /* ------------------------------- */
 /* ---------------LeftBar--------- */
 .leftbar__inner{
