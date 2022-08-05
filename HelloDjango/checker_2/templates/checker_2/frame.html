@@ -108,10 +108,11 @@
                   <img data-oi-img="{{img.hash}}" src="{{img.src}}">
                   {%endfor%}
                   </div>
-                  <div id="text-info">
                   <div class="container-toolbar" id="analize-load">
                       <div class="lds-ring" id="load-ring"><div></div><div></div><div></div><div></div></div>
                   </div>
+                  <div id="text-info">
+
 
                   </div>
                 </div>
@@ -222,6 +223,8 @@
 
     function loadBackAnalize(land_code){
       // Загрузда данных анализа текста API
+      $('#text-info').empty()
+      $('#analize-load').show()
         let url = currentUrl + '/checker_2/analiz_land_text/'
         data = {'land_text': land_code}
         $.post(url, data, function(response){
