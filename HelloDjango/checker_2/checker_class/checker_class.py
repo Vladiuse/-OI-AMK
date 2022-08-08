@@ -14,6 +14,7 @@ class UrlChecker:
         self.url = UrlChecker.format_url(url)
         self.land_source = str()
         self.page = str()
+        self.land_attrs = list()
 
         self.is_url_work()
         self.dom = DomFixxer
@@ -34,6 +35,13 @@ class UrlChecker:
             raise ZeroDivisionError
         else:
             self.land_source = res.text
+
+    def add_site_attrs(self):
+        if self.dom.is_video_on_site():
+            self.land_attrs.append('video')
+
+        if len(self.kma.country_list) > 1:
+            self.land_attrs.append('more_one_select')
 
     def process(self):
         self.kma = self.kma(self.url, self.land_source)
@@ -57,10 +65,12 @@ class UrlChecker:
         html_page = html_page.replace('"', '&quot;')
         html_page = html_page.replace("'", '&apos;')
         self.page = html_page
+        self.add_site_attrs()
         self.check_list = self.check_list(
             land_type=self.kma.land_type,
             discount_type=self.kma.discount_type,
             country=self.kma.country,
             lang=self.kma.language,
+            land_attrs=self.land_attrs
         )
         self.check_list.process()

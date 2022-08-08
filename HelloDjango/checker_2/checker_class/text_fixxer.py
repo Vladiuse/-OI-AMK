@@ -153,3 +153,8 @@ class DomFixxer:
         title = self.soup.find('title')
         self.title = title.text
 
+    def is_video_on_site(self):
+        """Есть ли на сайте тэг video"""
+        if self.soup.find_all('video'):
+            return True
+

@@ -13,7 +13,11 @@
 <h5>{{block.name}}</h5>
     <ul>
     {%for sub in block.subs%}
-        <li>{{sub.text}}{{sub.filter}}{{sub.is_notice}}</li>
+        {%if sub.is_notice%}
+        <li><b>{{sub.text}}</b></li>
+        {%else%}
+                <li>{{sub.text}}</li>
+        {%endif%}
     {%endfor%}
         </ul>
 {%endfor%}
