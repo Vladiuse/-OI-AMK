@@ -121,18 +121,18 @@ DATABASES = {
     }
 }
 
-# for MySql database remote
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'vladiuse_kma',
-#         'USER': 'vladiuse_kma',
-#         'PASSWORD': get_secret('vladiuse_kma'),
-#         'HOST': 'vladiuse.beget.tech',
-#         'PORT': '3306',
-#
-#     }
-# }
+ #for MySql database remote
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'vladiuse_kma',
+         'USER': 'vladiuse_kma',
+         'PASSWORD': get_secret('vladiuse_kma'),
+         'HOST': 'vladiuse.beget.tech',
+         'PORT': '3306',
+
+     }
+ }
 
 
 # Password validation
