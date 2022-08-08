@@ -15,6 +15,7 @@ from kma.models import OfferPosition, PhoneNumber
 from .models import CheckBlock, CheckPoint
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
+from qr_code.qrcode.utils import QRCodeOptions
 
 
 # Create your views here.
@@ -117,13 +118,20 @@ def analiz_land_text(request):
 
 
 def check_list(request):
-    check_list = CheckListView(
-    land_type='pre_land',
-    discount_type='full_price',
-    country='th',
-    lang='ru',
-    )
-    check_list.process()
-    content = {'check_list': check_list}
-    content = {'test': '<b>some</b> string and {{user}}'}
+    # check_list = CheckListView(
+    # land_type='pre_land',
+    # discount_type='full_price',
+    # country='th',
+    # lang='ru',
+    # )
+    # check_list.process()
+    # content = {'check_list': check_list}
+    content = {
+        'url': 'https://www.youtube.com/',
+        'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
+                                     # dark_color='#2496ff',
+                                     dark_color='white',
+                                     light_color='#404040',
+                                     ),
+    }
     return render(request, 'checker_2/check_list.html', content)

@@ -13,7 +13,6 @@ class KMALand:
         self.url = url
         self.land_text = land_text
         self.__kma_script = self._find_kma_back_data()
-        print(self.__kma_script)
         self.country = self._country()
         self.language = self._language()
         self.country_list = self._country_list()
@@ -59,7 +58,7 @@ class KMALand:
     def discount_type(self):
         """Получить тип скидки"""
         discount = self.country_list[self.country]['discount']
-        if int(discount) < 50:
+        if int(discount) >= 50:
             return 'low_price'
         else:
             return 'full_price'

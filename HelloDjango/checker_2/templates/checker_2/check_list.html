@@ -1,3 +1,4 @@
+{% load qr_code %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,5 +17,8 @@
     {%endfor%}
         </ul>
 {%endfor%}
+{% qr_from_data url options=my_options %}
+
+
 </body>
 </html>
