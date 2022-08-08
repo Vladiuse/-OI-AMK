@@ -118,15 +118,16 @@ def analiz_land_text(request):
 
 
 def check_list(request):
-    # check_list = CheckListView(
-    # land_type='pre_land',
-    # discount_type='full_price',
-    # country='th',
-    # lang='ru',
-    # )
-    # check_list.process()
+    check_list = CheckListView(
+    land_type='pre_land',
+    discount_type='full_price',
+    country='th',
+    lang='ru',
+    )
+    check_list.process()
     # content = {'check_list': check_list}
     content = {
+        'check_list': check_list,
         'url': 'https://www.youtube.com/',
         'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
                                      # dark_color='#2496ff',

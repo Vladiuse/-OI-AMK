@@ -100,6 +100,11 @@ height: 60px;
 .list-group-item.d-flex{
   border-bottom: 1px solid whitesmoke;
 }
+
+.list-group-item.sub.notice{
+border: 2px solid #2496ff;
+}
+
 /* ------------------------------- */
 
 

@@ -126,9 +126,9 @@
                       <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
                     </label>
                     {%for sub in block.subs %}
-                      <label class="list-group-item sub">
+                      <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
                           <input class="form-check-input me-1 " type="checkbox" value="">
-                          {{sub}}
+                          {{sub.text}}
                       </label>
                     {%endfor%}
                   </div>

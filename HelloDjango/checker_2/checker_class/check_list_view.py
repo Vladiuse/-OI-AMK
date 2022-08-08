@@ -37,6 +37,6 @@ class CheckListView:
             }
             for c in b.checkpoint_set.all():
                 if self.is_need_add(c):
-                    dic['subs'].append(c.text)
+                    dic['subs'].append(c)
             if dic['subs']:
                 self.check_list.append(dic)

@@ -43,6 +43,8 @@ class CheckPoint(OrderedModel):
         verbose_name='Только для языка',
         blank=True,
     )
+    is_notice = models.BooleanField(default=False, null=False, blank=True, verbose_name='Требует внимания')
+    filter = models.CharField(max_length=30, verbose_name='Прочий фильтр', default='', null=False, blank=True)
 
     class Meta:
         verbose_name = 'Пункт проверки'
