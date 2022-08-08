@@ -125,4 +125,5 @@ def check_list(request):
     )
     check_list.process()
     content = {'check_list': check_list}
+    content = {'test': '<b>some</b> string and {{user}}'}
     return render(request, 'checker_2/check_list.html', content)
