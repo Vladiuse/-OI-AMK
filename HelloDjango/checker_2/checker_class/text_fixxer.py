@@ -1,25 +1,10 @@
-import re
 import hashlib
 from bs4 import BeautifulSoup
-import requests as req
 from django.conf import settings
 
-SPAN_CLASS_BACK = '__back-date '
-SPAN_DATE_ERROR = ' __debug_date_error'
-SPAN_CLASS_PERCENT = '__back-percent '
 
-TOOLBAR_HTML_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/block.html'
 TOOLBAR_STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
 TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
-
-
-
-def is_date_correct(date):
-    """Проверка коректности даты"""
-    for char in '-/\\':
-        if char in date:
-            return False
-    return True
 
 
 class Img:
@@ -29,7 +14,6 @@ class Img:
     ATTRS = [
         'data-src',
         'data-pagespeed-lazy-src',
-        
     ]
 
     ALL_IMG_SRCS = []
@@ -88,108 +72,40 @@ class Img:
                 pass
 
 
-def find_img_double(soup) -> set:
-    """Поиск дублей карртинок в html """
-    # soup = BeautifulSoup(text, 'lxml')
-    images = soup.find_all('img')
-    srcs = []
-    srcs_double = set()
-    for img in images:
-        try:
-            src = img['src']
-            srcs.append(src)
-        except KeyError:
-            pass
-    for src in srcs:
-        if srcs.count(src) > 1:
-            srcs_double.add(src)
-    return srcs_double
-
-
-class TextFixxer:
-    """Внесение изменений в исходный код страницы"""
-
-    def __init__(self, text):
-        self.text = text
-
-    def process(self):
-        # self.add_test_dates()
-        self.text = re.sub(
-            r'<[\w\s]+>[\s\wА-Яа-я.,;:"!?@#$%&*(){}\']*(\D\d\d\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4})[\s\wА-Яа-я.,;:"!?@#$%&*(){}\']*<[/\w\s]+>',
-            # добавил Спецсимолы
-            self.wrap_dates,
-            self.text)
-        self.text = re.sub(r'<[=\w\d\s"\-]*>[\t\r\n\s\-]?(\d\d\d\d|\d{4}[\s\-]{1,3}\d{4})[\t\r\n\s\-]?<[/\w\s]+>',
-                           self.wrap_dates,
-                           self.text)
-
-    @staticmethod
-    def span_wrap(date_s):
-        date = date_s.group(0)
-        span_class = SPAN_CLASS_BACK
-        if not is_date_correct(date):
-            span_class += SPAN_DATE_ERROR
-        res = f'<span class="{span_class}" >{date}</span>'
-        return res
-
-    @staticmethod
-    def wrap_dates(string):
-        """Поиск дат хх.хх.хххх и оборачивание в тэг"""
-        date_string = string.group(0)
-        date = re.sub(r'\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}|\d\d\d\d', TextFixxer.span_wrap, date_string)
-        return date
-
-    def add_test_dates(self):
-        with open(TEST_DATES, encoding='utf-8') as file:
-            dates = file.read()
-        body_pos = self.text.find('</body>')
-        self.text = self.text[:body_pos] + dates + self.text[body_pos:]
-
-
 class DomFixxer:
     """Изменение верстки сайта"""
 
     def __init__(self, soup, url):
         self.soup = soup
-        self.toolbar = None
+        self.url = url
+        self.base_tag_url = ''
+        self.title = ''
         self.styles = None
         self.script = None
-        self.url = url
+        self.img_doubles = list()
+
 
     def process(self):
-        self.load_files()
-        # self.add_bouble_img_in_tool()
-        self.find_double_img()
-        self.add_checked_url_in_toolbar()
         self.add_base_tag()
-        # self.fix_style_link()
-        # self.add_test_dates()
+        self.get_title()
+        self.load_files()
+        self.find_double_img()
 
-        self.add_html()
         self.add_css()
         self.add_js()
 
     def load_files(self):
-        with open(TOOLBAR_HTML_FILE, encoding='utf-8') as file:
-            self.toolbar = file.read()
-        self.toolbar = BeautifulSoup(self.toolbar, 'lxml')
         with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
             self.styles = file.read()
         with open(TOOLBAR_JS_FILE, encoding='utf-8') as file:
             script = file.read()
-            # script = script.replace('\n', '')
             self.script = script
 
-    def add_html(self):
-        # div_soup = BeautifulSoup(self.toolbar, 'lxml')
-        div_soup = self.toolbar.find('div', {"id": "oi-toolbar"})
-        self.soup.html.body.insert(0, div_soup)
 
     def add_css(self):
         """Добавить стили на сайт"""
         styles_tag = self.soup.new_tag('style')
         styles_tag.string = self.styles
-        # self.soup.html.head.insert(0, styles_tag)
         self.soup.html.body.append(styles_tag)
 
     def add_js(self):
@@ -199,51 +115,22 @@ class DomFixxer:
         self.soup.html.body.append(script_tag)
 
     def find_double_img(self):
+        """Поиск на сайте дублей картинок и добавление к ним соответствующих атрибутов"""
         imgs_tags = self.soup.find_all('img')
         Img.reset()
         imgs = [Img(img) for img in imgs_tags]
         [img.process() for img in imgs]
         [img.set_img_as_double() for img in imgs]
-        div_toolbar = self.toolbar.find('div', {"id": "back-info"})
-        if Img.IMG_SRC_DOUBLES:
-            p_info = self.soup.new_tag('p')
-            p_info.string = 'Картинки дубли:'
-            div_toolbar.append(p_info)
         for hash, src in Img.IMG_SRC_DOUBLES.items():
-            new_img = self.toolbar.new_tag('img', src=src)
-            new_img[Img.to_find_img_attr] = hash
-            div_toolbar.append(new_img)
+            if not src.startswith('https'):
+                src = self.base_tag_url + src
+            dic = {
 
-    def add_bouble_img_in_tool(self):
-        double_imgs_src = find_img_double(self.soup)
-        self.add_calss_img_boudle()
-        div_toolbar = self.toolbar.find('div', {"id": "back-info"})
-        if double_imgs_src:
-            p_info = self.soup.new_tag('p')
-            p_info.string = 'Картинки дубли:'
-            div_toolbar.append(p_info)
-        for img_scr in double_imgs_src:
-            new_img = self.toolbar.new_tag('img', src=img_scr)
-            div_toolbar.append(new_img)
+                'hash': hash,
+                'src': src,
+            }
+            self.img_doubles.append(dic)
 
-    def add_calss_img_boudle(self):
-        """Добавление стиля обводки для дублей картинки"""
-        css_tyle = ' __debug_double'
-        double_imgs_src = find_img_double(self.soup)
-        for src in double_imgs_src:
-            imgs = self.soup.find_all('img')
-            for img in imgs:
-                try:
-                    if img['src'] == src:
-                        img['class'] = ' '.join(img['class']) + css_tyle
-                except KeyError:
-                    img['class'] = css_tyle
-
-    def add_checked_url_in_toolbar(self):
-        self.toolbar.find(id="original-link")['data-href'] = self.url
-
-    def fix_all_tags(self):
-        pass
 
     def add_base_tag(self):
         url = self.url
@@ -251,6 +138,7 @@ class DomFixxer:
             url = self.url.split('?')[0]
         if not url.endswith('/'):
             url += '/'
+        self.base_tag_url = url
         base = self.soup.find('base')
         if not base:
             new_base = self.soup.new_tag('base')
@@ -259,29 +147,14 @@ class DomFixxer:
         else:
             base['href'] = url
 
-    def fix_style_link(self):
-        href = 'css/bmmfp.css'
-        new_href = 'css/A.bmmfp.css.pagespeed.cf.TbIz99oGpz.css'
-        link_style = self.soup.find('link', {'href': href})
-        if link_style:
-            new_link = self.soup.new_tag('link')
-            new_link['href'] = new_href
-            new_link['media'] = "all"
-            new_link['rel'] = "stylesheet"
-            new_link['type'] = "text/css"
-            self.soup.html.head.insert(0, new_link)
-            # link_style['href'] = new_href
 
-    def fix_relativ_path(self):
-        pass
+    def get_title(self):
+        """найти title сайта"""
+        title = self.soup.find('title')
+        self.title = title.text
 
-    def load_wb(self):
-        with open(TOOLBAR_NO_JS_FILE, encoding='utf-8') as file:
-            self.script = file.read()
-
-    def add_wb(self):
-        script_tag = self.soup.new_tag("script")
-        script_tag.string = self.script
-        self.soup.html.body.append(script_tag)
-
+    def is_video_on_site(self):
+        """Есть ли на сайте тэг video"""
+        if self.soup.find_all('video'):
+            return True
 

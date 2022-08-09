@@ -2,11 +2,22 @@ from django.db import models
 from ordered_model.models import OrderedModel
 
 # Create your models here.
+class CheckBlock(OrderedModel):
+    name = models.CharField(max_length=100, verbose_name='Название')
 
-class CheckPoint(models.Model):
+    class Meta:
+        verbose_name = 'Блок проверки'
+        verbose_name_plural = 'Блоки проверки'
+        ordering = ['order']
+
+    def __str__(self):
+        return self.name
+class CheckPoint(OrderedModel):
     LAND_TYPES = ('land', 'Лэндинг'), ('preland', 'Прэлендинг')
     DISCOUNT_TYPE = ('free', 'Бесплатно'), ('low_price', 'Лоу-прайс')
+
     text = models.CharField(max_length=255, verbose_name='Описание пункта проверки')
+    parent = models.ForeignKey(CheckBlock, on_delete=models.CASCADE)
     land_type = models.CharField(
         max_length=20,
         verbose_name='Тип сайта',
@@ -32,26 +43,15 @@ class CheckPoint(models.Model):
         verbose_name='Только для языка',
         blank=True,
     )
+    is_notice = models.BooleanField(default=False, null=False, blank=True, verbose_name='Требует внимания')
+    filter = models.CharField(max_length=30, verbose_name='Прочий фильтр', default='', null=False, blank=True)
 
     class Meta:
         verbose_name = 'Пункт проверки'
         verbose_name_plural = 'Пункты проверки'
+        ordering = ['order']
 
     def __str__(self):
         return self.text
 
-
-class Main(OrderedModel):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        ordering = ['order']
-
-
-class Sub(OrderedModel):
-    name = models.CharField(max_length=50)
-    main = models.ForeignKey(Main, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ['order']
 

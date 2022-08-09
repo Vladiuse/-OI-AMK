@@ -9,6 +9,8 @@ console.log('MY SCRIPNT START')
     let fromInputNotelClass = '__debug_no_tel';
     let debugScritpDate = '__debug_script_date';
     let doubleImgStyle = '__debug_double';
+    let clickElemStyle = '__debug_click_elem'
+    let cursorPointClass = '__debug_cursor_point_elem'
     let toolbarErrorClass = '__error';
 
 
@@ -145,12 +147,14 @@ console.log('MY SCRIPNT START')
         let links = $('a')
         console.log(toggleTime, 'toggleTime FROM my SCRIPT IN FUNC');
         links.addClass(debugClass)
+        links.addClass(clickElemStyle)
     }
 
     // Выборка картинок внутри ссылок
     function findImgLink(){
         let imgs = $('a img') // button input img svg path
         imgs.addClass(debugClass)
+        imgs.addClass(clickElemStyle)
         imgs.each(function(){
             let link = $(this).parent()
             if (link.children().length == 1){
@@ -163,12 +167,25 @@ console.log('MY SCRIPNT START')
     function findDivLink(){
         let divs = $('a div') // button input img svg path
         divs.addClass(debugClass)
+        divs.addClass(clickElemStyle)
         divs.each(function(){
             let link = $(this).parent()
             if (link.children().length == 1){
                 link.removeClass(debugClass)
             }
         })
+    }
+
+    function fincCursorPointElem(){
+        let all = $('*')
+        let cursor_elems = all.filter(function(){
+        if ($(this).css('cursor') == 'pointer'){
+        return true
+            }
+        })
+        cursor_elems.addClass(debugClass)
+        cursor_elems.addClass(cursorPointClass)
+
     }
     
     // Выборка всех цен (по классу)
@@ -233,23 +250,26 @@ console.log('MY SCRIPNT START')
     }
     
     // Скролл по дублям картинок
-
-    $('#back-info img').click(function(){
+    function doubleImgScroll(img_hash){
         $('img.__focus_img').removeClass('__focus_img')
-        let src = $(this).attr('data-oi-img')
+        // let src = $(this).attr('data-oi-img')
+        let src = img_hash
         // console.log(src, 'src дубля')
         if (src != lastDoubleScr){imgBoubleCounter = 0}
         lastDoubleScr = src
         let imgs = $('img.'+doubleImgStyle).filter(function(){
             if ($(this).attr('data-oi-img-double') == src){return true}
         })
-        // console.log(imgs, 'Найденые дубли')
         imgBoubleLen = imgs.length
         console.log(imgBoubleCounter, imgBoubleLen)
         imgs.get(imgBoubleCounter).scrollIntoView({block: "center", behavior: "smooth"});
         $(imgs.get(imgBoubleCounter)).addClass('__focus_img') // xxx
         imgBoubleCounter ++
         if (imgBoubleCounter  >= imgBoubleLen) {imgBoubleCounter=0; console.log('Сброс счетчика')}
+    }
+
+    $('#back-info img').click(function(){
+        
         })
 
 

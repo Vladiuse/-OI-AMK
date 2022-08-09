@@ -17,14 +17,15 @@ class KMALand:
         self.language = self._language()
         self.country_list = self._country_list()
 
+
     def _find_kma_back_data(self) -> str:
         """Ищет и возвражает тело скрипта с переменными для лэндинга"""
-        soup = BeautifulSoup(self.land_text, 'lxml')
+        soup = BeautifulSoup(self.land_text, 'html5')
         scripts = soup.find_all('script')
         kma_script = ''
         for s in scripts:
-            if s.text.startswith('tmp_data_to_server'):
-                kma_script = s.text
+            if 'country_list' in str(s):
+                kma_script = str(s)
                 break
         return kma_script
 
@@ -45,7 +46,7 @@ class KMALand:
     def _country_list(self) -> dict:
         """Поиск в js коде переменной country_list - возвращает ее значение"""
         start = self.__kma_script.find('country_list=') + len('country_list=')
-        end = self.__kma_script.find(';json_quer')
+        end = self.__kma_script.find('}};') + 2
         var = self.__kma_script[start:end]
         country_list = json.loads(var)
         dic = dict()
@@ -57,7 +58,7 @@ class KMALand:
     def discount_type(self):
         """Получить тип скидки"""
         discount = self.country_list[self.country]['discount']
-        if int(discount) < 50:
+        if int(discount) >= 50:
             return 'low_price'
         else:
             return 'full_price'

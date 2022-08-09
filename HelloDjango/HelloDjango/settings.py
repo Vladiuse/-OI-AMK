@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     # extensions
     'django_extensions',
     'ordered_model',
+    'qr_code',
 ]
 
 MIDDLEWARE = [

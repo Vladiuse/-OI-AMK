@@ -31,6 +31,7 @@ def find_word_template_in_text(word_template, text):
 
 
 class TextAnaliz:
+    """Класс анализа кода страницы после отрисовки"""
 
     def __init__(self, land_text, data):
         self.land_text = land_text
@@ -124,7 +125,7 @@ class TextAnaliz:
                 date = date[1:]
             clean_dates.append(date)
         clean_dates = list(set(clean_dates))
-        clean_dates = TextAnaliz.sort_dates(clean_dates)
+        # clean_dates = TextAnaliz.sort_dates(clean_dates)
         self.result.update({'dates_on_land': clean_dates})
 
     def find_geo_words(self):

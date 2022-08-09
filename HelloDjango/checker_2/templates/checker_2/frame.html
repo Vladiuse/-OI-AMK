@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkChecker v2.0</title>
+  <title>{{checker.dom.title}}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -50,7 +50,7 @@
                 <div class="topbar__btn" onclick="setDevice('phone')" >Phone</div>
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn">button</div>
+                <div class="topbar__btn"><a href="{{checker.kma.url}}" target="_blank" id="original-link">Original</a></div>
                 <div class="topbar__btn">button</div>
                 <div class="topbar__btn">button</div>
               </div>
@@ -70,6 +70,9 @@
               <div class="leftbar__tool-items">
                 <div class="leftbar__tool-item">
                   <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Click Elem</div>
+                </div>
+                <div class="leftbar__tool-item">
+                  <div class="leftbar__tool-btn" onclick="runFuncIframe('fincCursorPointElem')">Cursor</div>
                 </div>
                 <div class="leftbar__tool-item">
                   <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">Forms</div>
@@ -100,21 +103,32 @@
             <div class="navigation">
               <div class="navigation__inner">
                 <div id="checker-data">
+                  <div id="img-doubles">
+                    {% for img in checker.dom.img_doubles %}
+                  <img data-oi-img="{{img.hash}}" src="{{img.src}}">
+                  {%endfor%}
+                  </div>
+                  <div class="container-toolbar" id="analize-load">
+                      <div class="lds-ring" id="load-ring"><div></div><div></div><div></div><div></div></div>
+                  </div>
+                  <div id="text-info">
 
+
+                  </div>
                 </div>
                 <div id="check_list">
                   <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
                   <div class="list-group">            
-                  {%for name, sub_list in checker_list.items %}
+                  {%for block in checker.check_list %}
                   <div class="group-id-{{ forloop.counter }}">
                     <label class="list-group-item d-flex justify-content-between">
-                      <b>{{name}}</b>
+                      <b>{{block.name}}</b>
                       <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
                     </label>
-                    {%for sub in sub_list%}
-                      <label class="list-group-item sub">
+                    {%for sub in block.subs %}
+                      <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
                           <input class="form-check-input me-1 " type="checkbox" value="">
-                          {{sub}}
+                          {{sub.text}}
                       </label>
                     {%endfor%}
                   </div>
@@ -123,8 +137,8 @@
               </div>
               </div>
             </div>
-            <div class="for-frame">
-              <iframe srcdoc="{{land|safe}}" id="iframe"></iframe>
+            <div class="frame-wrapper">
+              <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
             </div>
             
           </div>
@@ -209,12 +223,27 @@
 
     function loadBackAnalize(land_code){
       // Загрузда данных анализа текста API
+      $('#text-info').empty()
+      $('#analize-load').show()
         let url = currentUrl + '/checker_2/analiz_land_text/'
         data = {'land_text': land_code}
         $.post(url, data, function(response){
-            console.log(response, 'RESPONSE ANALIZE')
+            console.log(response, 'RESPONSE ANALIZE1', response['success'])
             if (response['success']){
-                let some = 1;
+                $('#analize-load').hide()
+                offers = response.result['offers']
+                putDataFromAnalize('Офферы:', offers)
+                currs = response.result['currencys']
+                putDataFromAnalize('Валюты:', currs)
+                dates = response.result['dates_on_land']
+                putDataFromAnalize('Даты:', dates)
+                phone_codes = response.result['phone_codes']
+                putDataFromAnalize('Моб коды:', phone_codes)
+                geo_words = response.result['geo_words_templates']
+                putDataFromAnalize('Слова:', geo_words)
+                scripts_on_land = response.result['scripts']
+                console.log('End')
+                fixListHeight()
 
             } else {
                 console.error('Ошибка загрузки анализатора')
@@ -223,12 +252,35 @@
         })
     }
 
+    function putDataFromAnalize(desc,data){
+      $('#text-info').append(`<br>`)
+      $('#text-info').append(`<p>${desc}</p>`)
+      for (id in data){
+        let value = data[id]
+        $('#text-info').append(`<span>${value}</span>`)
+      }
+    }
+
+    // При клике на найденые дубли картинок
+    $('#img-doubles img').click(function(){
+      runFuncIframe('showImages')
+      iframe.contentWindow.doubleImgScroll($(this).attr('data-oi-img'))
+    })
+
 </script>
 <script>
+  fixListHeight()
   // для чеклиста
   $('#clear-check-list').click(function(){
       $('.check_list input').prop('checked', false);
   })
+  function fixListHeight(){
+    // Подогнать высоту чеклиста
+    let chekListWidth = $('#iframe').height() - $('#checker-data').height()
+    console.log(chekListWidth, 'chekListWidth')
+  $('#check_list').height(chekListWidth + 'px')
+  }
+  
   // Снять\Поставить все гагли в чеклисте
   $('a.clear-group').click(function(e){
       e.preventDefault()

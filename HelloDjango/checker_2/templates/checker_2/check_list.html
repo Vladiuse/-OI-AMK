@@ -1,0 +1,28 @@
+{% load qr_code %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>{{test|safe}}</h1>
+<h1>CList</h1>
+{{check_list}}
+{%for block in check_list%}
+<h5>{{block.name}}</h5>
+    <ul>
+    {%for sub in block.subs%}
+        {%if sub.is_notice%}
+        <li><b>{{sub.text}}</b></li>
+        {%else%}
+                <li>{{sub.text}}</li>
+        {%endif%}
+    {%endfor%}
+        </ul>
+{%endfor%}
+{% qr_from_data url options=my_options %}
+
+
+</body>
+</html>
