@@ -62,90 +62,93 @@
 
     <main class="main">
 
-      <div class="leftbar">
-        <div class="container-fluid">
-          <div class="leftbar__inner">
+      <div class="main__inner">
 
-            <div class="leftbar__tool">
-              <div class="leftbar__tool-items">
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Click Elem</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('fincCursorPointElem')">Cursor</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">Forms</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('showPrices')">Prices</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('showDates')">Dates</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('showImages')">Img</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">Reset</div>
-                </div>
-              </div>  
-              <div class="leftbar__tool-items leftbar__tool-bottom">
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn">button</div>
-                </div>
-                <div class="leftbar__tool-item">
-                  <div class="leftbar__tool-btn">button</div>
-                </div>
+        <div class="leftbar">
+          <div class="container-fluid">
+            <div class="leftbar__inner">
+  
+              <div class="leftbar__tool">
+                <div class="leftbar__tool-items">
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Click Elem</div>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('fincCursorPointElem')">Cursor</div>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">Forms</div>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showPrices')">Prices</div>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showDates')">Dates</div>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showImages')">Img</div>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">Reset</div>
+                  </div>
+                </div>  
               </div>
-            </div>
-
-            <div class="navigation">
-              <div class="navigation__inner">
-                <div id="checker-data">
-                  <div id="img-doubles">
-                    {% for img in checker.dom.img_doubles %}
-                  <img data-oi-img="{{img.hash}}" src="{{img.src}}">
-                  {%endfor%}
-                  </div>
-                  <div class="container-toolbar" id="analize-load">
-                      <div class="lds-ring" id="load-ring"><div></div><div></div><div></div><div></div></div>
-                  </div>
-                  <div id="text-info">
-
-
-                  </div>
-                </div>
-                <div id="check_list">
-                  <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
-                  <div class="list-group">            
-                  {%for block in checker.check_list %}
-                  <div class="group-id-{{ forloop.counter }}">
-                    <label class="list-group-item d-flex justify-content-between">
-                      <b>{{block.name}}</b>
-                      <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
-                    </label>
-                    {%for sub in block.subs %}
-                      <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
-                          <input class="form-check-input me-1 " type="checkbox" value="">
-                          {{sub.text}}
-                      </label>
+  
+              <div class="navigation">
+                <div class="navigation__inner">
+                  <div id="checker-data">
+                    <div id="img-doubles">
+                      {% for img in checker.dom.img_doubles %}
+                    <img data-oi-img="{{img.hash}}" src="{{img.src}}">
                     {%endfor%}
+                    </div>
+                    <div class="container-toolbar" id="analize-load">
+                        <div class="lds-ring" id="load-ring"><div></div><div></div><div></div><div></div></div>
+                    </div>
+                    <div id="text-info">
+                    </div>
                   </div>
-                  {%endfor%}
-                  </div>
+                  <div id="check_list">
+                    <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
+  
+                    <div class="list-group">            
+                    {%for block in checker.check_list %}
+                    <div class="group-id-{{ forloop.counter }}">
+  
+                      <label class="list-group__items tab">
+                        <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
+                        <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
+                        
+                        <div class="list-group-item__row tab-content">
+                          <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
+                          {%for sub in block.subs %}
+                          <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
+                              <input class="form-check-input me-1 " type="checkbox" value="">
+                              {{sub.text}}
+                          </label>
+                        {%endfor%}
+                        </div>
+  
+                      </label>
+                      
+                    </div>
+                    {%endfor%}
+                    </div>
+                </div>
+                </div>
               </div>
-              </div>
+  
             </div>
-            <div class="frame-wrapper">
-              <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
-            </div>
-            
           </div>
-         
-          
         </div>
+  
+        <div class="frame-wrapper">
+          <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
+        </div>
+
       </div>
+
+      
   
     </main>
 
@@ -274,12 +277,12 @@
   $('#clear-check-list').click(function(){
       $('.check_list input').prop('checked', false);
   })
-  function fixListHeight(){
+/*   function fixListHeight(){
     // Подогнать высоту чеклиста
     let chekListWidth = $('#iframe').height() - $('#checker-data').height()
     console.log(chekListWidth, 'chekListWidth')
   $('#check_list').height(chekListWidth + 'px')
-  }
+  } */
   
   // Снять\Поставить все гагли в чеклисте
   $('a.clear-group').click(function(e){
