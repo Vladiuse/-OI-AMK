@@ -159,20 +159,22 @@ body {
 /* ------------------------------- */
 .tab__input,
 .tab-content {
-  display: none;
+/* display: none; */
+  display: block;
 }
 
 .tab-title::after {
-  content: '+';
+  content: '-';
   float: right;
 }
 
 .tab :checked+.tab-title::after {
-  content: '-';
+  content: '+';
 }
 
 .tab :checked~.tab-content {
-  display: block;
+/* display: block; */
+  display: none;
 }
 
 
