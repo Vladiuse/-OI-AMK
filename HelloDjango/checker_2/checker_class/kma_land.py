@@ -58,7 +58,7 @@ class KMALand:
     def discount_type(self):
         """Получить тип скидки"""
         discount = self.country_list[self.country]['discount']
-        if int(discount) >= 50:
+        if int(discount) > 50:
             return 'low_price'
         else:
             return 'full_price'

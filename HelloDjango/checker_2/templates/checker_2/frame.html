@@ -290,12 +290,16 @@
     $('#clear-check-list').click(function () {
       $('.check_list input').prop('checked', false);
     })
-    /*   function fixListHeight(){
+
+    $('.list-group').click(function(){
+      fixListHeight()
+    })
+      function fixListHeight(){
         // Подогнать высоту чеклиста
         let chekListWidth = $('#iframe').height() - $('#checker-data').height()
         console.log(chekListWidth, 'chekListWidth')
       $('#check_list').height(chekListWidth + 'px')
-      } */
+      }
 
     // Снять\Поставить все гагли в чеклисте
     $('a.clear-group').click(function (e) {
