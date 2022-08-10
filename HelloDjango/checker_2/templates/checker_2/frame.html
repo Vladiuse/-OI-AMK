@@ -1,20 +1,23 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{checker.dom.title}}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="{% static 'checker_2/css/reset.css' %}" rel="stylesheet"> 
-  <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="{% static 'checker_2/css/reset.css' %}" rel="stylesheet">
+  <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet">
   <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'root/css/flag-icon.min.css' %}" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
+
 <body>
 
   <div class="wrapper">
@@ -45,12 +48,13 @@
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn" onclick="setDevice('desctop')" >Desctop</div>
-                <div class="topbar__btn" onclick="setDevice('laptop')" >Laptop</div>
-                <div class="topbar__btn" onclick="setDevice('phone')" >Phone</div>
+                <div class="topbar__btn" onclick="setDevice('desctop')">Desctop</div>
+                <div class="topbar__btn" onclick="setDevice('laptop')">Laptop</div>
+                <div class="topbar__btn" onclick="setDevice('phone')">Phone</div>
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn"><a href="{{checker.kma.url}}" target="_blank" id="original-link">Original</a></div>
+                <div class="topbar__btn"><a href="{{checker.kma.url}}" target="_blank" id="original-link">Original</a>
+                </div>
                 <div class="topbar__btn">button</div>
                 <div class="topbar__btn">button</div>
               </div>
@@ -67,7 +71,7 @@
         <div class="leftbar">
           <div class="container-fluid">
             <div class="leftbar__inner">
-  
+
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
                   <div class="leftbar__tool-item">
@@ -91,65 +95,74 @@
                   <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">Reset</div>
                   </div>
-                </div>  
+                </div>
               </div>
-  
+
               <div class="navigation">
                 <div class="navigation__inner">
+
                   <div id="checker-data">
                     <div id="img-doubles">
                       {% for img in checker.dom.img_doubles %}
-                    <img data-oi-img="{{img.hash}}" src="{{img.src}}">
-                    {%endfor%}
+                      <img data-oi-img="{{img.hash}}" src="{{img.src}}">
+                      {%endfor%}
                     </div>
                     <div class="container-toolbar" id="analize-load">
-                        <div class="lds-ring" id="load-ring"><div></div><div></div><div></div><div></div></div>
+                      <div class="lds-ring" id="load-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
                     </div>
                     <div id="text-info">
                     </div>
                   </div>
+
                   <div id="check_list">
                     <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
-  
-                    <div class="list-group">            
-                    {%for block in checker.check_list %}
-                    <div class="group-id-{{ forloop.counter }}">
-  
-                      <label class="list-group__items tab">
-                        <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
-                        <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
-                        
-                        <div class="list-group-item__row tab-content">
-                          <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}" data-group-status="1">Отметить все </a>
-                          {%for sub in block.subs %}
-                          <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
+
+                    <div class="list-group">
+                      {%for block in checker.check_list %}
+                      <div class="group-id-{{ forloop.counter }}">
+
+                        <label class="list-group__items tab">
+                          <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
+                          <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
+
+                          <div class="list-group-item__row tab-content">
+                            <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
+                              data-group-status="1">Отметить все </a>
+                            {%for sub in block.subs %}
+                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
                               <input class="form-check-input me-1 " type="checkbox" value="">
                               {{sub.text}}
-                          </label>
-                        {%endfor%}
-                        </div>
-  
-                      </label>
-                      
+                            </label>
+                            {%endfor%}
+                          </div>
+
+                        </label>
+
+                      </div>
+                      {%endfor%}
                     </div>
-                    {%endfor%}
-                    </div>
-                </div>
+                  </div>
+
                 </div>
               </div>
-  
+
             </div>
           </div>
         </div>
-  
+
         <div class="frame-wrapper">
           <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
         </div>
 
       </div>
 
-      
-  
+
+
     </main>
 
     <footer class="footer">
@@ -157,149 +170,150 @@
 
   </div>
 
-<script src="js/main.js"></script>
-<script>
-  let currentUrl = window.location.origin;
-  const full = location.protocol + '//' + location.host + '/';
-  let site = iframe.contentWindow
+  <script src="js/main.js"></script>
+  <script>
+    let currentUrl = window.location.origin;
+    const full = location.protocol + '//' + location.host + '/';
+    let site = iframe.contentWindow
 
-  let land_data_from_js = false;
-  let get_phone_code_api = false;
+    let land_data_from_js = false;
+    let get_phone_code_api = false;
 
 
 
-  iframe.onload = function() {
-    // исполнение после полной загрузки iframe
-    // iframe.contentDocument.body.prepend("Hello, world!");
-    if (land_data_from_js){loadLandParams()}
-    if (get_phone_code_api){getPhoneCode()}
+    iframe.onload = function () {
+      // исполнение после полной загрузки iframe
+      // iframe.contentDocument.body.prepend("Hello, world!");
+      if (land_data_from_js) { loadLandParams() }
+      if (get_phone_code_api) { getPhoneCode() }
 
-    land_code = $(iframe.contentDocument).find('html').html()
-    console.log(land_code.length)
-    loadBackAnalize(land_code)
+      land_code = $(iframe.contentDocument).find('html').html()
+      console.log(land_code.length)
+      loadBackAnalize(land_code)
 
     }
 
 
-  function runFuncIframe(func_name){
-    // запустить функцию в айфрейме по названию
-    let func = iframe.contentWindow[func_name]
-    func();
+    function runFuncIframe(func_name) {
+      // запустить функцию в айфрейме по названию
+      let func = iframe.contentWindow[func_name]
+      func();
 
-  }
-
-  function loadLandParams(){
-    // загрузка в тулбар данных по ценам и скидкам
-    let country = site.country // iso страны лэнда из обьекта js
-    $('#country').text(site.country)
-    $('#s1').text(site.country_list[country].s1)
-    $('#s4').text(site.country_list[country].s4)
-    $('#curr').text(site.country_list[country].curr)
-    $('#discount').text(site.country_list[country].discount)
     }
-    
-  function getPhoneCode(){
+
+    function loadLandParams() {
+      // загрузка в тулбар данных по ценам и скидкам
+      let country = site.country // iso страны лэнда из обьекта js
+      $('#country').text(site.country)
+      $('#s1').text(site.country_list[country].s1)
+      $('#s4').text(site.country_list[country].s4)
+      $('#curr').text(site.country_list[country].curr)
+      $('#discount').text(site.country_list[country].discount)
+    }
+
+    function getPhoneCode() {
       // Получить Маску телефона по стране API
-      url = currentUrl+ '/kma/get_phone_code/'
+      url = currentUrl + '/kma/get_phone_code/'
       console.log(url, 'url')
-      data = {'country_code': site.country}
-          $.get(url, data, function(response){
-              console.log(response, 'RESPONSE PHONE CODE')
-              if (response['success'] == true){
-                  $('#phone-code').text('+'+response['phone_code'])
-                  PhoneMask = '+'+response['phone_code'];
-              }
-              else{$('#phone-code').text('error'); console.error('Маска phone не загружена',response['message'])}
-          })
-  }
-
-  function setDevice(deviseType){
-    // изменение ширини сайта пож выбранный девайс
-    devicesWidth = {
-      'desctop': '100%',
-      'laptop': '1180px',
-      'phone': '375px',
+      data = { 'country_code': site.country }
+      $.get(url, data, function (response) {
+        console.log(response, 'RESPONSE PHONE CODE')
+        if (response['success'] == true) {
+          $('#phone-code').text('+' + response['phone_code'])
+          PhoneMask = '+' + response['phone_code'];
+        }
+        else { $('#phone-code').text('error'); console.error('Маска phone не загружена', response['message']) }
+      })
     }
-    let width = devicesWidth[deviseType]
-    $('#iframe').css('width', width)
-  }
 
-    function loadBackAnalize(land_code){
+    function setDevice(deviseType) {
+      // изменение ширини сайта пож выбранный девайс
+      devicesWidth = {
+        'desctop': '100%',
+        'laptop': '1180px',
+        'phone': '375px',
+      }
+      let width = devicesWidth[deviseType]
+      $('#iframe').css('width', width)
+    }
+
+    function loadBackAnalize(land_code) {
       // Загрузда данных анализа текста API
       $('#text-info').empty()
       $('#analize-load').show()
-        let url = currentUrl + '/checker_2/analiz_land_text/'
-        data = {'land_text': land_code}
-        $.post(url, data, function(response){
-            console.log(response, 'RESPONSE ANALIZE1', response['success'])
-            if (response['success']){
-                $('#analize-load').hide()
-                offers = response.result['offers']
-                putDataFromAnalize('Офферы:', offers)
-                currs = response.result['currencys']
-                putDataFromAnalize('Валюты:', currs)
-                dates = response.result['dates_on_land']
-                putDataFromAnalize('Даты:', dates)
-                phone_codes = response.result['phone_codes']
-                putDataFromAnalize('Моб коды:', phone_codes)
-                geo_words = response.result['geo_words_templates']
-                putDataFromAnalize('Слова:', geo_words)
-                scripts_on_land = response.result['scripts']
-                console.log('End')
-                fixListHeight()
+      let url = currentUrl + '/checker_2/analiz_land_text/'
+      data = { 'land_text': land_code }
+      $.post(url, data, function (response) {
+        console.log(response, 'RESPONSE ANALIZE1', response['success'])
+        if (response['success']) {
+          $('#analize-load').hide()
+          offers = response.result['offers']
+          putDataFromAnalize('Офферы:', offers)
+          currs = response.result['currencys']
+          putDataFromAnalize('Валюты:', currs)
+          dates = response.result['dates_on_land']
+          putDataFromAnalize('Даты:', dates)
+          phone_codes = response.result['phone_codes']
+          putDataFromAnalize('Моб коды:', phone_codes)
+          geo_words = response.result['geo_words_templates']
+          putDataFromAnalize('Слова:', geo_words)
+          scripts_on_land = response.result['scripts']
+          console.log('End')
+          fixListHeight()
 
-            } else {
-                console.error('Ошибка загрузки анализатора')
-            }
-            
-        })
+        } else {
+          console.error('Ошибка загрузки анализатора')
+        }
+
+      })
     }
 
-    function putDataFromAnalize(desc,data){
+    function putDataFromAnalize(desc, data) {
       $('#text-info').append(`<br>`)
       $('#text-info').append(`<p>${desc}</p>`)
-      for (id in data){
+      for (id in data) {
         let value = data[id]
         $('#text-info').append(`<span>${value}</span>`)
       }
     }
 
     // При клике на найденые дубли картинок
-    $('#img-doubles img').click(function(){
+    $('#img-doubles img').click(function () {
       runFuncIframe('showImages')
       iframe.contentWindow.doubleImgScroll($(this).attr('data-oi-img'))
     })
 
-</script>
-<script>
-  fixListHeight()
-  // для чеклиста
-  $('#clear-check-list').click(function(){
+  </script>
+  <script>
+    fixListHeight()
+    // для чеклиста
+    $('#clear-check-list').click(function () {
       $('.check_list input').prop('checked', false);
-  })
-/*   function fixListHeight(){
-    // Подогнать высоту чеклиста
-    let chekListWidth = $('#iframe').height() - $('#checker-data').height()
-    console.log(chekListWidth, 'chekListWidth')
-  $('#check_list').height(chekListWidth + 'px')
-  } */
-  
-  // Снять\Поставить все гагли в чеклисте
-  $('a.clear-group').click(function(e){
+    })
+    /*   function fixListHeight(){
+        // Подогнать высоту чеклиста
+        let chekListWidth = $('#iframe').height() - $('#checker-data').height()
+        console.log(chekListWidth, 'chekListWidth')
+      $('#check_list').height(chekListWidth + 'px')
+      } */
+
+    // Снять\Поставить все гагли в чеклисте
+    $('a.clear-group').click(function (e) {
       e.preventDefault()
       let groupId = $(this).attr('data-group-id')
-      if ($(this).attr('data-group-status') == 1){
-          $('.group-id-' + groupId + ' input').prop('checked', true);
-          $(this).attr('data-group-status', '0')
-          $(this).text('Снять все')
+      if ($(this).attr('data-group-status') == 1) {
+        $('.group-id-' + groupId + ' input').prop('checked', true);
+        $(this).attr('data-group-status', '0')
+        $(this).text('Снять все')
       } else {
-          $('.group-id-' + groupId + ' input').prop('checked', false);
-          $(this).attr('data-group-status', '1')
-          $(this).text('Отметить все')
+        $('.group-id-' + groupId + ' input').prop('checked', false);
+        $(this).attr('data-group-status', '1')
+        $(this).text('Отметить все')
       }
-      
-  })
-</script>
+
+    })
+  </script>
 
 </body>
+
 </html>

@@ -96,7 +96,10 @@ body {
   display: block;
   margin-bottom: 8px;
 }
-
+.list-group__items-title:hover{
+  cursor: pointer;
+  color: rgb(241, 185, 145);
+}
 .list-group-item {
   display: block;
   color: #212529;
@@ -331,7 +334,7 @@ body {
 }
 
 .navigation {
-  width: 320px;
+  width: 300px;
   border-right: 1px solid rgba(33, 43, 52, 1);
   border-bottom: 1px solid rgba(33, 43, 52, 1);
   background-color: rgb(63, 61, 61);
