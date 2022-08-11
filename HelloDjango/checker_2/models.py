@@ -80,13 +80,24 @@ class UserSiteCheckPoint(models.Model):
             u = UserSiteCheckPoint(check_point=check_point, user=user_model, url=url)
             new_check_list.append(u)
         new_list = UserSiteCheckPoint.objects.bulk_create(new_check_list)
-        return new_list
+        new_dic = {check_point.__dict__['check_point_id']: check_point.__dict__ for check_point in new_list}
+        return new_dic
 
     @staticmethod
     def get_user_ckecklist_dict(user_model, url):
+        """Получить чеклист пользователя для сайта"""
         all = UserSiteCheckPoint.objects.filter(user_id=user_model.id, url=url).values()
         user_dict_checklist = {check_point['check_point_id']: check_point for check_point in all}
         return user_dict_checklist
 
     # def __str__(self):
     #     return self.text
+
+
+class ActualUserList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    url = models.CharField(max_length=50)
+    date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'url']
