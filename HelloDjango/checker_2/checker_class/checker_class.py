@@ -10,7 +10,7 @@ from kma.models import PhoneNumber
 
 class UrlChecker:
 
-    def __init__(self, url):
+    def __init__(self, url, user):
         self.url = UrlChecker.format_url(url)
         self.land_source = str()
         self.page = str()
@@ -20,6 +20,7 @@ class UrlChecker:
         self.dom = DomFixxer
         self.kma = KMALand
         self.check_list = CheckListView
+        self.user = user
 
 
 
@@ -71,6 +72,8 @@ class UrlChecker:
             discount_type=self.kma.discount_type,
             country=self.kma.country,
             lang=self.kma.language,
-            land_attrs=self.land_attrs
+            land_attrs=self.land_attrs,
+            user=self.user,
+            url=self.url
         )
         self.check_list.process()

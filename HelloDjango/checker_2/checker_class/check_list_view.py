@@ -1,13 +1,15 @@
-from checker_2.models import CheckPoint, CheckBlock
+from checker_2.models import CheckPoint, CheckBlock, UserSiteCheckPoint
 
 
 class CheckListView:
 
-    def __init__(self, *, land_type, discount_type, country, lang, land_attrs):
+    def __init__(self, *, land_type, discount_type, country, lang, land_attrs, user, url):
         self.land_type = land_type
         self.discount_type = discount_type
         self.country = country
         self.lang = lang
+        self.user = user
+        self.url = url
         self.land_attrs = land_attrs
         self.check_list = list()
 
@@ -32,6 +34,7 @@ class CheckListView:
 
     def process(self):
         all = CheckBlock.objects.prefetch_related('checkpoint_set').all()
+        # checked_list = UserSiteCheckPoint.objects.filter(user=self.user)
         for b in all:
             dic = {
                 'name': b.name,

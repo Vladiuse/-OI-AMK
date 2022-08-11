@@ -1,5 +1,6 @@
 from django.db import models
 from ordered_model.models import OrderedModel
+from django.contrib.auth.models import User
 
 # Create your models here.
 class CheckBlock(OrderedModel):
@@ -53,5 +54,36 @@ class CheckPoint(OrderedModel):
 
     def __str__(self):
         return self.text
+
+
+
+class UserSiteCheckPoint(models.Model):
+    check_point = models.ForeignKey(CheckPoint, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    url = models.CharField(max_length=50)
+    is_checked = models.BooleanField(default=False)
+
+
+    class Meta:
+        # verbose_name = 'Пункт проверки'
+        # verbose_name_plural = 'Пункты проверки'
+        ordering = ['check_point__order']
+        unique_together = ['check_point', 'user', 'url']
+
+
+    @staticmethod
+    def make_user_url_list(user_model, url):
+        """Создать чеклист проверки под конкрентый сайт и пользователя"""
+        all = CheckPoint.objects.all()
+        new_check_list = list()
+        for check_point in all:
+            u = UserSiteCheckPoint(check_point=check_point, user=user_model, url=url)
+            new_check_list.append(u)
+        new_list = UserSiteCheckPoint.objects.bulk_create(new_check_list)
+        return new_list
+
+    # def __str__(self):
+    #     return self.text
+
 
 

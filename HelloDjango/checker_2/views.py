@@ -43,7 +43,7 @@ def index(requests):
 def check_url(request):
     # получения кода для iframe
     url = request.GET['url']
-    url_checker = UrlChecker(url=url)
+    url_checker = UrlChecker(url=url, user=request.user)
     url_checker.process()
     content = {
         'checker': url_checker,
