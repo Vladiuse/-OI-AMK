@@ -2,6 +2,7 @@ from django.db import models
 from ordered_model.models import OrderedModel
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 class CheckBlock(OrderedModel):
     name = models.CharField(max_length=100, verbose_name='Название')
@@ -13,6 +14,8 @@ class CheckBlock(OrderedModel):
 
     def __str__(self):
         return self.name
+
+
 class CheckPoint(OrderedModel):
     LAND_TYPES = ('land', 'Лэндинг'), ('preland', 'Прэлендинг')
     DISCOUNT_TYPE = ('free', 'Бесплатно'), ('low_price', 'Лоу-прайс')
@@ -56,20 +59,17 @@ class CheckPoint(OrderedModel):
         return self.text
 
 
-
 class UserSiteCheckPoint(models.Model):
     check_point = models.ForeignKey(CheckPoint, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     url = models.CharField(max_length=50)
     is_checked = models.BooleanField(default=False)
 
-
     class Meta:
         # verbose_name = 'Пункт проверки'
         # verbose_name_plural = 'Пункты проверки'
         ordering = ['check_point__order']
         unique_together = ['check_point', 'user', 'url']
-
 
     @staticmethod
     def make_user_url_list(user_model, url):
@@ -82,8 +82,11 @@ class UserSiteCheckPoint(models.Model):
         new_list = UserSiteCheckPoint.objects.bulk_create(new_check_list)
         return new_list
 
+    @staticmethod
+    def get_user_ckecklist_dict(user_model, url):
+        all = UserSiteCheckPoint.objects.filter(user_id=user_model.id, url=url).values()
+        user_dict_checklist = {check_point['check_point_id']: check_point for check_point in all}
+        return user_dict_checklist
+
     # def __str__(self):
     #     return self.text
-
-
-

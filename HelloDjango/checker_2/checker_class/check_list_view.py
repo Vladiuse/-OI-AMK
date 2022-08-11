@@ -34,7 +34,7 @@ class CheckListView:
 
     def process(self):
         all = CheckBlock.objects.prefetch_related('checkpoint_set').all()
-        # checked_list = UserSiteCheckPoint.objects.filter(user=self.user)
+        user_check_list = UserSiteCheckPoint.get_user_ckecklist_dict(user_model=self.user, url=self.url)
         for b in all:
             dic = {
                 'name': b.name,
@@ -42,6 +42,8 @@ class CheckListView:
             }
             for c in b.checkpoint_set.all():
                 if self.is_need_add(c):
+                    c.is_checked = user_check_list[c.id]['is_checked']
                     dic['subs'].append(c)
+            # если блок чеклиста имеет пункты проверки - не пуст
             if dic['subs']:
                 self.check_list.append(dic)

@@ -123,7 +123,9 @@ def check_list(request):
     discount_type='full_price',
     country='th',
     lang='ru',
-    land_attrs=[ 'more_one_select']
+    land_attrs=[ 'more_one_select'],
+    user=request.user,
+    url='https://dsadsadsa.co1010',
     )
     check_list.process()
     # content = {'check_list': check_list}
