@@ -90,6 +90,17 @@ class UserSiteCheckPoint(models.Model):
         user_dict_checklist = {check_point['check_point_id']: check_point for check_point in all}
         return user_dict_checklist
 
+    @staticmethod
+    def get_list(user_model, url):
+        try:
+            ActualUserList.objects.get(user=user_model, url=url)
+            user_check_list = UserSiteCheckPoint.get_user_ckecklist_dict(user_model=user_model, url=url)
+        except ActualUserList.DoesNotExist as error:
+            new_ckeck_list_record = ActualUserList(user=user_model, url=url)
+            new_ckeck_list_record.save()
+            user_check_list = UserSiteCheckPoint.make_user_url_list(user_model=user_model, url=url)
+        return user_check_list
+
     # def __str__(self):
     #     return self.text
 

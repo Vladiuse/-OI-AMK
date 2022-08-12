@@ -125,7 +125,7 @@ def check_list(request):
     lang='ru',
     land_attrs=[ 'more_one_select'],
     user=request.user,
-    url='https://ooooo.com',
+    url='https://tttttt.com',
     )
     check_list.process()
     # content = {'check_list': check_list}
