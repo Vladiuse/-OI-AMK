@@ -125,12 +125,18 @@
                           <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
 
                           <div class="list-group-item__row tab-content">
-                            <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
-                              data-group-status="1">Отметить все </a>
+                            <!-- <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
+                              data-group-status="1">Отметить все </a> -->
                             {%for sub in block.subs %}
-                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
-                              <input class="form-check-input me-1 " type="checkbox" value="">
+                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
+                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
                               {{sub.text}}
+                              <div class="lds-ring check-list" style="display: none;">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
                             </label>
                             {%endfor%}
                           </div>
@@ -169,6 +175,8 @@
     let currentUrl = window.location.origin;
     const full = location.protocol + '//' + location.host + '/';
     let site = iframe.contentWindow
+    let csrftoken = '{{csrf_token}}' // csrfmiddlewaretoken
+    let checkedUrl = '{{checker.kma.url}}'
 
     let land_data_from_js = false;
     let get_phone_code_api = false;
@@ -285,6 +293,10 @@
     }
   </script>
   <script>
+      // открыть весь список
+      $('.tab-content').trigger('click')
+
+
     fixListHeight()
     // для чеклиста
     $('#clear-check-list').click(function () {
@@ -302,17 +314,56 @@
       }
 
     // Снять\Поставить все гагли в чеклисте
-    $('a.clear-group').click(function (e) {
-      e.preventDefault()
-      let groupId = $(this).attr('data-group-id')
-      if ($(this).attr('data-group-status') == 1) {
-        $('.group-id-' + groupId + ' input').prop('checked', true);
-        $(this).attr('data-group-status', '0')
-        $(this).text('Снять все')
-      } else {
-        $('.group-id-' + groupId + ' input').prop('checked', false);
-        $(this).attr('data-group-status', '1')
-        $(this).text('Отметить все')
+    // $('a.clear-group').click(function (e) {
+    //   e.preventDefault()
+    //   let groupId = $(this).attr('data-group-id')
+    //   if ($(this).attr('data-group-status') == 1) {
+    //     $('.group-id-' + groupId + ' input').prop('checked', true);
+    //     $(this).attr('data-group-status', '0')
+    //     $(this).text('Снять все')
+    //   } else {
+    //     $('.group-id-' + groupId + ' input').prop('checked', false);
+    //     $(this).attr('data-group-status', '1')
+    //     $(this).text('Отметить все')
+    //   }
+
+    // })
+
+
+      function sendNewCheckStatus(check_point_id, checked_url, new_status){
+      // Отпарвить новый статус у пункта проверки чеклиста
+      url = full + 'checker_2/change_status_of_user_checklist/'
+      data = {
+        'check_point_id': check_point_id,
+        'checked_url': checked_url,
+        'status': new_status,
+        'csrfmiddlewaretoken': csrftoken,
+      }
+      $.post(url, data, function(response){
+        console.log(response)
+        if (response['success'] != true){console.error('Ошибка сохранения чекпоита!')}
+        makeCkeckPointAnable(check_point_id)
+      })
+
+    }
+
+    function makeCkeckPointAnable(checkPointId){
+      let checkPoint = $('#check_list .list-group-item.sub').filter(function(){
+        if ($(this).attr('data-checkpoint-id') == checkPointId) {return true}
+      })
+      checkPoint.find('input').prop('disabled', false)
+      checkPoint.find('.lds-ring.check-list').hide()
+    }
+
+    $('#check_list .list-group-item.sub input').click(function(){
+      let check_point = $(this).parent()
+      if ($(this).attr('disabled') !='disabled'){
+        $(this).prop('disabled', true)
+        let check_point_id = check_point.attr('data-checkpoint-id')
+        let status = $(this).is(':checked')
+        check_point.find('.lds-ring.check-list').show()
+        console.log(check_point_id, status, check_point.find('.lds-ring.check-list'))
+        sendNewCheckStatus(check_point_id, checkedUrl, status)
       }
 
     })
