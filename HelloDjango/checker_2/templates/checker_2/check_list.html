@@ -228,8 +228,18 @@
       }
       $.post(url, data, function(response){
         console.log(response)
+        if (response['success'] != true){console.error('Ошибка сохранения чекпоита!')}
+        makeCkeckPointAnable(check_point_id)
       })
 
+    }
+
+    function makeCkeckPointAnable(checkPointId){
+      let checkPoint = $('#check_list .list-group-item.sub').filter(function(){
+        if ($(this).attr('data-checkpoint-id') == checkPointId) {return true}
+      })
+      checkPoint.find('input').prop('disabled', false)
+      checkPoint.find('.lds-ring.check-list').hide()
     }
 
     $('#check_list .list-group-item.sub input').click(function(){

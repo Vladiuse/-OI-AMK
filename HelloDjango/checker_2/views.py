@@ -121,7 +121,7 @@ def analiz_land_text(request):
 @login_required
 def check_list(request):
 
-    url = 'https://tttttt.com'
+    url = 'https://1111.com'
 
     check_list = CheckListView(
     land_type='pre_land',

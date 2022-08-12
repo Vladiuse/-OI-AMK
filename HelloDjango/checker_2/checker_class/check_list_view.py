@@ -34,15 +34,6 @@ class CheckListView:
 
     def process(self):
         all = CheckBlock.objects.prefetch_related('checkpoint_set').all()
-        # try:
-        #     print(ActualUserList.objects.get(user=self.user, url=self.url), 'xxxxxxxxxx')
-        #     user_check_list = UserSiteCheckPoint.get_user_ckecklist_dict(user_model=self.user, url=self.url)
-        #     print('Загружен созданый')
-        # except ActualUserList.DoesNotExist as error:
-        #     new_ckeck_list_record = ActualUserList(user=self.user, url=self.url)
-        #     new_ckeck_list_record.save()
-        #     user_check_list = UserSiteCheckPoint.make_user_url_list(user_model=self.user, url=self.url)
-        #     print('СОЗДАН НОВЫЙ!!!')
         user_check_list = UserSiteCheckPoint.get_list(user_model=self.user, url=self.url)
         for b in all:
             dic = {
