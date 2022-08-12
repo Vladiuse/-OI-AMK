@@ -12,6 +12,7 @@ from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_info import get_rekl_by_id
 from .checker_class.kma_land import KMALand
 from kma.models import OfferPosition, PhoneNumber
+from .models import UserSiteCheckPoint
 from .models import CheckBlock, CheckPoint
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
@@ -117,7 +118,11 @@ def analiz_land_text(request):
     return JsonResponse(answer, safe=False)
 
 
+@login_required
 def check_list(request):
+
+    url = 'https://tttttt.com'
+
     check_list = CheckListView(
     land_type='pre_land',
     discount_type='full_price',
@@ -125,11 +130,12 @@ def check_list(request):
     lang='ru',
     land_attrs=[ 'more_one_select'],
     user=request.user,
-    url='https://tttttt.com',
+    url=url,
     )
     check_list.process()
     # content = {'check_list': check_list}
     content = {
+        'checked_url': url,
         'check_list': check_list,
         'url': 'https://www.youtube.com/',
         'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
@@ -139,3 +145,38 @@ def check_list(request):
                                      ),
     }
     return render(request, 'checker_2/check_list.html', content)
+
+@login_required
+def change_status_of_user_checklist(request):
+    """Изменение статуса у чекпоинта списка проверки сайта"""
+    if request.method == 'POST':
+        user = request.user
+        check_point_id = request.POST['check_point_id']
+        checked_url = request.POST['checked_url']
+        status = request.POST['status']
+        print(user,check_point_id,checked_url,status)
+        if status == 'true':
+            status = True
+        else:
+            status = False
+        try:
+            check_point = UserSiteCheckPoint.objects.get(user=user, check_point_id=check_point_id, url=checked_url)
+            check_point.is_checked = status
+            check_point.save()
+            answer = {
+                'success': True,
+            }
+            return JsonResponse(answer, safe=False)
+        except UserSiteCheckPoint.DoesNotExist as error:
+            answer = {
+                'success': False,
+                'error': str(error),
+            }
+            return JsonResponse(answer, safe=False)
+    else:
+        answer = {
+            'success': False,
+            'error': 'Wrong method',
+        }
+        return JsonResponse(answer, safe=False)
+

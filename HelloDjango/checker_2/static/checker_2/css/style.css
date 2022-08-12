@@ -185,6 +185,7 @@ body {
   height: 25px;
 }
 
+
 .lds-ring div {
   box-sizing: border-box;
   display: block;
@@ -197,6 +198,19 @@ body {
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: #fff transparent transparent transparent;
 }
+
+
+.lds-ring.check-list {
+  width: 15px;
+  height: 15px;
+}
+.lds-ring.check-list div{
+  width: 15px;
+  height: 15px;
+  margin: 5px;
+}
+
+
 
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
