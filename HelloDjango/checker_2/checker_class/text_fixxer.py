@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 
 
-TOOLBAR_STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
-TOOLBAR_JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
+
 
 
 class Img:
@@ -75,86 +74,47 @@ class Img:
 class DomFixxer:
     """Изменение верстки сайта"""
 
-    def __init__(self, soup, url):
-        self.soup = soup
-        self.url = url
-        self.base_tag_url = ''
-        self.title = ''
-        self.styles = None
-        self.script = None
-        self.img_doubles = list()
-
-
-    def process(self):
-        self.add_base_tag()
-        self.get_title()
-        self.load_files()
-        self.find_double_img()
-
-        self.add_css()
-        self.add_js()
-
-    def load_files(self):
-        with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
-            self.styles = file.read()
-        with open(TOOLBAR_JS_FILE, encoding='utf-8') as file:
-            script = file.read()
-            self.script = script
-
-
-    def add_css(self):
+    @staticmethod
+    def add_css(soup, css_text):
         """Добавить стили на сайт"""
-        styles_tag = self.soup.new_tag('style')
-        styles_tag.string = self.styles
-        self.soup.html.body.append(styles_tag)
+        styles_tag = soup.new_tag('style')
+        styles_tag.string = css_text
+        soup.html.body.append(styles_tag)
 
-    def add_js(self):
+    @staticmethod
+    def add_js(soup, js_text):
         """Добавить скрипт на сайт"""
-        script_tag = self.soup.new_tag("script")
-        script_tag.string = self.script
-        self.soup.html.body.append(script_tag)
+        script_tag = soup.new_tag("script")
+        script_tag.string = js_text
+        soup.html.body.append(script_tag)
 
-    def find_double_img(self):
+    @staticmethod
+    def find_double_img(soup, base_url='') -> list:
         """Поиск на сайте дублей картинок и добавление к ним соответствующих атрибутов"""
-        imgs_tags = self.soup.find_all('img')
+        img_doubles = list()
+        imgs_tags = soup.find_all('img')
         Img.reset()
         imgs = [Img(img) for img in imgs_tags]
         [img.process() for img in imgs]
         [img.set_img_as_double() for img in imgs]
         for hash, src in Img.IMG_SRC_DOUBLES.items():
-            if not src.startswith('https'):
-                src = self.base_tag_url + src
+            if not src.startswith('http'):
+                src = base_url + src
             dic = {
-
                 'hash': hash,
                 'src': src,
             }
-            self.img_doubles.append(dic)
+            img_doubles.append(dic)
+        return img_doubles
 
-
-    def add_base_tag(self):
-        url = self.url
-        if '?' in self.url:
-            url = self.url.split('?')[0]
-        if not url.endswith('/'):
-            url += '/'
-        self.base_tag_url = url
-        base = self.soup.find('base')
+    @staticmethod
+    def add_base_tag(soup, url):
+        base = soup.find('base')
         if not base:
-            new_base = self.soup.new_tag('base')
+            new_base = soup.new_tag('base')
             new_base['href'] = url
-            self.soup.html.head.insert(0, new_base)
+            soup.html.head.insert(0, new_base)
         else:
             base['href'] = url
 
-
-    def get_title(self):
-        """найти title сайта"""
-        title = self.soup.find('title')
-        self.title = title.text
-
-    def is_video_on_site(self):
-        """Есть ли на сайте тэг video"""
-        if self.soup.find_all('video'):
-            return True
 

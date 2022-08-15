@@ -41,17 +41,17 @@ class TextAnaliz:
         self.soup = BeautifulSoup(self.land_text, 'lxml')
         self.clean_land_text = self.soup.text
 
-    def add_placeholders_text(self):
-        inputs = self.soup.find_all('input')
-        placeholders_text = ['']
-        for inpt in inputs:
-            try:
-                placeholder = inpt['placeholder']
-                placeholders_text.append(placeholder)
-            except KeyError:
-                pass
-        placeholders_text = ' '.join(placeholders_text)
-        self.clean_land_text += placeholders_text
+    # def add_placeholders_text(self):
+    #     inputs = self.soup.find_all('input')
+    #     placeholders_text = ['']
+    #     for inpt in inputs:
+    #         try:
+    #             placeholder = inpt['placeholder']
+    #             placeholders_text.append(placeholder)
+    #         except KeyError:
+    #             pass
+    #     placeholders_text = ' '.join(placeholders_text)
+    #     self.clean_land_text += placeholders_text
 
 
     def process(self):
@@ -68,14 +68,14 @@ class TextAnaliz:
         self.find_scripts()
         # print(self.result)
 
-    def drop_some_tags(self):
-        """Убрать элементы тулбара и полиси"""
-        ids = ['oi-toolbar', 'test-block', 'polit', 'agreement']
-        for id in ids:
-            print(id, id in str(self.soup))
-            elem = self.soup.find(id=id)
-            if elem:
-                elem.decompose()
+    # def drop_some_tags(self):
+    #     """Убрать элементы тулбара и полиси"""
+    #     ids = ['oi-toolbar', 'test-block', 'polit', 'agreement']
+    #     for id in ids:
+    #         print(id, id in str(self.soup))
+    #         elem = self.soup.find(id=id)
+    #         if elem:
+    #             elem.decompose()
             
 
             #         // send_text.find('#oi-toolbar').remove()
@@ -140,52 +140,44 @@ class TextAnaliz:
         # pprint(result)
         self.result.update({'geo_words': result})
 
-    def find_scripts(self):
-        # yaMetrika = 'yametrica'
-        # to_find = [
-        #     {'name': someKMA, 'find': 'duhost'},
-        #      {'name': yaMetrika, 'find': 'https://mc.yandex.ru/metrika'},
-        #      ]
-        soup = BeautifulSoup(self.land_text, 'lxml')
-        scripts = soup.find_all('script')
-        scripts_block = '' 
-        for script in scripts: 
-            scripts_block += str(script)
-        socialFish = TextAnaliz.find_social(scripts_block)
-        yam = TextAnaliz.find_yam(scripts_block)
-        result = {
-            'socialFish': socialFish,
-            'yam': yam,
-        }
-
-        # for i in to_find:
-        #     if i['find'] in scripts_block:
-        #         result[i['name']] = True
-        self.result.update({
-            'scripts': result,
-        })
-    @staticmethod
-    def find_yam(scripts_blocks):
-        yam_link= 'https://mc.yandex.ru/metrika'
-        yam_id = ';ym('
-        if yam_link in scripts_blocks:
-            pos = scripts_blocks.find(yam_id)
-            if pos != -1:
-                yam_id = scripts_blocks[pos+ 4:pos+12]
-                return yam_id
-            else:
-                return 'not found'
-        else:
-            return False
-
-
-    @staticmethod
-    def find_social(scripts_blocks):
-        socialFish = 'duhost'
-        if socialFish in scripts_blocks:
-            return True
-        else:
-            return False
+    # def find_scripts(self):
+    #     soup = BeautifulSoup(self.land_text, 'lxml')
+    #     scripts = soup.find_all('script')
+    #     scripts_block = ''
+    #     for script in scripts:
+    #         scripts_block += str(script)
+    #     socialFish = TextAnaliz.find_social(scripts_block)
+    #     yam = TextAnaliz.find_yam(scripts_block)
+    #     result = {
+    #         'socialFish': socialFish,
+    #         'yam': yam,
+    #     }
+    #
+    #     self.result.update({
+    #         'scripts': result,
+    #     })
+    # @staticmethod
+    # def find_yam(scripts_blocks):
+    #     yam_link= 'https://mc.yandex.ru/metrika'
+    #     yam_id = ';ym('
+    #     if yam_link in scripts_blocks:
+    #         pos = scripts_blocks.find(yam_id)
+    #         if pos != -1:
+    #             yam_id = scripts_blocks[pos+ 4:pos+12]
+    #             return yam_id
+    #         else:
+    #             return 'not found'
+    #     else:
+    #         return False
+    #
+    #
+    # @staticmethod
+    # def find_social(scripts_blocks):
+    #     socialFish = 'duhost'
+    #     if socialFish in scripts_blocks:
+    #         return True
+    #     else:
+    #         return False
 
 
     def find_geo_templates_words(self):
