@@ -3,6 +3,23 @@ import re
 import json
 import requests as req
 
+class Land:
+
+    def __init__(self, source_text, url,*, parser='html5lib'):
+        self.source_text = source_text
+        self.url = url
+        self.soup = BeautifulSoup(self.source_text, parser)
+
+    def get_title(self):
+        """найти title сайта"""
+        title = self.soup.find('title')
+        self.title = title.text
+
+    def is_video_tag_on_site(self):
+        """Есть ли на сайте тэг video"""
+        if self.soup.find_all('video'):
+            return True
+
 
 class KMALand:
     """Сайт KMA"""
