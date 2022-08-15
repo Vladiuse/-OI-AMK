@@ -12,11 +12,11 @@ class UrlChecker:
 
     def __init__(self, source_text, url, user):
         self.land = KMALand(source_text, url, escape_chars=True)
-        self.check_list = CheckListView
+        self.check_list = CheckListView(land=self.land, user=user)
         self.user = user
 
     def process(self):
-        pass
+        self.check_list.process()
         # self.kma.phone_code = PhoneNumber.get_phone_code_by_country(self.land.country)
 
 

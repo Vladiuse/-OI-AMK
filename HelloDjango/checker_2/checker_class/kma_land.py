@@ -30,11 +30,12 @@ class Land:
         for script in self.soup.find_all('script'):
             yield str(script)
 
-
     @staticmethod
     def re_escape_html_chars(html_text):
         print('START RE', len(html_text))
-        chars = [('&nbsp;', ' '), ('&quot;', '"'), ('&apos;', "'"), ('&&', '@@'), ('&', '&amp;&amp;'), ('@@', '&&')]
+        chars = [('&#8211;', '-'), ('&#8220;', '“'), ('&#8221;', '”'), ('&#39;', "'"), ('&nbsp;', ' '), ('&quot;', '"'),
+                 ('&apos;', "'"),
+                 ('&&', '@@'), ('&', '&amp;&amp;'), ('@@', '&&')]
         for char, chat_to in chars:
             html_text = html_text.replace(char, chat_to)
         print('START RE', len(html_text))
@@ -42,7 +43,9 @@ class Land:
 
     @staticmethod
     def escape_html_for_iframe(html_text):
-        chars = [('&', '&amp;&amp;'), ('"', '&quot;'), ("'", '&apos;')]
+        chars = [
+            # ('&', '&amp;&amp;'),
+                 ('"', '&quot;'), ("'", '&apos;')]
         for char, chat_to in chars:
             html_text = html_text.replace(char, chat_to)
         return html_text
@@ -183,8 +186,6 @@ class KMALand(Land):
         html_code = str(self.soup)
         html_code = self.escape_html_for_iframe(html_code)
         return html_code
-
-
 
     @staticmethod
     def find_social(scripts_blocks):
