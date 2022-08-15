@@ -62,7 +62,7 @@ class CheckPoint(OrderedModel):
 class UserSiteCheckPoint(models.Model):
     check_point = models.ForeignKey(CheckPoint, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    url = models.CharField(max_length=50)
+    url = models.CharField(max_length=70)
     is_checked = models.BooleanField(default=False)
 
     class Meta:
@@ -107,7 +107,7 @@ class UserSiteCheckPoint(models.Model):
 
 class ActualUserList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    url = models.CharField(max_length=50)
+    url = models.CharField(max_length=70)
     date = models.DateField(auto_now_add=True)
 
     class Meta:

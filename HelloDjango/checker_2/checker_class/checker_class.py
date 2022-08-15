@@ -47,6 +47,7 @@ class UrlChecker:
     def process(self):
         self.kma = self.kma(self.url, self.land_source)
         self.kma.phone_code = PhoneNumber.get_phone_code_by_country(self.kma.country)
+        self.land_source = self.land_source.replace('&#39;', "'")
         self.land_source = self.land_source.replace('&nbsp;', ' ')
         self.land_source = self.land_source.replace('&quot;', '"')
         self.land_source = self.land_source.replace('&apos;', "'")
