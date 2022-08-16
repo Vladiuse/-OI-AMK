@@ -52,6 +52,13 @@ body {
   display: inline-block;
   margin-right: 6px;
 }
+#scripts-img{
+display: flex;
+}
+#scripts-img img{
+width: 20px;
+margin: 0 5px;
+}
 
 /* -----------Check List (from bs)----------- */
 #check_list{
@@ -278,7 +285,7 @@ body {
 
 .topbar__btn {
   cursor: pointer;
-  min-width: 60px;
+  min-width: 30px;
   margin-left: 5px;
   display: inline-block;
   font-family: arial, sans-serif;
@@ -313,7 +320,7 @@ body {
   pointer-events: none;
 }
 
-#original-link {
+#original-link .topbar__btn{
   color: rgb(142, 194, 236);
   font-weight: bold;
   text-decoration: underline;

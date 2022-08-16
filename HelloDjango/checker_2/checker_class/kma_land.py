@@ -15,13 +15,17 @@ class Land:
         self.human_text = None
         self.img_doubles = None
 
+    def get_no_protocol_url(self):
+        return self.url.replace('http://', '')
+
     def _get_title(self):
         """найти title сайта"""
         title = self.soup.find('title')
-        return title
+        return title.text
 
     def _is_video_tag_on_site(self):
         """Есть ли на сайте тэг video"""
+        print(self.soup.find_all('video'))
         if self.soup.find_all('video'):
             return True
 
@@ -32,20 +36,18 @@ class Land:
 
     @staticmethod
     def re_escape_html_chars(html_text):
-        print('START RE', len(html_text))
         chars = [('&#8211;', '-'), ('&#8220;', '“'), ('&#8221;', '”'), ('&#39;', "'"), ('&nbsp;', ' '), ('&quot;', '"'),
                  ('&apos;', "'"),
                  ('&&', '@@'), ('&', '&amp;&amp;'), ('@@', '&&')]
         for char, chat_to in chars:
             html_text = html_text.replace(char, chat_to)
-        print('START RE', len(html_text))
         return html_text
 
     @staticmethod
     def escape_html_for_iframe(html_text):
         chars = [
             # ('&', '&amp;&amp;'),
-                 ('"', '&quot;'), ("'", '&apos;')]
+            ('"', '&quot;'), ("'", '&apos;')]
         for char, chat_to in chars:
             html_text = html_text.replace(char, chat_to)
         return html_text
@@ -79,7 +81,7 @@ class Land:
                 elem.decompose()
 
     def get_human_land_text(self):
-        clean_land_text = self.source_text.text
+        clean_land_text = self.soup.text
         clean_land_text += ' ' + self.title
         inputs = self.soup.find_all('input')
         placeholders_text = ['']
@@ -97,25 +99,18 @@ class Land:
     def title(self):
         return self._get_title()
 
-    @staticmethod
-    def find_yam(scripts_blocks):
+    def is_yam_script(self):
         yam_link = 'https://mc.yandex.ru/metrika'
-        yam_id = ';ym('
-        if yam_link in scripts_blocks:
-            pos = scripts_blocks.find(yam_id)
-            if pos != -1:
-                yam_id = scripts_blocks[pos + 4:pos + 12]
-                return yam_id
-            else:
-                return 'not found'
-        else:
-            return False
+        for script in self.scripts:
+            if yam_link in script:
+                return True
 
 
 class KMALand(Land):
     """Сайт KMA"""
     PRE_LAND_DOMAINS = ['blog-feed.org']
     LAND_ADMIN_UTM = 'ufl'
+    POLICY_IDS = ['polit', 'agreement']
     STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
     JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
 
@@ -126,6 +121,16 @@ class KMALand(Land):
         self.language = self._language()
         self.country_list = self._country_list()
         self.land_attrs = list()
+
+    def get_clean_url(self):
+        url = super().get_no_protocol_url()
+        for domain in KMALand.PRE_LAND_DOMAINS:
+            url = url.replace(domain, '')
+        if url.startswith('/'):
+            url = url[1:]
+        if url.endswith('/'):
+            url = url[:-1]
+        return url
 
     @staticmethod
     def format_url(url):
@@ -138,7 +143,10 @@ class KMALand(Land):
         # soup = BeautifulSoup(self.source_text, 'html5')
         # scripts = soup.find_all('script')
         for script in self.scripts:
+            # print(script)
+            # print('country_list' in script)
             if 'country_list' in script:
+
                 return script
 
     def _country(self) -> str:
@@ -173,6 +181,8 @@ class KMALand(Land):
         if len(self.country_list) > 1:
             self.land_attrs.append('more_one_select')
 
+    def process(self):
+        self.find_n_mark_img_doubles()
     @property
     def iframe_srcdoc(self):
         with open(self.STYLES_FILE, encoding='utf-8') as file:
@@ -182,18 +192,15 @@ class KMALand(Land):
             js_text = file.read()
             self.add_script_tag(js_text)
         self.add_base_tag()
-        self.find_n_mark_img_doubles()
         html_code = str(self.soup)
         html_code = self.escape_html_for_iframe(html_code)
         return html_code
 
-    @staticmethod
-    def find_social(scripts_blocks):
+    def is_social_script(self):
         socialFish = 'duhost'
-        if socialFish in scripts_blocks:
-            return True
-        else:
-            return False
+        for script in self.scripts:
+            if socialFish in script:
+                return True
 
     @property
     def discount_type(self):
@@ -240,9 +247,4 @@ class KMALand(Land):
 if __name__ == '__main__':
     url = 'https://blog-feed.org/elle-breasty/?ufl=14926'
     res = req.get(url)
-    kma = KMALand(url, res.text)
-    print(kma.s1)
-    print(kma.s2)
-    print(kma.s3)
-    print(kma.s4)
-    print(kma.discount)
+    kma = Land(res.text, url)

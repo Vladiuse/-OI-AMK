@@ -1,20 +1,14 @@
 import yaml
 import requests as req
-from bs4 import BeautifulSoup
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-
-from .checker_class.text_fixxer import DomFixxer
 from .checker_class.text_finder import TextAnaliz
-from .checker_class.kma_land import KMALand
-from .checker_class.kma_info import get_rekl_by_id
-from .checker_class.kma_land import KMALand
+from .checker_class.kma_land import KMALand, Land
 from kma.models import OfferPosition, PhoneNumber
 from .models import UserSiteCheckPoint
-from .models import CheckBlock, CheckPoint
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
 from qr_code.qrcode.utils import QRCodeOptions
@@ -86,13 +80,16 @@ def analiz_land_text(request):
             'geo_words': geo_words,
             'geo_words_templates': geo_words_templates,
         }
-        analizer = TextAnaliz(land_text=land_text, data=data)
+        land = Land(source_text=land_text,url='0', parser='lxml')
+        land.drop_tags_from_dom(KMALand.POLICY_IDS)
+        human_text = land.get_human_land_text()
+        analizer = TextAnaliz(source_text=str(land.soup.text),human_text=human_text, data=data)
         analizer.process()
         answer = {
             'success': True,
             'result': analizer.result,
         }
-    except BaseException as error:
+    except IndexError as error:
         answer = {
             'success': False,
             'error': str(error),
@@ -136,7 +133,6 @@ def change_status_of_user_checklist(request):
         check_point_id = request.POST['check_point_id']
         checked_url = request.POST['checked_url']
         status = request.POST['status']
-        print(user,check_point_id,checked_url,status)
         if status == 'true':
             status = True
         else:
