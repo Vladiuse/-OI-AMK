@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 
 
-
-
-
 class Img:
     css_tyle = ' __debug_double'
     to_find_img_attr = 'data-oi-img'
@@ -54,6 +51,9 @@ class Img:
                     self.main_src = src
             else:
                 self.main_src = self.src
+        # bad code bottom!!!
+        if self.main_src is None:
+            self.main_src = 'no_scr'
 
     def _get_src(self):
         """Получить src картинки"""
@@ -61,6 +61,8 @@ class Img:
             self.src = self.img['src']
         except KeyError:
             pass
+            # bad code bottom!!!
+            self.scr = 'no_scr'
 
     def _get_attrs_srcs(self):
         """Получить все остальные scr с других аттрибутов"""

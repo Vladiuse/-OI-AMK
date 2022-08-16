@@ -46,6 +46,15 @@
                 <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
+                <div id="scripts-img">
+                  {%if kma.is_yam_script%}
+                  <img src="{% static 'checker_2/scripts/yam.png' %}">
+                  {%endif%}
+                   {%if kma.is_social_script%}
+                  <img src="{% static 'checker_2/scripts/spy.png' %}">
+                  {%endif%}
+                </div>
+
               </div>
               <div class="topbar__item">
                 <div class="topbar__btn" onclick="setDevice('desctop')">Desctop</div>
@@ -53,8 +62,8 @@
                 <div class="topbar__btn" onclick="setDevice('phone')">Phone</div>
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn"><a href="{{kma.url}}" target="_blank" id="original-link">Original</a>
-                </div>
+                <a href="{{kma.url}}" target="_blank" id="original-link"><div class="topbar__btn">{{kma.get_clean_url}}
+                </div></a>
                 <div class="topbar__btn" onclick="iframereboot()">ReBoot</div>
                 <div class="topbar__btn">QR</div> {# qr_from_data url options=my_options #}
               </div>
@@ -97,7 +106,7 @@
 
                   <div id="checker-data">
                     <div id="img-doubles">
-                      {% for img in checker.dom.img_doubles %}
+                      {% for img in kma.img_doubles %}
                       <img data-oi-img="{{img.hash}}" src="{{img.src}}">
                       {%endfor%}
                     </div>
@@ -176,7 +185,7 @@
     const full = location.protocol + '//' + location.host + '/';
     let site = iframe.contentWindow
     let csrftoken = '{{csrf_token}}' // csrfmiddlewaretoken
-    let checkedUrl = '{{checker.kma.url}}'
+    let checkedUrl = '{{kma.url}}'
 
     let land_data_from_js = false;
     let get_phone_code_api = false;
