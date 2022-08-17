@@ -15,10 +15,24 @@
   <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet">
   <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'root/css/flag-icon.min.css' %}" rel="stylesheet">
+  <!--ICONS-->
+  <script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
+    <!--TO - CLONE-->
+  <div id="text-analiz" style="display: none;">
+    <div class="info-block info">
+      <i class="fa-solid fa-circle-chevron-down"></i>
+  </div>
+  <div class="info-block warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+  </div>
+  <div class="info-block error">
+      <i class="fa-solid fa-circle-exclamation"></i>
+  </div>
+</div>
 
   <div class="wrapper">
 
@@ -34,11 +48,11 @@
             </div>
             <div class="topbar__items">
               <div class="topbar__item">
-                <div class="topbar__btn" id="country">{{kma.country}}
+                <div class="topbar__btn" id="country">{{kma.country|upper}}
                   <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
                 {% if kma.country != kma.language %}
-                <div class="topbar__btn" id="language">lang: {{kma.language}}
+                <div class="topbar__btn" id="language">lang: {{kma.language|upper}}
                   <span class="flag-icon flag-icon-{{kma.language}}"></span>
                 </div>
                 {% endif %}
@@ -189,6 +203,7 @@
 
     let land_data_from_js = false;
     let get_phone_code_api = false;
+    let get_old_analize = false;
 
 
 
@@ -248,6 +263,34 @@
       $('#iframe').css('width', width)
     }
 
+
+    let x_data = {
+      'text': 'Some text',
+      'status': 'warning',
+      'items': ['123', '123', 'xxxx', 'xxyyyy']
+    }
+    function loadImfoItems(items){
+      console.log(items)
+      for (pos in items){
+        let item = items[pos];
+        addInfo(item)
+      }
+    }
+    function addInfo(x_data){
+      let info = $('#text-analiz .info-block.'+x_data['status']).clone()
+      let main_text = $('<p>')
+      main_text.text(x_data['text'] + ': ')
+      info.append(main_text)
+      for (pos in x_data['items']){
+        let item_text = x_data['items'][pos]
+        let item_elem = $('<p>')
+        item_elem.text(item_text)
+        info.append(item_elem)
+      }
+      $('#text-info').append(info)
+    }
+
+
     function loadBackAnalize(land_code) {
       // Загрузда данных анализа текста API
       $('#text-info').empty()
@@ -255,20 +298,26 @@
       let url = currentUrl + '/checker_2/analiz_land_text/'
       data = { 'land_text': land_code }
       $.post(url, data, function (response) {
-        console.log(response, 'RESPONSE ANALIZE1', response['success'])
+        let analiz_response = response;
+        console.log(analiz_response)
         if (response['success']) {
           $('#analize-load').hide()
-          offers = response.result['offers']
-          putDataFromAnalize('Офферы:', offers)
-          currs = response.result['currencys']
-          putDataFromAnalize('Валюты:', currs)
-          dates = response.result['dates_on_land']
-          putDataFromAnalize('Даты:', dates)
-          phone_codes = response.result['phone_codes']
-          putDataFromAnalize('Моб коды:', phone_codes)
-          geo_words = response.result['geo_words_templates']
-          putDataFromAnalize('Слова:', geo_words)
-          scripts_on_land = response.result['scripts']
+
+          if (get_old_analize){
+            offers = response.result['offers']
+            putDataFromAnalize('Офферы:', offers)
+            currs = response.result['currencys']
+            putDataFromAnalize('Валюты:', currs)
+            dates = response.result['dates_on_land']
+            putDataFromAnalize('Даты:', dates)
+            phone_codes = response.result['phone_codes']
+            putDataFromAnalize('Моб коды:', phone_codes)
+            geo_words = response.result['geo_words_templates']
+            putDataFromAnalize('Слова:', geo_words)
+            scripts_on_land = response.result['scripts']
+          }
+          
+          loadImfoItems(response['new_checker'])
           console.log('End')
           fixListHeight()
 
@@ -376,6 +425,7 @@
       }
 
     })
+
   </script>
 
 </body>

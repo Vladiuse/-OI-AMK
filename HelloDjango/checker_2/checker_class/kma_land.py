@@ -25,7 +25,6 @@ class Land:
 
     def _is_video_tag_on_site(self):
         """Есть ли на сайте тэг video"""
-        print(self.soup.find_all('video'))
         if self.soup.find_all('video'):
             return True
 

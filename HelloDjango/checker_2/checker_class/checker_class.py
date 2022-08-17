@@ -1,10 +1,10 @@
 import requests as req
 from bs4 import BeautifulSoup
-from .kma_land import KMALand
+from .kma_land import KMALand, Land
 from .text_fixxer import DomFixxer
+from .text_finder import TextAnaliz
 from .check_list_view import CheckListView
-from .check_list_view import CheckListView
-from kma.models import PhoneNumber
+from kma.models import PhoneNumber, OfferPosition
 
 
 class Check:
@@ -13,6 +13,7 @@ class Check:
 
     WARNING = 'warning'
     ERROR = 'error'
+    INFO = 'info'
 
     STATUS_SET = {}
 
@@ -21,10 +22,19 @@ class Check:
         self.text_finder_result = text_finder_result
         self.errors = set()
         self.info = set()
-        self.result = dict()
+        self.messages = list()
 
     def process(self):
         pass
+
+    def add_mess(self, message_text, *args):
+        message = {
+            'text': message_text,
+            'status': self.STATUS_SET[message_text],
+            'items': args,
+        }
+        self.messages.append(message)
+
 
 class PhoneCountryMask(Check):
     DESCRIPTION = 'Поиск моб кодов стран'
@@ -39,13 +49,14 @@ class PhoneCountryMask(Check):
     }
 
     def process(self):
-        phome_codes_on_land = self.text_finder_result['phone_codes']
-        country_phone_code = '+'+self.land.phone_code
-        for code in phome_codes_on_land:
+        phone_codes_on_land = self.text_finder_result['phone_codes']
+        country_phone_code = '+' + self.land.phone_code
+        for code in phone_codes_on_land:
             if code == country_phone_code:
-                self.info.add(self.MASK_ON_LAND)
+                self.add_mess(self.MASK_ON_LAND, code)
             else:
-                self.info.add(self.INCORECT_MASK_ON_LAND)
+                self.add_mess(self.INCORECT_MASK_ON_LAND, code)
+
 
 class Currency(Check):
     DESCRIPTION = 'Поиск валют по тексту'
@@ -53,39 +64,78 @@ class Currency(Check):
 
     NO_CURRENCIES = 'Валюты не найдены'
     MORE_ONE_CURRENCIES = 'Найдена валюта другой страны'
+    ONE_CURR_FOUND = 'Найденая валюта'
 
     STATUS_SET = {
-        NO_CURRENCIES : Check.WARNING,
+        NO_CURRENCIES: Check.WARNING,
         MORE_ONE_CURRENCIES: Check.ERROR,
+        ONE_CURR_FOUND: Check.INFO,
     }
 
     def process(self):
-        currency = self.land.curr
+        currency = self.land.curr.lower()
         currencies_on_land = self.text_finder_result['currencys']
         if not currencies_on_land:
-            self.info.add(self.NO_CURRENCIES)
-        for c in currencies_on_land:
-            if c != currency:
-                self.info.add(self.MORE_ONE_CURRENCIES)
+            self.add_mess(self.NO_CURRENCIES)
+        for curr in currencies_on_land:
+            if curr != currency:
+                self.add_mess(self.MORE_ONE_CURRENCIES, curr)
+
+
 class OffersInLand(Check):
     DESCRIPTION = 'Поиск офферов по тексту'
     KEY_NAME = 'offers_on_land'
 
     NO_OFFER_FIND = 'Не найден не один оффер'
     MORE_ONE_OFFER_FOUND = 'Найдено больше одного оффера'
+    ONE_OFFER_FOUND = 'Оффер'
 
     STATUS_SET = {
         NO_OFFER_FIND: Check.WARNING,
         MORE_ONE_OFFER_FOUND: Check.ERROR,
+        ONE_OFFER_FOUND: Check.INFO
     }
-
 
     def process(self):
         offers_in_land = self.text_finder_result['offers']
         if not offers_in_land:
-            self.info.add(self.NO_OFFER_FIND)
+            self.add_mess(self.NO_OFFER_FIND)
         if len(offers_in_land) > 1:
-            self.info.add(self.MORE_ONE_OFFER_FOUND)
+            self.add_mess(self.MORE_ONE_OFFER_FOUND, *offers_in_land)
+        if len(offers_in_land) == 1:
+            self.add_mess(self.ONE_OFFER_FOUND, *offers_in_land)
+
+
+class Dates(Check):
+    DESCRIPTION = 'Поиск дат по тексту'
+    KEY_NAME = 'dates_on_land'
+
+    ALL_DATES = 'Даты'
+
+    STATUS_SET = {
+        ALL_DATES: Check.INFO,
+    }
+
+    def process(self):
+        dates = self.text_finder_result['dates_on_land']
+        self.add_mess(self.ALL_DATES, *dates)
+
+
+class GeoWords(Check):
+    DESCRIPTION = 'Поиск стран по тексту'
+    KEY_NAME = 'countrys_in_land'
+
+    ALL_COUNTRYS = 'Страны'
+
+    STATUS_SET = {
+        ALL_COUNTRYS: Check.INFO,
+    }
+
+    def process(self):
+        countrys = self.text_finder_result['geo_words_templates']
+        for iso, countrys in countrys.items():
+            countrys.insert(0, iso.upper())
+            self.add_mess(self.ALL_COUNTRYS, *countrys)
 
 
 class UrlChecker:
@@ -100,3 +150,59 @@ class UrlChecker:
         self.land.process()
         self.check_list.process()
         self.land.phone_code = PhoneNumber.get_phone_code_by_country(self.land.country)
+
+    @staticmethod
+    def text_analiz(land_text):
+        data_for_text_analiz = UrlChecker.get_data_for_text_analiz()
+        land = KMALand(source_text=land_text, url='0', parser='lxml')
+        land.drop_tags_from_dom(KMALand.POLICY_IDS)
+        land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
+        human_text = land.get_human_land_text()
+        analizer = TextAnaliz(source_text=str(land.soup.text), human_text=human_text, data=data_for_text_analiz)
+        analizer.process()
+        old_analizer_result = analizer.result
+        messages = []
+        for check in PhoneCountryMask, OffersInLand, Currency, Dates, GeoWords:
+            check = check(land=land, text_finder_result=analizer.result)
+            check.process()
+            messages += check.messages
+        result = {
+            'old': old_analizer_result,
+            'new': messages,
+        }
+        return result
+
+    # @staticmethod
+    # def text_analiz_new(land_text):
+    #     data_for_text_analiz = UrlChecker.get_data_for_text_analiz()
+    #     land = KMALand(land_text, url='1')
+    #     human_text = land.get_human_land_text()
+    #     analizer = TextAnaliz(source_text=str(land.soup.text), human_text=human_text, data=data_for_text_analiz)
+    #     for check in PhoneCountryMask, OffersInLand,Currency:
+    #         check = check()
+
+    @staticmethod
+    def get_data_for_text_analiz():
+        offers = OfferPosition.objects.values('name')
+        offers_names = [offer['name'] for offer in offers]
+        phones = PhoneNumber.objects.values('short', 'currency', 'phone_code', 'words')
+        phone_codes = [phone['phone_code'] for phone in phones]
+        currencys = [phone['currency'] for phone in phones]
+        geo_words = {}
+        geo_words_templates = {}
+        for phone in phones:
+            if phone['words']['words']:
+                dic = {phone['short']: phone['words']['words']}
+                geo_words.update(dic)
+        for phone in phones:
+            if phone['words']['templates']:
+                dic = {phone['short']: phone['words']['templates']}
+                geo_words_templates.update(dic)
+        data_for_text_analiz = {
+            'offers': offers_names,
+            'currencys': currencys,
+            'phone_codes': phone_codes,
+            'geo_words': geo_words,
+            'geo_words_templates': geo_words_templates,
+        }
+        return data_for_text_analiz

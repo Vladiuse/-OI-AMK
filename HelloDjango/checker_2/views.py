@@ -64,38 +64,42 @@ def check_url(request):
 def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
-        offers = OfferPosition.objects.values('name')
-        offers_names = [offer['name'] for offer in offers]
-        phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
-        phone_codes = [phone['phone_code'] for phone in phones]
-        currencys = [phone['currency'] for phone in phones]
-        geo_words = {}
-        geo_words_templates = {}
-        for phone in phones:
-            if phone['words']['words']:
-                dic = {phone['short']: phone['words']['words']}
-                geo_words.update(dic)
-        for phone in phones:
-            if phone['words']['templates']:
-                dic = {phone['short']: phone['words']['templates']}
-                geo_words_templates.update(dic)
-        data = {
-            'offers': offers_names,
-            'currencys': currencys,
-            'phone_codes': phone_codes,
-            'geo_words': geo_words,
-            'geo_words_templates': geo_words_templates,
-        }
-        land = Land(source_text=land_text,url='0', parser='lxml')
-        land.drop_tags_from_dom(KMALand.POLICY_IDS)
-        human_text = land.get_human_land_text()
-        analizer = TextAnaliz(source_text=str(land.soup.text),human_text=human_text, data=data)
-        analizer.process()
+        url_checker = UrlChecker
+        result = url_checker.text_analiz(land_text)
+        # offers = OfferPosition.objects.values('name')
+        # offers_names = [offer['name'] for offer in offers]
+        # phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
+        # phone_codes = [phone['phone_code'] for phone in phones]
+        # currencys = [phone['currency'] for phone in phones]
+        # geo_words = {}
+        # geo_words_templates = {}
+        # for phone in phones:
+        #     if phone['words']['words']:
+        #         dic = {phone['short']: phone['words']['words']}
+        #         geo_words.update(dic)
+        # for phone in phones:
+        #     if phone['words']['templates']:
+        #         dic = {phone['short']: phone['words']['templates']}
+        #         geo_words_templates.update(dic)
+        # data = {
+        #     'offers': offers_names,
+        #     'currencys': currencys,
+        #     'phone_codes': phone_codes,
+        #     'geo_words': geo_words,
+        #     'geo_words_templates': geo_words_templates,
+        # }
+
+        # land = Land(source_text=land_text,url='0', parser='lxml')
+        # land.drop_tags_from_dom(KMALand.POLICY_IDS)
+        # human_text = land.get_human_land_text()
+        # analizer = TextAnaliz(source_text=str(land.soup.text),human_text=human_text, data=data)
+        # analizer.process()
         answer = {
             'success': True,
-            'result': analizer.result,
+            'result': result['old'],
+            'new_checker': result['new'],
         }
-    except BaseException as error:
+    except IndentationError as error:
         answer = {
             'success': False,
             'error': str(error),

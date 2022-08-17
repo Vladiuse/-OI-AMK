@@ -327,6 +327,44 @@ margin: 0 5px;
   cursor: pointer;
 }
 
+
+.info-block{
+  margin: 5px 0;
+  padding: 2px 9px;
+  border-radius: 3px;
+  border: 1px solid #d3d4d5;
+}
+.info-block p{
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  color: aliceblue;
+}
+.info-block.warning{
+  border: 2px solid #fcd62e;
+  border-left: 7px solid #fcd62e;
+}
+.info-block.info{
+  border: 2px solid#62a5ff;
+  border-left: 7px solid #62a5ff;
+}
+.info-block.error{
+  border: 2px solid #fc5f2e;
+  border-left: 7px solid  #fc5f2e;
+}
+
+.info-block.warning i{
+  color:#fcd62e;
+}
+.info-block.info i{
+  color:#62a5ff;
+}
+.info-block.error i{
+  color:#fc5f2e;
+}
+
+
+
 /* ------------------------------- */
 /* ---------------LeftBar--------- */
 .leftbar__inner {
