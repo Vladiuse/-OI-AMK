@@ -95,7 +95,7 @@ def analiz_land_text(request):
             'success': True,
             'result': analizer.result,
         }
-    except IndexError as error:
+    except BaseException as error:
         answer = {
             'success': False,
             'error': str(error),
