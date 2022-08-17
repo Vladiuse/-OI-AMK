@@ -55,7 +55,7 @@ def check_url(request):
             'kma': url_checker.land,
         }
         end = time.time()
-        print(f'Total:{round(start - end, 2)}')
+        print(f'Total:{round(end - start, 2)}')
         return render(request, 'checker_2/frame.html', content)
 
 
