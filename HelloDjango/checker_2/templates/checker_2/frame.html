@@ -52,8 +52,7 @@
                   <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
                 {% if kma.country != kma.language %}
-                <div class="topbar__btn" id="language">lang: {{kma.language|upper}}
-                  <span class="flag-icon flag-icon-{{kma.language}}"></span>
+                <div class="topbar__btn" id="language"> {{kma.full_lang}}
                 </div>
                 {% endif %}
                 <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>

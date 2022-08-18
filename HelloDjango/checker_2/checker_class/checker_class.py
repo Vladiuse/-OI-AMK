@@ -4,7 +4,8 @@ from .kma_land import KMALand, Land
 from .text_fixxer import DomFixxer
 from .text_finder import TextAnaliz
 from .check_list_view import CheckListView
-from kma.models import PhoneNumber, OfferPosition
+from kma.models import PhoneNumber, OfferPosition, Language
+
 
 
 class Check:
@@ -138,6 +139,25 @@ class GeoWords(Check):
             self.add_mess(self.ALL_COUNTRYS, *countrys)
 
 
+class CountyLang(Check):
+    DESCRIPTION = 'Правильный язык сайта'
+    KEY_NAME = 'country_lang'
+
+    INCORRECT_LANG = 'Указан не вырный язык сайта'
+
+    STATUS_SET = {
+        INCORRECT_LANG: Check.WARNING,
+    }
+
+    def process(self):
+        site_lang = self.land.language
+        list_of_langs = self.land.available_langs.split(',')
+        print(site_lang, '\n', list_of_langs)
+        if site_lang not in self.land.available_langs:
+            self.add_mess(self.INCORRECT_LANG,'должен быть', *list_of_langs)
+
+
+
 class UrlChecker:
 
     def __init__(self, source_text, url, user):
@@ -150,19 +170,26 @@ class UrlChecker:
         self.land.process()
         self.check_list.process()
         self.land.phone_code = PhoneNumber.get_phone_code_by_country(self.land.country)
+        try:
+            self.land.full_lang = Language.objects.get(pk=self.land.language)
+        except Language.DoesNotExist:
+            self.land.full_lang = 'no lang in BD'
 
     @staticmethod
     def text_analiz(land_text):
         data_for_text_analiz = UrlChecker.get_data_for_text_analiz()
         land = KMALand(source_text=land_text, url='0', parser='lxml')
         land.drop_tags_from_dom(KMALand.POLICY_IDS)
-        land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
+        # land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
+        country_db_data = PhoneNumber.objects.get(short=land.country)
+        land.phone_code = country_db_data.phone_code
+        land.available_langs = country_db_data.langs
         human_text = land.get_human_land_text()
         analizer = TextAnaliz(source_text=str(land.soup.text), human_text=human_text, data=data_for_text_analiz)
         analizer.process()
         old_analizer_result = analizer.result
         messages = []
-        for check in PhoneCountryMask, OffersInLand, Currency, Dates, GeoWords:
+        for check in PhoneCountryMask, OffersInLand, Currency, Dates, GeoWords, CountyLang:
             check = check(land=land, text_finder_result=analizer.result)
             check.process()
             messages += check.messages
