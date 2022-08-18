@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{checker.dom.title}}</title>
+  <title>{{kma.title}}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
@@ -18,6 +18,9 @@
   <!--ICONS-->
   <script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  {% for link in kma.get_favicon_links %}
+  {{link|safe}}
+  {%endfor%}
 </head>
 
 <body>
@@ -42,7 +45,7 @@
           <div class="topbar__row">
             <div class="topbar__burger">
               <p class="topbar__burger-text">
-                VLD
+                KMA
               </p>
               <img class="topbar__logo" src="" alt="logo">
             </div>
@@ -51,10 +54,8 @@
                 <div class="topbar__btn" id="country">{{kma.country|upper}}
                   <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
-                {% if kma.country != kma.language %}
                 <div class="topbar__btn" id="language"> {{kma.full_lang}}
                 </div>
-                {% endif %}
                 <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
                 <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
@@ -77,8 +78,10 @@
               <div class="topbar__item">
                 <a href="{{kma.url}}" target="_blank" id="original-link"><div class="topbar__btn">{{kma.get_clean_url}}
                 </div></a>
-                <div class="topbar__btn" onclick="iframereboot()">ReBoot</div>
-                <div class="topbar__btn">QR</div> {# qr_from_data url options=my_options #}
+                <div class="topbar__btn" onclick="iframereboot()">
+                  <i class="fa-solid fa-rotate-right"></i>
+                </div>
+                <div class="topbar__btn">QR <i class="fa-solid fa-qrcode"></i></div> {# qr_from_data url options=my_options #}
               </div>
             </div>
           </div>
@@ -367,6 +370,7 @@
         // Подогнать высоту чеклиста
         let chekListWidth = $('#iframe').height() - $('#checker-data').height()
         console.log(chekListWidth, 'chekListWidth')
+        chekListWidth = chekListWidth - 30;
       $('#check_list').height(chekListWidth + 'px')
       }
 

@@ -7,6 +7,7 @@ from django.conf import settings
 
 
 class Land:
+    TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
 
     def __init__(self, source_text, url, *, parser='html5lib', escape_chars=False):
         self.source_text = Land.re_escape_html_chars(source_text) if escape_chars else source_text
@@ -27,6 +28,32 @@ class Land:
         """Есть ли на сайте тэг video"""
         if self.soup.find_all('video'):
             return True
+
+    def get_favicon_links(self, add_base_url=True):
+        links = self.soup.find_all('link')
+        links = list(filter(self.is_favicon_links,links))
+        if add_base_url:
+            for l in links:
+                if not l['href'].startswith('http'):
+                    l['href'] = Land.get_url_for_base_tag(self.url) + l['href']
+                yield str(l)
+        
+
+    @staticmethod
+    def is_favicon_links(link):
+        res = []
+        for attr in ['rel', 'type']:
+            try:
+                a = link[attr]
+                if isinstance(a, str):
+                    res.append(a)
+                if isinstance(a, list):
+                    res.extend(a)
+            except KeyError:
+                pass
+        for attr in res:
+            if attr in Land.TYPES_REL:
+                return True
 
     @property
     def scripts(self):

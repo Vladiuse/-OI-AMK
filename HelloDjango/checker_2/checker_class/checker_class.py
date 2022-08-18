@@ -79,7 +79,9 @@ class Currency(Check):
         if not currencies_on_land:
             self.add_mess(self.NO_CURRENCIES)
         for curr in currencies_on_land:
-            if curr != currency:
+            if curr == currency:
+                self.add_mess(self.ONE_CURR_FOUND, curr)
+            if curr != currency and curr not in ['all','try',]:
                 self.add_mess(self.MORE_ONE_CURRENCIES, curr)
 
 
@@ -185,7 +187,7 @@ class UrlChecker:
         land.phone_code = country_db_data.phone_code
         land.available_langs = country_db_data.langs
         human_text = land.get_human_land_text()
-        analizer = TextAnaliz(source_text=str(land.soup.text), human_text=human_text, data=data_for_text_analiz)
+        analizer = TextAnaliz(source_text=str(land.soup.text), human_text=human_text.lower(), data=data_for_text_analiz)
         analizer.process()
         old_analizer_result = analizer.result
         messages = []
@@ -199,14 +201,6 @@ class UrlChecker:
         }
         return result
 
-    # @staticmethod
-    # def text_analiz_new(land_text):
-    #     data_for_text_analiz = UrlChecker.get_data_for_text_analiz()
-    #     land = KMALand(land_text, url='1')
-    #     human_text = land.get_human_land_text()
-    #     analizer = TextAnaliz(source_text=str(land.soup.text), human_text=human_text, data=data_for_text_analiz)
-    #     for check in PhoneCountryMask, OffersInLand,Currency:
-    #         check = check()
 
     @staticmethod
     def get_data_for_text_analiz():
