@@ -67,25 +67,45 @@ class TextAnaliz:
                 result.update({p_code: res})
         self.result.update({'phone_codes': list(result)})
 
+    # def find_dates_old(self):
+    #     pattern = '\D[12]{1}[890]{1}\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # выкидывает неактуальные года
+    #     text = self.human_text
+    #     dates = re.findall(pattern, text)
+    #     dates = list(set(dates))
+    #     chars = '\n() \xa0'
+    #     start_end = ' -.,:;"'
+    #     clean_dates = []
+    #     for date in dates:
+    #         for char in chars:
+    #             date = date.replace(char, '')
+    #         if date[-1] in start_end:
+    #             date = date[:-1]
+    #         if date[0] in start_end:
+    #             date = date[1:]
+    #         clean_dates.append(date)
+    #     clean_dates = list(set(clean_dates))
+    #     self.result.update({'dates_on_land': clean_dates})
+
     def find_dates(self):
-        # pattern = '\D\d\d\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'
-        pattern = '\D[12]{1}[890]{1}\d\d[^0-9%]|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # выкидывает неактуальные года
+        pattern = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # убран захват символов перед датой
         text = self.human_text
-        dates = re.findall(pattern, text)
-        dates = list(set(dates))
-        chars = '\n() \xa0'
-        start_end = ' -.,:;"'
-        clean_dates = []
-        for date in dates:
-            for char in chars:
-                date = date.replace(char, '')
-            if date[-1] in start_end:
-                date = date[:-1]
-            if date[0] in start_end:
-                date = date[1:]
-            clean_dates.append(date)
-        clean_dates = list(set(clean_dates))
-        self.result.update({'dates_on_land': clean_dates})
+        with open('/home/vlad/PycharmProjects/-OI-AMK/test_ьн.html','w') as file:
+            file.write(text)
+        dates_n_years = re.findall(pattern, text)
+        dates_n_years = list(set(dates_n_years))
+        print(dates_n_years, 'xxxxxx')
+        dates = []
+        years = []
+        for i in dates_n_years:
+            if len(i) == 4:
+                years.append(i)
+            else:
+                dates.append(i)
+        self.result.update({
+            'dates_on_land': dates,
+            'years_on_land': years,
+        })
+
 
     def find_geo_words(self):
         """Поиск статичных слов относящихся к стране"""
@@ -113,32 +133,32 @@ class TextAnaliz:
                 result.update({geo: res})
         self.result.update({'geo_words_templates': result})
 
-    @staticmethod
-    def sort_dates(dates: list):
-        dates_correct = []
-        dates_incorrect = []
-        years = []
-        years_old = []
-        for date in dates:
-            if len(date) == 4:
-                if int(date) in range(2020, 2023):
-                    years.append(date)
-                else:
-                    years_old.append(date)
-            else:
-                if date.count('.') != 2 or int(date[-2:]) not in range(20, 23):
-                    dates_incorrect.append(date)
-                else:
-                    dates_correct.append(date)
-        result = {
-            'oi-dates_correct': dates_correct,
-            'oi-dates_incorrect': dates_incorrect,
-            'oi-years': years,
-            'oi-years_old': years_old,
-        }
-        for k, v in result.items():
-            v.sort(reverse=True)
-        return result
+    # @staticmethod
+    # def sort_dates(dates: list):
+    #     dates_correct = []
+    #     dates_incorrect = []
+    #     years = []
+    #     years_old = []
+    #     for date in dates:
+    #         if len(date) == 4:
+    #             if int(date) in range(2020, 2023):
+    #                 years.append(date)
+    #             else:
+    #                 years_old.append(date)
+    #         else:
+    #             if date.count('.') != 2 or int(date[-2:]) not in range(20, 23):
+    #                 dates_incorrect.append(date)
+    #             else:
+    #                 dates_correct.append(date)
+    #     result = {
+    #         'oi-dates_correct': dates_correct,
+    #         'oi-dates_incorrect': dates_incorrect,
+    #         'oi-years': years,
+    #         'oi-years_old': years_old,
+    #     }
+    #     for k, v in result.items():
+    #         v.sort(reverse=True)
+    #     return result
 
 
 if __name__ == '__main__':
