@@ -1,5 +1,6 @@
 import requests as req
 from bs4 import BeautifulSoup
+from datetime import datetime
 from .kma_land import KMALand, Land
 from .text_fixxer import DomFixxer
 from .text_finder import TextAnaliz
@@ -80,7 +81,7 @@ class Currency(Check):
             self.add_mess(self.NO_CURRENCIES)
         for curr in currencies_on_land:
             if curr == currency:
-                self.add_mess(self.ONE_CURR_FOUND, curr)
+                self.add_mess(self.ONE_CURR_FOUND, curr.upper())
             if curr != currency and curr not in ['all','try',]:
                 self.add_mess(self.MORE_ONE_CURRENCIES, curr)
 
@@ -113,15 +114,100 @@ class Dates(Check):
     DESCRIPTION = 'Поиск дат по тексту'
     KEY_NAME = 'dates_on_land'
 
+    ALL_YEARS = 'Года'
     ALL_DATES = 'Даты'
+    INCORRECT_DATE_FORMAT = 'Некоректный формат'
+    INCORRECT_DATE = 'Некоректный день или месяц'
+    FUTURE_DATE = 'Дата из будущего'
+    EARLIEST_DATE = 'Самая ранняя дата'
 
     STATUS_SET = {
+        ALL_YEARS: Check.INFO,
         ALL_DATES: Check.INFO,
+        EARLIEST_DATE: Check.INFO,
+        INCORRECT_DATE_FORMAT: Check.WARNING,
+        INCORRECT_DATE: Check.ERROR,
+        FUTURE_DATE: Check.ERROR,
     }
 
     def process(self):
         dates = self.text_finder_result['dates_on_land']
-        self.add_mess(self.ALL_DATES, *dates)
+        # dates += ['00.12.20', '01.13.20', '20-12-20',]
+        years = self.text_finder_result['years_on_land']
+        if years:
+            years.sort(key=lambda x: int(x))
+            self.add_mess(self.ALL_YEARS, *years)
+        if dates:
+            self.add_mess(self.ALL_DATES, *dates)
+
+        incorrect_format_dates = list(filter(self.is_incorrect_date_format, dates))
+        if incorrect_format_dates:
+            self.add_mess(self.INCORRECT_DATE_FORMAT, *incorrect_format_dates)
+
+        incorrect_dates = list(filter(self.is_date_incorrect,dates))
+        if incorrect_dates:
+            self.add_mess(self.INCORRECT_DATE, *incorrect_dates)
+
+        future_dates = list(filter(self.is_date_from_future, dates))
+        if future_dates:
+            self.add_mess(self.FUTURE_DATE, *future_dates)
+        earliest_date = self.get_earliest_date(dates)
+        if earliest_date:
+            self.add_mess(self.EARLIEST_DATE, earliest_date)
+
+
+    @staticmethod
+    def is_incorrect_date_format(date):
+        chars = '-\\/'
+        for char in chars:
+            if char in date:
+                return True
+    @staticmethod
+    def make_date_point_delimeter(date: str) -> str:
+        """Привести дату к формату хх.хх.хх"""
+        new_date = ''
+        for char in date:
+            if char.isdigit():
+                new_date += char
+            else:
+                new_date += '.'
+        return new_date
+    @staticmethod
+    def make_date(date: str):
+        """Создать обьект даты или вернуть None"""
+        date = Dates.make_date_point_delimeter(date)
+        correct_date = None
+        for year_format in 'yY':
+            try:
+                correct_date = datetime.strptime(date, '%d.%m.%' + year_format).date()
+            except ValueError:
+                pass
+        return correct_date
+    @staticmethod
+    def is_date_incorrect(date):
+        """Правильный ли день и месяц у даты"""
+        return not bool(Dates.make_date(date))
+    @staticmethod
+    def is_date_from_future(date: str):
+        """Явзяеться ли дата датой из будущего"""
+        date = Dates.make_date(date)
+        if date:
+            today = datetime.today().date()
+            if date > today:
+                return True
+        return False
+
+    @staticmethod
+    def get_earliest_date(dates: list):
+        dates_obj = []
+        for date in dates:
+            date = Dates.make_date(date)
+            if date:
+                dates_obj.append(date)
+        dates_obj.sort()
+        if dates_obj:
+            earliest_date = dates_obj[0]
+            return earliest_date.strftime('%d.%m.%Y')
 
 
 class GeoWords(Check):
@@ -154,7 +240,6 @@ class CountyLang(Check):
     def process(self):
         site_lang = self.land.language
         list_of_langs = self.land.available_langs.split(',')
-        print(site_lang, '\n', list_of_langs)
         if site_lang not in self.land.available_langs:
             self.add_mess(self.INCORRECT_LANG,'должен быть', *list_of_langs)
 
