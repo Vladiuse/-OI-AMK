@@ -13,6 +13,9 @@ from .models import UserSiteCheckPoint
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
 from qr_code.qrcode.utils import QRCodeOptions
+from django.template import Template
+from django.template import Context, RequestContext
+
 
 
 # Create your views here.
@@ -167,4 +170,20 @@ def change_status_of_user_checklist(request):
             'error': 'Wrong method',
         }
         return JsonResponse(answer, safe=False)
+
+
+def doc_page(request):
+    file_path = str(settings.BASE_DIR) + '/manual/templates/manual/news/comm_change.html'
+    with open(file_path) as file:
+        text = file.read()
+    # s = '{% load note %} {{x}} 123 {{user}} {%note%}123123{%end%}'
+    to_remove = ["{% extends 'manual/base.html' %}", "{% block content %}", "{%endblock%}"]
+    for tag in to_remove:
+        text  = text.replace(tag, '')
+    context = RequestContext(request,{'x': 'xxxx'})
+    t = Template(text)
+    res = t.render(context)
+    return HttpResponse(res)
+
+
 
