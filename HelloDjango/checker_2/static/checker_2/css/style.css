@@ -52,6 +52,13 @@ body {
   display: inline-block;
   margin-right: 6px;
 }
+#scripts-img{
+display: flex;
+}
+#scripts-img img{
+width: 20px;
+margin: 0 5px;
+}
 
 /* -----------Check List (from bs)----------- */
 #check_list{
@@ -278,7 +285,7 @@ body {
 
 .topbar__btn {
   cursor: pointer;
-  min-width: 60px;
+  min-width: 30px;
   margin-left: 5px;
   display: inline-block;
   font-family: arial, sans-serif;
@@ -313,12 +320,50 @@ body {
   pointer-events: none;
 }
 
-#original-link {
+#original-link .topbar__btn{
   color: rgb(142, 194, 236);
   font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
 }
+
+
+.info-block{
+  margin: 5px 0;
+  padding: 2px 9px;
+  border-radius: 3px;
+  border: 1px solid #d3d4d5;
+}
+.info-block p{
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  color: aliceblue;
+}
+.info-block.warning{
+  border: 2px solid #fcd62e;
+  border-left: 7px solid #fcd62e;
+}
+.info-block.info{
+  border: 2px solid#62a5ff;
+  border-left: 7px solid #62a5ff;
+}
+.info-block.error{
+  border: 2px solid #fc5f2e;
+  border-left: 7px solid  #fc5f2e;
+}
+
+.info-block.warning i{
+  color:#fcd62e;
+}
+.info-block.info i{
+  color:#62a5ff;
+}
+.info-block.error i{
+  color:#fc5f2e;
+}
+
+
 
 /* ------------------------------- */
 /* ---------------LeftBar--------- */
