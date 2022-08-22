@@ -30,7 +30,7 @@
 </head>
 
 <body>
-  <div id="for-doc" style="display: block">
+  <div id="for-doc" style="display: none;">
     <div id="manual"></div>
   </div>
     <!--TO - CLONE-->
@@ -363,9 +363,10 @@
 
 
     // загрузка документации
-    function loadDoc(){
+    function loadDoc(manual_land){
       let url = currentUrl + '/checker_2/doc_page/'
-      $.get(url, function(response){
+      data = {'manual_land': manual_land}
+      $.post(url, data,function(response){
         $('#for-doc').show()
         $('#manual').empty()
           $('#manual').html(response)

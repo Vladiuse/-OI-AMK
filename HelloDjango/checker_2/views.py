@@ -15,6 +15,7 @@ from .checker_class import UrlChecker
 from qr_code.qrcode.utils import QRCodeOptions
 from django.template import Template
 from django.template import Context, RequestContext
+from bs4 import BeautifulSoup
 
 
 
@@ -171,15 +172,26 @@ def change_status_of_user_checklist(request):
         }
         return JsonResponse(answer, safe=False)
 
-
+@login_required
+@csrf_exempt
 def doc_page(request):
-    file_path = str(settings.BASE_DIR) + '/manual/templates/manual/news/comm_change.html'
+    manual_land = request.POST['manual_land']
+    manual_land = manual_land.replace('.', '/')
+    print(manual_land)
+    block_id = None
+    if '#' in manual_land:
+        manual_land, block_id = manual_land.split('#')
+    print(manual_land,block_id)
+    file_path = str(settings.BASE_DIR) + f'/manual/templates/manual/{manual_land}.html'
     with open(file_path) as file:
         text = file.read()
-    # s = '{% load note %} {{x}} 123 {{user}} {%note%}123123{%end%}'
-    to_remove = ["{% extends 'manual/base.html' %}", "{% block content %}", "{%endblock%}"]
+    to_remove = ["{% extends 'manual/base.html' %}", "{% block content %}", "{%endblock%}", "{% endblock %}"]
     for tag in to_remove:
         text  = text.replace(tag, '')
+    if block_id:
+        soup = BeautifulSoup(text,'lxml')
+        text_block = soup.find('div', {'id': block_id})
+        text = str(text_block)
     context = RequestContext(request,{'x': 'xxxx'})
     t = Template(text)
     res = t.render(context)
