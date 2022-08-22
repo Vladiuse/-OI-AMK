@@ -24,6 +24,7 @@ console.log('MY SCRIPNT START')
         findAlla();
         findImgLink();
         findDivLink();
+        fincCursorPointElem();
     }
 
     function showFormEmels(){

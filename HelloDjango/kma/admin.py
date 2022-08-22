@@ -8,7 +8,7 @@ class DefaultWebAdmin(admin.ModelAdmin):
 
 
 class PhoneNumberAdmin(admin.ModelAdmin):
-    list_display = ['id', 'short', 'ru_full_name', 'phone', 'phone_code', 'currency']
+    list_display = ['id', 'short', 'ru_full_name', 'phone', 'phone_code', 'currency', 'langs']
     list_display_links = ['short', 'phone', 'ru_full_name']
 
 
