@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{checker.dom.title}}</title>
+  <title>{{kma.title}}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
@@ -15,10 +15,27 @@
   <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet">
   <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'root/css/flag-icon.min.css' %}" rel="stylesheet">
+  <!--ICONS-->
+  <script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  {% for link in kma.get_favicon_links %}
+  {{link|safe}}
+  {%endfor%}
 </head>
 
 <body>
+    <!--TO - CLONE-->
+  <div id="text-analiz" style="display: none;">
+    <div class="info-block info">
+      <i class="fa-solid fa-circle-chevron-down"></i>
+  </div>
+  <div class="info-block warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+  </div>
+  <div class="info-block error">
+      <i class="fa-solid fa-circle-exclamation"></i>
+  </div>
+</div>
 
   <div class="wrapper">
 
@@ -28,24 +45,30 @@
           <div class="topbar__row">
             <div class="topbar__burger">
               <p class="topbar__burger-text">
-                VLD
+                KMA
               </p>
               <img class="topbar__logo" src="" alt="logo">
             </div>
             <div class="topbar__items">
               <div class="topbar__item">
-                <div class="topbar__btn" id="country">{{kma.country}}
+                <div class="topbar__btn" id="country">{{kma.country|upper}}
                   <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
-                {% if kma.country != kma.language %}
-                <div class="topbar__btn" id="language">lang: {{kma.language}}
-                  <span class="flag-icon flag-icon-{{kma.language}}"></span>
+                <div class="topbar__btn" id="language"> {{kma.full_lang}}
                 </div>
-                {% endif %}
                 <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
                 <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
+                <div id="scripts-img">
+                  {%if kma.is_yam_script%}
+                  <img src="{% static 'checker_2/scripts/yam.png' %}">
+                  {%endif%}
+                   {%if kma.is_social_script%}
+                  <img src="{% static 'checker_2/scripts/spy.png' %}">
+                  {%endif%}
+                </div>
+
               </div>
               <div class="topbar__item">
                 <div class="topbar__btn" onclick="setDevice('desctop')">Desctop</div>
@@ -53,10 +76,12 @@
                 <div class="topbar__btn" onclick="setDevice('phone')">Phone</div>
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn"><a href="{{checker.kma.url}}" target="_blank" id="original-link">Original</a>
+                <a href="{{kma.url}}" target="_blank" id="original-link"><div class="topbar__btn">{{kma.get_clean_url}}
+                </div></a>
+                <div class="topbar__btn" onclick="iframereboot()">
+                  <i class="fa-solid fa-rotate-right"></i>
                 </div>
-                <div class="topbar__btn">button</div>
-                <div class="topbar__btn">button</div>
+                <div class="topbar__btn">QR <i class="fa-solid fa-qrcode"></i></div> {# qr_from_data url options=my_options #}
               </div>
             </div>
           </div>
@@ -78,9 +103,6 @@
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Click Elem</div>
                   </div>
                   <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('fincCursorPointElem')">Cursor</div>
-                  </div>
-                  <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">Forms</div>
                   </div>
                   <div class="leftbar__tool-item">
@@ -88,9 +110,6 @@
                   </div>
                   <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('showDates')">Dates</div>
-                  </div>
-                  <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showImages')">Img</div>
                   </div>
                   <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">Reset</div>
@@ -103,7 +122,7 @@
 
                   <div id="checker-data">
                     <div id="img-doubles">
-                      {% for img in checker.dom.img_doubles %}
+                      {% for img in kma.img_doubles %}
                       <img data-oi-img="{{img.hash}}" src="{{img.src}}">
                       {%endfor%}
                     </div>
@@ -131,12 +150,18 @@
                           <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
 
                           <div class="list-group-item__row tab-content">
-                            <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
-                              data-group-status="1">Отметить все </a>
+                            <!-- <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
+                              data-group-status="1">Отметить все </a> -->
                             {%for sub in block.subs %}
-                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}">
-                              <input class="form-check-input me-1 " type="checkbox" value="">
+                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
+                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
                               {{sub.text}}
+                              <div class="lds-ring check-list" style="display: none;">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
                             </label>
                             {%endfor%}
                           </div>
@@ -156,7 +181,7 @@
         </div>
 
         <div class="frame-wrapper">
-          <iframe srcdoc="{{checker.page|safe}}" id="iframe"></iframe>
+          <iframe srcdoc="{{kma.iframe_srcdoc|safe}}" id="iframe"></iframe>
         </div>
 
       </div>
@@ -175,9 +200,12 @@
     let currentUrl = window.location.origin;
     const full = location.protocol + '//' + location.host + '/';
     let site = iframe.contentWindow
+    let csrftoken = '{{csrf_token}}' // csrfmiddlewaretoken
+    let checkedUrl = '{{kma.url}}'
 
     let land_data_from_js = false;
     let get_phone_code_api = false;
+    let get_old_analize = false;
 
 
 
@@ -237,6 +265,34 @@
       $('#iframe').css('width', width)
     }
 
+
+    let x_data = {
+      'text': 'Some text',
+      'status': 'warning',
+      'items': ['123', '123', 'xxxx', 'xxyyyy']
+    }
+    function loadImfoItems(items){
+      console.log(items)
+      for (pos in items){
+        let item = items[pos];
+        addInfo(item)
+      }
+    }
+    function addInfo(x_data){
+      let info = $('#text-analiz .info-block.'+x_data['status']).clone()
+      let main_text = $('<p>')
+      main_text.text(x_data['text'] + ': ')
+      info.append(main_text)
+      for (pos in x_data['items']){
+        let item_text = x_data['items'][pos]
+        let item_elem = $('<p>')
+        item_elem.text(item_text)
+        info.append(item_elem)
+      }
+      $('#text-info').append(info)
+    }
+
+
     function loadBackAnalize(land_code) {
       // Загрузда данных анализа текста API
       $('#text-info').empty()
@@ -244,20 +300,26 @@
       let url = currentUrl + '/checker_2/analiz_land_text/'
       data = { 'land_text': land_code }
       $.post(url, data, function (response) {
-        console.log(response, 'RESPONSE ANALIZE1', response['success'])
+        let analiz_response = response;
+        console.log(analiz_response)
         if (response['success']) {
           $('#analize-load').hide()
-          offers = response.result['offers']
-          putDataFromAnalize('Офферы:', offers)
-          currs = response.result['currencys']
-          putDataFromAnalize('Валюты:', currs)
-          dates = response.result['dates_on_land']
-          putDataFromAnalize('Даты:', dates)
-          phone_codes = response.result['phone_codes']
-          putDataFromAnalize('Моб коды:', phone_codes)
-          geo_words = response.result['geo_words_templates']
-          putDataFromAnalize('Слова:', geo_words)
-          scripts_on_land = response.result['scripts']
+
+          if (get_old_analize){
+            offers = response.result['offers']
+            putDataFromAnalize('Офферы:', offers)
+            currs = response.result['currencys']
+            putDataFromAnalize('Валюты:', currs)
+            dates = response.result['dates_on_land']
+            putDataFromAnalize('Даты:', dates)
+            phone_codes = response.result['phone_codes']
+            putDataFromAnalize('Моб коды:', phone_codes)
+            geo_words = response.result['geo_words_templates']
+            putDataFromAnalize('Слова:', geo_words)
+            scripts_on_land = response.result['scripts']
+          }
+          
+          loadImfoItems(response['new_checker'])
           console.log('End')
           fixListHeight()
 
@@ -283,35 +345,90 @@
       iframe.contentWindow.doubleImgScroll($(this).attr('data-oi-img'))
     })
 
+
+    // перезагрузка iFrame
+    function iframereboot(){
+      var iframe = document.getElementById('iframe');
+      iframe.srcdoc = iframe.srcdoc;
+    }
   </script>
   <script>
+      // открыть весь список
+      $('.tab-content').trigger('click')
+
+
     fixListHeight()
     // для чеклиста
     $('#clear-check-list').click(function () {
       $('.check_list input').prop('checked', false);
     })
-    /*   function fixListHeight(){
+
+    $('.list-group').click(function(){
+      fixListHeight()
+    })
+      function fixListHeight(){
         // Подогнать высоту чеклиста
         let chekListWidth = $('#iframe').height() - $('#checker-data').height()
         console.log(chekListWidth, 'chekListWidth')
+        chekListWidth = chekListWidth - 30;
       $('#check_list').height(chekListWidth + 'px')
-      } */
+      }
 
     // Снять\Поставить все гагли в чеклисте
-    $('a.clear-group').click(function (e) {
-      e.preventDefault()
-      let groupId = $(this).attr('data-group-id')
-      if ($(this).attr('data-group-status') == 1) {
-        $('.group-id-' + groupId + ' input').prop('checked', true);
-        $(this).attr('data-group-status', '0')
-        $(this).text('Снять все')
-      } else {
-        $('.group-id-' + groupId + ' input').prop('checked', false);
-        $(this).attr('data-group-status', '1')
-        $(this).text('Отметить все')
+    // $('a.clear-group').click(function (e) {
+    //   e.preventDefault()
+    //   let groupId = $(this).attr('data-group-id')
+    //   if ($(this).attr('data-group-status') == 1) {
+    //     $('.group-id-' + groupId + ' input').prop('checked', true);
+    //     $(this).attr('data-group-status', '0')
+    //     $(this).text('Снять все')
+    //   } else {
+    //     $('.group-id-' + groupId + ' input').prop('checked', false);
+    //     $(this).attr('data-group-status', '1')
+    //     $(this).text('Отметить все')
+    //   }
+
+    // })
+
+
+      function sendNewCheckStatus(check_point_id, checked_url, new_status){
+      // Отпарвить новый статус у пункта проверки чеклиста
+      url = full + 'checker_2/change_status_of_user_checklist/'
+      data = {
+        'check_point_id': check_point_id,
+        'checked_url': checked_url,
+        'status': new_status,
+        'csrfmiddlewaretoken': csrftoken,
+      }
+      $.post(url, data, function(response){
+        console.log(response)
+        if (response['success'] != true){console.error('Ошибка сохранения чекпоита!')}
+        makeCkeckPointAnable(check_point_id)
+      })
+
+    }
+
+    function makeCkeckPointAnable(checkPointId){
+      let checkPoint = $('#check_list .list-group-item.sub').filter(function(){
+        if ($(this).attr('data-checkpoint-id') == checkPointId) {return true}
+      })
+      checkPoint.find('input').prop('disabled', false)
+      checkPoint.find('.lds-ring.check-list').hide()
+    }
+
+    $('#check_list .list-group-item.sub input').click(function(){
+      let check_point = $(this).parent()
+      if ($(this).attr('disabled') !='disabled'){
+        $(this).prop('disabled', true)
+        let check_point_id = check_point.attr('data-checkpoint-id')
+        let status = $(this).is(':checked')
+        check_point.find('.lds-ring.check-list').show()
+        console.log(check_point_id, status, check_point.find('.lds-ring.check-list'))
+        sendNewCheckStatus(check_point_id, checkedUrl, status)
       }
 
     })
+
   </script>
 
 </body>
