@@ -31,7 +31,7 @@
 
 <body>
   <div id="for-doc" style="display: none;">
-    <div id="manual"></div>
+    <div id="manual" class="content "></div>
   </div>
     <!--TO - CLONE-->
   <div id="text-analiz" style="display: none;">
@@ -156,7 +156,12 @@
 
                         <label class="list-group__items tab">
                           <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
-                          <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
+                          <b class="list-group__items-title tab-title" for="tab">
+                            {{block.name}} 
+                            {%if block.manual_link%}
+                            <a href="" data-manual-link="{{block.manual_link}}">(?)</a>
+                            {%endif%}
+                          </b>
 
                           <div class="list-group-item__row tab-content">
                             <!-- <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
@@ -164,7 +169,10 @@
                             {%for sub in block.subs %}
                             <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
                               <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
-                              {{sub.text}}
+                              {{sub.text}} 
+                              {%if sub.manual_link%}
+                            <a href="" data-manual-link="{{sub.manual_link}}">(?)</a>
+                            {%endif%}
                               <div class="lds-ring check-list" style="display: none;">
                                 <div></div>
                                 <div></div>
@@ -364,6 +372,7 @@
 
     // загрузка документации
     function loadDoc(manual_land){
+      console.log(manual_land)
       let url = currentUrl + '/checker_2/doc_page/'
       data = {'manual_land': manual_land}
       $.post(url, data,function(response){
@@ -396,6 +405,11 @@
       } */
   </style>
   <script>
+    $('#check_list a').click(function(e){
+      e.preventDefault();
+      let manualLink = $(this).attr('data-manual-link');
+      loadDoc(manualLink);
+    })
       // открыть весь список
       $('.tab-content').trigger('click')
 

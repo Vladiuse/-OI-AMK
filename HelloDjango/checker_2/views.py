@@ -192,6 +192,7 @@ def doc_page(request):
         soup = BeautifulSoup(text,'lxml')
         text_block = soup.find('div', {'id': block_id})
         text = str(text_block)
+    text = '{% load note %}\n'+text
     context = RequestContext(request,{'x': 'xxxx'})
     t = Template(text)
     res = t.render(context)
