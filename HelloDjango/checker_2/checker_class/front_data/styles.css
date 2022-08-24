@@ -1,7 +1,7 @@
     :root {
-    --link-color: rgb(0, 183, 255);
+    --link-color: rgb(255, 0, 0);
     --cursor-point-color: rgb(255, 153, 0);
-    --full-click-elem: rgb(174, 0, 255);
+    --full-click-elem: rgb(0, 183, 255);
     --price-color: rgb(57, 202, 0);
     --currency-color: rgb(47, 167, 0);
     --discount-color: rgb(118, 0, 141);
