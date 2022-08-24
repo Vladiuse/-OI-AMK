@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class CheckBlock(OrderedModel):
     name = models.CharField(max_length=100, verbose_name='Название')
+    manual_link = models.CharField(max_length=50, verbose_name='ссылка на доку', blank=True)
 
     class Meta:
         verbose_name = 'Блок проверки'
@@ -49,6 +50,7 @@ class CheckPoint(OrderedModel):
     )
     is_notice = models.BooleanField(default=False, null=False, blank=True, verbose_name='Требует внимания')
     filter = models.CharField(max_length=30, verbose_name='Прочий фильтр', default='', null=False, blank=True)
+    manual_link = models.CharField(max_length=50, verbose_name='ссылка на доку', blank=True)
 
     class Meta:
         verbose_name = 'Пункт проверки'

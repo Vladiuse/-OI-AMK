@@ -16,8 +16,17 @@
 .content p.center{
     text-align: center;
 }
-.rst-content .content>p{
+/* .rst-content .content>p{
     margin: 12px 0 !important;
+}
+.rst-content .content p{
+    margin: 5px 0;
+} */
+.content>p{
+    margin: 12px 0 !important;
+}
+.content p{
+    margin: 5px 0;
 }
 
 #manual img[class^="w-"]{
@@ -25,9 +34,7 @@
     margin-bottom: 15px;
 }
 
-.rst-content .content p{
-    margin: 5px 0;
-}
+
 #manual p.center{
     text-align: center;
 }
@@ -190,7 +197,7 @@ span-x.danger {
     width: 100%;
 }
 
-.rst-content .note.success{
+/* .rst-content .note.success{
     background: #e7f2fa;
 }
 .rst-content .note.success .admonition-title {
@@ -210,5 +217,27 @@ span-x.danger {
     background: #ffcccc;
 }
 .rst-content .note.danger .admonition-title {
+    background: #f07e7e;
+} */
+.note.success{
+    background: #e7f2fa;
+}
+.note.success .admonition-title {
+    background: #1abc9c;
+
+}
+
+.note.warning{
+    background: #ffedcc;
+}
+.note.warning .admonition-title {
+    background: #f0b37e;
+}
+
+
+.note.danger{
+    background: #ffcccc;
+}
+.note.danger .admonition-title {
     background: #f07e7e;
 }

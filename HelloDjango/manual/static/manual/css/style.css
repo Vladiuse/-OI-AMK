@@ -170,16 +170,16 @@ ul.toctree-l>li.current button::before{
     background-color: #c9c9c9;
 }
 
-.rst-content .admonition{
+.content .admonition{
     clear: both;
     padding: 12px;
     line-height: 24px;
     margin: 16px 0 24px 0;
 }
-.rst-content .note{
+.content .note{
     background: #e7f2fa;
 }
-.rst-content .note .admonition-title{
+.content .note .admonition-title{
     background: #6ab0de;
     font-weight: 700;
     display: block;
@@ -189,7 +189,7 @@ ul.toctree-l>li.current button::before{
 }
 
 
-.rst-content .admonition-title:before {
+.content .admonition-title:before {
     margin-right: 4px;
     content: "\f06a";
     font-family: FontAwesome;
