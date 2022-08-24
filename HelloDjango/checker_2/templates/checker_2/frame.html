@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
     rel="stylesheet">
-  <link href="{% static 'checker_2/css/reset.css' %}" rel="stylesheet">
-  <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet">
+  <!-- <link href="{% static 'checker_2/css/reset.css' %}" rel="stylesheet"> -->
+  <!-- <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet"> -->
   <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'root/css/flag-icon.min.css' %}" rel="stylesheet">
   <!--ICONS-->
@@ -24,18 +24,18 @@
 </head>
 
 <body>
-    <!--TO - CLONE-->
+  <!--TO - CLONE-->
   <div id="text-analiz" style="display: none;">
     <div class="info-block info">
       <i class="fa-solid fa-circle-chevron-down"></i>
-  </div>
-  <div class="info-block warning">
+    </div>
+    <div class="info-block warning">
       <i class="fa-solid fa-triangle-exclamation"></i>
-  </div>
-  <div class="info-block error">
+    </div>
+    <div class="info-block error">
       <i class="fa-solid fa-circle-exclamation"></i>
+    </div>
   </div>
-</div>
 
   <div class="wrapper">
 
@@ -64,24 +64,53 @@
                   {%if kma.is_yam_script%}
                   <img src="{% static 'checker_2/scripts/yam.png' %}">
                   {%endif%}
-                   {%if kma.is_social_script%}
+                  {%if kma.is_social_script%}
                   <img src="{% static 'checker_2/scripts/spy.png' %}">
                   {%endif%}
                 </div>
 
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn" onclick="setDevice('desctop')">Desctop</div>
-                <div class="topbar__btn" onclick="setDevice('laptop')">Laptop</div>
-                <div class="topbar__btn" onclick="setDevice('phone')">Phone</div>
+                <div class="topbar__btn" onclick="setDevice('desctop')">
+                  <div style="position: relative;">
+                    <svg data-icon="DeviceLaptopCutCorner24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" class="bem-Svg bem-TopBar_Body_BreakpointButton_Icon bem-TopBar_Body_Button_Icon" style="display: block;">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M14.037 3H4a1 1 0 00-1 1v13H0v2a1 1 0 001 1h22a1 1 0 001-1v-2h-3V8.82l-.997-.725-.003.002V17H4V4h10.418a1.445 1.445 0 01-.381-1z" fill="currentColor"></path>
+                      <path opacity=".6" fill-rule="evenodd" clip-rule="evenodd" d="M15.74 5H5v11h14V8.825l-.874.636c-1.175.855-2.758-.293-2.31-1.676l.717-2.21L15.742 5z" fill="currentColor"></path>
+                    </svg>
+                    <svg data-icon="DeviceBase" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" class="bem-Svg bem-TopBar_Body_BreakpointButton_Icon bem-TopBar_Body_Button_Icon" style="display: block; position: absolute; right: -4px; top: -4px; stroke: rgb(64, 64, 64);">
+                      <path d="M9.78 6l-.829-2.553c-.3-.921-1.603-.921-1.902 0L6.219 6H3.54c-.968 0-1.371 1.24-.587 1.81l2.17 1.574-.83 2.556c-.299.921.756 1.687 1.54 1.117l2.171-1.58 2.169 1.576c.783.57 1.838-.196 1.539-1.118l-.828-2.552 2.166-1.574c.784-.57.381-1.809-.588-1.809h-2.68z" fill="currentColor"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="topbar__btn" onclick="setDevice('laptop')">
+                  <svg data-icon="DeviceTabletPortrait24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display: block;">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4a1 1 0 011-1h14a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm7 15a1 1 0 112 0 1 1 0 01-2 0zm8-15H5v13h14V4z" fill="currentColor"></path>
+                    <path opacity=".6" fill="currentColor" d="M6 5h12v11H6z"></path>
+                  </svg>
+                </div>
+                <div class="topbar__btn" onclick="setDevice('phone')">
+                  <svg data-icon="DeviceMobilePortrait24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display: block;">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4a1 1 0 011-1h10a1 1 0 011 1v16a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm5 15a1 1 0 112 0 1 1 0 01-2 0zm6-15H7v13h10V4z" fill="currentColor">
+                    </path>
+                    <path opacity=".6" fill="currentColor" d="M8 5h8v11H8z">
+                    </path>
+                  </svg>
+                </div>
               </div>
               <div class="topbar__item">
-                <a href="{{kma.url}}" target="_blank" id="original-link"><div class="topbar__btn">{{kma.get_clean_url}}
-                </div></a>
+                <div class="topbar__btn">
+                  <a href="{{kma.url}}" target="_blank" id="original-link">
+                    {{kma.get_clean_url}}
+                  </a>
+                </div>
                 <div class="topbar__btn" onclick="iframereboot()">
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
-                <div class="topbar__btn">QR <i class="fa-solid fa-qrcode"></i></div> {# qr_from_data url options=my_options #}
+                <div class="topbar__btn">
+                  QR
+                  <i class="fa-solid fa-qrcode"></i>
+                </div>
+                {# qr_from_data url options=my_options #}
               </div>
             </div>
           </div>
@@ -114,13 +143,21 @@
                   <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">Reset</div>
                   </div>
+
+                  <a class="navigation__add-link"
+                    onclick="document.getElementById('navigation-add').style.display = 'block' "data-manual-link="{{sub.manual_link}}">
+                    (?)
+                  </a>
+
+                  
+
                 </div>
               </div>
 
               <div class="navigation">
                 <div class="navigation__inner">
 
-                  <div id="checker-data">
+                  <div class="navigation__checker-data" id="checker-data">
                     <div id="img-doubles">
                       {% for img in kma.img_doubles %}
                       <img data-oi-img="{{img.hash}}" src="{{img.src}}">
@@ -138,7 +175,7 @@
                     </div>
                   </div>
 
-                  <div id="check_list">
+                  <div class="navigation__checker-list" id="check_list">
                     <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
 
                     <div class="list-group">
@@ -147,14 +184,18 @@
 
                         <label class="list-group__items tab">
                           <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
-                          <b class="list-group__items-title tab-title" for="tab">{{block.name}}</b>
+
+                          <b class="list-group__items-title tab-title" for="tab">
+                            {{block.name}}
+                          </b>
 
                           <div class="list-group-item__row tab-content">
                             <!-- <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
                               data-group-status="1">Отметить все </a> -->
                             {%for sub in block.subs %}
-                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
-                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
+                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
+                              data-checkpoint-id="{{sub.id}}">
+                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
                               {{sub.text}}
                               <div class="lds-ring check-list" style="display: none;">
                                 <div></div>
@@ -170,6 +211,24 @@
 
                       </div>
                       {%endfor%}
+                    </div>
+                  </div>
+
+                  <div class="navigation__add" id="navigation-add">
+                    <div class="navigation__add-inner">
+                      <div class="add-inner__head">
+                        <div class="add-inner__item">
+                          TEXT
+                        </div>
+                        <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
+                          X
+                        </a>
+                      </div>
+                      <div class="add-inner__main">
+                        <p>
+                          Тут добавляем контент
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -271,19 +330,19 @@
       'status': 'warning',
       'items': ['123', '123', 'xxxx', 'xxyyyy']
     }
-    function loadImfoItems(items){
+    function loadImfoItems(items) {
       console.log(items)
-      for (pos in items){
+      for (pos in items) {
         let item = items[pos];
         addInfo(item)
       }
     }
-    function addInfo(x_data){
-      let info = $('#text-analiz .info-block.'+x_data['status']).clone()
+    function addInfo(x_data) {
+      let info = $('#text-analiz .info-block.' + x_data['status']).clone()
       let main_text = $('<p>')
       main_text.text(x_data['text'] + ': ')
       info.append(main_text)
-      for (pos in x_data['items']){
+      for (pos in x_data['items']) {
         let item_text = x_data['items'][pos]
         let item_elem = $('<p>')
         item_elem.text(item_text)
@@ -305,7 +364,7 @@
         if (response['success']) {
           $('#analize-load').hide()
 
-          if (get_old_analize){
+          if (get_old_analize) {
             offers = response.result['offers']
             putDataFromAnalize('Офферы:', offers)
             currs = response.result['currencys']
@@ -318,7 +377,7 @@
             putDataFromAnalize('Слова:', geo_words)
             scripts_on_land = response.result['scripts']
           }
-          
+
           loadImfoItems(response['new_checker'])
           console.log('End')
           fixListHeight()
@@ -347,14 +406,14 @@
 
 
     // перезагрузка iFrame
-    function iframereboot(){
+    function iframereboot() {
       var iframe = document.getElementById('iframe');
       iframe.srcdoc = iframe.srcdoc;
     }
   </script>
   <script>
-      // открыть весь список
-      $('.tab-content').trigger('click')
+    // открыть весь список
+    $('.tab-content').trigger('click')
 
 
     fixListHeight()
@@ -363,16 +422,19 @@
       $('.check_list input').prop('checked', false);
     })
 
-    $('.list-group').click(function(){
+    $('.list-group').click(function () {
       fixListHeight()
     })
-      function fixListHeight(){
-        // Подогнать высоту чеклиста
-        let chekListWidth = $('#iframe').height() - $('#checker-data').height()
-        console.log(chekListWidth, 'chekListWidth')
-        chekListWidth = chekListWidth - 30;
-      $('#check_list').height(chekListWidth + 'px')
-      }
+    /* function fixListHeight(){
+      // Подогнать высоту чеклиста
+      let chekListWidth = $('#iframe').height() - $('#checker-data').height()
+      console.log(chekListWidth, 'chekListWidth')
+      chekListWidth = chekListWidth - 30;
+    $('#check_list').height(chekListWidth + 'px')
+    } */
+
+
+
 
     // Снять\Поставить все гагли в чеклисте
     // $('a.clear-group').click(function (e) {
@@ -391,7 +453,7 @@
     // })
 
 
-      function sendNewCheckStatus(check_point_id, checked_url, new_status){
+    function sendNewCheckStatus(check_point_id, checked_url, new_status) {
       // Отпарвить новый статус у пункта проверки чеклиста
       url = full + 'checker_2/change_status_of_user_checklist/'
       data = {
@@ -400,25 +462,25 @@
         'status': new_status,
         'csrfmiddlewaretoken': csrftoken,
       }
-      $.post(url, data, function(response){
+      $.post(url, data, function (response) {
         console.log(response)
-        if (response['success'] != true){console.error('Ошибка сохранения чекпоита!')}
+        if (response['success'] != true) { console.error('Ошибка сохранения чекпоита!') }
         makeCkeckPointAnable(check_point_id)
       })
 
     }
 
-    function makeCkeckPointAnable(checkPointId){
-      let checkPoint = $('#check_list .list-group-item.sub').filter(function(){
-        if ($(this).attr('data-checkpoint-id') == checkPointId) {return true}
+    function makeCkeckPointAnable(checkPointId) {
+      let checkPoint = $('#check_list .list-group-item.sub').filter(function () {
+        if ($(this).attr('data-checkpoint-id') == checkPointId) { return true }
       })
       checkPoint.find('input').prop('disabled', false)
       checkPoint.find('.lds-ring.check-list').hide()
     }
 
-    $('#check_list .list-group-item.sub input').click(function(){
+    $('#check_list .list-group-item.sub input').click(function () {
       let check_point = $(this).parent()
-      if ($(this).attr('disabled') !='disabled'){
+      if ($(this).attr('disabled') != 'disabled') {
         $(this).prop('disabled', true)
         let check_point_id = check_point.attr('data-checkpoint-id')
         let status = $(this).is(':checked')
