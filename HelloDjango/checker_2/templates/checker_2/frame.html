@@ -21,10 +21,19 @@
   {% for link in kma.get_favicon_links %}
   {{link|safe}}
   {%endfor%}
+<!--  FOR MANUAL-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- STYLES -->
+  <link rel="stylesheet" href="{% static 'manual/css/bs_styles.css' %}">
+  <link rel="stylesheet" href="{% static 'manual/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'manual/css/my_styles.css' %}">
 </head>
 
 <body>
-  <!--TO - CLONE-->
+  <!-- <div id="for-doc" style="display: none;">
+    <div id="manual" class="content "></div>
+  </div> -->
+    <!--TO - CLONE-->
   <div id="text-analiz" style="display: none;">
     <div class="info-block info">
       <i class="fa-solid fa-circle-chevron-down"></i>
@@ -149,7 +158,7 @@
                     (?)
                   </a>
 
-                  
+
 
                 </div>
               </div>
@@ -176,7 +185,7 @@
                   </div>
 
                   <div class="navigation__checker-list" id="check_list">
-                    <div class="leftbar__tool-btn" id="clear-check-list">Clear</div>
+                    <!-- <div class="leftbar__tool-btn" id="clear-check-list">Clear</div> -->
 
                     <div class="list-group">
                       {%for block in checker.check_list %}
@@ -184,30 +193,38 @@
 
                         <label class="list-group__items tab">
                           <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
-
                           <b class="list-group__items-title tab-title" for="tab">
                             {{block.name}}
+                            {%if block.manual_link%}
+                            <a href="" data-manual-link="{{block.manual_link}}">(?)</a>
+                            {%endif%}
                           </b>
 
                           <div class="list-group-item__row tab-content">
-                            <!-- <a href="#" class="link-secondary clear-group" data-group-id="{{ forloop.counter }}"
-                              data-group-status="1">Отметить все </a> -->
                             {%for sub in block.subs %}
-                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
+                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
+                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
+                              {{sub.text}}
+                              {%if sub.manual_link%}
+                            <a href="" data-manual-link="{{sub.manual_link}}">(?)</a>
+                            {%endif%}
+                            <div class="lds-ring check-list" style="display: none;">
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                              <div></div>
+                            </div>
+                          </label>
+                            <!-- <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
                               data-checkpoint-id="{{sub.id}}">
                               <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
                               {{sub.text}}
-                              <div class="lds-ring check-list" style="display: none;">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                              </div>
-                            </label>
+         
+                            </label> -->
                             {%endfor%}
                           </div>
 
-                        </label>
+                     
 
                       </div>
                       {%endfor%}
@@ -218,13 +235,13 @@
                     <div class="navigation__add-inner">
                       <div class="add-inner__head">
                         <div class="add-inner__item">
-                          TEXT
+                          Документация
                         </div>
                         <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
                           X
                         </a>
                       </div>
-                      <div class="add-inner__main">
+                      <div class="add-inner__main content" id="manual" >
                         <p>
                           Тут добавляем контент
                         </p>
@@ -410,10 +427,52 @@
       var iframe = document.getElementById('iframe');
       iframe.srcdoc = iframe.srcdoc;
     }
+
+
+    // загрузка документации
+    function loadDoc(manual_land){
+      console.log(manual_land)
+      let url = currentUrl + '/checker_2/doc_page/'
+      data = {'manual_land': manual_land}
+      $.post(url, data,function(response){
+        // $('#for-doc').show()
+        $('#navigation-add').show()
+        $('#manual').empty()
+          $('#manual').html(response)
+      })
+    }
+
   </script>
+  <style>
+      #for-doc{
+        position: absolute;
+        top: 70px;
+        left: 400px;
+        width: 600px;
+        min-height: 100px;
+        background-color: white;
+        z-index: 5;
+        padding: 20px;
+        border-radius: 10px;
+        border: 3px solid black;
+        max-height: 800px;
+        overflow: hidden;
+        overflow-y: scroll;
+      }
+      /* #manual{
+        overflow: hidden;
+        overflow-y: scroll;
+      } */
+  </style>
   <script>
-    // открыть весь список
-    $('.tab-content').trigger('click')
+    $('#check_list a').click(function(e){
+      e.preventDefault();
+      let manualLink = $(this).attr('data-manual-link');
+      loadDoc(manualLink);
+    })
+      // открыть весь список
+      $('.tab-content').trigger('click')
+
 
 
     fixListHeight()
@@ -493,6 +552,7 @@
 
   </script>
 
+<script src="{% static 'manual/js/main.js' %}"></script>
 </body>
 
 </html>

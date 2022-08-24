@@ -13,6 +13,10 @@ from .models import UserSiteCheckPoint
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
 from qr_code.qrcode.utils import QRCodeOptions
+from django.template import Template
+from django.template import Context, RequestContext
+from bs4 import BeautifulSoup
+
 
 
 # Create your views here.
@@ -167,4 +171,32 @@ def change_status_of_user_checklist(request):
             'error': 'Wrong method',
         }
         return JsonResponse(answer, safe=False)
+
+@login_required
+@csrf_exempt
+def doc_page(request):
+    manual_land = request.POST['manual_land']
+    manual_land = manual_land.replace('.', '/')
+    print(manual_land)
+    block_id = None
+    if '#' in manual_land:
+        manual_land, block_id = manual_land.split('#')
+    print(manual_land,block_id)
+    file_path = str(settings.BASE_DIR) + f'/manual/templates/manual/{manual_land}.html'
+    with open(file_path) as file:
+        text = file.read()
+    to_remove = ["{% extends 'manual/base.html' %}", "{% block content %}", "{%endblock%}", "{% endblock %}"]
+    for tag in to_remove:
+        text  = text.replace(tag, '')
+    if block_id:
+        soup = BeautifulSoup(text,'lxml')
+        text_block = soup.find('div', {'id': block_id})
+        text = str(text_block)
+    text = '{% load note %}\n'+text
+    context = RequestContext(request,{'x': 'xxxx'})
+    t = Template(text)
+    res = t.render(context)
+    return HttpResponse(res)
+
+
 

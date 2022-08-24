@@ -19,10 +19,10 @@ ol[class] {
   padding: 0;
 }
 
-img {
+/* img {
   max-width: 100%;
   display: block;
-}
+} */
 
 input,
 button,
@@ -495,9 +495,13 @@ margin: 0 5px;
   background-color: rgb(63, 61, 61);
   border: 1px solid rgba(33, 43, 52, 1);
   border-left: none;
-  max-width: 600px;
-  width: 100%;
-  max-height: calc(100vh - 50px);
+  /* max-width: 600px;
+  width: 100%; */
+  width: 600px;
+  /* max-height: calc(100vh - 50px); */
+  height: 900px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 .navigation__add-link,
 .add-inner__item,
@@ -511,11 +515,15 @@ margin: 0 5px;
   justify-content: space-between;
   border-bottom: 1px solid rgba(33, 43, 52, 1);
 }
-.add-inner__main p{
+/* .add-inner__main p{
   text-align: center;
   color: #f1f1f1;
-}
+} */
 /* ------------------------------- */
 /* ------------footer------------- */
 
 /* ------------------------------- */
+
+#manual{
+  padding: 3px 20px;
+}

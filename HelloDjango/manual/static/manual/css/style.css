@@ -1,6 +1,9 @@
-body{
+body#manual{
     background-color: #edf0f2;
+    margin: 0;
+    padding:0;
 }
+
 p.caption, h1, h2, h3, h4, h5, h6, legend {
     margin-top: 0;
     font-weight: 700;
@@ -8,7 +11,7 @@ p.caption, h1, h2, h3, h4, h5, h6, legend {
 }
 
 .nav-logo h2{
-    margin: 0;
+    margin: 0 !important;
 }
 .nav-logo img{
     width: 50px;
@@ -45,7 +48,7 @@ nav{
 .rst-content{
     padding: 1.618em 3.236em;
     height: 100%;
-    max-width: 900px;
+    max-width: 800px;
     margin: 0;
     background: #fcfcfc;
     min-height: 100vh;
@@ -167,16 +170,16 @@ ul.toctree-l>li.current button::before{
     background-color: #c9c9c9;
 }
 
-.rst-content .admonition{
+.content .admonition{
     clear: both;
     padding: 12px;
     line-height: 24px;
     margin: 16px 0 24px 0;
 }
-.rst-content .note{
+.content .note{
     background: #e7f2fa;
 }
-.rst-content .note .admonition-title{
+.content .note .admonition-title{
     background: #6ab0de;
     font-weight: 700;
     display: block;
@@ -185,30 +188,8 @@ ul.toctree-l>li.current button::before{
     margin: -12px -12px 12px;
 }
 
-.rst-content .note.success{
-    background: #e7f2fa;
-}
-.rst-content .note.success .admonition-title {
-    background: #1abc9c;
 
-}
-
-.rst-content .note.warning{
-    background: #ffedcc;
-}
-.rst-content .note.warning .admonition-title {
-    background: #f0b37e;
-}
-
-
-.rst-content .note.danger{
-    background: #ffcccc;
-}
-.rst-content .note.danger .admonition-title {
-    background: #f07e7e;
-}
-
-.rst-content .admonition-title:before {
+.content .admonition-title:before {
     margin-right: 4px;
     content: "\f06a";
     font-family: FontAwesome;

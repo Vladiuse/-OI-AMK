@@ -38,6 +38,7 @@ class CheckListView:
         for b in all:
             dic = {
                 'name': b.name,
+                'manual_link': b.manual_link,
                 'subs': []
             }
             for c in b.checkpoint_set.all():
