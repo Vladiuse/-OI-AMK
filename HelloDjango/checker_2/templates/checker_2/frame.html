@@ -397,7 +397,7 @@
 
           loadImfoItems(response['new_checker'])
           console.log('End')
-          fixListHeight()
+          // fixListHeight()
 
         } else {
           console.error('Ошибка загрузки анализатора')
@@ -475,15 +475,17 @@
 
 
 
-    fixListHeight()
+    // fixListHeight()
     // для чеклиста
     $('#clear-check-list').click(function () {
       $('.check_list input').prop('checked', false);
     })
 
-    $('.list-group').click(function () {
-      fixListHeight()
-    })
+    // $('.list-group').click(function () {
+    //   fixListHeight()
+    // })
+
+
     /* function fixListHeight(){
       // Подогнать высоту чеклиста
       let chekListWidth = $('#iframe').height() - $('#checker-data').height()
@@ -538,6 +540,7 @@
     }
 
     $('#check_list .list-group-item.sub input').click(function () {
+      console.log(123)
       let check_point = $(this).parent()
       if ($(this).attr('disabled') != 'disabled') {
         $(this).prop('disabled', true)
