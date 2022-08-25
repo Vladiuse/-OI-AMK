@@ -107,16 +107,16 @@
                 </div>
               </div>
               <div class="topbar__item">
-                <div class="topbar__btn">
-                  <a href="{{kma.get_land_admin_url}}" target="_blank" id="original-link">
+                <a href="{{kma.get_land_admin_url}}" target="_blank" id="original-link">
+                  <div class="topbar__btn">
                     <i class="fa-solid fa-pen-to-square"></i>
-                  </a>
-                </div>
-                <div class="topbar__btn">
-                  <a href="{{kma.url}}" target="_blank" id="original-link">
-                    {{kma.get_clean_url}}
-                  </a>
-                </div>
+                  </div>
+                </a>
+                <a href="{{kma.url}}" target="_blank" id="original-link">
+                  <div class="topbar__btn">            
+                      {{kma.get_clean_url}}
+                  </div>
+                </a>
                 <div class="topbar__btn" onclick="iframereboot()">
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
@@ -142,26 +142,40 @@
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Click Elem</div>
+                  <!-- <div class="leftbar__tool-item">
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Cl</div>
                   </div>
                   <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">Forms</div>
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">F</div>
                   </div>
                   <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showPrices')">Prices</div>
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showPrices')">P</div>
                   </div>
                   <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showDates')">Dates</div>
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showDates')">D</div>
                   </div>
                   <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">Reset</div>
+                    <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">R</div>
+                  </div> -->
+                  <div class="leftbar__tool-item debug" >
+                    <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
+                  </div>
+                  <div class="leftbar__tool-item debug" onclick="runFuncIframe('showCkickEmems')">
+                    <svg data-icon="ShareLarge" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M14 11V7.33h-2a3 3 0 00-3 3v3H7v-3a4.998 4.998 0 015-5h2V2l6 4.5-6 4.5z"></path><path fill="currentColor" d="M7.108 4H2a1 1 0 00-1 1v12a1 1 0 001 1h15a1 1 0 001-1v-5.25l-2 1.5V16H3V6h2.272a8.044 8.044 0 011.836-2z"></path></svg>
+                  </div>
+                  <div class="leftbar__tool-item debug" onclick="runFuncIframe('showFormPriceDate')">
+                    <svg data-icon="Commercepanel" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path d="M3.122 2H0V0h4.878L5.4 4H19v6.82L4.647 13.69 3.122 2zM18 20a2 2 0 110-4 2 2 0 010 4zM6 20a2 2 0 110-4 2 2 0 010 4z" fill="currentColor"></path></svg>
+                  </div>
+                  <div class="leftbar__tool-item" onclick="runFuncIframe('removeAllDebug')" id="clear-debug">
+                    <i class="fa-solid fa-xmark"></i>
+                  </div>
+                  <div class="leftbar__tool-item">
+                    <i class="fa-solid fa-circle-question"></i>
                   </div>
 
-                  <a class="navigation__add-link"
+                  <!-- <a class="navigation__add-link"
                     onclick="document.getElementById('navigation-add').style.display = 'block' "data-manual-link="{{sub.manual_link}}">
-                    (?)
-                  </a>
+                  </a> -->
 
 
 
@@ -194,14 +208,16 @@
 
                     <div class="list-group">
                       {%for block in checker.check_list %}
-                      <div class="group-id-{{ forloop.counter }}">
+                      <div class="block group-id-{{ forloop.counter }}">
 
                         <label class="list-group__items tab">
                           <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
                           <b class="list-group__items-title tab-title" for="tab">
                             {{block.name}}
                             {%if block.manual_link%}
-                            <a href="" data-manual-link="{{block.manual_link}}">(?)</a>
+                            <a href="" data-manual-link="{{block.manual_link}}">
+                              <i class="fa-solid fa-circle-question"></i>
+                            </a>
                             {%endif%}
                           </b>
 
@@ -211,7 +227,9 @@
                               <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
                               {{sub.text}}
                               {%if sub.manual_link%}
-                            <a href="" data-manual-link="{{sub.manual_link}}">(?)</a>
+                            <a href="" data-manual-link="{{sub.manual_link}}">
+                              <i class="fa-solid fa-circle-question"></i>
+                            </a>
                             {%endif%}
                             <div class="lds-ring check-list" style="display: none;">
                               <div></div>
@@ -243,7 +261,7 @@
                           Документация
                         </div>
                         <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
-                          X
+                          <i class="fa-solid fa-xmark"></i>
                         </a>
                       </div>
                       <div class="add-inner__main content" id="manual" >
@@ -449,7 +467,7 @@
 
   </script>
   <style>
-      #for-doc{
+      /* #for-doc{
         position: absolute;
         top: 70px;
         left: 400px;
@@ -463,12 +481,13 @@
         max-height: 800px;
         overflow: hidden;
         overflow-y: scroll;
-      }
+      } */
       /* #manual{
         overflow: hidden;
         overflow-y: scroll;
       } */
   </style>
+
   <script>
     $('#check_list a').click(function(e){
       e.preventDefault();
@@ -561,6 +580,55 @@
   </script>
 
 <script src="{% static 'manual/js/main.js' %}"></script>
+<script>
+  $('.leftbar__tool-item.debug').click(function(){
+    $(this).toggleClass('active')
+  })
+
+  $('#clear-debug').click(function(){
+    $('.leftbar__tool-item.debug').removeClass('active')
+  })
+</script>
+<style>
+  .leftbar__tool-item svg,
+  .leftbar__tool-item i
+  {
+    color: #ffffff;
+    margin: 0 7px;
+  }
+  .leftbar__tool-item.active svg,
+  .leftbar__tool-item.active i
+  {
+    color: rgb(36, 150, 255);
+    margin: 0 7px;
+  }
+
+  .leftbar__tool-item {
+  margin-top: -1px;
+  display: block;
+  /* width: 35px; */
+  position: relative;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  cursor: default;
+  border-bottom: 1px solid rgb(43, 43, 43);
+  }
+
+
+  /* .list-group .block{
+    background-color: rgb(43, 43, 43);
+    border-top: 1px none;
+    border-right: 0px solid rgb(33, 33, 33);
+    border-bottom: 1px solid rgb(33, 33, 33);
+    border-left: 0px solid rgb(33, 33, 33);
+    color: rgb(255, 255, 255);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding-left: 12px;
+    padding-right: 12px;
+  } */
+</style>
 </body>
 
 </html>
