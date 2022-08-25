@@ -208,7 +208,7 @@
 
                     <div class="list-group">
                       {%for block in checker.check_list %}
-                      <div class="block group-id-{{ forloop.counter }}">
+                      <div class="block block group-id-{{ forloop.counter }}">
 
                         <label class="list-group__items tab">
                           <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
@@ -220,7 +220,6 @@
                             </a>
                             {%endif%}
                           </b>
-
                           <div class="list-group-item__row tab-content">
                             {%for sub in block.subs %}
                             <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
@@ -242,13 +241,11 @@
                               data-checkpoint-id="{{sub.id}}">
                               <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
                               {{sub.text}}
-         
+
                             </label> -->
                             {%endfor%}
                           </div>
-
-                     
-
+                          </label>
                       </div>
                       {%endfor%}
                     </div>
@@ -615,7 +612,7 @@
   }
 
 
-  /* .list-group .block{
+  .list-group .block{
     background-color: rgb(43, 43, 43);
     border-top: 1px none;
     border-right: 0px solid rgb(33, 33, 33);
@@ -623,11 +620,18 @@
     border-left: 0px solid rgb(33, 33, 33);
     color: rgb(255, 255, 255);
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding-left: 12px;
-    padding-right: 12px;
-  } */
+    font-size: 13px;
+    font-weight: 450;
+  }
+  .list-group-item{
+    background-color: #404040;
+    border-bottom: 1px solid #212121;
+  }
+  .list-group-item:hover{
+    background-color: rgb(77, 77, 77);
+    /* background-color: rgb(141, 34, 34); */
+  }
+  /* #4d4d4d */
 </style>
 </body>
 

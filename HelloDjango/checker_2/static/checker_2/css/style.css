@@ -149,7 +149,8 @@ margin: 0 5px;
   flex-flow: row wrap;
 }
 #checker-data{
-  border-bottom: 1px solid rgba(33, 43, 52, 1);;
+  border-bottom: 1px solid rgba(33, 43, 52, 1);
+  padding 0 10px;
   padding-bottom: 8px;
 }
 #checker-data #img-doubles img {
@@ -163,14 +164,14 @@ margin: 0 5px;
 #check_list{
   overflow: hidden;
   overflow-y: scroll;
-  padding-right: 10px;
-  margin-top: 5px;
+  padding-right: 4px;
+  margin-top: 0px;
 }
 #check_list::-webkit-scrollbar {
   width: 6px;
 }
 #check_list::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
   border-radius: 25px;
 }
 #check_list::-webkit-scrollbar-thumb {
@@ -178,7 +179,7 @@ margin: 0 5px;
   border-radius: 25px;
 }
 #check_list::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 #check_list b,
 #check_list label {
@@ -189,7 +190,7 @@ margin: 0 5px;
   line-height: 0.9rem;
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  margin-top: 0px;
 }
 .list-group b {
   font-size: 1.1rem;
@@ -197,24 +198,34 @@ margin: 0 5px;
 }
 .list-group__items {
   display: block;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+}
+.list-group__items.tab{
+  margin: 0px 10px;
+}
+.list-group-item__row{
+  margin: 0px -10px;
 }
 .list-group__items-title {
   display: block;
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
+  margin: 6px;
 }
 .list-group__items-title:hover{
   cursor: pointer;
   color: rgb(241, 185, 145);
 }
 .list-group-item {
-  display: block;
+  /* display: block; */
+  display: flex;
+  align-items: center;
   color: #212529;
   text-decoration: none;
   line-height: 16px;
   background-color: rgb(63, 61, 61);
-  padding: 3px 0 3px 3px;
-} 
+  /* padding: 3px 0 3px 3px; */
+  padding: 3px 10px 3px 3px;
+}
 .link-secondary {
   display: block;
   margin-bottom: 5px;
@@ -260,7 +271,7 @@ margin: 0 5px;
   width: 25px;
   height: 25px;
   margin: 8px;
-  border: 4px solid #fff;
+  border: 3px solid #fff;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: #fff transparent transparent transparent;
@@ -268,11 +279,12 @@ margin: 0 5px;
 .lds-ring.check-list {
   width: 15px;
   height: 15px;
+  margin-left: 2px;
 }
 .lds-ring.check-list div{
   width: 15px;
   height: 15px;
-  margin: 5px;
+  margin: 0px;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
@@ -479,7 +491,7 @@ margin: 0 5px;
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - 46px);
-  padding: 10px 8px;
+  padding: 10px 0px;
 }
 .navigation__checker-data{
   flex-grow: 1;
