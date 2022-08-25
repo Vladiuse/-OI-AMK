@@ -57,55 +57,15 @@ class CheckPoint(OrderedModel):
         verbose_name_plural = 'Пункты проверки'
         ordering = ['order']
 
+    def save(self):
+        super().save()
+        actual_lists = ActualUserList.objects.all()
+        for user_list in actual_lists:
+            user_check_point = UserSiteCheckPoint(user_list=user_list, check_point=self)
+            user_check_point.save()
+
     def __str__(self):
         return self.text
-
-
-class UserSiteCheckPoint(models.Model):
-    check_point = models.ForeignKey(CheckPoint, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    url = models.CharField(max_length=70)
-    is_checked = models.BooleanField(default=False)
-
-    class Meta:
-        # verbose_name = 'Пункт проверки'
-        # verbose_name_plural = 'Пункты проверки'
-        ordering = ['check_point__order']
-        unique_together = ['check_point', 'user', 'url']
-
-    @staticmethod
-    def make_user_url_list(user_model, url):
-        """Создать чеклист проверки под конкрентый сайт и пользователя"""
-        all = CheckPoint.objects.all()
-        new_check_list = list()
-        for check_point in all:
-            u = UserSiteCheckPoint(check_point=check_point, user=user_model, url=url)
-            new_check_list.append(u)
-        new_list = UserSiteCheckPoint.objects.bulk_create(new_check_list)
-        new_dic = {check_point.__dict__['check_point_id']: check_point.__dict__ for check_point in new_list}
-        return new_dic
-
-    @staticmethod
-    def get_user_ckecklist_dict(user_model, url):
-        """Получить чеклист пользователя для сайта"""
-        all = UserSiteCheckPoint.objects.filter(user_id=user_model.id, url=url).values()
-        user_dict_checklist = {check_point['check_point_id']: check_point for check_point in all}
-        return user_dict_checklist
-
-    @staticmethod
-    def get_list(user_model, url):
-        try:
-            ActualUserList.objects.get(user=user_model, url=url)
-            user_check_list = UserSiteCheckPoint.get_user_ckecklist_dict(user_model=user_model, url=url)
-        except ActualUserList.DoesNotExist as error:
-            new_ckeck_list_record = ActualUserList(user=user_model, url=url)
-            new_ckeck_list_record.save()
-            user_check_list = UserSiteCheckPoint.make_user_url_list(user_model=user_model, url=url)
-        return user_check_list
-
-    # def __str__(self):
-    #     return self.text
-
 
 class ActualUserList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -114,3 +74,52 @@ class ActualUserList(models.Model):
 
     class Meta:
         unique_together = ['user', 'url']
+
+
+class UserSiteCheckPoint(models.Model):
+    check_point = models.ForeignKey(CheckPoint, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # url = models.CharField(max_length=70)
+    user_list = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
+    is_checked = models.BooleanField(default=False)
+
+    class Meta:
+        # verbose_name = 'Пункт проверки'
+        # verbose_name_plural = 'Пункты проверки'
+        ordering = ['check_point__order']
+        unique_together = ['check_point', 'user_list']
+
+    @staticmethod
+    def make_user_url_list(user_list):
+        """Создать чеклист проверки под конкрентый сайт и пользователя"""
+        all = CheckPoint.objects.all()
+        new_check_list = list()
+        for check_point in all:
+            u = UserSiteCheckPoint(check_point=check_point, user_list=user_list)
+            new_check_list.append(u)
+        new_list = UserSiteCheckPoint.objects.bulk_create(new_check_list)
+        new_dic = {check_point.__dict__['check_point_id']: check_point.__dict__ for check_point in new_list}
+        return new_dic
+
+    @staticmethod
+    def get_user_ckecklist_dict(user_list):
+        """Получить чеклист пользователя для сайта"""
+        all = UserSiteCheckPoint.objects.filter(user_list=user_list).values()
+        user_dict_checklist = {check_point['check_point_id']: check_point for check_point in all}
+        return user_dict_checklist
+
+    @staticmethod
+    def get_list(user_model, url):
+        try:
+            user_list = ActualUserList.objects.get(user=user_model, url=url)
+            user_check_list = UserSiteCheckPoint.get_user_ckecklist_dict(user_list=user_list)
+        except ActualUserList.DoesNotExist as error:
+            new_ckeck_list_record = ActualUserList(user=user_model, url=url)
+            new_ckeck_list_record.save()
+            user_check_list = UserSiteCheckPoint.make_user_url_list(user_list=new_ckeck_list_record)
+        return user_check_list
+
+    # def __str__(self):
+    #     return self.text
+
+

@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_land import KMALand, Land
 from kma.models import OfferPosition, PhoneNumber
-from .models import UserSiteCheckPoint
+from .models import UserSiteCheckPoint, ActualUserList
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
 from qr_code.qrcode.utils import QRCodeOptions
@@ -152,7 +152,8 @@ def change_status_of_user_checklist(request):
         else:
             status = False
         try:
-            check_point = UserSiteCheckPoint.objects.get(user=user, check_point_id=check_point_id, url=checked_url)
+            user_list = ActualUserList.objects.get(user=user,url=checked_url)
+            check_point = UserSiteCheckPoint.objects.get(check_point_id=check_point_id, user_list=user_list)
             check_point.is_checked = status
             check_point.save()
             answer = {
