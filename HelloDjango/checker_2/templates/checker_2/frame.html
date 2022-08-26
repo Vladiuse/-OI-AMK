@@ -157,7 +157,7 @@
                   <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">R</div>
                   </div> -->
-                  <div class="leftbar__tool-item debug" >
+                  <div class="leftbar__tool-item debug active" id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
                   <div class="leftbar__tool-item debug" onclick="runFuncIframe('showCkickEmems')">
@@ -587,6 +587,11 @@
 
   $('#clear-debug').click(function(){
     $('.leftbar__tool-item.debug').removeClass('active')
+  })
+  $('#navigator').click(function(){
+    if ($(this).hasClass('active')){
+      $('.navigation').show()
+    } else {$('.navigation').hide()}
   })
 </script>
 <style>

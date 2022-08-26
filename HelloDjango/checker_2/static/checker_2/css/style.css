@@ -95,6 +95,7 @@ body {
 }
 .main{
   display: flex;
+  height: 900px;
 }
 .main__inner{
   display: flex;
