@@ -300,7 +300,7 @@
     const full = location.protocol + '//' + location.host + '/';
     let site = iframe.contentWindow
     let csrftoken = '{{csrf_token}}' // csrfmiddlewaretoken
-    let checkedUrl = '{{kma.url}}'
+    let checkedUrl = '{{kma.url|safe}}'
 
     let land_data_from_js = false;
     let get_phone_code_api = false;
