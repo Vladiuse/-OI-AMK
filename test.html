@@ -46,10 +46,59 @@
             color:#fc5f2e;
         }
     </style>
+    <style>
+        .roundedTwo {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    margin: 20px auto;
+    background: #fcfff4;
+    background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    border-radius: 50px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgb(0 0 0 / 50%);
+}
+.roundedTwo input[type=checkbox] {
+    visibility: hidden;
+}
+.roundedTwo label {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #222222 0%, #45484d 100%);
+    border-radius: 50px;
+    box-shadow: inset 0px 1px 1px rgb(0 0 0 / 50%), 0px 1px 0px white;
+}
+.roundedTwo label:after {
+    content: '';
+    width: 9px;
+    height: 5px;
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    border: 3px solid #fcfff4;
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    opacity: 0;
+    transform: rotate(-45deg);
+}
+.roundedTwo input[type=checkbox]:checked + label:after {
+    opacity: 1;
+}
+    </style>
 </head>
 <body>
-  
-
+    <div class="roundedTwo">
+        <input type="checkbox" value="None" id="roundedTwo" name="check" checked="">
+        <label for="roundedTwo"></label>
+      </div>
+      <div class="roundedTwo">
+        <input type="checkbox" value="None" id="roundedTwo1" name="check" checked="">
+        <label for="roundedTwo"></label>
+      </div>
 
 
 

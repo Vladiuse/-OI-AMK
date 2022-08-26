@@ -82,7 +82,7 @@ class Currency(Check):
         for curr in currencies_on_land:
             if curr == currency:
                 self.add_mess(self.ONE_CURR_FOUND, curr.upper())
-            if curr != currency and curr not in ['all','try',]:
+            if curr != currency and curr not in ['all','try', 'gel', 'peso']:
                 self.add_mess(self.MORE_ONE_CURRENCIES, curr)
 
 
