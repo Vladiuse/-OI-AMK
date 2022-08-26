@@ -417,7 +417,7 @@ margin: 0 5px;
 .leftbar__tool {
   display: flex;
   flex-direction: column;
-  width: 80px;
+  width: 38px;
   border-right: 1px solid rgba(33, 43, 52, 1);
   border-bottom: 1px solid rgba(33, 43, 52, 1);
   background-color: rgb(63, 61, 61);
@@ -425,14 +425,14 @@ margin: 0 5px;
 
 .leftbar__tool-item {
   text-align: center;
-  padding: 0 10px;
+  /* padding: 0 10px; */
 }
 
 .leftbar__tool-btn {
   margin-top: 5px;
   padding: 5px 8px;
   cursor: pointer;
-  width: 60px;
+  width: 30px;
   display: block;
   font-family: arial, sans-serif;
   font-size: 12px;
@@ -499,16 +499,19 @@ margin: 0 5px;
   width: 100%; */
   width: 600px;
   /* max-height: calc(100vh - 50px); */
-  height: 900px;
+}
+.add-inner__main{
   overflow: hidden;
   overflow-y: scroll;
+  height: 850px;
 }
+
 .navigation__add-link,
 .add-inner__item,
 .add-inner__lock{
   color: #f1f1f1;
   cursor: pointer !important; 
-  padding: 5px 8px;
+  padding: 5px 20px;
 }
 .add-inner__head{
   display: flex;
@@ -526,4 +529,18 @@ margin: 0 5px;
 
 #manual{
   padding: 3px 20px;
+}
+#manual::-webkit-scrollbar {
+  width: 6px;
+}
+#manual::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 25px;
+}
+#manual::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 25px;
+}
+#manual::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

@@ -48,6 +48,13 @@ console.log('MY SCRIPNT START')
         findSriptsDate();
     }
 
+    function showFormPriceDate(){
+        // общая функция для всего кроме кликабельных элементов
+        showFormEmels();
+        showPrices();
+        showDates();
+    }
+
     function showImages(){
         // Картинки
         findImgDouble();

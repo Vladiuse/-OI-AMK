@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import re
 import json
+from json import JSONDecodeError
 import requests as req
 from .text_fixxer import DomFixxer
 from django.conf import settings
@@ -146,6 +147,9 @@ class KMALand(Land):
         self.country = self._country()
         self.language = self._language()
         self.country_list = self._country_list()
+        self.list_of_parameters = self._list_of_parameters()
+        self.list_of_form_parameters = self._list_of_form_parameters()
+        print(self.list_of_form_parameters)
         self.land_attrs = list()
 
     def get_clean_url(self):
@@ -172,7 +176,6 @@ class KMALand(Land):
             # print(script)
             # print('country_list' in script)
             if 'country_list' in script:
-
                 return script
 
     def _country(self) -> str:
@@ -200,6 +203,38 @@ class KMALand(Land):
             dic[k.lower()] = v
         return dic
 
+    def _list_of_parameters(self) -> dict:
+        """Поиск в js коде переменной list_of_parameters - возвращает ее значение"""
+        start = self.__kma_script.find('list_of_parameters=') + len('list_of_parameters=')
+        if start == -1:
+            return dict()
+        end = self.__kma_script.find('};',start) + 1
+        var = self.__kma_script[start:end]
+        try:
+            list_of_parameters = json.loads(var)
+        except JSONDecodeError:
+            return dict()
+        dic = dict()
+        for k, v in list_of_parameters.items():
+            dic[k.lower()] = v
+        return dic
+
+    def _list_of_form_parameters(self) -> dict:
+        # for preland
+        """Поиск в js коде переменной list_of_form_parameters - возвращает ее значение"""
+        start = self.__kma_script.find("list_of_form_parameters='") + len("list_of_form_parameters='")
+        end = self.__kma_script.find("';", start) + 0
+        var = self.__kma_script[start:end]
+        try:
+            list_of_form_parameters = json.loads(var)
+        except JSONDecodeError:
+            return dict()
+        dic = dict()
+        for k, v in list_of_form_parameters.items():
+            dic[k.lower()] = v
+        return dic
+
+
     def add_site_attrs(self):
         if self._is_video_tag_on_site():
             self.land_attrs.append('video')
@@ -209,6 +244,8 @@ class KMALand(Land):
 
     def process(self):
         self.find_n_mark_img_doubles()
+
+
     @property
     def iframe_srcdoc(self):
         with open(self.STYLES_FILE, encoding='utf-8') as file:
@@ -268,6 +305,29 @@ class KMALand(Land):
     @property
     def curr(self):
         return self.country_list[self.country]['curr']
+
+    @property
+    def offer_id(self):
+        if self.list_of_form_parameters:
+            return self.list_of_form_parameters['offer_id']
+        else:
+            return self.list_of_parameters['offer_id']
+
+    @property
+    def landing_id(self):
+        return self.list_of_parameters['landing']
+    @property
+    def preland_id(self):
+        return self.list_of_form_parameters['transit']
+
+    @property
+    def get_land_admin_url(self):
+        if self.land_type == 'land':
+            kma_land_url = f'https://cpanel.kma.biz/offer/module/landing/update?offer_id={self.offer_id}&id={self.landing_id}'
+            return kma_land_url
+        else:
+            kma_preland_url = f'https://cpanel.kma.biz/offer/module/transit/update?offer_id={self.offer_id}&id={self.preland_id}'
+            return kma_preland_url
 
 
 if __name__ == '__main__':
