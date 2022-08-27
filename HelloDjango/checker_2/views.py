@@ -178,13 +178,11 @@ def change_status_of_user_checklist(request):
 def doc_page(request):
     manual_land = request.POST['manual_land']
     manual_land = manual_land.replace('.', '/')
-    print(manual_land)
     block_id = None
     if '#' in manual_land:
         manual_land, block_id = manual_land.split('#')
-    print(manual_land,block_id)
     file_path = str(settings.BASE_DIR) + f'/manual/templates/manual/{manual_land}.html'
-    with open(file_path) as file:
+    with open(file_path, encoding='utf-8') as file:
         text = file.read()
     to_remove = ["{% extends 'manual/base.html' %}", "{% block content %}", "{%endblock%}", "{% endblock %}"]
     for tag in to_remove:
