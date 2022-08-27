@@ -79,8 +79,8 @@
                 </div>
 
               </div>
-              <div class="topbar__item">
-                <div class="topbar__btn" onclick="setDevice('desctop')">
+              <div class="topbar__item devises">
+                <div class="topbar__btn devise active" onclick="setDevice('desctop')">
                   <div style="position: relative;">
                     <svg data-icon="DeviceLaptopCutCorner24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" class="bem-Svg bem-TopBar_Body_BreakpointButton_Icon bem-TopBar_Body_Button_Icon" style="display: block;">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M14.037 3H4a1 1 0 00-1 1v13H0v2a1 1 0 001 1h22a1 1 0 001-1v-2h-3V8.82l-.997-.725-.003.002V17H4V4h10.418a1.445 1.445 0 01-.381-1z" fill="currentColor"></path>
@@ -91,19 +91,22 @@
                     </svg>
                   </div>
                 </div>
-                <div class="topbar__btn" onclick="setDevice('laptop')">
+                <div class="topbar__btn devise" onclick="setDevice('laptop')">
                   <svg data-icon="DeviceTabletPortrait24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display: block;">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4a1 1 0 011-1h14a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm7 15a1 1 0 112 0 1 1 0 01-2 0zm8-15H5v13h14V4z" fill="currentColor"></path>
                     <path opacity=".6" fill="currentColor" d="M6 5h12v11H6z"></path>
                   </svg>
                 </div>
-                <div class="topbar__btn" onclick="setDevice('phone')">
+                <div class="topbar__btn devise" onclick="setDevice('phone')">
                   <svg data-icon="DeviceMobilePortrait24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display: block;">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4a1 1 0 011-1h10a1 1 0 011 1v16a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm5 15a1 1 0 112 0 1 1 0 01-2 0zm6-15H7v13h10V4z" fill="currentColor">
                     </path>
                     <path opacity=".6" fill="currentColor" d="M8 5h8v11H8z">
                     </path>
                   </svg>
+                </div>
+                <div class="topbar__btn" >
+                  1000 PX 80%
                 </div>
               </div>
               <div class="topbar__item">
@@ -157,7 +160,7 @@
                   <div class="leftbar__tool-item">
                     <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">R</div>
                   </div> -->
-                  <div class="leftbar__tool-item debug" >
+                  <div class="leftbar__tool-item debug active" id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
                   <div class="leftbar__tool-item debug" onclick="runFuncIframe('showCkickEmems')">
@@ -208,7 +211,7 @@
 
                     <div class="list-group">
                       {%for block in checker.check_list %}
-                      <div class="block group-id-{{ forloop.counter }}">
+                      <div class="block block group-id-{{ forloop.counter }}">
 
                         <label class="list-group__items tab">
                           <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
@@ -220,7 +223,6 @@
                             </a>
                             {%endif%}
                           </b>
-
                           <div class="list-group-item__row tab-content">
                             {%for sub in block.subs %}
                             <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
@@ -242,13 +244,11 @@
                               data-checkpoint-id="{{sub.id}}">
                               <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
                               {{sub.text}}
-         
+
                             </label> -->
                             {%endfor%}
                           </div>
-
-                     
-
+                          </label>
                       </div>
                       {%endfor%}
                     </div>
@@ -588,6 +588,19 @@
   $('#clear-debug').click(function(){
     $('.leftbar__tool-item.debug').removeClass('active')
   })
+
+  $('#navigator').click(function(){
+    if ($(this).hasClass('active')){
+      $('.navigation').show()
+    } else {
+      $('.navigation').hide()
+    }
+  })
+
+  $('.topbar__item.devises .devise').click(function(){
+    $('.topbar__item.devises .devise').removeClass('active')
+    $(this).addClass('active')
+  })
 </script>
 <style>
   .leftbar__tool-item svg,
@@ -599,7 +612,7 @@
   .leftbar__tool-item.active svg,
   .leftbar__tool-item.active i
   {
-    color: rgb(36, 150, 255);
+    color: rgb(93 178 255);
     margin: 0 7px;
   }
 
@@ -615,7 +628,7 @@
   }
 
 
-  /* .list-group .block{
+  .list-group .block{
     background-color: rgb(43, 43, 43);
     border-top: 1px none;
     border-right: 0px solid rgb(33, 33, 33);
@@ -623,11 +636,51 @@
     border-left: 0px solid rgb(33, 33, 33);
     color: rgb(255, 255, 255);
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding-left: 12px;
-    padding-right: 12px;
-  } */
+    font-size: 13px;
+    font-weight: 450;
+  }
+  .list-group-item{
+    background-color: #404040;
+    border-bottom: 1px solid #212121;
+  }
+  .list-group-item:hover{
+    background-color: rgb(77, 77, 77);
+    /* background-color: rgb(141, 34, 34); */
+  }
+  /* #4d4d4d */
+  .list-group i{
+  margin-left: 3px;
+  font-size: 1rem;
+  }
+</style>
+<style>
+  .topbar__btn{
+    padding: 6px;
+    display: flex;
+    border-right: 1px solid #363636;
+  }
+  .topbar__btn.active{
+    background-color: #212121;
+  }
+  .topbar__btn svg{
+    color: #ffffff;
+    opacity: 0.4;
+  }
+  .topbar__btn svg:hover{
+    opacity: 0.6;
+  }
+  .topbar__btn.active svg{
+    opacity: 0.8;
+  }
+</style>
+<style>
+  #check_list a i{
+    color: rgb(93 178 255);
+    font-size: 13px;
+  }
+  #country span{
+    margin-left: 3px;
+  }
 </style>
 </body>
 
