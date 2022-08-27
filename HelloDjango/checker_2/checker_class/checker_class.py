@@ -1,7 +1,7 @@
 import requests as req
 from bs4 import BeautifulSoup
 from datetime import datetime
-from .kma_land import KMALand, Land
+from .kma_land import KMALand, Land, PrelandNoAdminError
 from .text_fixxer import DomFixxer
 from .text_finder import TextAnaliz
 from .check_list_view import CheckListView
@@ -215,16 +215,21 @@ class GeoWords(Check):
     KEY_NAME = 'countrys_in_land'
 
     ALL_COUNTRYS = 'Страны'
+    INCORECT_COUNTRY = 'Другие страны'
 
     STATUS_SET = {
         ALL_COUNTRYS: Check.INFO,
+        INCORECT_COUNTRY: Check.WARNING,
     }
 
     def process(self):
         countrys = self.text_finder_result['geo_words_templates']
         for iso, countrys in countrys.items():
             countrys.insert(0, iso.upper())
-            self.add_mess(self.ALL_COUNTRYS, *countrys)
+            if self.land.country == iso:
+                self.add_mess(self.ALL_COUNTRYS, *countrys)
+            else:
+                self.add_mess(self.INCORECT_COUNTRY, *countrys)
 
 
 class CountyLang(Check):
