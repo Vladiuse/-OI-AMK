@@ -184,7 +184,7 @@ def doc_page(request):
         manual_land, block_id = manual_land.split('#')
     print(manual_land,block_id)
     file_path = str(settings.BASE_DIR) + f'/manual/templates/manual/{manual_land}.html'
-    with open(file_path) as file:
+    with open(file_path, encoding='utf-8') as file:
         text = file.read()
     to_remove = ["{% extends 'manual/base.html' %}", "{% block content %}", "{%endblock%}", "{% endblock %}"]
     for tag in to_remove:
