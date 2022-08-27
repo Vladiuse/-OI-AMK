@@ -1,13 +1,14 @@
 import yaml
 import requests as req
+from requests.exceptions import ConnectionError
 import time
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .checker_class.text_finder import TextAnaliz
-from .checker_class.kma_land import KMALand, Land
+from .checker_class.kma_land import KMALand, Land, PrelandNoAdminError
 from kma.models import OfferPosition, PhoneNumber
 from .models import UserSiteCheckPoint, ActualUserList
 from .checker_class.check_list_view import CheckListView
@@ -35,9 +36,6 @@ def read_check_list():
 def index(requests):
     # with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
     #     debug_styles = file.read()
-    # content = {
-    #     'debug_styles': debug_styles,
-    # }
     return render(requests, 'checker_2/index.html')
 
 @login_required
@@ -46,21 +44,36 @@ def check_url(request):
     url = request.GET['url']
     url = KMALand.format_url(url)
     start = time.time()
-    res = req.get(url)
+    try:
+        res = req.get(url)
+    except ConnectionError:
+        content = {
+            'error_text': 'Ссылка не работает'
+        }
+        return render(request, 'checker_2/index.html', content)
     end_load_url = time.time()
     print(f'Site Load:{round(end_load_url - start,2)}')
     if res.status_code != 200:
-        raise ZeroDivisionError
-    else:
-        url_checker = UrlChecker(res.text, url=url, user=request.user)
-        url_checker.process()
         content = {
-            'checker': url_checker,
-            'kma': url_checker.land,
+            'error_text': 'Ссылка не работает'
         }
-        end = time.time()
-        print(f'Total:{round(end - start, 2)}')
-        return render(request, 'checker_2/frame.html', content)
+        return render(request, 'checker_2/index.html', content)
+    else:
+        try:
+            url_checker = UrlChecker(res.text, url=url, user=request.user)
+            url_checker.process()
+            content = {
+                'checker': url_checker,
+                'kma': url_checker.land,
+            }
+            end = time.time()
+            print(f'Total:{round(end - start, 2)}')
+            return render(request, 'checker_2/frame.html', content)
+        except PrelandNoAdminError:
+            content = {
+                'error_text': PrelandNoAdminError.__doc__
+            }
+            return render(request, 'checker_2/index.html', content)
 
 
 @login_required
@@ -178,11 +191,9 @@ def change_status_of_user_checklist(request):
 def doc_page(request):
     manual_land = request.POST['manual_land']
     manual_land = manual_land.replace('.', '/')
-    print(manual_land)
     block_id = None
     if '#' in manual_land:
         manual_land, block_id = manual_land.split('#')
-    print(manual_land,block_id)
     file_path = str(settings.BASE_DIR) + f'/manual/templates/manual/{manual_land}.html'
     with open(file_path, encoding='utf-8') as file:
         text = file.read()

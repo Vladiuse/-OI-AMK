@@ -53,9 +53,11 @@
         <div class="container-fluid">
           <div class="topbar__row">
             <div class="topbar__burger">
-              <p class="topbar__burger-text">
+              <a href="{% url 'checker_2:index' %}">
+                <p class="topbar__burger-text">
                 KMA
               </p>
+              </a>
               <img class="topbar__logo" src="" alt="logo">
             </div>
             <div class="topbar__items">
@@ -223,6 +225,7 @@
                             </a>
                             {%endif%}
                           </b>
+
                           <div class="list-group-item__row tab-content">
                             {%for sub in block.subs %}
                             <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
@@ -300,7 +303,7 @@
     const full = location.protocol + '//' + location.host + '/';
     let site = iframe.contentWindow
     let csrftoken = '{{csrf_token}}' // csrfmiddlewaretoken
-    let checkedUrl = '{{kma.url}}'
+    let checkedUrl = '{{kma.url|safe}}'
 
     let land_data_from_js = false;
     let get_phone_code_api = false;
@@ -655,7 +658,7 @@
 </style>
 <style>
   .topbar__btn{
-    padding: 6px;
+    padding: 8px;
     display: flex;
     border-right: 1px solid #363636;
   }
