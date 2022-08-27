@@ -6,6 +6,10 @@ import requests as req
 from .text_fixxer import DomFixxer
 from django.conf import settings
 
+class PrelandNoAdminError(BaseException):
+    """Прелэндинг не подключен к админке (нет ?ufl=)"""
+
+
 
 class Land:
     TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
@@ -136,7 +140,7 @@ class Land:
 class KMALand(Land):
     """Сайт KMA"""
     PRE_LAND_DOMAINS = ['blog-feed.org']
-    LAND_ADMIN_UTM = 'ufl'
+    LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
     JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
@@ -149,7 +153,6 @@ class KMALand(Land):
         self.country_list = self._country_list()
         self.list_of_parameters = self._list_of_parameters()
         self.list_of_form_parameters = self._list_of_form_parameters()
-        print(self.list_of_form_parameters)
         self.land_attrs = list()
 
     def get_clean_url(self):
@@ -279,6 +282,8 @@ class KMALand(Land):
         """Получить тип сайта"""
         for domain in self.PRE_LAND_DOMAINS:
             if domain in self.url:
+                if KMALand.LAND_ADMIN_UTM not in self.url:
+                    raise PrelandNoAdminError
                 return 'pre_land'
         return 'land'
 
