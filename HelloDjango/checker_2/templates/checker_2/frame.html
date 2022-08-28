@@ -57,12 +57,26 @@
         <div class="container-fluid">
           <div class="topbar__row">
             <div class="topbar__burger">
-              <a href="{% url 'checker_2:index' %}">
-                <p class="topbar__burger-text">
+              <a href="{% url 'checker_2:index' %}" style="display: flex; align-items: center; justify-content: center;">
+                <!-- <p class="topbar__burger-text">
                 KMA
-              </p>
+              </p> -->
+              <!-- <?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> -->
+<!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ viewBox="0 0 748.000000 769.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
+fill="#ebebeb" stroke="none">
+</g>
+</svg> -->
+<img src="{% static 'checker_2/scripts/logo.png' %}" style="width: 30px; height: 30px;">
+
+
               </a>
-              <img class="topbar__logo" src="" alt="logo">
+              <!-- <img class="topbar__logo" src="{%static 'checker_2/scripts/logo.svg'%}" alt="logo"> -->
             </div>
             <div class="topbar__items">
               <div class="topbar__item">
