@@ -455,6 +455,7 @@ margin: 0 5px;
 .leftbar__tool {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 38px;
   border-right: 1px solid rgba(33, 43, 52, 1);
   border-bottom: 1px solid rgba(33, 43, 52, 1);

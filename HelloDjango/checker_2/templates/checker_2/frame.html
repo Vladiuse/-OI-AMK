@@ -1,4 +1,5 @@
 {% load static %}
+{% load qr_code %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +31,9 @@
 </head>
 
 <body>
+  <div id="qr-modal" style="display: none;">
+    {% qr_from_data kma.url options=my_options %}
+  </div>
   <!-- <div id="for-doc" style="display: none;">
     <div id="manual" class="content "></div>
   </div> -->
@@ -125,11 +129,11 @@
                 <div class="topbar__btn" onclick="iframereboot()">
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
-                <div class="topbar__btn qrcode">
+                <div class="topbar__btn qrcode" id="show-qr">
                   QR
                   <i class="fa-solid fa-qrcode"></i>
                 </div>
-                {# qr_from_data url options=my_options #}
+                
               </div>
             </div>
           </div>
@@ -147,21 +151,6 @@
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <!-- <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showCkickEmems')">Cl</div>
-                  </div>
-                  <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showFormEmels')">F</div>
-                  </div>
-                  <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showPrices')">P</div>
-                  </div>
-                  <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('showDates')">D</div>
-                  </div>
-                  <div class="leftbar__tool-item">
-                    <div class="leftbar__tool-btn" onclick="runFuncIframe('removeAllDebug')">R</div>
-                  </div> -->
                   <div class="leftbar__tool-item debug active" id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
@@ -174,16 +163,10 @@
                   <div class="leftbar__tool-item" onclick="runFuncIframe('removeAllDebug')" id="clear-debug">
                     <i class="fa-solid fa-xmark"></i>
                   </div>
-                  <div class="leftbar__tool-item">
-                    <i class="fa-solid fa-circle-question"></i>
-                  </div>
-
-                  <!-- <a class="navigation__add-link"
-                    onclick="document.getElementById('navigation-add').style.display = 'block' "data-manual-link="{{sub.manual_link}}">
-                  </a> -->
-
-
-
+                  
+                </div>
+                <div class="leftbar__tool-item">
+                  <i class="fa-solid fa-circle-question" style="font-size: 20px;"></i>
                 </div>
               </div>
 
@@ -655,7 +638,7 @@
   .topbar__btn{
     padding: 8px;
     display: flex;
-    border-right: 1px solid #363636;
+    border-right: 1px solid rgb(43, 43, 43);
   }
   .topbar__btn.active{
     background-color: #212121;
@@ -680,6 +663,21 @@
     margin-left: 3px;
   }
 </style>
+<style>
+  #qr-modal{
+    position: absolute;
+    top: 300px;
+    left: 700px;
+  }
+  #qr-modal img{
+    width: 500px;
+  }
+</style>
+<script>
+  $('#show-qr').click(function(){
+    $('#qr-modal').show()
+  })
+</script>
 </body>
 
 </html>

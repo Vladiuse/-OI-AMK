@@ -284,7 +284,7 @@ class KMALand(Land):
             if domain in self.url:
                 if KMALand.LAND_ADMIN_UTM not in self.url:
                     raise PrelandNoAdminError
-                return 'pre_land'
+                return 'preland'
         return 'land'
 
     @property
