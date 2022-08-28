@@ -89,8 +89,8 @@ class TextAnaliz:
     def find_dates(self):
         pattern = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # убран захват символов перед датой
         text = self.human_text
-        with open('/home/vlad/PycharmProjects/-OI-AMK/test_ьн.html','w') as file:
-            file.write(text)
+        #with open('/home/vlad/PycharmProjects/-OI-AMK/test_ьн.html','w') as file:
+         #   file.write(text)
         dates_n_years = re.findall(pattern, text)
         dates_n_years = list(set(dates_n_years))
         print(dates_n_years, 'xxxxxx')
