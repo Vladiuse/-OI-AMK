@@ -65,6 +65,11 @@ def check_url(request):
             content = {
                 'checker': url_checker,
                 'kma': url_checker.land,
+                'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
+                                    # dark_color='#2496ff',
+                                    dark_color='white',
+                                    light_color='#404040',
+                                    ),
             }
             end = time.time()
             print(f'Total:{round(end - start, 2)}')
