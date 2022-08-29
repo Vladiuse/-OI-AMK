@@ -105,18 +105,18 @@ body {
 .main__inner{
   display: flex;
   flex-grow: 1;
-  max-height: calc(100vh - 30px);
+  max-height: calc(100vh - 40px);
 }
 
 .frame-wrapper {
   width: 100%;
+  height: calc(100vh - 40px);
   display: flex;
   justify-content: center;
 }
 
 #iframe {
   width: 100%;
-  /* max-height: 900px; */
   background-color: white;
 }
 /* #iframe {
@@ -329,7 +329,7 @@ margin: 0 5px;
   border-top: none;
   border-bottom: none;
   width: 60px;
-  margin-left: 7px;
+  /* margin-left: 7px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -448,6 +448,7 @@ margin: 0 5px;
 
 /* ---------------LeftBar--------- */
 .leftbar__inner {
+  position: relative;
   display: flex;
   border-top: 1px solid rgba(33, 43, 52, 1);
 }
@@ -464,7 +465,6 @@ margin: 0 5px;
 
 .leftbar__tool-item {
   text-align: center;
-  /* padding: 0 10px; */
 }
 
 .leftbar__tool-btn {
@@ -506,10 +506,13 @@ margin: 0 5px;
   pointer-events: none;
 }
 
-.navigation {
+.navigation{
+  display: none;
+  position: absolute;
+  top: -1px;
+  left: 38px;
   width: 300px;
-  border-right: 1px solid rgba(33, 43, 52, 1);
-  border-bottom: 1px solid rgba(33, 43, 52, 1);
+  border: 1px solid rgba(33, 43, 52, 1);
   background-color: rgb(63, 61, 61);
 }
 
@@ -517,8 +520,14 @@ margin: 0 5px;
   position: relative;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 46px);
 }
+
+.navigation__checker{
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 42px);
+}
+
 .navigation__checker-data{
   flex-grow: 1;
 }
@@ -528,18 +537,13 @@ margin: 0 5px;
 .navigation__add{
   display: none;
   position: absolute;
-  left: 300px;
   top: -1px;
+  left: 338px;
   background-color: rgb(63, 61, 61);
   border: 1px solid rgba(33, 43, 52, 1);
   border-left: none;
   width: 600px;
-  max-height: calc(100vh - 50px);
-}
-.add-inner__main{
-  overflow: hidden;
-  overflow-y: scroll;
-  height: 850px;
+  max-height: calc(100vh - 40px);
 }
 
 .navigation__add-link,
@@ -557,6 +561,7 @@ margin: 0 5px;
 .add-inner__main{
   overflow: hidden;
   overflow-y: scroll;
+  max-height: calc(100vh - 83px);
 }
 .add-inner__main::-webkit-scrollbar {
   width: 6px;
@@ -573,12 +578,9 @@ margin: 0 5px;
   background: #555; 
 }
 /* ------------------------------- */
-/* ------------footer------------- */
-
-/* ------------------------------- */
 
 #manual{
-  padding: 3px 20px;
+  padding: 0 10px;
 }
 #manual::-webkit-scrollbar {
   width: 6px;
