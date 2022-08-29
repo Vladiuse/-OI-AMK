@@ -198,12 +198,15 @@ fill="#ebebeb" stroke="none">
                         {%endfor%}
                       </div>
                       <div class="container-toolbar" id="analize-load">
-                        <div class="lds-ring" id="load-ring">
+                        <!-- <div class="lds-ring" id="load-ring">
                           <div></div>
                           <div></div>
                           <div></div>
                           <div></div>
-                        </div>
+                        </div> -->
+                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                        <p>Загрузка сайта</p>
+                        <p style="display: none;">Анализ</p>
                       </div>
                       <div id="text-info">
                       </div>
@@ -276,6 +279,7 @@ fill="#ebebeb" stroke="none">
                       <i class="fa-solid fa-xmark"></i>
                     </a>
                   </div>
+                  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="manual" >
                     <p>
                       -----LOADING-----
@@ -319,7 +323,12 @@ fill="#ebebeb" stroke="none">
       if (get_phone_code_api) { getPhoneCode() }
 
       land_code = $(iframe.contentDocument).find('html').html()
-      console.log(land_code.length)
+      $('#analize-load p').first().slideUp(300, function(){
+        $('#analize-load p').last().slideDown(300)
+      })
+      
+      // $('#analize-load p').first().slideUp(300)
+      // $('#analize-load p').last().slideDown(300)
       loadBackAnalize(land_code)
 
     }
@@ -475,7 +484,7 @@ fill="#ebebeb" stroke="none">
 
     // загрузка документации
     function loadDoc(manual_land){
-      console.log(manual_land)
+      $('.navigation__add-inner .lds-ellipsis').show()
       let url = currentUrl + '/checker_2/doc_page/'
       data = {'manual_land': manual_land}
       $.post(url, data,function(response){
@@ -483,6 +492,7 @@ fill="#ebebeb" stroke="none">
         $('#navigation-add').show()
         $('#manual').empty()
           $('#manual').html(response)
+          $('.navigation__add-inner .lds-ellipsis').hide()
       })
     }
 
@@ -715,6 +725,7 @@ fill="#ebebeb" stroke="none">
   }
 </style>
 <style>
+
   .topbar__btn{
     padding: 6px;
     display: flex;
@@ -743,6 +754,78 @@ fill="#ebebeb" stroke="none">
     margin-left: 3px;
   }
 </style>
+<style>
+  .navigation__add-inner .lds-ellipsis{
+    margin: 0 10px;
+    margin-top: 5px;
+  }
+
+  .lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 4px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 4px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 16px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 28px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(12px, 0);
+  }
+}
+  </style>
+  <style>
+    /* 123 */
+    #analize-load{
+      display: flex;
+      align-items: center;
+      color: aliceblue;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+  </style>
 </body>
 
 </html>
