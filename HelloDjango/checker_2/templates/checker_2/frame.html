@@ -31,9 +31,9 @@
 </head>
 
 <body>
-  <div id="qr-modal" style="display: none;">
-    {% qr_from_data kma.url options=my_options %}
-  </div>
+  <!-- <div id="qr-modal" style="display: none;">
+    {# qr_from_data kma.url options=my_options #}
+  </div> -->
   <!-- <div id="for-doc" style="display: none;">
     <div id="manual" class="content "></div>
   </div> -->
@@ -90,9 +90,6 @@ fill="#ebebeb" stroke="none">
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
                 <div class="topbar__btn" id="jeneral-status" style="display: none">
-                    <i class="fa-solid fa-circle-chevron-down" style="display: none"></i>
-                    <i class="fa-solid fa-triangle-exclamation" style="display: none"></i>
-                    <i class="fa-solid fa-circle-exclamation" style="display: none"></i>
 
                 </div>
                 <div id="scripts-img">
@@ -149,10 +146,10 @@ fill="#ebebeb" stroke="none">
                 <div class="topbar__btn" onclick="iframereboot()">
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
-                <div class="topbar__btn qrcode" id="show-qr">
+                <!-- <div class="topbar__btn qrcode" id="show-qr">
                   QR
                   <i class="fa-solid fa-qrcode"></i>
-                </div>
+                </div> -->
                 
               </div>
             </div>
@@ -645,12 +642,19 @@ fill="#ebebeb" stroke="none">
     }
   })
 
+  // при наведении на добовую панель
   $('.leftbar').hover(function(){
-    if (!$('#navigator').hasClass('active')){$('.navigation').show()}
-    
+    if (!$('#navigator').hasClass('active')){
+      $('.navigation').show()
+      $('#jeneral-status i').hide()
+    }
   })
+  // при наведении на окно фрейма
   $('#iframe').hover(function(){
-    if (!$('#navigator').hasClass('active')){$('.navigation').hide()}
+    if (!$('#navigator').hasClass('active')){
+      $('.navigation, #navigation-add').hide()
+      $('#jeneral-status i').show()
+    }
   })
 
 
@@ -739,26 +743,6 @@ fill="#ebebeb" stroke="none">
     margin-left: 3px;
   }
 </style>
-<style>
-  #qr-modal{
-    position: absolute;
-    top: 5.5%;
-    left: 33%;
-    border: 1px solid rgb(43, 43, 43);
-  }
-  #qr-modal img{
-    width: 500px;
-  }
-</style>
-<script>
-/*   $('#show-qr').click(function(){
-    $('#qr-modal').show()
-  }) */
-  $("#show-qr").on("click", function(e){
-      e.preventDefault();
-      $("#qr-modal").slideToggle();
-  });
-</script>
 </body>
 
 </html>
