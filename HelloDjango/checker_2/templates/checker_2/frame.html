@@ -31,9 +31,7 @@
 </head>
 
 <body>
-  <!-- <div id="qr-modal" style="display: none;">
-    {# qr_from_data kma.url options=my_options #}
-  </div> -->
+
   <!-- <div id="for-doc" style="display: none;">
     <div id="manual" class="content "></div>
   </div> -->
@@ -67,7 +65,7 @@
                         <!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 748.000000 769.000000"
                         preserveAspectRatio="xMidYMid meet">
-
+    
                         <g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
                         fill="#ebebeb" stroke="none">
                         </g>
@@ -81,16 +79,27 @@
                 <div class="topbar__btn" id="country">{{kma.country|upper}}
                   <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
-                <div class="topbar__item" id="language"> {{kma.full_lang}}
+              </div>
+              <div class="topbar__item">
+                <div class="topbar__btn" id="language"> {{kma.full_lang}}
                 </div>
-                <div class="topbar__item" id="phone-code">+{{kma.phone_code}}</div>
-                <div class="topbar__item"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
-                <div class="topbar__item"><span id="curr">{{kma.curr}}</span></div>
-                <div class="topbar__item"><span id="discount">{{kma.discount}}</span>%</div>
-                <div class="topbar__btn" id="jeneral-status" style="display: none">
+              </div>
+              <div class="topbar__item">
+                <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
+              </div>
+              <div class="topbar__item">
+                <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
+              </div>
+              <div class="topbar__item">
+                <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
+              </div>
+              <div class="topbar__item">
+                <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
+              </div>
+              <div class="topbar__btn" id="jeneral-status" style="display: none">
 
-                </div>
-                <div class="topbar__item">
+              </div>
+              <div class="topbar__item">
                 <div id="scripts-img">
                   {%if kma.is_yam_script%}
                   <img src="{% static 'checker_2/scripts/yam.png' %}">
@@ -99,7 +108,6 @@
                   <img src="{% static 'checker_2/scripts/spy.png' %}">
                   {%endif%}
                 </div>
-
               </div>
             </div>
             <div class="topbar__items">
@@ -144,7 +152,7 @@
               </div>
             </div>
             <div class="topbar__items">
-
+              
               <div class="topbar__item">
                 <a href="{{kma.get_land_admin_url}}" target="_blank" id="original-link">
                   <div class="topbar__btn">
@@ -164,12 +172,12 @@
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
               </div>
-<!--              <div class="topbar__item">-->
-<!--                <div class="topbar__btn qrcode" id="show-qr">-->
-<!--                  QR-->
-<!--                  <i class="fa-solid fa-qrcode"></i>-->
-<!--                </div>-->
-<!--              </div>-->
+              <!-- <div class="topbar__item">
+                <div class="topbar__btn qrcode" id="show-qr">
+                  QR
+                  <i class="fa-solid fa-qrcode"></i>
+                </div>
+              </div> -->
 
             </div>
           </div>
@@ -187,14 +195,13 @@
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item navigation-btn {%if user_settings.left_bar %}active{%endif%}"
-                  id="navigator">
+                  <div class="leftbar__tool-item navigation-btn active" id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug {%if user_settings.click_elem %}active{%endif%}" data-iframe-func="showCkickEmems">
+                  <div class="leftbar__tool-item debug" data-iframe-func="showCkickEmems">
                     <svg data-icon="ShareLarge" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M14 11V7.33h-2a3 3 0 00-3 3v3H7v-3a4.998 4.998 0 015-5h2V2l6 4.5-6 4.5z"></path><path fill="currentColor" d="M7.108 4H2a1 1 0 00-1 1v12a1 1 0 001 1h15a1 1 0 001-1v-5.25l-2 1.5V16H3V6h2.272a8.044 8.044 0 011.836-2z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug {%if user_settings.other %}active{%endif%}"" data-iframe-func="showFormPriceDate">
+                  <div class="leftbar__tool-item debug" data-iframe-func="showFormPriceDate">
                     <svg data-icon="Commercepanel" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path d="M3.122 2H0V0h4.878L5.4 4H19v6.82L4.647 13.69 3.122 2zM18 20a2 2 0 110-4 2 2 0 010 4zM6 20a2 2 0 110-4 2 2 0 010 4z" fill="currentColor"></path></svg>
                   </div>
                   <div class="leftbar__tool-item" data-iframe-func="removeAllDebug" id="clear-debug">
@@ -207,7 +214,7 @@
                 </div>
               </div>
 
-              <div class="navigation" {%if not user_settings.left_bar %} style="display: none; position:absolute;"{%endif%}>
+              <div class="navigation">
                 <div class="navigation__inner">
                   <div class="navigation__checker">
 
@@ -218,15 +225,12 @@
                         {%endfor%}
                       </div>
                       <div class="container-toolbar" id="analize-load">
-                        <!-- <div class="lds-ring" id="load-ring">
+                        <div class="lds-ring" id="load-ring">
                           <div></div>
                           <div></div>
                           <div></div>
                           <div></div>
-                        </div> -->
-                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                        <p>Загрузка сайта</p>
-                        <p style="display: none;">Анализ</p>
+                        </div>
                       </div>
                       <div id="text-info">
                       </div>
@@ -271,7 +275,6 @@
                                 data-checkpoint-id="{{sub.id}}">
                                 <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
                                 {{sub.text}}
-
                               </label> -->
                               {%endfor%}
                             </div>
@@ -299,11 +302,10 @@
                       <i class="fa-solid fa-xmark"></i>
                     </a>
                   </div>
-                  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="manual" >
-                    <!-- <p>
+                    <p>
                       -----LOADING-----
-                    </p> -->
+                    </p>
                   </div>
                 </div>
               </div>
@@ -321,7 +323,6 @@
     </main>
 
   </div>
-
   <script src="js/main.js"></script>
   <script>
     let currentUrl = window.location.origin;
