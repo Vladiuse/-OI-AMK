@@ -89,6 +89,12 @@ fill="#ebebeb" stroke="none">
                 <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
+                <div class="topbar__btn" id="jeneral-status" style="display: none">
+                    <i class="fa-solid fa-circle-chevron-down" style="display: none"></i>
+                    <i class="fa-solid fa-triangle-exclamation" style="display: none"></i>
+                    <i class="fa-solid fa-circle-exclamation" style="display: none"></i>
+
+                </div>
                 <div id="scripts-img">
                   {%if kma.is_yam_script%}
                   <img src="{% static 'checker_2/scripts/yam.png' %}">
@@ -419,7 +425,7 @@ fill="#ebebeb" stroke="none">
             putDataFromAnalize('Слова:', geo_words)
             scripts_on_land = response.result['scripts']
           }
-
+          setJeneralStatus(response['jeneral_status'])
           loadImfoItems(response['new_checker'])
           console.log('End')
           // fixListHeight()
@@ -429,6 +435,22 @@ fill="#ebebeb" stroke="none">
         }
 
       })
+    }
+
+    // Добавить иконку общего статуса
+    function setJeneralStatus(status){
+      status_ico = {
+        'info': 'fa-solid fa-circle-chevron-down',
+        'warning': 'fa-solid fa-triangle-exclamation',
+        'error': 'fa-solid fa-circle-exclamation',
+      }
+      if (status == ''){$('#jeneral-status').remove()}
+      else
+      {
+        let elem = $('<i></i>')
+        elem.addClass(status_ico[status])
+        $('#jeneral-status').append(elem)
+      }
     }
 
     function putDataFromAnalize(desc, data) {
@@ -491,6 +513,8 @@ fill="#ebebeb" stroke="none">
   </style>
 
   <script>
+
+    // загрузка документации при клике на вопросик
     $('#check_list a').click(function(e){
       e.preventDefault();
       $(".navigation__add").slideToggle();
@@ -607,15 +631,17 @@ fill="#ebebeb" stroke="none">
     runFuncIframe(cleanFunc)
   })
 
+  // изменение режима отображения большой боковой панели
   $('#navigator').click(function(){
     if ($(this).hasClass('active')){
       $('.navigation').css('position', 'absolute')
       $(this).removeClass('active')
-      // $('.navigation').hide()
+      $('#jeneral-status').show()
     } else {
       $('.navigation').css('position', 'static')
       $(this).addClass('active')
       $('.navigation').show()
+      $('#jeneral-status').hide()
     }
   })
 

@@ -120,6 +120,7 @@ def analiz_land_text(request):
             'success': True,
             'result': result['old'],
             'new_checker': result['new'],
+            'jeneral_status': result['jeneral_status'],
         }
     except IndentationError as error:
         answer = {

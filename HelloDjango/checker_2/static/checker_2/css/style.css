@@ -437,15 +437,16 @@ margin: 0 5px;
   border-left: 7px solid  #fc5f2e;
 }
 
-.info-block.warning i{
+i.fa-triangle-exclamation{
   color:#fcd62e;
 }
-.info-block.info i{
+i.fa-circle-chevron-down{
   color:#62a5ff;
 }
-.info-block.error i{
+i.fa-circle-exclamation{
   color:#fc5f2e;
 }
+
 /* ------------------------------------------- */
 
 
