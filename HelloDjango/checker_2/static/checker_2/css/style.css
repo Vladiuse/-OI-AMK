@@ -459,7 +459,9 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
 .leftbar__tool {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 38px;
+  height: calc(100vh - 40px);
   background-color: rgb(63, 61, 61);
 }
 
