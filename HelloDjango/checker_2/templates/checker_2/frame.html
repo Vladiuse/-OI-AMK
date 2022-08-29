@@ -56,39 +56,49 @@
       <div class="topbar">
         <div class="container-fluid">
           <div class="topbar__row">
-            <div class="topbar__burger">
-              <a href="{% url 'checker_2:index' %}" style="display: flex; align-items: center; justify-content: center;">
-                <!-- <p class="topbar__burger-text">
-                KMA
-              </p> -->
-              <!-- <?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> -->
-<!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- viewBox="0 0 748.000000 769.000000"
- preserveAspectRatio="xMidYMid meet">
 
-<g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
-fill="#ebebeb" stroke="none">
-</g>
-</svg> -->
-<img src="{% static 'checker_2/scripts/logo_2.png' %}" style="width: 40px;">
-
-
-              </a>
-              <!-- <img class="topbar__logo" src="{%static 'checker_2/scripts/logo.svg'%}" alt="logo"> -->
-            </div>
             <div class="topbar__items">
+              <div class="topbar__item">
+                <div class="topbar__burger">
+                  <a href="{% url 'checker_2:index' %}" style="display: flex; align-items: center; justify-content: center;">
+                      <!-- <?xml version="1.0" standalone="no"?>
+                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+                        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> -->
+                        <!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 748.000000 769.000000"
+                        preserveAspectRatio="xMidYMid meet">
+    
+                        <g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
+                        fill="#ebebeb" stroke="none">
+                        </g>
+                        </svg> -->
+                    <img src="{% static 'checker_2/scripts/logo_2.png' %}" style="width: 40px;">
+                  </a>
+                  <!-- <img class="topbar__logo" src="{%static 'checker_2/scripts/logo.svg'%}" alt="logo"> -->
+                </div>
+              </div>
               <div class="topbar__item">
                 <div class="topbar__btn" id="country">{{kma.country|upper}}
                   <span class="flag-icon flag-icon-{{kma.country}}"></span>
                 </div>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn" id="language"> {{kma.full_lang}}
                 </div>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn" id="phone-code">+{{kma.phone_code}}</div>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn"><span id="s1">{{kma.s1}}</span> (<span id="s4">{{kma.s4}}</span>)</div>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn"><span id="curr">{{kma.curr}}</span></div>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
+              </div>
+              <div class="topbar__item">
                 <div id="scripts-img">
                   {%if kma.is_yam_script%}
                   <img src="{% static 'checker_2/scripts/yam.png' %}">
@@ -97,8 +107,9 @@ fill="#ebebeb" stroke="none">
                   <img src="{% static 'checker_2/scripts/spy.png' %}">
                   {%endif%}
                 </div>
-
               </div>
+            </div>
+            <div class="topbar__items">
               <div class="topbar__item devises">
                 <div class="topbar__btn devise active" onclick="setDevice('desctop')">
                   <div style="position: relative;">
@@ -111,12 +122,18 @@ fill="#ebebeb" stroke="none">
                     </svg>
                   </div>
                 </div>
+              </div>
+
+              <div class="topbar__item devises">
                 <div class="topbar__btn devise" onclick="setDevice('laptop')">
                   <svg data-icon="DeviceTabletPortrait24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display: block;">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4a1 1 0 011-1h14a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm7 15a1 1 0 112 0 1 1 0 01-2 0zm8-15H5v13h14V4z" fill="currentColor"></path>
                     <path opacity=".6" fill="currentColor" d="M6 5h12v11H6z"></path>
                   </svg>
                 </div>
+              </div>
+
+              <div class="topbar__item devises">
                 <div class="topbar__btn devise" onclick="setDevice('phone')">
                   <svg data-icon="DeviceMobilePortrait24" aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" style="display: block;">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M6 4a1 1 0 011-1h10a1 1 0 011 1v16a1 1 0 01-1 1H7a1 1 0 01-1-1V4zm5 15a1 1 0 112 0 1 1 0 01-2 0zm6-15H7v13h10V4z" fill="currentColor">
@@ -125,30 +142,42 @@ fill="#ebebeb" stroke="none">
                     </path>
                   </svg>
                 </div>
+              </div>
+
+              <div class="topbar__item devises">
                 <div class="topbar__btn" >
                   1000 PX 80%
                 </div>
               </div>
+            </div>
+            <div class="topbar__items">
+              
               <div class="topbar__item">
                 <a href="{{kma.get_land_admin_url}}" target="_blank" id="original-link">
                   <div class="topbar__btn">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </div>
                 </a>
+              </div>
+              <div class="topbar__item">
                 <a href="{{kma.url}}" target="_blank" id="original-link">
                   <div class="topbar__btn">            
                       {{kma.get_clean_url}}
                   </div>
                 </a>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn" onclick="iframereboot()">
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
+              </div>
+              <div class="topbar__item">
                 <div class="topbar__btn qrcode" id="show-qr">
                   QR
                   <i class="fa-solid fa-qrcode"></i>
                 </div>
-                
               </div>
+
             </div>
           </div>
         </div>
@@ -620,11 +649,11 @@ fill="#ebebeb" stroke="none">
   })
 
   $('.leftbar').hover(function(){
-    if (!$('#navigator').hasClass('active')){$('.navigation').show()}
+    if (!$('#navigator').hasClass('active')){$('.navigation').show(200)}
     
   })
   $('#iframe').hover(function(){
-    if (!$('#navigator').hasClass('active')){$('.navigation').hide()}
+    if (!$('#navigator').hasClass('active')){$('.navigation').hide(200)}
   })
 
 
@@ -688,7 +717,7 @@ fill="#ebebeb" stroke="none">
   .topbar__btn{
     padding: 6px;
     display: flex;
-    border-right: 1px solid rgb(43, 43, 43);
+    /* border-right: 1px solid rgb(43, 43, 43); */
   }
   .topbar__btn.active{
     background-color: #212121;
@@ -718,7 +747,7 @@ fill="#ebebeb" stroke="none">
     position: absolute;
     top: 5.5%;
     left: 33%;
-    border: 1px solid rgb(43, 43, 43);
+    /* border: 1px solid rgb(43, 43, 43); */
   }
   #qr-modal img{
     width: 500px;
