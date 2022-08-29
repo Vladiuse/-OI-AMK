@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_land import KMALand, Land, PrelandNoAdminError
 from kma.models import OfferPosition, PhoneNumber
-from .models import UserSiteCheckPoint, ActualUserList
+from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
 # from qr_code.qrcode.utils import QRCodeOptions
@@ -33,10 +33,14 @@ def read_check_list():
     return template
 
 @login_required
-def index(requests):
+def index(request):
     # with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
     #     debug_styles = file.read()
-    return render(requests, 'checker_2/index.html')
+    settings = CheckerUserSetting.objects.get(user=request.user)
+    content = {
+        'user_settings':settings,
+    }
+    return render(request, 'checker_2/index.html', content)
 
 @login_required
 def check_url(request):
@@ -62,6 +66,7 @@ def check_url(request):
         try:
             url_checker = UrlChecker(res.text, url=url, user=request.user)
             url_checker.process()
+
             content = {
                 'checker': url_checker,
                 'kma': url_checker.land,
@@ -72,6 +77,7 @@ def check_url(request):
                 #                     ),
             }
             end = time.time()
+
             print(f'Total:{round(end - start, 2)}')
             return render(request, 'checker_2/frame.html', content)
         except PrelandNoAdminError:
