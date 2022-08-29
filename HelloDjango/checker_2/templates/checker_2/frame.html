@@ -187,7 +187,7 @@ fill="#ebebeb" stroke="none">
                 </div>
               </div>
 
-              <div class="navigation">
+              <div class="navigation" >
                 <div class="navigation__inner">
                   <div class="navigation__checker">
 
@@ -281,9 +281,9 @@ fill="#ebebeb" stroke="none">
                   </div>
                   <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="manual" >
-                    <p>
+                    <!-- <p>
                       -----LOADING-----
-                    </p>
+                    </p> -->
                   </div>
                 </div>
               </div>
@@ -621,17 +621,29 @@ fill="#ebebeb" stroke="none">
 
 <script src="{% static 'manual/js/main.js' %}"></script>
 <script>
+
+  // при клике на кнопки дебагрежима 
   $('.leftbar__tool-item.debug').click(function(){
     $(this).toggleClass('active')
-    let items = $('.leftbar__tool-item.debug.active')
     runFuncIframe('removeAllDebug')
+    onActiveDebug()
+    // $.each(items, function(i){
+    //   let func = $(this).attr('data-iframe-func')
+    //   runFuncIframe(func)
+
+    // })
+  })
+
+  // включить дебаг которые активны
+  function onActiveDebug(){
+    let items = $('.leftbar__tool-item.debug.active')
     $.each(items, function(i){
       let func = $(this).attr('data-iframe-func')
       runFuncIframe(func)
 
     })
-  })
-
+  }
+  // при клике отключить дебаг режим
   $('#clear-debug').click(function(){
     $('.leftbar__tool-item.debug').removeClass('active')
     let cleanFunc = $(this).attr('data-iframe-func')
