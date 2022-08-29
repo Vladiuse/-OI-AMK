@@ -151,7 +151,8 @@
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item debug active" id="navigator">
+                  <!-- class="leftbar__tool-item debug active" id="navigator" -->
+                  <div class="leftbar__tool-item debug navigation-btn">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
                   <div class="leftbar__tool-item debug" onclick="runFuncIframe('showCkickEmems')">
@@ -172,92 +173,98 @@
 
               <div class="navigation">
                 <div class="navigation__inner">
+                  <div class="navigation__checker">
 
-                  <div class="navigation__checker-data" id="checker-data">
-                    <div id="img-doubles">
-                      {% for img in kma.img_doubles %}
-                      <img data-oi-img="{{img.hash}}" src="{{img.src}}">
-                      {%endfor%}
-                    </div>
-                    <div class="container-toolbar" id="analize-load">
-                      <div class="lds-ring" id="load-ring">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                    <div class="navigation__checker-data" id="checker-data">
+                      <div id="img-doubles">
+                        {% for img in kma.img_doubles %}
+                        <img data-oi-img="{{img.hash}}" src="{{img.src}}">
+                        {%endfor%}
                       </div>
-                    </div>
-                    <div id="text-info">
-                    </div>
-                  </div>
-
-                  <div class="navigation__checker-list" id="check_list">
-                    <!-- <div class="leftbar__tool-btn" id="clear-check-list">Clear</div> -->
-
-                    <div class="list-group">
-                      {%for block in checker.check_list %}
-                      <div class="block block group-id-{{ forloop.counter }}">
-
-                        <label class="list-group__items tab">
-                          <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
-                          <b class="list-group__items-title tab-title" for="tab">
-                            {{block.name}}
-                            {%if block.manual_link%}
-                            <a href="" data-manual-link="{{block.manual_link}}">
-                              <i class="fa-solid fa-circle-question"></i>
-                            </a>
-                            {%endif%}
-                          </b>
-
-                          <div class="list-group-item__row tab-content">
-                            {%for sub in block.subs %}
-                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
-                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
-                              {{sub.text}}
-                              {%if sub.manual_link%}
-                            <a href="" data-manual-link="{{sub.manual_link}}">
-                              <i class="fa-solid fa-circle-question"></i>
-                            </a>
-                            {%endif%}
-                            <div class="lds-ring check-list" style="display: none;">
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                            </div>
-                          </label>
-                            <!-- <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
-                              data-checkpoint-id="{{sub.id}}">
-                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
-                              {{sub.text}}
-
-                            </label> -->
-                            {%endfor%}
-                          </div>
-                          </label>
-                      </div>
-                      {%endfor%}
-                    </div>
-                  </div>
-
-                  <div class="navigation__add" id="navigation-add">
-                    <div class="navigation__add-inner">
-                      <div class="add-inner__head">
-                        <div class="add-inner__item">
-                          Документация
+                      <div class="container-toolbar" id="analize-load">
+                        <div class="lds-ring" id="load-ring">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
                         </div>
-                        <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
-                          <i class="fa-solid fa-xmark"></i>
-                        </a>
                       </div>
-                      <div class="add-inner__main content" id="manual" >
-                        <p>
-                          Тут добавляем контент
-                        </p>
+                      <div id="text-info">
                       </div>
                     </div>
+  
+                    <div class="navigation__checker-list" id="check_list">
+                      <!-- <div class="leftbar__tool-btn" id="clear-check-list">Clear</div> -->
+  
+                      <div class="list-group">
+                        {%for block in checker.check_list %}
+                        <div class="block block group-id-{{ forloop.counter }}">
+  
+                          <label class="list-group__items tab">
+                            <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
+                            <b class="list-group__items-title tab-title" for="tab">
+                              {{block.name}}
+                              {%if block.manual_link%}
+                              <a href="" data-manual-link="{{block.manual_link}}">
+                                <i class="fa-solid fa-circle-question"></i>
+                              </a>
+                              {%endif%}
+                            </b>
+  
+                            <div class="list-group-item__row tab-content">
+                              {%for sub in block.subs %}
+                              <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
+                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
+                                {{sub.text}}
+                                {%if sub.manual_link%}
+                              <a href="" data-manual-link="{{sub.manual_link}}">
+                                <i class="fa-solid fa-circle-question"></i>
+                              </a>
+                              {%endif%}
+                              <div class="lds-ring check-list" style="display: none;">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
+                            </label>
+                              <!-- <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
+                                data-checkpoint-id="{{sub.id}}">
+                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
+                                {{sub.text}}
+  
+                              </label> -->
+                              {%endfor%}
+                            </div>
+                            </label>
+                        </div>
+                        {%endfor%}
+                      </div>
+                    </div>
+
                   </div>
 
+                  
+
+                </div>
+
+              </div>
+
+              <div class="navigation__add" id="navigation-add">
+                <div class="navigation__add-inner">
+                  <div class="add-inner__head">
+                    <div class="add-inner__item">
+                      Документация
+                    </div>
+                    <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
+                      <i class="fa-solid fa-xmark"></i>
+                    </a>
+                  </div>
+                  <div class="add-inner__main content" id="manual" >
+                    <p>
+                      -----LOADING-----
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -318,6 +325,7 @@
       $('#curr').text(site.country_list[country].curr)
       $('#discount').text(site.country_list[country].discount)
     }
+
 
     function getPhoneCode() {
       // Получить Маску телефона по стране API
@@ -472,6 +480,7 @@
   <script>
     $('#check_list a').click(function(e){
       e.preventDefault();
+      $(".navigation__add").slideToggle();
       let manualLink = $(this).attr('data-manual-link');
       loadDoc(manualLink);
     })
@@ -479,6 +488,12 @@
       $('.tab-content').trigger('click')
 
 
+        /* -------------------- */
+    $(".navigation-btn").on("click", function(e){
+      e.preventDefault();
+      $(".navigation").slideToggle();
+    });
+        /* -------------------- */
 
     // fixListHeight()
     // для чеклиста
@@ -570,13 +585,13 @@
     $('.leftbar__tool-item.debug').removeClass('active')
   })
 
-  $('#navigator').click(function(){
+/*   $('#navigator').click(function(){
     if ($(this).hasClass('active')){
       $('.navigation').show()
     } else {
       $('.navigation').hide()
     }
-  })
+  }) */
 
   $('.topbar__item.devises .devise').click(function(){
     $('.topbar__item.devises .devise').removeClass('active')
@@ -666,17 +681,22 @@
 <style>
   #qr-modal{
     position: absolute;
-    top: 300px;
-    left: 700px;
+    top: 5.5%;
+    left: 33%;
+    border: 1px solid rgb(43, 43, 43);
   }
   #qr-modal img{
     width: 500px;
   }
 </style>
 <script>
-  $('#show-qr').click(function(){
+/*   $('#show-qr').click(function(){
     $('#qr-modal').show()
-  })
+  }) */
+  $("#show-qr").on("click", function(e){
+      e.preventDefault();
+      $("#qr-modal").slideToggle();
+  });
 </script>
 </body>
 
