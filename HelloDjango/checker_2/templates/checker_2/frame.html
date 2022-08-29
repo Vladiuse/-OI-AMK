@@ -57,12 +57,26 @@
         <div class="container-fluid">
           <div class="topbar__row">
             <div class="topbar__burger">
-              <a href="{% url 'checker_2:index' %}">
-                <p class="topbar__burger-text">
+              <a href="{% url 'checker_2:index' %}" style="display: flex; align-items: center; justify-content: center;">
+                <!-- <p class="topbar__burger-text">
                 KMA
-              </p>
+              </p> -->
+              <!-- <?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> -->
+<!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ viewBox="0 0 748.000000 769.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
+fill="#ebebeb" stroke="none">
+</g>
+</svg> -->
+<img src="{% static 'checker_2/scripts/logo_2.png' %}" style="width: 40px;">
+
+
               </a>
-              <img class="topbar__logo" src="" alt="logo">
+              <!-- <img class="topbar__logo" src="{%static 'checker_2/scripts/logo.svg'%}" alt="logo"> -->
             </div>
             <div class="topbar__items">
               <div class="topbar__item">
@@ -129,7 +143,7 @@
                 <div class="topbar__btn" onclick="iframereboot()">
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
-                <div class="topbar__btn" id="show-qr">
+                <div class="topbar__btn qrcode" id="show-qr">
                   QR
                   <i class="fa-solid fa-qrcode"></i>
                 </div>
@@ -151,16 +165,16 @@
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item debug active" id="navigator">
+                  <div class="leftbar__tool-item navigation-btn active" id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug" onclick="runFuncIframe('showCkickEmems')">
+                  <div class="leftbar__tool-item debug" data-iframe-func="showCkickEmems">
                     <svg data-icon="ShareLarge" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M14 11V7.33h-2a3 3 0 00-3 3v3H7v-3a4.998 4.998 0 015-5h2V2l6 4.5-6 4.5z"></path><path fill="currentColor" d="M7.108 4H2a1 1 0 00-1 1v12a1 1 0 001 1h15a1 1 0 001-1v-5.25l-2 1.5V16H3V6h2.272a8.044 8.044 0 011.836-2z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug" onclick="runFuncIframe('showFormPriceDate')">
+                  <div class="leftbar__tool-item debug" data-iframe-func="showFormPriceDate">
                     <svg data-icon="Commercepanel" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path d="M3.122 2H0V0h4.878L5.4 4H19v6.82L4.647 13.69 3.122 2zM18 20a2 2 0 110-4 2 2 0 010 4zM6 20a2 2 0 110-4 2 2 0 010 4z" fill="currentColor"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item" onclick="runFuncIframe('removeAllDebug')" id="clear-debug">
+                  <div class="leftbar__tool-item" data-iframe-func="removeAllDebug" id="clear-debug">
                     <i class="fa-solid fa-xmark"></i>
                   </div>
                   
@@ -172,92 +186,98 @@
 
               <div class="navigation">
                 <div class="navigation__inner">
+                  <div class="navigation__checker">
 
-                  <div class="navigation__checker-data" id="checker-data">
-                    <div id="img-doubles">
-                      {% for img in kma.img_doubles %}
-                      <img data-oi-img="{{img.hash}}" src="{{img.src}}">
-                      {%endfor%}
-                    </div>
-                    <div class="container-toolbar" id="analize-load">
-                      <div class="lds-ring" id="load-ring">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                    <div class="navigation__checker-data" id="checker-data">
+                      <div id="img-doubles">
+                        {% for img in kma.img_doubles %}
+                        <img data-oi-img="{{img.hash}}" src="{{img.src}}">
+                        {%endfor%}
                       </div>
-                    </div>
-                    <div id="text-info">
-                    </div>
-                  </div>
-
-                  <div class="navigation__checker-list" id="check_list">
-                    <!-- <div class="leftbar__tool-btn" id="clear-check-list">Clear</div> -->
-
-                    <div class="list-group">
-                      {%for block in checker.check_list %}
-                      <div class="block block group-id-{{ forloop.counter }}">
-
-                        <label class="list-group__items tab">
-                          <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
-                          <b class="list-group__items-title tab-title" for="tab">
-                            {{block.name}}
-                            {%if block.manual_link%}
-                            <a href="" data-manual-link="{{block.manual_link}}">
-                              <i class="fa-solid fa-circle-question"></i>
-                            </a>
-                            {%endif%}
-                          </b>
-
-                          <div class="list-group-item__row tab-content">
-                            {%for sub in block.subs %}
-                            <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
-                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
-                              {{sub.text}}
-                              {%if sub.manual_link%}
-                            <a href="" data-manual-link="{{sub.manual_link}}">
-                              <i class="fa-solid fa-circle-question"></i>
-                            </a>
-                            {%endif%}
-                            <div class="lds-ring check-list" style="display: none;">
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                            </div>
-                          </label>
-                            <!-- <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
-                              data-checkpoint-id="{{sub.id}}">
-                              <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
-                              {{sub.text}}
-
-                            </label> -->
-                            {%endfor%}
-                          </div>
-                          </label>
-                      </div>
-                      {%endfor%}
-                    </div>
-                  </div>
-
-                  <div class="navigation__add" id="navigation-add">
-                    <div class="navigation__add-inner">
-                      <div class="add-inner__head">
-                        <div class="add-inner__item">
-                          Документация
+                      <div class="container-toolbar" id="analize-load">
+                        <div class="lds-ring" id="load-ring">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
                         </div>
-                        <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
-                          <i class="fa-solid fa-xmark"></i>
-                        </a>
                       </div>
-                      <div class="add-inner__main content" id="manual" >
-                        <p>
-                          Тут добавляем контент
-                        </p>
+                      <div id="text-info">
                       </div>
                     </div>
+
+                    <div class="navigation__checker-list" id="check_list">
+                      <!-- <div class="leftbar__tool-btn" id="clear-check-list">Clear</div> -->
+
+                      <div class="list-group">
+                        {%for block in checker.check_list %}
+                        <div class="block block group-id-{{ forloop.counter }}">
+
+                          <label class="list-group__items tab">
+                            <input class="tab__input" type="checkbox" id="tab1" name="tab-group">
+                            <b class="list-group__items-title tab-title" for="tab">
+                              {{block.name}}
+                              {%if block.manual_link%}
+                              <a href="" data-manual-link="{{block.manual_link}}">
+                                <i class="fa-solid fa-circle-question"></i>
+                              </a>
+                              {%endif%}
+                            </b>
+
+                            <div class="list-group-item__row tab-content">
+                              {%for sub in block.subs %}
+                              <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
+                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
+                                {{sub.text}}
+                                {%if sub.manual_link%}
+                              <a href="" data-manual-link="{{sub.manual_link}}">
+                                <i class="fa-solid fa-circle-question"></i>
+                              </a>
+                              {%endif%}
+                              <div class="lds-ring check-list" style="display: none;">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
+                            </label>
+                              <!-- <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
+                                data-checkpoint-id="{{sub.id}}">
+                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
+                                {{sub.text}}
+
+                              </label> -->
+                              {%endfor%}
+                            </div>
+                            </label>
+                        </div>
+                        {%endfor%}
+                      </div>
+                    </div>
+
                   </div>
 
+
+
+                </div>
+
+              </div>
+
+              <div class="navigation__add" id="navigation-add">
+                <div class="navigation__add-inner">
+                  <div class="add-inner__head">
+                    <div class="add-inner__item">
+                      Документация
+                    </div>
+                    <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
+                      <i class="fa-solid fa-xmark"></i>
+                    </a>
+                  </div>
+                  <div class="add-inner__main content" id="manual" >
+                    <p>
+                      -----LOADING-----
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -271,12 +291,7 @@
 
       </div>
 
-
-
     </main>
-
-    <footer class="footer">
-    </footer>
 
   </div>
 
@@ -323,6 +338,7 @@
       $('#curr').text(site.country_list[country].curr)
       $('#discount').text(site.country_list[country].discount)
     }
+
 
     function getPhoneCode() {
       // Получить Маску телефона по стране API
@@ -477,6 +493,7 @@
   <script>
     $('#check_list a').click(function(e){
       e.preventDefault();
+      $(".navigation__add").slideToggle();
       let manualLink = $(this).attr('data-manual-link');
       loadDoc(manualLink);
     })
@@ -484,6 +501,12 @@
       $('.tab-content').trigger('click')
 
 
+        /* -------------------- */
+    // $(".navigation-btn").on("click", function(e){
+    //   e.preventDefault();
+    //   $(".navigation").slideToggle();
+    // });
+        /* -------------------- */
 
     // fixListHeight()
     // для чеклиста
@@ -569,19 +592,41 @@
 <script>
   $('.leftbar__tool-item.debug').click(function(){
     $(this).toggleClass('active')
+    let items = $('.leftbar__tool-item.debug.active')
+    runFuncIframe('removeAllDebug')
+    $.each(items, function(i){
+      let func = $(this).attr('data-iframe-func')
+      runFuncIframe(func)
+
+    })
   })
 
   $('#clear-debug').click(function(){
     $('.leftbar__tool-item.debug').removeClass('active')
+    let cleanFunc = $(this).attr('data-iframe-func')
+    runFuncIframe(cleanFunc)
   })
 
   $('#navigator').click(function(){
     if ($(this).hasClass('active')){
-      $('.navigation').show()
+      $('.navigation').css('position', 'absolute')
+      $(this).removeClass('active')
+      // $('.navigation').hide()
     } else {
-      $('.navigation').hide()
+      $('.navigation').css('position', 'static')
+      $(this).addClass('active')
+      $('.navigation').show()
     }
   })
+
+  $('.leftbar').hover(function(){
+    if (!$('#navigator').hasClass('active')){$('.navigation').show()}
+    
+  })
+  $('#iframe').hover(function(){
+    if (!$('#navigator').hasClass('active')){$('.navigation').hide()}
+  })
+
 
   $('.topbar__item.devises .devise').click(function(){
     $('.topbar__item.devises .devise').removeClass('active')
@@ -641,7 +686,7 @@
 </style>
 <style>
   .topbar__btn{
-    padding: 8px;
+    padding: 6px;
     display: flex;
     border-right: 1px solid rgb(43, 43, 43);
   }
@@ -671,17 +716,22 @@
 <style>
   #qr-modal{
     position: absolute;
-    top: 300px;
-    left: 700px;
+    top: 5.5%;
+    left: 33%;
+    border: 1px solid rgb(43, 43, 43);
   }
   #qr-modal img{
     width: 500px;
   }
 </style>
 <script>
-  $('#show-qr').click(function(){
+/*   $('#show-qr').click(function(){
     $('#qr-modal').show()
-  })
+  }) */
+  $("#show-qr").on("click", function(e){
+      e.preventDefault();
+      $("#qr-modal").slideToggle();
+  });
 </script>
 </body>
 
