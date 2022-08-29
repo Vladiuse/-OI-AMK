@@ -48,28 +48,45 @@ def check_url(request):
     url = request.GET['url']
     url = KMALand.format_url(url)
     start = time.time()
+    settings = CheckerUserSetting.objects.get(user=request.user)
+
+    left_bar = request.GET['checker_leftbar']
+    click_elem = request.GET['checker_clickelems']
+    other = request.GET['checker_other_elems']
+    print(left_bar,click_elem,other, 'xxxxxxx')
+    left_bar = True if left_bar.lower() == 'true' else False
+    click_elem = True if click_elem.lower() == 'true' else False
+    other = True if other.lower() == 'true' else False
+    settings.left_bar = left_bar
+    settings.click_elem = click_elem
+    settings.other = other
+    print(left_bar,click_elem,other, 'yyyyyy')
+    settings.save()
+    print(settings)
     try:
         res = req.get(url)
     except ConnectionError:
         content = {
-            'error_text': 'Ссылка не работает'
+            'error_text': 'Ссылка не работает',
+            'user_settings':settings,
         }
         return render(request, 'checker_2/index.html', content)
     end_load_url = time.time()
     print(f'Site Load:{round(end_load_url - start,2)}')
     if res.status_code != 200:
         content = {
-            'error_text': 'Ссылка не работает'
+            'error_text': 'Ссылка не работает',
+            'user_settings':settings,
         }
         return render(request, 'checker_2/index.html', content)
     else:
         try:
             url_checker = UrlChecker(res.text, url=url, user=request.user)
             url_checker.process()
-
             content = {
                 'checker': url_checker,
                 'kma': url_checker.land,
+                'user_settings': settings,
                 # 'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
                 #                     # dark_color='#2496ff',
                 #                     dark_color='white',
@@ -82,7 +99,8 @@ def check_url(request):
             return render(request, 'checker_2/frame.html', content)
         except PrelandNoAdminError:
             content = {
-                'error_text': PrelandNoAdminError.__doc__
+                'error_text': PrelandNoAdminError.__doc__,
+                'user_settings':settings,
             }
             return render(request, 'checker_2/index.html', content)
 

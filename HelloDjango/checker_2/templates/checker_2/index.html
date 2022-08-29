@@ -19,9 +19,9 @@
             <label>Url для проверки:</label>
             {% csrf_token %}
             <input type="url" name="url" class="form-control" required placeholder="Введите url">
-            <input type="hidden" id="checker_leftbar" value="{{user_settings.left_bar}}">
-            <input type="hidden" id="checker_clickelems" value="{{user_settings.click_elem}}">
-            <input type="hidden" id="checker_other_elems" value="{{user_settings.other}}">
+            <input type="hidden" id="checker_leftbar" value="{{user_settings.left_bar}}" name="checker_leftbar">
+            <input type="hidden" id="checker_clickelems" value="{{user_settings.click_elem}}" name="checker_clickelems">
+            <input type="hidden" id="checker_other_elems" value="{{user_settings.other}}" name="checker_other_elems">
             <button class="btn btn-primary">Проверить</button>
         </form>
     </div>
@@ -31,13 +31,13 @@
     <i class="fa-solid fa-gear"></i>
     <form style="">
         <div>
-            <input type="checkbox" id="leftbar"
+            <input type="checkbox" id="leftbar"  
             {%if user_settings.left_bar%}checked{%endif%}
             >
             <label for="leftbar">Показывать панель</label>
         </div>
         <div>
-            <input type="checkbox" id="clickelems"
+            <input type="checkbox" id="clickelems" 
             {%if user_settings.click_elem%}checked{%endif%}
             >
             <label for="clickelems">Кликабельные элементы</label>

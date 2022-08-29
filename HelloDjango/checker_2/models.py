@@ -130,6 +130,5 @@ class CheckerUserSetting(models.Model):
     other = models.BooleanField(default=True, verbose_name='Показывать даты, формы')
 
     def __str__(self):
-        return str(self.user)
-
+        return f'{self.user}-{self.left_bar}-{self.click_elem}-{self.other}'
 

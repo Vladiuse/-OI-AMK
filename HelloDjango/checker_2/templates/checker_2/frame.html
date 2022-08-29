@@ -168,13 +168,14 @@ fill="#ebebeb" stroke="none">
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item navigation-btn active" id="navigator">
+                  <div class="leftbar__tool-item navigation-btn {%if user_settings.left_bar %}active{%endif%}" 
+                  id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug" data-iframe-func="showCkickEmems">
+                  <div class="leftbar__tool-item debug {%if user_settings.click_elem %}active{%endif%}" data-iframe-func="showCkickEmems">
                     <svg data-icon="ShareLarge" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M14 11V7.33h-2a3 3 0 00-3 3v3H7v-3a4.998 4.998 0 015-5h2V2l6 4.5-6 4.5z"></path><path fill="currentColor" d="M7.108 4H2a1 1 0 00-1 1v12a1 1 0 001 1h15a1 1 0 001-1v-5.25l-2 1.5V16H3V6h2.272a8.044 8.044 0 011.836-2z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug" data-iframe-func="showFormPriceDate">
+                  <div class="leftbar__tool-item debug {%if user_settings.other %}active{%endif%}"" data-iframe-func="showFormPriceDate">
                     <svg data-icon="Commercepanel" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path d="M3.122 2H0V0h4.878L5.4 4H19v6.82L4.647 13.69 3.122 2zM18 20a2 2 0 110-4 2 2 0 010 4zM6 20a2 2 0 110-4 2 2 0 010 4z" fill="currentColor"></path></svg>
                   </div>
                   <div class="leftbar__tool-item" data-iframe-func="removeAllDebug" id="clear-debug">
@@ -187,7 +188,7 @@ fill="#ebebeb" stroke="none">
                 </div>
               </div>
 
-              <div class="navigation" >
+              <div class="navigation" {%if not user_settings.left_bar %} style="display: none; position:absolute;"{%endif%}>
                 <div class="navigation__inner">
                   <div class="navigation__checker">
 
@@ -329,6 +330,7 @@ fill="#ebebeb" stroke="none">
       
       // $('#analize-load p').first().slideUp(300)
       // $('#analize-load p').last().slideDown(300)
+      onActiveDebug()
       loadBackAnalize(land_code)
 
     }
