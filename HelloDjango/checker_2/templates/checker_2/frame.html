@@ -72,7 +72,7 @@
 fill="#ebebeb" stroke="none">
 </g>
 </svg> -->
-<img src="{% static 'checker_2/scripts/logo_2.png' %}" style="width: 30px;">
+<img src="{% static 'checker_2/scripts/logo_2.png' %}" style="width: 40px;">
 
 
               </a>
@@ -165,7 +165,7 @@ fill="#ebebeb" stroke="none">
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item navigation-btn" id="navigator">
+                  <div class="leftbar__tool-item navigation-btn active" id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
                   <div class="leftbar__tool-item debug" data-iframe-func="showCkickEmems">
@@ -502,10 +502,10 @@ fill="#ebebeb" stroke="none">
 
 
         /* -------------------- */
-    $(".navigation-btn").on("click", function(e){
-      e.preventDefault();
-      $(".navigation").slideToggle();
-    });
+    // $(".navigation-btn").on("click", function(e){
+    //   e.preventDefault();
+    //   $(".navigation").slideToggle();
+    // });
         /* -------------------- */
 
     // fixListHeight()
@@ -609,14 +609,23 @@ fill="#ebebeb" stroke="none">
 
   $('#navigator').click(function(){
     if ($(this).hasClass('active')){
-      $('.navigation').hide()
+      $('.navigation').css('position', 'absolute')
       $(this).removeClass('active')
+      // $('.navigation').hide()
     } else {
-      $('.navigation').show()
+      $('.navigation').css('position', 'static')
       $(this).addClass('active')
+      $('.navigation').show()
     }
   })
 
+  $('.leftbar').hover(function(){
+    if (!$('#navigator').hasClass('active')){$('.navigation').show()}
+    
+  })
+  $('#iframe').hover(function(){
+    if (!$('#navigator').hasClass('active')){$('.navigation').hide()}
+  })
 
 
   $('.topbar__item.devises .devise').click(function(){
@@ -677,7 +686,7 @@ fill="#ebebeb" stroke="none">
 </style>
 <style>
   .topbar__btn{
-    padding: 8px;
+    padding: 6px;
     display: flex;
     border-right: 1px solid rgb(43, 43, 43);
   }
