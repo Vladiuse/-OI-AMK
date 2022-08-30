@@ -13,7 +13,6 @@ from kma.models import OfferPosition, PhoneNumber
 from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
-# from qr_code.qrcode.utils import QRCodeOptions
 from django.template import Template
 from django.template import Context, RequestContext
 from bs4 import BeautifulSoup
