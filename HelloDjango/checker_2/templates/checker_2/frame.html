@@ -145,9 +145,9 @@
                 </div>
               </div>
 
-              <div class="topbar__item devises">
+              <div class="topbar__item devises" id="devise-width">
                 <div class="topbar__btn" >
-                  1000 PX 80%
+                  <span>1000</span> PX
                 </div>
               </div>
             </div>
@@ -356,6 +356,7 @@
       // $('#analize-load p').first().slideUp(300)
       // $('#analize-load p').last().slideDown(300)
       onActiveDebug()
+      setDeviseWidth()
       loadBackAnalize(land_code)
 
     }
@@ -403,6 +404,7 @@
       }
       let width = devicesWidth[deviseType]
       $('#iframe').css('width', width)
+      setDeviseWidth()
     }
 
 
@@ -521,6 +523,12 @@
           $('#manual').html(response)
           $('.navigation__add-inner .lds-ellipsis').hide()
       })
+    }
+
+    function setDeviseWidth(){
+      let elem = $('#devise-width span')
+      let width = $('#iframe').css('width').replace('px', '')
+      elem.text(width)
     }
 
   </script>
@@ -684,11 +692,13 @@
       $('.navigation').css('position', 'absolute')
       $(this).removeClass('active')
       $('#jeneral-status').show()
+      setDeviseWidth()
     } else {
       $('.navigation').css('position', 'static')
       $(this).addClass('active')
       $('.navigation').show()
       $('#jeneral-status').hide()
+      setDeviseWidth()
     }
   })
 
@@ -864,6 +874,11 @@
       color: aliceblue;
       text-transform: uppercase;
       font-size: 13px;
+    }
+
+    #devise-width span{
+      font-weight: 600;
+      margin-right: 3px;
     }
   </style>
 </body>
