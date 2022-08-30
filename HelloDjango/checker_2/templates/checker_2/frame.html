@@ -210,7 +210,7 @@
                   </div>
                   
                 </div>
-                <div class="leftbar__tool-item">
+                <div class="leftbar__tool-item" id="about" data-manual-link="other.linkchecker">
                   <i class="fa-solid fa-circle-question" style="font-size: 20px;"></i>
                 </div>
               </div>
@@ -474,6 +474,7 @@
 
     // Добавить иконку общего статуса
     function setJeneralStatus(status){
+      $('#jeneral-status').empty()
       status_ico = {
         'info': 'fa-solid fa-circle-chevron-down',
         'warning': 'fa-solid fa-triangle-exclamation',
@@ -557,7 +558,7 @@
   <script>
 
     // загрузка документации при клике на вопросик
-    $('#check_list a').click(function(e){
+    $('#check_list a, #about').click(function(e){
       e.preventDefault();
       // $(".navigation__add").slideToggle();
       $(".navigation__add").show();
