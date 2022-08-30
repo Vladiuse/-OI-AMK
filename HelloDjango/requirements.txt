@@ -9,7 +9,6 @@ cryptography==37.0.2
 Django==3.2.10
 django-extensions==3.1.5
 django-ordered-model==3.6
-django-qr-code==3.1.1
 h11==0.13.0
 html5lib==1.1
 idna==3.3
