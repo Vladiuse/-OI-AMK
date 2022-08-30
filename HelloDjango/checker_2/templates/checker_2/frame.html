@@ -30,11 +30,6 @@
 </head>
 
 <body>
-
-  <!-- <div id="for-doc" style="display: none;">
-    <div id="manual" class="content "></div>
-  </div> -->
-    <!--TO - CLONE-->
   <div id="text-analiz" style="display: none;">
     <div class="info-block info">
       <i class="fa-solid fa-circle-chevron-down"></i>
@@ -58,20 +53,8 @@
               <div class="topbar__item">
                 <div class="topbar__burger">
                   <a href="{% url 'checker_2:index' %}" style="display: flex; align-items: center; justify-content: center;">
-                      <!-- <?xml version="1.0" standalone="no"?>
-                        <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
-                        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"> -->
-                        <!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 748.000000 769.000000"
-                        preserveAspectRatio="xMidYMid meet">
-    
-                        <g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
-                        fill="#ebebeb" stroke="none">
-                        </g>
-                        </svg> -->
                     <img src="{% static 'checker_2/scripts/logo_2.png' %}" style="width: 40px;">
                   </a>
-                  <!-- <img class="topbar__logo" src="{%static 'checker_2/scripts/logo.svg'%}" alt="logo"> -->
                 </div>
               </div>
               <div class="topbar__item">
@@ -171,12 +154,6 @@
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
               </div>
-              <!-- <div class="topbar__item">
-                <div class="topbar__btn qrcode" id="show-qr">
-                  QR
-                  <i class="fa-solid fa-qrcode"></i>
-                </div>
-              </div> -->
 
             </div>
           </div>
@@ -225,12 +202,6 @@
                         {%endfor%}
                       </div>
                       <div class="container-toolbar" id="analize-load">
-                        <!-- <div class="lds-ring" id="load-ring">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div> -->
                         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                         <p>Загрузка сайта</p>
                         <p style="display: none;">Анализ</p>
@@ -240,8 +211,6 @@
                     </div>
 
                     <div class="navigation__checker-list" id="check_list">
-                      <!-- <div class="leftbar__tool-btn" id="clear-check-list">Clear</div> -->
-
                       <div class="list-group">
                         {%for block in checker.check_list %}
                         <div class="block block group-id-{{ forloop.counter }}">
@@ -274,11 +243,6 @@
                                 <div></div>
                               </div>
                             </label>
-                              <!-- <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}"
-                                data-checkpoint-id="{{sub.id}}">
-                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
-                                {{sub.text}}
-                              </label> -->
                               {%endfor%}
                             </div>
                             </label>
@@ -307,9 +271,6 @@
                   </div>
                   <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="manual" >
-                    <!-- <p>
-                      -----LOADING-----
-                    </p> -->
                   </div>
                 </div>
               </div>
@@ -338,12 +299,11 @@
     let land_data_from_js = false;
     let get_phone_code_api = false;
     let get_old_analize = false;
-
+    let iframeStartHeight = 0;
+    let recordIframeScroll = true
 
 
     iframe.onload = function () {
-      // исполнение после полной загрузки iframe
-      // iframe.contentDocument.body.prepend("Hello, world!");
       if (land_data_from_js) { loadLandParams() }
       if (get_phone_code_api) { getPhoneCode() }
 
@@ -352,15 +312,22 @@
         $('#analize-load p').last().slideDown(300)
       })
 
-      // $('#analize-load p').first().slideUp(300)
-      // $('#analize-load p').last().slideDown(300)
       onActiveDebug()
       setDeviseWidth()
       loadBackAnalize(land_code)
+      recordIframeScroll = true
+      iframe.contentWindow.scrollTo(0,iframeStartHeight);
+
+          // прописать высоту фрейма в переменную
+          iframe.contentWindow.onscroll = (e) => {  
+          if (recordIframeScroll){iframeStartHeight = iframe.contentWindow.scrollY; console.log(iframeStartHeight)}
+          }
 
     }
 
 
+
+    
     function runFuncIframe(func_name) {
       // запустить функцию в айфрейме по названию
       let func = iframe.contentWindow[func_name]
@@ -407,11 +374,6 @@
     }
 
 
-    let x_data = {
-      'text': 'Some text',
-      'status': 'warning',
-      'items': ['123', '123', 'xxxx', 'xxyyyy']
-    }
     function loadImfoItems(items) {
       console.log(items)
       for (pos in items) {
@@ -506,6 +468,7 @@
 
     // перезагрузка iFrame
     function iframereboot() {
+      recordIframeScroll = false;
       var iframe = document.getElementById('iframe');
       iframe.srcdoc = iframe.srcdoc;
     }
@@ -723,6 +686,8 @@
     $('.topbar__item.devises .devise').removeClass('active')
     $(this).addClass('active')
   })
+
+ 
 </script>
 <style>
   .leftbar__tool-item svg,
