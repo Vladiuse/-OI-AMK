@@ -1,6 +1,9 @@
 from django.shortcuts import render
 import yaml
 from django.conf import settings
+from django.template import Template
+from django.template import Context
+from django.http import HttpResponse
 
 
 PERSONS = {
@@ -76,5 +79,6 @@ def show_page(request, page_path):
         }
     content.update(PERSONS)
     return render(request, f'manual/{page_path}.html', content)
+
 
 

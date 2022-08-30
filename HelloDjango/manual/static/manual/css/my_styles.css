@@ -1,33 +1,41 @@
-h1{
+#manual h1{
     margin-bottom: 50px;
     border-bottom: 1px solid #e1e4e5;
 }
-h2,h3{
+#manual h2,
+#manual h3{
     margin: 25px 0;
 }
-h4,h5{
+#manual h4,#manual h5{
     margin:15px 0 10px 0;
 }
-h6{
+#manual h6{
     margin-top: 15px;
 }
 
 .content p.center{
     text-align: center;
 }
-.rst-content .content>p{
+/* .rst-content .content>p{
     margin: 12px 0 !important;
 }
+.rst-content .content p{
+    margin: 5px 0;
+} */
+.content>p{
+    margin: 12px 0 !important;
+}
+.content p{
+    margin: 5px 0;
+}
 
-img[class^="w-"]{
+#manual img[class^="w-"]{
     display:block;
     margin-bottom: 15px;
 }
 
-.rst-content .content p{
-    margin: 5px 0;
-}
-p.center{
+
+#manual p.center{
     text-align: center;
 }
 
@@ -55,10 +63,10 @@ img.w-90{
 img.w-100{
     width: 90%;
 }
-span.b{
+#manual span.b{
 font-weight: bold;
 }
-span.cap{
+#manual span.cap{
     text-transform: uppercase
 }
 
@@ -187,4 +195,49 @@ span-x.danger {
 }
 .correct img{
     width: 100%;
+}
+
+/* .rst-content .note.success{
+    background: #e7f2fa;
+}
+.rst-content .note.success .admonition-title {
+    background: #1abc9c;
+
+}
+
+.rst-content .note.warning{
+    background: #ffedcc;
+}
+.rst-content .note.warning .admonition-title {
+    background: #f0b37e;
+}
+
+
+.rst-content .note.danger{
+    background: #ffcccc;
+}
+.rst-content .note.danger .admonition-title {
+    background: #f07e7e;
+} */
+.note.success{
+    background: #e7f2fa;
+}
+.note.success .admonition-title {
+    background: #1abc9c;
+
+}
+
+.note.warning{
+    background: #ffedcc;
+}
+.note.warning .admonition-title {
+    background: #f0b37e;
+}
+
+
+.note.danger{
+    background: #ffcccc;
+}
+.note.danger .admonition-title {
+    background: #f07e7e;
 }

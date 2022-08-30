@@ -17,8 +17,11 @@
 
 <!--<script type="text/javascript" src="{% static 'office/main.js' %}"></script>-->
 
-<!--ICONS-->
-<script src="https://kit.fontawesome.com/0960a95ef5.js" crossorigin="anonymous"></script>
+<!--ICONS OLD-->
+<!-- <script src="https://kit.fontawesome.com/0960a95ef5.js" crossorigin="anonymous"></script> -->
+
+  <!--ICONS-->
+  <script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -49,6 +52,9 @@
                                    <li class="nav-item">
                 <a class="nav-link" href="{% url 'checker:index' %}" id="checker-url">LinkChecker</a>
               </li>
+                                                             <li class="nav-item">
+                <a class="nav-link" href="{% url 'manual:index' %}">Мануал</a>
+              </li>
                                              <li class="nav-item">
                 <a class="nav-link" href="{% url 'archive:index' %}">Архив</a>
               </li>
@@ -59,7 +65,7 @@
                   Ссылки
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#" target="_blank">----</a></li>
+                  <li><a class="dropdown-item" href="http://vim-store.ru/checker/" target="_blank">Old LinkChecker</a></li>
                   <li><a class="dropdown-item" href="/admin" target="_blank">Admin</a></li>
                 </ul>
               </li>

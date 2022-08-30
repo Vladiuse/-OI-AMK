@@ -29,3 +29,4 @@ $ pwd
 $ touch restart.txt
 
 Hello world
+только чекер 2

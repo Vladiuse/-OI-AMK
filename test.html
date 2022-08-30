@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--ICONS-->
+    <script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        body{
+            background-color: #363838;
+        }
+        .info-block{
+            margin: 5px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            border: 1px solid #d3d4d5;
+        }
+        .info-block p{
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            color: aliceblue;
+        }
+        .info-block.warning{
+            border: 2px solid #fcd62e;
+            border-left: 7px solid #fcd62e;
+        }
+        .info-block.info{
+            border: 2px solid #4253ff;
+            border-left: 7px solid #4253ff;
+        }
+        .info-block.error{
+            border: 2px solid #fc5f2e;
+            border-left: 7px solid  #fc5f2e;
+        }
+
+        .info-block.warning i{
+            color:#fcd62e;
+        }
+        .info-block.info i{
+            color:#4253ff;
+        }
+        .info-block.error i{
+            color:#fc5f2e;
+        }
+    </style>
+    <style>
+        .roundedTwo {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    margin: 20px auto;
+    background: #fcfff4;
+    background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    border-radius: 50px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgb(0 0 0 / 50%);
+}
+.roundedTwo input[type=checkbox] {
+    visibility: hidden;
+}
+.roundedTwo label {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #222222 0%, #45484d 100%);
+    border-radius: 50px;
+    box-shadow: inset 0px 1px 1px rgb(0 0 0 / 50%), 0px 1px 0px white;
+}
+.roundedTwo label:after {
+    content: '';
+    width: 9px;
+    height: 5px;
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    border: 3px solid #fcfff4;
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    opacity: 0;
+    transform: rotate(-45deg);
+}
+.roundedTwo input[type=checkbox]:checked + label:after {
+    opacity: 1;
+}
+    </style>
+</head>
+<body>
+    <div class="roundedTwo">
+        <input type="checkbox" value="None" id="roundedTwo" name="check" checked="">
+        <label for="roundedTwo"></label>
+      </div>
+      <div class="roundedTwo">
+        <input type="checkbox" value="None" id="roundedTwo1" name="check" checked="">
+        <label for="roundedTwo"></label>
+      </div>
+
+
+
+
+
+        <div>
+
+        </div>
+    </div>
+    <div class="info-block info">
+        <i class="fa-solid fa-circle-chevron-down"></i>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+    </div>
+    <div class="info-block warning">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+    </div>
+    <div class="info-block error">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        
+    </div>
+</body>
+</html>
+

@@ -18,6 +18,7 @@ class PhoneNumber(models.Model):
     phone_code = models.CharField(max_length=15, verbose_name='Моб код страны', blank=True)
     currency = models.CharField(max_length=5, verbose_name='Валюта', blank=True)
     words = models.JSONField(default={"words": [], "templates": []}, verbose_name='Слова под гео')
+    langs = models.CharField(max_length=15, verbose_name='Языки гео', blank=True)
 
     class Meta:
         verbose_name = 'Валидный номер'
@@ -32,6 +33,16 @@ class PhoneNumber(models.Model):
             return phone.phone_code
         except PhoneNumber.DoesNotExist as error:
             return f'{iso_code}:{error}'
+
+class Language(models.Model):
+    iso = models.CharField(max_length=2, verbose_name='Код iso языка', primary_key=True)
+    russian_name = models.CharField(max_length=25, verbose_name='Русское название', blank=True)
+
+    class Meta:
+        ordering = ['iso']
+
+    def __str__(self):
+        return f'{self.russian_name}({self.iso.upper()})'
 
 
 class OfferPosition(models.Model):
