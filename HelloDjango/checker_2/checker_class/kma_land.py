@@ -139,7 +139,7 @@ class Land:
 
 class KMALand(Land):
     """Сайт KMA"""
-    PRE_LAND_DOMAINS = ['blog-feed.org']
+    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
@@ -147,6 +147,9 @@ class KMALand(Land):
 
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
+        if self.land_type == 'preland':
+            if KMALand.LAND_ADMIN_UTM not in url:
+                raise PrelandNoAdminError
         self.__kma_script = self._find_kma_back_data()
         self.country = self._country()
         self.language = self._language()
@@ -154,6 +157,8 @@ class KMALand(Land):
         self.list_of_parameters = self._list_of_parameters()
         self.list_of_form_parameters = self._list_of_form_parameters()
         self.land_attrs = list()
+
+
 
     def get_clean_url(self):
         url = super().get_no_protocol_url()
@@ -169,6 +174,7 @@ class KMALand(Land):
     def format_url(url):
         url = url.strip()
         url = url.replace('https://', 'http://')
+        url = url.replace('blogs-info.info', 'blog-feed.org')
         return url
 
     def _find_kma_back_data(self) -> str:
@@ -282,8 +288,6 @@ class KMALand(Land):
         """Получить тип сайта"""
         for domain in self.PRE_LAND_DOMAINS:
             if domain in self.url:
-                if KMALand.LAND_ADMIN_UTM not in self.url:
-                    raise PrelandNoAdminError
                 return 'preland'
         return 'land'
 

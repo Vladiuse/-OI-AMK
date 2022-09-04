@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,8 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
     rel="stylesheet">
-  <!-- <link href="{% static 'checker_2/css/reset.css' %}" rel="stylesheet"> -->
-  <!-- <link href="{% static 'checker_2/css/global.css' %}" rel="stylesheet"> -->
   <link href="{% static 'checker_2/css/style.css' %}" rel="stylesheet">
   <link href="{% static 'root/css/flag-icon.min.css' %}" rel="stylesheet">
   <!--ICONS-->
@@ -312,22 +309,19 @@
         $('#analize-load p').last().slideDown(300)
       })
 
-      onActiveDebug()
-      setDeviseWidth()
+      onActiveDebug() // включить активные дебагрежимы (из настроек)
+      setDeviseWidth()  // проставить значение ширины фрейма
       loadBackAnalize(land_code)
       recordIframeScroll = true
       iframe.contentWindow.scrollTo(0,iframeStartHeight);
 
-          // прописать высоту фрейма в переменную
+          // прописать высоту фрейма в переменную - отключена пока фрейм грузиться
           iframe.contentWindow.onscroll = (e) => {  
           if (recordIframeScroll){iframeStartHeight = iframe.contentWindow.scrollY;}
           }
 
     }
 
-
-
-    
     function runFuncIframe(func_name) {
       // запустить функцию в айфрейме по названию
       let func = iframe.contentWindow[func_name]
@@ -373,7 +367,7 @@
       setDeviseWidth()
     }
 
-
+    // пробегаеться по сообщениям об ошибках с бэка
     function loadImfoItems(items) {
       console.log(items)
       for (pos in items) {
@@ -381,6 +375,8 @@
         addInfo(item)
       }
     }
+
+    // добавить текст ошибки на страницу
     function addInfo(x_data) {
       let info = $('#text-analiz .info-block.' + x_data['status']).clone()
       let main_text = $('<p>')
@@ -423,8 +419,6 @@
           }
           setJeneralStatus(response['jeneral_status'])
           loadImfoItems(response['new_checker'])
-          console.log('End')
-          // fixListHeight()
 
         } else {
           console.error('Ошибка загрузки анализатора')
@@ -495,27 +489,6 @@
     }
 
   </script>
-  <style>
-      /* #for-doc{
-        position: absolute;
-        top: 70px;
-        left: 400px;
-        width: 600px;
-        min-height: 100px;
-        background-color: white;
-        z-index: 5;
-        padding: 20px;
-        border-radius: 10px;
-        border: 3px solid black;
-        max-height: 800px;
-        overflow: hidden;
-        overflow-y: scroll;
-      } */
-      /* #manual{
-        overflow: hidden;
-        overflow-y: scroll;
-      } */
-  </style>
 
   <script>
 
@@ -531,50 +504,10 @@
       $('.tab-content').trigger('click')
 
 
-        /* -------------------- */
-    // $(".navigation-btn").on("click", function(e){
-    //   e.preventDefault();
-    //   $(".navigation").slideToggle();
-    // });
-        /* -------------------- */
-
-    // fixListHeight()
     // для чеклиста
     $('#clear-check-list').click(function () {
       $('.check_list input').prop('checked', false);
     })
-
-    // $('.list-group').click(function () {
-    //   fixListHeight()
-    // })
-
-
-    /* function fixListHeight(){
-      // Подогнать высоту чеклиста
-      let chekListWidth = $('#iframe').height() - $('#checker-data').height()
-      console.log(chekListWidth, 'chekListWidth')
-      chekListWidth = chekListWidth - 30;
-    $('#check_list').height(chekListWidth + 'px')
-    } */
-
-
-
-
-    // Снять\Поставить все гагли в чеклисте
-    // $('a.clear-group').click(function (e) {
-    //   e.preventDefault()
-    //   let groupId = $(this).attr('data-group-id')
-    //   if ($(this).attr('data-group-status') == 1) {
-    //     $('.group-id-' + groupId + ' input').prop('checked', true);
-    //     $(this).attr('data-group-status', '0')
-    //     $(this).text('Снять все')
-    //   } else {
-    //     $('.group-id-' + groupId + ' input').prop('checked', false);
-    //     $(this).attr('data-group-status', '1')
-    //     $(this).text('Отметить все')
-    //   }
-
-    // })
 
 
     function sendNewCheckStatus(check_point_id, checked_url, new_status) {
@@ -594,6 +527,7 @@
 
     }
 
+    // сделать чекбокс в чеклисте активным/неактивным
     function makeCkeckPointAnable(checkPointId) {
       let checkPoint = $('#check_list .list-group-item.sub').filter(function () {
         if ($(this).attr('data-checkpoint-id') == checkPointId) { return true }
@@ -602,6 +536,7 @@
       checkPoint.find('.lds-ring.check-list').hide()
     }
 
+    // При клике на инпут в чеклисте
     $('#check_list .list-group-item.sub input').click(function () {
       console.log(123)
       let check_point = $(this).parent()
@@ -610,7 +545,6 @@
         let check_point_id = check_point.attr('data-checkpoint-id')
         let status = $(this).is(':checked')
         check_point.find('.lds-ring.check-list').show()
-        console.log(check_point_id, status, check_point.find('.lds-ring.check-list'))
         sendNewCheckStatus(check_point_id, checkedUrl, status)
       }
 
@@ -626,11 +560,6 @@
     $(this).toggleClass('active')
     runFuncIframe('removeAllDebug')
     onActiveDebug()
-    // $.each(items, function(i){
-    //   let func = $(this).attr('data-iframe-func')
-    //   runFuncIframe(func)
-
-    // })
   })
 
   // включить дебаг которые активны
@@ -681,7 +610,7 @@
     }
   })
 
-
+  // переключение класса active на напени устройств
   $('.topbar__item.devises .devise').click(function(){
     $('.topbar__item.devises .devise').removeClass('active')
     $(this).addClass('active')
@@ -732,9 +661,7 @@
   }
   .list-group-item:hover{
     background-color: rgb(77, 77, 77);
-    /* background-color: rgb(141, 34, 34); */
   }
-  /* #4d4d4d */
   .list-group i{
   margin-left: 3px;
   font-size: 1rem;
@@ -745,7 +672,6 @@
   .topbar__btn{
     padding: 6px;
     display: flex;
-    /* border-right: 1px solid rgb(43, 43, 43); */
   }
   .topbar__btn.active{
     background-color: #212121;
@@ -845,6 +771,15 @@
     #devise-width span{
       font-weight: 600;
       margin-right: 3px;
+    }
+  </style>
+  <style>
+    /* Дубли стилей, чтоб избежать сброса кэша */
+    body{
+      background-color: rgb(63, 61, 61 ,0.75);
+    }
+    #text-info p, #text-info span {
+      display: inline-block;
     }
   </style>
 </body>

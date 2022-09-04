@@ -71,7 +71,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 
 
 body {
-  background-color: rgb(63, 61, 61);
+  background-color: rgb(63, 61, 61 ,0.75);
   font-size: 16px;
 	line-height: 27px;
 	font-weight: 400;
@@ -139,7 +139,7 @@ body {
 #text-info p,
 #text-info span {
   color: aliceblue;
-  display: inline;
+  display: inline-block;
   margin-right: 6px;
   font-size: 15px;
 }

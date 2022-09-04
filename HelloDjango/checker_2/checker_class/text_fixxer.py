@@ -111,12 +111,17 @@ class DomFixxer:
 
     @staticmethod
     def add_base_tag(soup, url):
+        # base = soup.find('base')
+        # if not base:
+        #     new_base = soup.new_tag('base')
+        #     new_base['href'] = url
+        #     soup.html.head.insert(0, new_base)
+        # else:
+        #     base['href'] = url
         base = soup.find('base')
-        if not base:
-            new_base = soup.new_tag('base')
-            new_base['href'] = url
-            soup.html.head.insert(0, new_base)
-        else:
-            base['href'] = url
-
+        if base:
+            base.extract()
+        new_base = soup.new_tag('base')
+        new_base['href'] = url
+        soup.html.head.insert(0, new_base)
 
