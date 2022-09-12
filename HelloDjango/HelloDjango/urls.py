@@ -28,7 +28,7 @@ urlpatterns = [
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('', include('root.urls')),
     path('kma/', include('kma.urls')),
-    path('checker/', include('checker.urls')),
+    path('checker_old/', include('checker.urls')),
     path('archive', include('archive.urls')),
     path('manual/', include('manual.urls')),
     path('checker_2/', include('checker_2.urls')),

@@ -353,7 +353,7 @@
             $('#test-click').hide()
             $('#load-ring').show()
             cleanDataToolbar()
-            let url = currentUrl + '/checker/analiz_land_text/'
+            let url = currentUrl + '/checker_old/analiz_land_text/'
             let page_title = $('title').clone()
             let send_text = $('html').clone()
             // send_text.find('#oi-toolbar').remove()
@@ -468,7 +468,7 @@
         function get_rekl(){
             offer_id = list_of_form_parameters['offer_id']
             camp_id = list_of_parameters['campaign']
-            url = '/checker/get_kma_rekl/?offer_id='+offer_id+'&camp_id='+camp_id
+            url = '/checker_old/get_kma_rekl/?offer_id='+offer_id+'&camp_id='+camp_id
             url = URL + url
             $.get(url, function(response){
                 console.log(response, 'xxxx')
