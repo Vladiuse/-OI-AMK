@@ -58,11 +58,14 @@ class CheckPoint(OrderedModel):
         ordering = ['order']
 
     def save(self):
-        super().save()
-        actual_lists = ActualUserList.objects.all()
-        for user_list in actual_lists:
-            user_check_point = UserSiteCheckPoint(user_list=user_list, check_point=self)
-            user_check_point.save()
+        if self.pk:
+            super().save()
+        else:
+            super().save()
+            actual_lists = ActualUserList.objects.all()
+            for user_list in actual_lists:
+                user_check_point = UserSiteCheckPoint(user_list=user_list, check_point=self)
+                user_check_point.save()
 
     def __str__(self):
         return self.text

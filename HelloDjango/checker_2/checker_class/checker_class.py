@@ -214,12 +214,12 @@ class GeoWords(Check):
     DESCRIPTION = 'Поиск стран по тексту'
     KEY_NAME = 'countrys_in_land'
 
-    ALL_COUNTRYS = 'Страны'
+    ALL_COUNTRYS = 'Найдена страна'
     INCORECT_COUNTRY = 'Другие страны'
 
     STATUS_SET = {
-        ALL_COUNTRYS: Check.INFO,
-        INCORECT_COUNTRY: Check.WARNING,
+        ALL_COUNTRYS: Check.WARNING,
+        INCORECT_COUNTRY: Check.ERROR,
     }
 
     def process(self):

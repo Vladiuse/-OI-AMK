@@ -9,6 +9,9 @@ from django.conf import settings
 class PrelandNoAdminError(BaseException):
     """Прелэндинг не подключен к админке (нет ?ufl=)"""
 
+class IncorrectPrelandUrl(BaseException):
+    """Не правильный url прелэнда"""
+
 
 
 class Land:
@@ -139,7 +142,8 @@ class Land:
 
 class KMALand(Land):
     """Сайт KMA"""
-    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info']
+    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info','previewpreland.pro']
+    INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
@@ -148,8 +152,12 @@ class KMALand(Land):
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
         if self.land_type == 'preland':
+            for domain in KMALand.INCORRECT_PRELAND_URLS:
+                if domain in url:
+                    raise IncorrectPrelandUrl
             if KMALand.LAND_ADMIN_UTM not in url:
                 raise PrelandNoAdminError
+
         self.__kma_script = self._find_kma_back_data()
         self.country = self._country()
         self.language = self._language()

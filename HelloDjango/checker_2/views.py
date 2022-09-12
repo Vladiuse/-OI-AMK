@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .checker_class.text_finder import TextAnaliz
-from .checker_class.kma_land import KMALand, Land, PrelandNoAdminError
+from .checker_class.kma_land import KMALand, Land, PrelandNoAdminError, IncorrectPrelandUrl
 from kma.models import OfferPosition, PhoneNumber
 from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
 from .checker_class.check_list_view import CheckListView
@@ -96,9 +96,15 @@ def check_url(request):
 
             print(f'Total:{round(end - start, 2)}')
             return render(request, 'checker_2/frame.html', content)
-        except PrelandNoAdminError:
+        except PrelandNoAdminError as error:
             content = {
-                'error_text': PrelandNoAdminError.__doc__,
+                'error_text': error.__doc__,
+                'user_settings':settings,
+            }
+            return render(request, 'checker_2/index.html', content)
+        except IncorrectPrelandUrl as error:
+            content = {
+                'error_text': error.__doc__,
                 'user_settings':settings,
             }
             return render(request, 'checker_2/index.html', content)
