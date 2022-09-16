@@ -3,34 +3,71 @@
 {% block content %}
 <div class="main-wrapper">
     <h1>Номера для тестов</h1>
-    <div class="to-copy">
-          <h5>Пробный_заказ</h5>
-          <h5>Probniy_zakaz</h5>
-    <a href="https://ru.wikipedia.org/wiki/ISO_3166-1" target="_blank">Коды Стран ISO</a><br>
-      <a href="https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D1%8F%D0%B7%D1%8B%D0%BA%D0%BE%D0%B2" target="_blank">Коды языков</a>
-      <br>
-      <div class="copypaste">
-        <!-- <p>@Славик#6278</p>
-        <p>**Тест интеграции**</p>
-        <p>Оффер: xxxx</p>
-        <p>Таска: xxxx</p>
-        <p>Рекл: xxxx</p>
-        <p>Гео: xxxx</p>
-        <p>Внешний ID: xxxx</p> -->
-        <textarea class="form-control" name="" id="" cols="30" rows="8">
-        <!-- @Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx -->
-        </textarea>
-      </div>
-     <div class="managers">
-      <button class="btn btn-primary">@Max KMA#6702 </button>
-      <button class="btn btn-secondary">@Nadezhda Sokolova#1960</button><br>
-      <button class="btn btn-warning">@Наталья Полищук#3551</button>
-      <button class="btn btn-info">@Olya KMA#4825</button>
-     </div>
-      <div class="container1">
-        <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
-            
+    <div class="to-copy container">
+      <div class="row">
+        <div class="col-4">
+              <h5>Пробный_заказ</h5>
+              <h5>Probniy_zakaz</h5>
+          <a href="https://ru.wikipedia.org/wiki/ISO_3166-1" target="_blank">Коды Стран ISO</a><br>
+          <a href="https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D1%8F%D0%B7%D1%8B%D0%BA%D0%BE%D0%B2" target="_blank">Коды языков</a>
+          <br>
+          <div class="copypaste">
+            <textarea class="form-control" name="" id="" cols="30" rows="8">
+            </textarea>
+          </div>
+        </div>
+        <div class="col-4" id="auto-test">
+          <h5>Автотест</h5>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="ru_test" checked>
+            <label class="form-check-label" for="flexRadioDefault1">
+              Пробный_заказ
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="eng_test" >
+            <label class="form-check-label" for="flexRadioDefault2">
+              Probniy_zakaz
+            </label>
+          </div>
 
+
+          <div >
+              <input type="text" id="chose-offer"  placeholder="Введите id оффера...">
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Выберети гео...">
+              <ul id="myUL-chosen">
+              </ul>
+              <button class="btn btn-primary disabled" id="send-button"> 
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                <span class="text">Отправить</span>
+              </button>
+              <a href="#" class="btn btn-primary  active" role="button" aria-pressed="true" id="lead-link" target="_blank" style="display:none;">Перейти в трекер</a>
+              <ul id="myUL">
+                {% for phone in phones %}
+                <li data-iso="{{phone.short}}">
+                  <a href="#">
+                    <div><span class="flag-icon flag-icon-{{phone.short}}"></span>
+                      {{phone.ru_full_name}} ({{phone.short|title}})</div>
+                    <i class="fa-solid fa-circle-check"></i>
+                  </a>
+                  
+                </li>
+                {%endfor%}
+              </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="managers">
+          <button class="btn btn-primary">@Max KMA#6702 </button>
+          <button class="btn btn-secondary">@Nadezhda Sokolova#1960</button><br>
+          <button class="btn btn-warning">@Наталья Полищук#3551</button>
+          <button class="btn btn-info">@Olya KMA#4825</button>
+         </div>
+          <div class="container1">
+            <textarea class="form-control" name="" id="" cols="30" rows="7"></textarea>
+          </div></div>
       </div>
     </div>
 
@@ -63,7 +100,7 @@
   justify-content: flex-start;
   }
   table{
-  max-width: 600px;
+  max-width: 500px;
   }
   .to-copy{
   /* display: flex;
@@ -71,10 +108,13 @@
   /* margin: 10px 0; */
   position: fixed;
   top: 160px;
-  left: 700px;
+  left: 600px;
   }
-  .to-copy h5, .to-copy a{
+  /* .to-copy h5, .to-copy a{
   margin: 0 5px;
+  } */
+  .to-copy textarea{
+    width: 400px;
   }
   .copypaste{
     margin: 30px 0;
@@ -88,7 +128,166 @@
   .managers{
     margin: 10px 0;
   }
+
+
+  /* #auto-test{
+    width: 400px;
+  } */
+
+  span.flag-icon{
+    margin-right: 5px;
+  }
+  #auto-test li .fa-circle-check{
+    margin-right: 20px;
+  }
+  #myUL li .fa-circle-check{
+    display: none;
+  }
+  #myUL-chosen li .fa-circle-check{
+    margin-right: 20px;
+    color: #5b783e;
+  }
 </style>
+<style>
+  /* for search geos */
+
+  #myInput,#chose-offer {
+  background-image: url('https://www.w3schools.com/css/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+#myUL,#myUL-chosen {
+  /* Remove default list styling */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; 
+}
+#myUL-chosen{
+  /* margin-bottom: 15px; */
+}
+#myUL{
+  display:none;
+  margin-top: 30px;
+}
+
+#myUL li a,#myUL-chosen li a {
+  border: 1px solid #ddd; /* Add a border to all links */
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6; /* Grey background color */
+  padding: 12px; /* Add some padding */
+  text-decoration: none; /* Remove default text underline */
+  font-size: 18px; /* Increase the font-size */
+  color: black; /* Add a black text color */
+  display: flex; /* Make it into a block element to fill the whole list */
+  justify-content: space-between;
+  align-items: center;
+}
+
+#myUL li a:hover:not(.header),
+#myUL-chosen li a:hover:not(.header)
+{
+  background-color: #eee; /* Add a hover effect to all links, except for headers */
+}
+</style>
+<script>
+  function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+  
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i].getElementsByTagName("a")[0];
+      txtValue = a.textContent || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+  </script>
+  <script>
+    let full = location.protocol + '//' + location.host + '/';
+    $('#myUL').on('click','li', function(){
+      $(this).remove()
+      $('#myUL-chosen').append($(this))
+      $('#myInput').val('')
+      onOffsendButton()
+    })
+
+
+    $('#myUL-chosen').on('click','li', function(){
+      $(this).remove().hide()
+      $('#myUL').append($(this))
+      $('#myInput').val('')
+      onOffsendButton()
+    })
+
+    $('#myInput').keyup(function(){
+      if ($(this).val().length > 1){
+        $('#myUL').show()
+      } else {$('#myUL').hide();$('#myUL li').hide()}
+    })
+    function getTestName(){
+        let test = ''
+        $('#auto-test .form-check-input').each(function(){
+        if ($(this).is(':checked')) {test = $(this).attr('id')}
+          })
+      return test
+      }
+
+    function onOffsendButton(){
+      if ($('#myUL-chosen').children().length == 0)
+      {$('#send-button').addClass('disabled')}
+      else
+      {$('#send-button').removeClass('disabled')}
+    }
+
+    $('#send-button').click(function(){
+      $(this).addClass('disabled')
+      sendLead()
+      $('#send-button .spinner-grow').show()
+      $('#send-button .text').text('Отправка')
+    })
+
+    function sendLead(){
+      let countrys = []
+      $('#myUL-chosen li').each(function(){
+        countrys.push($(this).attr('data-iso'))
+      })
+      countrys = countrys.join(',')
+      let offer_id = $('#chose-offer').val()
+      let url = full + 'kma/test_rekl/'
+      let data = {
+        'offer_id': offer_id,
+        'countrys': countrys,
+        'test_name': getTestName(),
+      }
+      $.post(url, data, function(response){
+        if (response['success'] == true){
+          $('#send-button .spinner-grow').hide()
+          $('#send-button .text').text('Отправить')
+          $('#send-button').removeClass('disabled')
+          console.log(response)
+          $('#lead-link').attr('href',response['link'] );
+          $('#lead-link').show()
+        }
+        else {console.error('Ошибка отправки лида', response)}
+      })
+      
+    }
+  </script>
 <script>
   let string = '@Max KMA#6702' + "\nОффер: xxxxx\nПускаем оффер? паблик/эксклюзив/приват?\nГео: xxx\nТаск: xxxx";
   $('.container1 textarea').val(string)
@@ -105,3 +304,8 @@
 </script>
 
 {% endblock %}
+
+
+
+
+

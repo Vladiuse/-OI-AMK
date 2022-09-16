@@ -7,4 +7,5 @@ urlpatterns = [
     path('phones/', views.phones, name='phones'),
     path('get_phone_code/', views.get_phone_code),
     path('manual/', views.manual, name='manual'),
+    path('test_rekl/', views.test_rekl,),
 ]

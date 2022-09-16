@@ -34,6 +34,19 @@ class PhoneNumber(models.Model):
         except PhoneNumber.DoesNotExist as error:
             return f'{iso_code}:{error}'
 
+    @staticmethod
+    def get_country_phone(*countrys_iso)-> dict:
+        """Возвразает словарь
+        ключ:county_iso
+        значение: номер телефона
+        """
+        phones = PhoneNumber.objects.filter(short__in=countrys_iso).values()
+        country_phone = dict()
+        for p in phones:
+            dic = {p['short']: p['phone']}
+            country_phone.update(dic)
+        return country_phone
+
 class Language(models.Model):
     iso = models.CharField(max_length=2, verbose_name='Код iso языка', primary_key=True)
     russian_name = models.CharField(max_length=25, verbose_name='Русское название', blank=True)
