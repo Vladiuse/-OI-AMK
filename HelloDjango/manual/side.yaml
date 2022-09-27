@@ -30,6 +30,7 @@
         - Возобновление: offer.restart_offer
         - Приостановка оффера/гео: offer.stop
         - Изменение условий работы: offer.change_work
+        - Перевод трафика на другого рекла: offer.change_traff_pass
 - Промо:
     - Правила оформления:
         - Чек-боксы(dev): check_land.rules_checkbox
@@ -54,6 +55,7 @@
         - Правки промо: tasks.rip_promo_check
 - Прочее:
     - LinkChecker: other.linkchecker
+    - Автотестирование интеграции: other.test_rekl
     - Глоссарий: other.glossary
     - Хаки: other.haks
     - Элементы документации: other.examples

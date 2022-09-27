@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DefaultWeb, PhoneNumber, OfferPosition
+from .models import DefaultWeb, PhoneNumber, OfferPosition, UserApiKey
 
 
 class DefaultWebAdmin(admin.ModelAdmin):
@@ -20,3 +20,5 @@ class OfferPositionAdmin(admin.ModelAdmin):
 admin.site.register(DefaultWeb, DefaultWebAdmin)
 admin.site.register(PhoneNumber, PhoneNumberAdmin)
 admin.site.register(OfferPosition, OfferPositionAdmin)
+admin.site.register(UserApiKey)
+

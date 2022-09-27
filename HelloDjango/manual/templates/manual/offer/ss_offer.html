@@ -8,25 +8,29 @@
     <p class="admonition-title">Что такое ss?</p>
     <p>SS - тип оффера, когда клиенты приобретают товар сразу на сайте, оплата банковской картой, а не как в 90% случаев по остальным офферам - на почте.</p>
     </div>
-<!-- <p>SS - тип оффера, когда клиенты приобретают товар сразу на сайте, оплата банковской картой, а не как в 90% случаев по остальным офферам - на почте.</p> -->
 <h3>Заведение в админке</h3>
+<h5>Основная информация</h5>
 <p>1.  Модель оплаты - выставляем SS. Straight sale - прямая продажа.</p>
 <img src="https://i.imgur.com/yH4MLef.png" alt="" class="w-50">
 <p>2. Выставить следующие галки</p>
-<div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-    <label class="form-check-label" for="flexCheckDefault">
-      Скрыть цены
-    </label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" >
-    <label class="form-check-label" for="flexCheckChecked">
-        Ретаргетинг
-    </label>
-  </div>
-<p>3. В кампании поставить цену 0 + 100% скидка</p>
-<p>4. Цель комиссию - оплаченная заявка</p>
+  {%check on%}
+  Скрыть цены
+  {%end%}
+  {%check off%}
+  Ретаргетинг
+  {%end%}
+  {%notice%}
+  Если цена указана в условиях задачи - скрыть цену <b>не ставим!</b>
+  {%end%}
+  <p>Холд указываем только в условиях - cистемный не надо</p>
+  {%img%}
+  https://i.imgur.com/rzFNxIU.png
+  {%end%}
+  <p>В Условия работы КЦ не пишем, тк по ss офферам его нет.</p>
+<h5>Рекламная кампания информация</h5>
+<p>В кампании поставить цену 0 + 100% скидка</p>
+<h5>Комиссии</h5>
+<p>Цель комиссии - <span-x>оплаченная заявка</span-x></p>
 <h3>Добавление лэндинга</h3>
 <p>В Url вставляеться ссылка из карточки на постановку задачи.</p>
 <img src="https://i.imgur.com/sENG0JJ.png" alt="" class="w-80">

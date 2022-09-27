@@ -16,24 +16,25 @@
             </textarea>
           </div>
         </div>
+        {% if user_api_key %}
         <div class="col-4" id="auto-test">
           <h5>Автотест</h5>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="flexRadioDefault" id="ru_test" checked>
-            <label class="form-check-label" for="flexRadioDefault1">
+            <label class="form-check-label" for="ru_test">
               Пробный_заказ
             </label>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="flexRadioDefault" id="eng_test" >
-            <label class="form-check-label" for="flexRadioDefault2">
+            <label class="form-check-label" for="eng_test">
               Probniy_zakaz
             </label>
           </div>
 
 
           <div >
-              <input type="text" id="chose-offer"  placeholder="Введите id оффера...">
+              <input type="text" id="chose-offer"  data-offer-id='' placeholder="Введите id оффера...">
               <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Выберети гео...">
               <ul id="myUL-chosen">
               </ul>
@@ -41,14 +42,19 @@
                 <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" style="display: none;"></span>
                 <span class="text">Отправить</span>
               </button>
-              <a href="#" class="btn btn-primary  active" role="button" aria-pressed="true" id="lead-link" target="_blank" style="display:none;">Перейти в трекер</a>
+              <a href="#" class="btn btn-secondary active" role="button" aria-pressed="true" id="lead-link" target="_blank" style="display:none;">Перейти в трекер</a>
               <ul id="myUL">
                 {% for phone in phones %}
-                <li data-iso="{{phone.short}}">
+                <li id="{{phone.short}}">
                   <a href="#">
                     <div><span class="flag-icon flag-icon-{{phone.short}}"></span>
-                      {{phone.ru_full_name}} ({{phone.short|title}})</div>
-                    <i class="fa-solid fa-circle-check"></i>
+                      {{phone.ru_full_name}} ({{phone.short|upper}})</div>
+                    <div class="status remove">
+                      <i class="fa-solid fa-circle-check success" style="display: none;"></i>
+                      <i class="fa-solid fa-circle-xmark error" style="display: none;"></i>
+                      <i class="fa-solid fa-circle-xmark danger" style="display: none;"></i>
+                      <i class="fa-solid fa-circle-xmark remove" ></i>
+                    </div>
                   </a>
                   
                 </li>
@@ -56,6 +62,7 @@
               </ul>
           </div>
         </div>
+        {%endif%}
       </div>
       <div class="row">
         <div class="col">
@@ -75,9 +82,10 @@
   <table class="table table table-striped">
   <thead>
     <tr>
-      <th scope="col">Страна</th>
       <th scope="col">Код ISO</th>
+      <th scope="col">Страна</th>
       <th scope="col">Номер</th>
+      <th scope="col">Моб Код</th>
     </tr>
   </thead>
   <tbody>
@@ -86,6 +94,7 @@
       <th scope="row">{{phone.short}}</th>
       <td>{{phone.ru_full_name}}</td>
       <td>{{phone.phone}}</td>
+      <td>+{{phone.phone_code}}</td>
     </tr>
   {% endfor %}
   </tbody>
@@ -137,16 +146,32 @@
   span.flag-icon{
     margin-right: 5px;
   }
-  #auto-test li .fa-circle-check{
-    margin-right: 20px;
-  }
+
   #myUL li .fa-circle-check{
     display: none;
   }
-  #myUL-chosen li .fa-circle-check{
-    margin-right: 20px;
-    color: #5b783e;
+  #myUL .status{
+    display: none;
   }
+  #myUL-chosen .status{
+    display: block;
+  }
+  #myUL-chosen li .status{
+    margin-right: 20px;
+  }
+  #myUL-chosen li .success{
+    color: #60912f;
+  }
+  #myUL-chosen li .error{
+    color: #b13131;
+  }
+  #myUL-chosen li .danger{
+    color: #b18f31;
+  }
+  #myUL-chosen li .remove{
+    color: #757575;
+  }
+
 </style>
 <style>
   /* for search geos */
@@ -170,7 +195,7 @@
   width: 100%; 
 }
 #myUL-chosen{
-  /* margin-bottom: 15px; */
+  margin-bottom: 10px;
 }
 #myUL{
   display:none;
@@ -226,12 +251,14 @@
       onOffsendButton()
     })
 
-
+    // перемещение вниз
     $('#myUL-chosen').on('click','li', function(){
       $(this).remove().hide()
       $('#myUL').append($(this))
       $('#myInput').val('')
       onOffsendButton()
+      $(this).find('i').hide()
+      $(this).find('i.remove').show()
     })
 
     $('#myInput').keyup(function(){
@@ -264,10 +291,10 @@
     function sendLead(){
       let countrys = []
       $('#myUL-chosen li').each(function(){
-        countrys.push($(this).attr('data-iso'))
+        countrys.push($(this).attr('id'))
       })
       countrys = countrys.join(',')
-      let offer_id = $('#chose-offer').val()
+      let offer_id = $('#chose-offer').attr('data-offer-id')
       let url = full + 'kma/test_rekl/'
       let data = {
         'offer_id': offer_id,
@@ -282,10 +309,52 @@
           console.log(response)
           $('#lead-link').attr('href',response['link'] );
           $('#lead-link').show()
+          $('#chose-offer').val('')
+          setStatusOnLeads(response['leads'])
         }
-        else {console.error('Ошибка отправки лида', response)}
+        else {
+          console.error('Ошибка отправки лида', response);
+          $('#send-button .spinner-grow').hide()
+          $('#send-button .text').text('Ошибка')
+          $('#send-button').removeClass('btn-primary')
+          $('#send-button').addClass('btn-danger')
+          $('#send-button').after(response.data.message)
+        }
       })
       
+    }
+
+    function setStatusOnLeads(leads){
+      $('#myUL-chosen li i').hide()
+      for (i in leads){
+        let lead = leads[i]
+        let elem = $('#'+lead['send_country'])
+        elem.find('i.'+lead['result_status']).show()
+      }
+    }
+
+    $('#chose-offer').focusout(function(){
+      
+      let value = $(this).val()
+      $(this).attr('data-offer-id', value)
+      if (value != ''){
+        $('#chose-offer').prop('disabled', true);
+        getOffer(value)
+        
+      }
+    })
+
+    function getOffer(offer_id){
+      let url = full + 'kma/get_offer/'
+      data = {'offer_id':offer_id}
+      let offer_data = {}
+      $.post(url,data,function(response){
+        console.log(response)
+        if (response['success']){offer_data = response['offer_data']}
+        else
+        {offer_data = {'name': 'Error requests'};console.error(response)}
+        $('#chose-offer').val(offer_data['name'])
+      })
     }
   </script>
 <script>

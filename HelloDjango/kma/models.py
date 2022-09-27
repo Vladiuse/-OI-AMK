@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class DefaultWeb(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя веба', unique=True)
@@ -67,6 +68,14 @@ class OfferPosition(models.Model):
     class Meta:
         verbose_name = 'Оффер'
         verbose_name_plural= 'Офферы'
+
+class UserApiKey(models.Model):
+
+    token = models.CharField(max_length=40, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 
 
