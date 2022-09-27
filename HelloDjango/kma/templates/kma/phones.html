@@ -318,7 +318,7 @@
           $('#send-button .text').text('Ошибка')
           $('#send-button').removeClass('btn-primary')
           $('#send-button').addClass('btn-danger')
-          $('#send-button').after(response.data.message)
+          $('#send-button').after(response.message + ": " +response.data.message)
         }
       })
       

@@ -84,7 +84,6 @@ class Lead:
             'token': self.token,
         }
         res = req.post(url, data=data, headers=self.headers)
-        print(res.json())
         self.data = res.json()
 
     def add_data(self):
@@ -135,8 +134,8 @@ class Lead:
 class KmaAPITest:
     TEST_NAME_1 = 'Пробный_заказ'
     TEST_NAME_2 = 'Probniy_zakaz'
-    TEST_NAME_1 = 'тест'
-    TEST_NAME_2 = 'test'
+    # TEST_NAME_1 = 'тест'
+    # TEST_NAME_2 = 'test'
 
     def __init__(self, token, offer_id, country_n_phone: dict, custom_name=False):
         self.token = token
@@ -155,7 +154,6 @@ class KmaAPITest:
             'token': token
         }
         res = req.get(url, params=params)
-        print(res.json())
         if res.json()['success'] != True:
             raise CreateStreamError(data=res.json())
         return res.json()['channel']
@@ -163,7 +161,6 @@ class KmaAPITest:
     def test_offer(self):
         """Протестировать оффер"""
         channel_id = self.create_stream(self.offer_id, self.token)
-        print(channel_id, 'slava')
         # channel_id = 'zXweZF'
         for country, phone in self.country_n_phone.items():
             phone = fix_phone_tail(phone)
