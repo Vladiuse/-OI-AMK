@@ -89,7 +89,8 @@ def test_rekl(requests):
 def get_offer(requests):
     try:
         offer_id = requests.POST['offer_id']
-        offer_data = KmaAPITest.get_offer(offer_id)
+        user_api = UserApiKey.objects.get(user=requests.user)
+        offer_data = KmaAPITest.get_offer(offer_id, user_api.token)
         answer = {
             'success': True,
             'offer_data': offer_data,

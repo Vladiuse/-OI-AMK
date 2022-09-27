@@ -192,8 +192,8 @@ class KmaAPITest:
         return leads_data
 
     @staticmethod
-    def get_offer(offer_id):
-        url = f'https://api.kma.biz/?method=getoffers&token={API_KEY}&return_type=json'
+    def get_offer(offer_id, token):
+        url = f'https://api.kma.biz/?method=getoffers&token={token}&return_type=json'
         res = req.get(url)
         result = res.json()
         for offer in result['offers']:
@@ -203,5 +203,5 @@ class KmaAPITest:
 
 
 
-if __name__ == '__main__':
-    print(KmaAPITest.get_offer('5657'))
+# if __name__ == '__main__':
+#     print(KmaAPITest.get_offer('5657'))
