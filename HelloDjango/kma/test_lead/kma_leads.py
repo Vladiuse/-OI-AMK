@@ -12,6 +12,7 @@ class KmaAPiError(BaseException):
     def __init__(self, data):
         self.data = data
 
+
 class CreateStreamError(KmaAPiError):
     """Ошибка создания потока"""
 
@@ -25,33 +26,41 @@ def get_time_delta_for_trecher():
     week_ago = today - timedelta(days=7)
     return f"{week_ago.strftime('%d.%m.%Y')}+-+{today.strftime('%d.%m.%Y')}"
 
+
 def get_ip():
     hostname = socket.gethostname()
     IPAddr = socket.gethostbyname(hostname)
     return IPAddr
 
 
-def fix_phone_tail(phone:str):
+def fix_phone_tail(phone: str):
     """поменять послендние 4 цифры в номере на рандомные"""
-    phone = phone[:-4] + str(r.randint(1000,9999))
+    phone = phone[:-4] + str(r.randint(1000, 9999))
     return phone
+
 
 API_KEY = 'T5Ug9l_5gStBTeg6mUCUSQ25hjAZbRjO'
 REFERER = 'Referer: https://facobook.com/'
 
-headers = {
-    'Authorization': f'Bearer {API_KEY}',
-    'Content-Type': 'application/x-www-form-urlencoded'
-}
+# headers = {
+#     'Authorization': f'Bearer {API_KEY}',
+#     'Content-Type': 'application/x-www-form-urlencoded'
+# }
+
+
 class Lead:
 
-    def __init__(self, name, phone, country,channel, token):
+    def __init__(self, name, phone, country, channel, token):
         self.token = token
         self.name = name
         self.phone = phone
         self.country = country
         self.channel = channel
         self.data = dict()
+        self.headers = {
+            'Authorization': f'Bearer {self.token}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
 
     def send(self, referer=REFERER, ip=get_ip()):
         # если дубль лида {"code":13,"message":"Duplicate of order!"}
@@ -74,12 +83,13 @@ class Lead:
             'referer': referer,
             'token': self.token,
         }
-        res = req.post(url, data=data, headers=headers)
+        res = req.post(url, data=data, headers=self.headers)
+        print(res.json())
         self.data = res.json()
 
     def add_data(self):
         self.add_status()
-        self.data.update({'send_country':self.country})
+        self.data.update({'send_country': self.country})
 
     def add_status(self):
         if not self.is_send_success():
@@ -92,7 +102,6 @@ class Lead:
             self.data.update({'result_status': 'danger'})
             return
         self.data.update({'result_status': 'success'})
-
 
     def is_send_success(self):
         try:
@@ -123,14 +132,13 @@ class Lead:
             return ''
 
 
-
 class KmaAPITest:
     TEST_NAME_1 = 'Пробный_заказ'
     TEST_NAME_2 = 'Probniy_zakaz'
     TEST_NAME_1 = 'тест'
     TEST_NAME_2 = 'test'
 
-    def __init__(self, token,offer_id, country_n_phone: dict, custom_name=False):
+    def __init__(self, token, offer_id, country_n_phone: dict, custom_name=False):
         self.token = token
         self.offer_id = offer_id
         self.country_n_phone = country_n_phone
@@ -147,18 +155,19 @@ class KmaAPITest:
             'token': token
         }
         res = req.get(url, params=params)
+        print(res.json())
         if res.json()['success'] != True:
             raise CreateStreamError(data=res.json())
         return res.json()['channel']
 
-
     def test_offer(self):
         """Протестировать оффер"""
         channel_id = self.create_stream(self.offer_id, self.token)
+        print(channel_id, 'slava')
         # channel_id = 'zXweZF'
         for country, phone in self.country_n_phone.items():
             phone = fix_phone_tail(phone)
-            lead = Lead(self.test_name, phone, country,channel_id, self.token)
+            lead = Lead(self.test_name, phone, country, channel_id, self.token)
             lead.send()
             lead.add_data()
             self.leads.append(lead)
@@ -202,6 +211,6 @@ class KmaAPITest:
         return {'name': 'No offer found'}
 
 
-
-# if __name__ == '__main__':
-#     print(KmaAPITest.get_offer('5657'))
+if __name__ == '__main__':
+    # print(KmaAPITest.get_offer('7217',API_KEY))
+    print(KmaAPITest.create_stream('7217', API_KEY))
