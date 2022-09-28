@@ -3,26 +3,33 @@
 {% block content %}
 <div class="main-wrapper">
     <h1>Вебы по умолчанию</h1>
-    <h4>Всего: {{webs|length}}</h4>
+    <h4>Всего: 16</h4>
 
     <div class="mb-3" >
       <label for="exampleFormControlTextarea1" class="form-label"></label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" style="width: 350px;"></textarea>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" style="width: 350px;">masterneoweb@gmail.com
+d.z.29@yandex.ru
+diana.00.91@mail.ru
+shaftman
+olezzaza15#171067
+gashik#45959
+ropeq13@gmail.com
+natalyariumina28@yandex.ru
+54746fa956b04
+q9v2qy46mjdkthnp
+Lerich
+v.yushenko#20430
+zan_spec#53311
+diegohaas#49019
+wmbeer#9030
+Lespoir7@mail.ru</textarea>
 </div>
 
 </div>
 <script>
-    let webs = [
-        {% for web in webs %}
-    "{{web.name}}",
-    {% endfor %}
-    ]
+
     let textareaStr = '';
-    for (pos in webs){
-    let web = webs[pos];
-    textareaStr = textareaStr + web + '\n'
-    }
-    $('textarea').text(textareaStr).focus()
+    $('textarea').focus()
     $('textarea').click(function(){
         $(this).select()
     })
