@@ -100,8 +100,8 @@
 {% block content %}
 {% endblock %}
 <script>
-  let full = 'http://' + location.host + '';
-  let checker_url = full + {% url 'checker_2:index' %}
+  let domain = 'http://' + location.host + '';
+  let checker_url = domain + {% url 'checker_2:index' %}
   $('#checker-url').attr('href', checker_url)
 </script>
 </body>
