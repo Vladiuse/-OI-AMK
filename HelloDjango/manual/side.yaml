@@ -7,6 +7,7 @@
     - Оффер:
         - Новый оффер: news.new_offer
         - Приостановка оффера: news.stop_offer
+        - Приостановка оффера по факту: news.stop_now
         - Возобновление оффера: news.restart_offer
     - Изменение офферов:
         - Изменение отчислений: news.comm_change
@@ -42,8 +43,11 @@
         - Основные элементы: check_land.elements
         - Форма(dev): check_land.forms
     - Запрос iFrame: check_land.get_iframe
+    - Индивидуальная страница "Спасибо": check_land.success_page
     - Тестирование(dev): check_land.tests
 - Интеграция:
+    - Настройка интеграции: integration.main
+    - При расширении гео: integration.add_geo
     - Особенности интеграции(dev): integration.jeneral
     - Тестирование: integration.test
 - Таски Kaiten:

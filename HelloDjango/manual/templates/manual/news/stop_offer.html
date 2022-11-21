@@ -11,7 +11,7 @@
 {% check c%}
 Отключение оффера
 {%end%}
-{%notice%}
+{%notice w%}
 Если оффер приватный - выставить соответствующую галочку
 {%end%}
 <h4>Выбор гео</h4>
@@ -34,7 +34,34 @@ Offer <b>"Sokolit - a complex for vision | low price (private) (MD)"</b> will be
 Please, redirect your traffic to another offer.
 {%end%}
 
-{%notice w%}
+<h2>Стоп нескольких офферов</h2>
+<p>Указываем несколько офферов, выбираем гео которые стопаем</p>
+{%img%}
+https://i.imgur.com/1hhzNu5.png
+{%end%}
+<p>Тк шаблона под новость с несколькими офферами нет, необходимо подредактировать склонения</p>
+{%code safe%}
+Приостановлен оффер → Приостановка офферов:<br>
+Офферы → Офферы:<br>
+Offer → Offers:<br>
+Offers → Offers:<br>
+another offer. → other offers.<br>
+{%end%}
+<p>Также необходимо поправить заголовок новости</p>
+{%news_desc%}
+Приостановка ряда офферов
+$
+Offers pause
+{%end%}
+{%news_desc%}
+Офферы: <b>Телевизионная антенна TV Flat HD | низкая цена, All Dent Veneers - виниры | бесплатно, Parazitox - капсулы от паразитов | бесплатно (RU, KZ)</b> будут приостановлены 19.11.2022 в 10:00 МСК.
+<br>Просьба перенаправить трафик на другие офферы.
+$
+Offers: <b>TV Antenna TV Flat HD | low price, All Dent Veneers - veneers | free, Parazitox - capsules from parasites | free (RU, KZ)</b> will be paused 19.11.2022 at 10:00 MSK.
+<br>Please, redirect your traffic to other offers.
+{%end%}
+
+{%notice d%}
 Необходимо проверять, действительно ли оффер выключился автоматически
 {%end %}
 {%endblock%}

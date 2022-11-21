@@ -346,6 +346,9 @@ class KMALand(Land):
             kma_preland_url = f'https://cpanel.kma.biz/offer/module/transit/update?offer_id={self.offer_id}&id={self.preland_id}'
             return kma_preland_url
 
+    def get_commision_page_url(self):
+        return f'https://cpanel.kma.biz/offer/module/commission/index?offer_id={self.offer_id}'
+
 
 if __name__ == '__main__':
     url = 'https://blog-feed.org/elle-breasty/?ufl=14926'
