@@ -15,9 +15,10 @@ def find_in_text(text: str, offers: list):
 
 
 def find_word_template_in_text(word_template, text):
+
     """Поиск шаблона слова по тексту"""
     regEx = '\W' + word_template + '[\W\w]{0,6}[\s.\-;:,]'
-    regEx = '\W' + word_template + '[\W\w]{0,6}[.\-;:,]'
+    regEx = '\W' + word_template + '[\W\w][^\s]{0,6}[.\-;:,«»\s]'
     symbols_to_clean = """ .-;:”,"\n"""
     res = re.findall(regEx, text)
     clean_result = []
@@ -93,7 +94,6 @@ class TextAnaliz:
          #   file.write(text)
         dates_n_years = re.findall(pattern, text)
         dates_n_years = list(set(dates_n_years))
-        print(dates_n_years, 'xxxxxx')
         dates = []
         years = []
         for i in dates_n_years:
