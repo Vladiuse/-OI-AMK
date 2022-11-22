@@ -246,4 +246,19 @@ def doc_page(request):
     return HttpResponse(res)
 
 
+def dell_old(requests):
+    try:
+        deleted_records = ActualUserList.dell_old()
+        res = {
+            'status': 'success',
+            'deleted_records': deleted_records
+        }
+    except BaseException as error:
+        res = {
+            'status': 'error',
+            'error': str(error),
+        }
+    return JsonResponse(res)
+
+
 

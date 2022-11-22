@@ -77,6 +77,8 @@ class Currency(Check):
     def process(self):
         currency = self.land.curr.lower()
         currencies_on_land = self.text_finder_result['currencys']
+        if '' in currencies_on_land:
+            currencies_on_land.remove('')
         if not currencies_on_land:
             self.add_mess(self.NO_CURRENCIES)
         for curr in currencies_on_land:

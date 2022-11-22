@@ -62,6 +62,14 @@ class Language(models.Model):
 class OfferPosition(models.Model):
     name = models.CharField(max_length=50, verbose_name='Оффер', unique=True)
 
+
+    def save(self):
+        words = self.name.split(' ')
+        for id, w in enumerate(words):
+            words[id] = w.title()
+        self.name = ' '.join(words)
+        super().save()
+
     def __str__(self):
         return self.name
 

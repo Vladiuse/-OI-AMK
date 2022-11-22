@@ -156,16 +156,16 @@ span-x {
     margin: auto 2px;
 }
 
-span-x.warning {
+span-w {
     border: 1px solid #f0b37e;
     background: #ffedcc;
 
 }
-span-x.success {
+span-s {
     border: 1px solid #1abc9c;
     background: #e7faee;
 }
-span-x.danger {
+span-d {
     border: 1px solid #bc1a1a;
     background: #fae7e7;
 }

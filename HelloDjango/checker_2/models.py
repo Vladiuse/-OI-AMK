@@ -1,6 +1,7 @@
 from django.db import models
 from ordered_model.models import OrderedModel
 from django.contrib.auth.models import User
+from datetime import date, timedelta
 
 
 # Create your models here.
@@ -77,6 +78,13 @@ class ActualUserList(models.Model):
 
     class Meta:
         unique_together = ['user', 'url']
+
+    @staticmethod
+    def dell_old():
+        """Удалить старые записи чекера"""
+        old = ActualUserList.objects.filter(date__lte=date.today() - timedelta(days=7))
+        old.delete()
+        return len(old)
 
 
 class UserSiteCheckPoint(models.Model):
