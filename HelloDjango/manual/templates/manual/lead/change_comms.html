@@ -1,0 +1,27 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Изменение комиссии по лидам</h1>
+<p>Переходим в следующий <a href="https://cpanel.kma.biz/beta/module/lead-commission-change">интерфейс</a>.</p>
+<p>В левое поле вносим ID лидов наши, в правое поле ID комиссии ID комиссии</p>
+{%img%}
+https://i.imgur.com/lYOMNiT.png
+{%end%}
+<p>Cмотрим тут: оффер и комиссия</p>
+
+{%img%}
+https://i.imgur.com/YrXIF1r.png
+{%end%}
+<p>Выбираем все лиды и жмем ОК или справа стрелочку</p>
+{%img%}
+https://i.imgur.com/9QtZZ7j.png
+{%end%}
+{%notice w%}
+Потом перепроверяем в интерфейсе лиды - сменилась ли комиссия.
+{%end%}
+{%note s%}
+INFO
+Обычно меняем не по одному лиду, а по пачке, поэтому удобнее использовать выбрать все и нажать ОК
+{%end%}
+{%endblock%}

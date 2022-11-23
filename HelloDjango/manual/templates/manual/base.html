@@ -179,5 +179,35 @@
         e.preventDefault()})
     
   </script>
+  <script>
+    // LAZY LOAD
+    const images = document.querySelectorAll('.rst-content .content img')
+  
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    }
+  
+    function handleImg(myImg, observer){
+      myImg.forEach(myImgSingle => {
+        // console.log(myImgSingle.intersectionRatio);
+        if (myImgSingle.intersectionRatio > 0){
+          loadImage(myImgSingle.target)
+        }
+      })
+    }
+  
+    function loadImage(image){
+      // console.log(image.getAttribute('data-src'))
+      image.src = image.getAttribute('data-src')
+    }
+  
+    const observer = new IntersectionObserver(handleImg, options);
+  
+    images.forEach(img => {
+      observer.observe(img)
+    })
+  </script>
 </body>
 </html>

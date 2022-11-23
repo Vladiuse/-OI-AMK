@@ -50,6 +50,9 @@
     - При расширении гео: integration.add_geo
     - Особенности интеграции(dev): integration.jeneral
     - Тестирование: integration.test
+- Лиды:
+    - Смена вебмастера: lead.change_web
+    - Изменение комиссии: lead.change_comms
 - Таски Kaiten:
     - Общая инфа(dev): tasks.jeneral
     - Создание и оформление: tasks.make

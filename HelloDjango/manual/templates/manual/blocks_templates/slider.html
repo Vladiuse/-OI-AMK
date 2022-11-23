@@ -7,7 +7,7 @@
   <div class="carousel-inner">
       {% for link in links %}
     <div class="carousel-item {% if forloop.counter0 == 0 %}active {% endif %}" data-bs-interval="999999">
-      <img src="{{link.href}}" class="d-block w-100" alt="...">
+      <img data-src="{{link.href}}" class="d-block w-100" alt="..." src="https://netsh.pp.ua/wp-content/uploads/2017/08/Placeholder-1.png">
                       {% if link.text %}
                       <div class="carousel-caption d-none d-md-block">
                         <h5>{{link.text}}</h5>

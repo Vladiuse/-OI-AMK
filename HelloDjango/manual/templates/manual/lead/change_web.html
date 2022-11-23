@@ -1,0 +1,19 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Измененрие веба у лида</h1>
+<p>Если требуеться изменить веб-мастера по отправленой заявке, необходимо перейти в <a href="https://cpanel.kma.biz/beta/module/lead-webmaster-change">интерфейс в админке</a>.</p>
+<p>В левое поле вносим ID заказов, в среднее ID вебмастера, в правое - поток и нажимаем применить.</p>
+{%img%}
+https://i.imgur.com/8nbnrlq.png
+{%end%}
+<p>выбираем все лиды и нажимаем <span-s>ОК</span-s></p>
+{%img%}
+https://i.imgur.com/UybzcaY.png
+{%end%}
+{%note w%}
+Важно
+У нового вебмастера может быть другая комиссия - обязательно это проверяем и если нужно меняем - комиссию потом <a href="lead.change_comms">по этой схеме</a>.
+{%end%}
+{%endblock%}
