@@ -49,7 +49,7 @@
     - Настройка интеграции: integration.main
     - При расширении гео: integration.add_geo
     - Примеры:
-        - Traflead KZ, Traflead RU, Traflead UZ: lead.rekl_traf
+        - Traflead KZ, Traflead RU, Traflead UZ: integration.rekl_traf
     - Особенности интеграции(dev): integration.jeneral
     - Тестирование: integration.test
 - Лиды:
