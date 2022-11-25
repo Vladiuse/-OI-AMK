@@ -48,11 +48,14 @@
 - Интеграция:
     - Настройка интеграции: integration.main
     - При расширении гео: integration.add_geo
+    - Примеры:
+        - Traflead KZ, Traflead RU, Traflead UZ: lead.rekl_traf
     - Особенности интеграции(dev): integration.jeneral
     - Тестирование: integration.test
 - Лиды:
     - Смена вебмастера: lead.change_web
     - Изменение комиссии: lead.change_comms
+    - Изменение статуса: lead.change_status
 - Таски Kaiten:
     - Общая инфа(dev): tasks.jeneral
     - Создание и оформление: tasks.make

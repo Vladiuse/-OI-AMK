@@ -1,0 +1,51 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Traflead KZ, Traflead RU, Traflead UZ</h1>
+<p>Данные рекламодатели используют СРМ Leadgroup - аналог Leadvertex только с более старой версией API. (Если интеграция с этими СРМ, тогда каждое гео заводим отдельной кампанией). 
+    <br>Менеджер ОП скидывает в таск проект, в который нужно настраиваться.</p>
+{%img%}
+https://i.imgur.com/oAwM0EB.png
+{%end%}
+<p>Пример ссылки на проект (Доступ к проекту в <a href="https://testkeymedia.atlassian.net/wiki/spaces/NKMA/pages/460324865">документации</a>) </p>
+{%code%}
+https://art438-sibericafree-kzpro.leadgroup.su/webmaster
+{%end%}
+<p>Идем во вкладку API И вносим апи ключ - его генерируем самостоятельно </p>
+{%img%}
+https://i.imgur.com/LkwzymB.png
+{%end%}
+{%note s%}
+Генерация ключа
+Переходим по <a href="https://www.lastpass.com/features/password-generator">ссылке</a>, убираем галочку символы 
+{%img%}
+https://i.imgur.com/32O0TFb.png
+{%end%}
+{%end%}
+<p>Далее смотрим, чтобы разделы <span-x>Получение списка</span-x> заказов и <span-x>Импорт заказов</span-x> были открыты (присутстовали на странице).</p>
+<p>В <span-s>модуле отправки</span-s> в адрес отправки вносим URL из раздела <b>Импорт заказав</b></p>
+{%img%}
+https://i.imgur.com/MOwMwe5.png
+{%end%}
+
+{%img%}
+https://i.imgur.com/shwEUIl.png
+{%end%}
+<p> В поле <b>additional1</b> вносим значение: <b>webmaster_int</b> - это означает, что в поле additional1 мы будем передавать реклу ID нашего вебмастера в числовом формате - числово-буквенный рекл не может принимать</p>
+<p>В поле <b>ID товара</b> вносим ID товара из таска)</p>
+<p>В модуле забора статусов вносим Адрес отправки из раздела <b>Получение списка заказов</b> . Далее, нужно будет подшаманить ссылку</p>
+{%img%}
+https://i.imgur.com/wQgl4nK.png
+{%end%}
+{%img%}
+https://i.imgur.com/6ncpuMI.png
+{%end%}
+{%notice w%}
+<b>Важно</b> ссылку берем до первого амперсанда
+{%end%}
+<p>Далее, нужно будет подшаманить ссылку:</p>
+{% code safe %}
+api/webmaster/getOrdersByIds.html? → api/webmaster<b>/v2/</b>getOrdersByIds.html
+{% end %}
+{%endblock%}
