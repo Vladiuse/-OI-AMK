@@ -1,5 +1,17 @@
 import re
 
+#TODO сдкелать функции через принятия параметров и return (неудобно писать тесты)
+
+def clead_word(word):
+    """
+    отчистка строки от не букв
+    """
+    clean_word = ''
+    for char in word:
+        if char.isalpha():
+            clean_word += char
+    return clean_word
+
 
 def find_in_text(text: str, offers: list):
     text = text.lower()
@@ -110,4 +122,75 @@ class TextAnaliz:
             if res:
                 result.update({geo: res})
         self.result.update({'geo_words_templates': result})
+
+
+class TextFinder:
+
+    YEAR = '19\d\d|20\d\d'
+    DATES  = '\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'
+    DATES_N_YEARS = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'
+
+
+    @staticmethod
+    def find_dates_n_years(text):
+        dates_n_years = re.findall(TextFinder.DATES_N_YEARS, text)
+        dates_n_years = list(set(dates_n_years))
+        dates = []
+        years = []
+        for i in dates_n_years:
+            if len(i) == 4:
+                years.append(i)
+            else:
+                dates.append(i)
+        result = {
+            'dates': dates,
+            'years': years,
+        }
+        return result
+
+    @staticmethod
+    def find_years(text):
+        return TextFinder.find_dates_n_years(text)['years']
+
+    @staticmethod
+    def find_dates(text):
+        return TextFinder.find_dates_n_years(text)['dates']
+
+
+    @staticmethod
+    def find_words(text, *words) -> list:
+        result = list()
+        for word in words:
+            pattern = '\\b\d{0,4}'+word+'\d{0,4}\\b'
+            res = re.findall(pattern, text)
+            result += res
+        return list(set(result))
+
+    @staticmethod
+    def is_word_in_text(text, word):
+        pattern = '\\b\d{0,4}' + word + '\d{0,4}\\b'
+        res = re.search(pattern, text)
+        return bool(res)
+
+
+    @staticmethod
+    def find_word_by_root(text, *words_roots) -> list:
+        """Поиск в тексте слов по его корню"""
+        result = list()
+        for word_root in words_roots:
+            pattern = word_root + '[\w\W][^\s]{0,5}'
+            res = re.findall(pattern, text)
+            result += res
+        result = map(clead_word, result)
+        return list(result)
+
+
+
+if __name__ == '__main__':
+    text = """
+            какойто текст россия 1RUB100 тарпшг российский адвыафды BYN российские, ;dsdas dasd  русский вывы русские EUR.
+"""
+    print(re.findall('\\b\d{0,4}RUB\d{0,4}\\b', text))
+
+
 
