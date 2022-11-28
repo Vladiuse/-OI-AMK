@@ -4,8 +4,8 @@ from django.conf import settings
 
 
 class Img:
-    css_tyle = ' __debug_double'
-    to_find_img_attr = 'data-oi-img'
+    IMG_DOUBLE_CLASS = ' __debug_double'
+    # to_find_img_attr = 'data-oi-img'
     oi_double_attr = 'data-oi-img-double'
     ATTRS = [
         'data-src',
@@ -29,15 +29,16 @@ class Img:
 
     @staticmethod
     def reset():
+        """Отличтить хранилище картинок"""
         Img.IMG_SRC_DOUBLES.clear()
         Img.ALL_IMG_SRCS.clear()
 
     def set_img_as_double(self):
         if Img.ALL_IMG_SRCS.count(self.main_src) > 1:
             try:
-                self.img['class'] = ' '.join(self.img['class']) + Img.css_tyle
+                self.img['class'] = ' '.join(self.img['class']) + Img.IMG_DOUBLE_CLASS
             except KeyError:
-                self.img['class'] = Img.css_tyle
+                self.img['class'] = Img.IMG_DOUBLE_CLASS
             sha_hash = hashlib.sha256(str(self.main_src).encode('utf-8')).hexdigest()
             sha_hash = sha_hash[-6:]
             self.img[Img.oi_double_attr] = sha_hash

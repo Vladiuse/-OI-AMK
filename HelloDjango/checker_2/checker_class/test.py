@@ -1,9 +1,9 @@
 import unittest
-from text_fixxer import DomFixxer
+from text_fixxer import DomFixxer, Img
 from bs4 import BeautifulSoup
 
 
-class DomFixxerTest(unittest.TestCase):
+class DomFixerTest(unittest.TestCase):
 
     def setUp(self):
         self.html = """
@@ -84,6 +84,94 @@ class DomFixxerTest(unittest.TestCase):
         dom.add_js(self.soup, js)
         js_in_land = self.soup.find('script')
         self.assertIn(js, str(js_in_land))
+
+    def test_img_double_find(self):
+        html = """
+                <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <base href="http://some.com">
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+        <body>
+            <img src="some_img.jpg">
+            <img src="some_img.jpg">
+            <img src="some_img_1.jpg">
+            <img src="some_img_1.jpg">
+        </body>
+        </html>
+        """
+        soup = BeautifulSoup(html, 'lxml')
+        dom = DomFixxer()
+        dom.find_double_img(soup)
+        images = soup.find_all('img')
+        for img in images:
+            self.assertIn(Img.IMG_DOUBLE_CLASS, img['class'])
+
+    def test_img_double_not_all(self):
+        html = """
+                <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <base href="http://some.com">
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+        <body>
+            <img src="some_img.jpg">
+            <img src="some_img.jpg">
+            <img src="some_img_1.jpg">
+            <img src="some_img_2.jpg">
+            <img src="some_img_3.jpg">
+        </body>
+        </html>
+        """
+        soup = BeautifulSoup(html, 'lxml')
+        dom = DomFixxer()
+        dom.find_double_img(soup)
+        images = soup.find_all('img', attrs={'class': Img.IMG_DOUBLE_CLASS})
+        self.assertTrue(len(images) == 2, msg="Проверка на количество")
+        for img in images:
+            self.assertIn(Img.IMG_DOUBLE_CLASS, img['class'], msg="Проверка на наличие класса")
+        not_double_images = soup.find_all('img', attrs={'class': None})
+        self.assertTrue(len(not_double_images) == 3, msg="Проверка на количество картинок не дублей")
+
+    def test_img_double_lazy_data_src(self):
+        html = """
+                <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <base href="http://some.com">
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+        <body>
+            <img src="some_img.jpg" data-src="some_image.png">
+            <img src="some_img.jpg" data-src="some_image.png">
+            <img src="some_img_1.jpg">
+            <img src="some_img_2.jpg">
+            <img src="some_img_3.jpg">
+        </body>
+        </html>
+        """
+        soup = BeautifulSoup(html, 'lxml')
+        dom = DomFixxer()
+        dom.find_double_img(soup)
+        images = soup.find_all('img', attrs={'class': Img.IMG_DOUBLE_CLASS})
+        self.assertTrue(len(images) == 2, msg="Проверка на количество")
+        not_double_images = soup.find_all('img', attrs={'class': None})
+        self.assertTrue(len(not_double_images) == 3, msg="Проверка на количество картинок не дублей")
+
+
+
+
 
 
 if __name__ == '__main__':
