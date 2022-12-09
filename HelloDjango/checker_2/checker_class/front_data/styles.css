@@ -106,6 +106,7 @@
         display: inline-block;
         color: red;
         font-weight: bold;
+        max-height: 30px;
     }
     .__debug_msg{
         display:block;
