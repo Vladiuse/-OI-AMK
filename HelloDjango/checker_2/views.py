@@ -160,32 +160,12 @@ def analiz_land_text(request):
 
 
 @login_required
-def check_list(request):
-
-    url = 'https://1111.com'
-
-    check_list = CheckListView(
-    land_type='pre_land',
-    discount_type='full_price',
-    country='th',
-    lang='ru',
-    land_attrs=[ 'more_one_select'],
-    user=request.user,
-    url=url,
-    )
-    check_list.process()
-    # content = {'check_list': check_list}
+def test(request):
     content = {
-        'checked_url': url,
-        'check_list': check_list,
-        'url': 'https://www.youtube.com/',
-        'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
-                                     # dark_color='#2496ff',
-                                     dark_color='white',
-                                     light_color='#404040',
-                                     ),
+        'var': 'VAR',
+        'list': list(range(10)),
     }
-    return render(request, 'checker_2/check_list.html', content)
+    return render(request, 'checker_2/test.html', content)
 
 @login_required
 def change_status_of_user_checklist(request):
