@@ -142,7 +142,7 @@ class Land:
 
 class KMALand(Land):
     """Сайт KMA"""
-    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info','previewpreland.pro']
+    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info','previewpreland.pro', 'feed-news.org', 'blogs-feed.org']
     INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
@@ -190,9 +190,7 @@ class KMALand(Land):
         # soup = BeautifulSoup(self.source_text, 'html5')
         # scripts = soup.find_all('script')
         for script in self.scripts:
-            # print(script)
-            # print('country_list' in script)
-            if 'country_list' in script:
+            if 'country_list' in script and 'country=' in script:
                 return script
 
     def _country(self) -> str:
