@@ -1,7 +1,6 @@
 import unittest
-from text_finder import find_in_text, find_word_template_in_text
-from text_finder import TextAnaliz, TextFinder
-
+from HelloDjango.checker_2.checker_class.text_finder import find_in_text, find_word_template_in_text
+from HelloDjango.checker_2.checker_class.text_finder import TextAnaliz, TextFinder
 
 class TextFinderTest1(unittest.TestCase):
 

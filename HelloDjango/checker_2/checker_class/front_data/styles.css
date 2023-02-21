@@ -72,7 +72,7 @@
         border: 2px solid var(--currency-color);
     }
     .price_land_discount.__debug{
-        border: 2px solid var(--discount-color);
+        border: 2px solid var(--discount-color) !important;
     }
 
     img.__debug.__debug_double{

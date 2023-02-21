@@ -4,7 +4,8 @@ import json
 from json import JSONDecodeError
 import requests as req
 from .text_fixxer import DomFixxer
-from django.conf import settings
+import os
+
 from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
 
 # class PrelandNoAdminError(BaseException):
@@ -116,19 +117,21 @@ class Land:
                 elem.decompose()
 
     def get_human_land_text(self):
-        clean_land_text = self.soup.text
-        clean_land_text += ' ' + self.title
-        inputs = self.soup.find_all('input')
-        placeholders_text = ['']
-        for inpt in inputs:
-            try:
-                placeholder = inpt['placeholder']
-                placeholders_text.append(placeholder)
-            except KeyError:
-                pass
-        placeholders_text = ' '.join(placeholders_text)
-        clean_land_text += placeholders_text
-        return clean_land_text
+        if not self.human_text:
+            clean_land_text = self.soup.text
+            clean_land_text += ' ' + self.title
+            inputs = self.soup.find_all('input')
+            placeholders_text = ['']
+            for inpt in inputs:
+                try:
+                    placeholder = inpt['placeholder']
+                    placeholders_text.append(placeholder)
+                except KeyError:
+                    pass
+            placeholders_text = ' '.join(placeholders_text)
+            clean_land_text += placeholders_text
+            self.human_text = clean_land_text
+        return self.human_text
 
     @property
     def title(self):
@@ -148,8 +151,10 @@ class KMALand(Land):
     INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
-    STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
-    JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
+    # STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
+    # JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
+    STYLES_FILE = './checker_2/checker_class/front_data/styles.css'
+    JS_FILE =  './checker_2/checker_class/front_data/script.js'
 
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
@@ -266,10 +271,13 @@ class KMALand(Land):
 
     @property
     def iframe_srcdoc(self):
-        with open(self.STYLES_FILE, encoding='utf-8') as file:
+        from django.conf import settings
+        styles_path = os.path.join(settings.BASE_DIR, self.STYLES_FILE)
+        js_path = os.path.join(settings.BASE_DIR, self.JS_FILE)
+        with open(styles_path, encoding='utf-8') as file:
             style_text = file.read()
             self.add_style_tag(style_text)
-        with open(self.JS_FILE, encoding='utf-8') as file:
+        with open(js_path, encoding='utf-8') as file:
             js_text = file.read()
             self.add_script_tag(js_text)
         self.add_base_tag()
