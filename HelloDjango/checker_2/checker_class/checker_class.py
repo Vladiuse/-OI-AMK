@@ -284,21 +284,36 @@ class UndefinedInText(Check):
         if 'undefined' in land_human_text:
             self.add_mess(self.UNDEFINED_IN_TEXT)
 
+class StarCharInText(Check):
+    DESCRIPTION = 'Поиск * в текста'
+    KEY_NAME = 'star_in_text'
+
+    VARIABLE_ON_SITE = 'Найдена * в тексте'
+
+    STATUS_SET = {
+        VARIABLE_ON_SITE: Check.WARNING,
+    }
+    STAR_CHAR = '*'
+
+    def process(self):
+        land_human_text = self.land.get_human_land_text()
+        if float(self.land.discount) <= 50 and self.STAR_CHAR in land_human_text:
+            self.add_mess(self.VARIABLE_ON_SITE)
+
+
 class HtmlPeaceOfCodeInText(Check):
     # супчик выкидывает их из текста(
     DESCRIPTION = 'Поиск элементов кода html'
     KEY_NAME = 'html_code_peace_in_text'
 
-    PEACES = ['']
-
-    HTML_PEACE_IN_TEXT = 'Элементы html кода найдены в текста'
+    HTML_PEACE_IN_TEXT = 'Элементы html кода найдены в тексте'
     STATUS_SET = {
         HTML_PEACE_IN_TEXT: Check.ERROR,
     }
 
     def process(self):
         land_human_text = self.land.get_human_land_text()
-        html_peaces = re.findall(r'<?!?[-]{1,2}>?|>|<', land_human_text)
+        html_peaces = re.findall(r'<!?-?|-{0,2}>', land_human_text)
         if html_peaces:
             self.add_mess(self.HTML_PEACE_IN_TEXT, *html_peaces)
 
@@ -333,7 +348,8 @@ class UrlChecker:
         analizer.process()
         old_analizer_result = analizer.result
         messages = []
-        for check in PhoneCountryMask, OffersInLand, Currency, Dates, GeoWords, CountyLang, PhpTempVar, UndefinedInText:
+        for check in PhoneCountryMask, OffersInLand, Currency, Dates,\
+                GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText:
             check = check(land=land, text_finder_result=analizer.result)
             check.process()
             messages += check.messages
