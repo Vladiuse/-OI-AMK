@@ -5,12 +5,13 @@ from json import JSONDecodeError
 import requests as req
 from .text_fixxer import DomFixxer
 from django.conf import settings
+from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
 
-class PrelandNoAdminError(BaseException):
-    """Прелэндинг не подключен к админке (нет ?ufl=)"""
-
-class IncorrectPrelandUrl(BaseException):
-    """Не правильный url прелэнда"""
+# class PrelandNoAdminError(BaseException):
+#     """Прелэндинг не подключен к админке (нет ?ufl=)"""
+#
+# class IncorrectPrelandUrl(BaseException):
+#     """Не правильный url прелэнда"""
 
 
 
@@ -155,9 +156,9 @@ class KMALand(Land):
         if self.land_type == 'preland':
             for domain in KMALand.INCORRECT_PRELAND_URLS:
                 if domain in url:
-                    raise IncorrectPrelandUrl
+                    raise IncorrectPreLandUrl
             if KMALand.LAND_ADMIN_UTM not in url:
-                raise PrelandNoAdminError
+                raise NoUflParamPreLand
 
         self.__kma_script = self._find_kma_back_data()
         self.country = self._country()
@@ -193,6 +194,7 @@ class KMALand(Land):
         for script in self.scripts:
             if 'country_list' in script and 'country=' in script:
                 return script
+        raise NoAdminSiteDataScript
 
     def _country(self) -> str:
         """Поиск в js коде переменной country - возвращает ее значение"""

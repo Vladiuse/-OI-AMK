@@ -3,7 +3,7 @@ import re
 import requests as req
 from bs4 import BeautifulSoup
 from datetime import datetime
-from .kma_land import KMALand, Land, PrelandNoAdminError
+from .kma_land import KMALand, Land
 from .text_fixxer import DomFixxer
 from .text_finder import TextAnaliz
 from .check_list_view import CheckListView
