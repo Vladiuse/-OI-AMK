@@ -142,7 +142,8 @@ class Land:
 
 class KMALand(Land):
     """Сайт KMA"""
-    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info','previewpreland.pro', 'feed-news.org', 'blogs-feed.org']
+    TEST_DOMAINS = ['127.0.0.1', 'vladiuse.beget.tech']
+    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info','previewpreland.pro', 'feed-news.org', 'blogs-feed.org'] + TEST_DOMAINS
     INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']

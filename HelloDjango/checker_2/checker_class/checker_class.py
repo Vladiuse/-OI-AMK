@@ -1,3 +1,5 @@
+import re
+
 import requests as req
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -158,6 +160,7 @@ class Dates(Check):
             self.add_mess(self.EARLIEST_DATE, earliest_date)
 
 
+
     @staticmethod
     def is_incorrect_date_format(date):
         chars = '-\\/'
@@ -251,6 +254,22 @@ class CountyLang(Check):
             self.add_mess(self.INCORRECT_LANG,'должен быть', *list_of_langs)
 
 
+class PhpTempVar(Check):
+    DESCRIPTION = 'Поиск переменных шаблонов PHP'
+    KEY_NAME = 'php_template_vars'
+
+    VARIABLE_ON_SITE = 'Найдена переменная шаблона'
+
+    STATUS_SET = {
+        VARIABLE_ON_SITE: Check.ERROR,
+    }
+
+    def process(self):
+        land_human_text = self.land.get_human_land_text()
+        var_templates = re.findall(r'\{\$[\S.]{1,40}}', land_human_text)
+        if var_templates:
+            self.add_mess(self.VARIABLE_ON_SITE, *var_templates)
+
 
 class UrlChecker:
 
@@ -283,7 +302,7 @@ class UrlChecker:
         analizer.process()
         old_analizer_result = analizer.result
         messages = []
-        for check in PhoneCountryMask, OffersInLand, Currency, Dates, GeoWords, CountyLang:
+        for check in PhoneCountryMask, OffersInLand, Currency, Dates, GeoWords, CountyLang, PhpTempVar:
             check = check(land=land, text_finder_result=analizer.result)
             check.process()
             messages += check.messages
