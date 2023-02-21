@@ -48,3 +48,20 @@ class CheckListView:
             # если блок чеклиста имеет пункты проверки(не пуст)
             if dic['subs']:
                 self.check_list.append(dic)
+
+
+
+# checks = CheckPoint.objects.filter(
+#     Q(land_type__iexact=land.land_type) | Q(land_type__iexact=''),
+#     Q(for_geo__icontains=land.country) | Q(for_geo__iexact=''),
+#     Q(for_lang__icontains=land.language) | Q(for_lang__iexact=''),
+#     Q(filter__in=land.other_filters) | Q(filter__iexact=''),
+# )
+#
+#
+# user_checks = UserSiteCheckPoint.objects.filter(user_list=ID)
+# blocks_qs = CheckBlock.objects.prefetch_related(
+#     Prefetch('checkpoint_set', queryset=checks)
+# ).prefetch_related(
+#     Prefetch('checkpoint_set__usersitecheckpoint_set', queryset=user_checks)
+# )

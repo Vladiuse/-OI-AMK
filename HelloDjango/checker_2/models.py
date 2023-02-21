@@ -28,7 +28,7 @@ class CheckPoint(OrderedModel):
         max_length=20,
         verbose_name='Тип сайта',
         choices=LAND_TYPES,
-        null=True,
+        # null=True,
         blank=True,
     )
 
@@ -36,7 +36,7 @@ class CheckPoint(OrderedModel):
         max_length=20,
         verbose_name='Тип скидки',
         choices=DISCOUNT_TYPE,
-        null=True,
+        # null=True,
         blank=True,
     )
     for_geo = models.CharField(
@@ -49,9 +49,24 @@ class CheckPoint(OrderedModel):
         verbose_name='Только для языка',
         blank=True,
     )
-    is_notice = models.BooleanField(default=False, null=False, blank=True, verbose_name='Требует внимания')
-    filter = models.CharField(max_length=30, verbose_name='Прочий фильтр', default='', null=False, blank=True)
-    manual_link = models.CharField(max_length=50, verbose_name='ссылка на доку', blank=True)
+    is_notice = models.BooleanField(
+        default=False,
+        # null=False,
+        blank=True,
+        verbose_name='Требует внимания'
+    )
+    filter = models.CharField(
+        max_length=30,
+        verbose_name='Прочий фильтр',
+        default='',
+        # null=False,
+        blank=True
+    )
+    manual_link = models.CharField(
+        max_length=50,
+        verbose_name='ссылка на доку',
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Пункт проверки'
@@ -70,6 +85,10 @@ class CheckPoint(OrderedModel):
 
     def __str__(self):
         return self.text
+
+    def full_info(self):
+        print(self.text)
+        print(self.land_type,self.discount_type,self.for_geo,self.for_lang,self.manual_link, sep=' | ')
 
 class ActualUserList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
