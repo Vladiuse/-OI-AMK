@@ -15,16 +15,8 @@ class CheckPointAdmin(OrderedModelAdmin):
     list_filter = ['parent__name']
 
 
-# class MainAdmin(OrderedModelAdmin):
-#     list_display = ('name', 'move_up_down_links')
-#
-#
-# class SubAdmin(OrderedModelAdmin):
-#     list_display = ('name', 'move_up_down_links')
-#     list_filter = ['main__name']
 
 
 admin.site.register(CheckPoint, CheckPointAdmin)
 admin.site.register(CheckBlock, CheckBlockAdmin)
-# admin.site.register(Main, MainAdmin)
 admin.site.register(CheckerUserSetting)

@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from datetime import date, timedelta
 
 
-# Create your models here.
 class CheckBlock(OrderedModel):
     name = models.CharField(max_length=100, verbose_name='Название')
     manual_link = models.CharField(max_length=50, verbose_name='ссылка на доку', blank=True)
@@ -28,7 +27,6 @@ class CheckPoint(OrderedModel):
         max_length=20,
         verbose_name='Тип сайта',
         choices=LAND_TYPES,
-        # null=True,
         blank=True,
     )
 
@@ -36,7 +34,6 @@ class CheckPoint(OrderedModel):
         max_length=20,
         verbose_name='Тип скидки',
         choices=DISCOUNT_TYPE,
-        # null=True,
         blank=True,
     )
     for_geo = models.CharField(
@@ -51,7 +48,6 @@ class CheckPoint(OrderedModel):
     )
     is_notice = models.BooleanField(
         default=False,
-        # null=False,
         blank=True,
         verbose_name='Требует внимания'
     )
@@ -59,7 +55,6 @@ class CheckPoint(OrderedModel):
         max_length=30,
         verbose_name='Прочий фильтр',
         default='',
-        # null=False,
         blank=True
     )
     manual_link = models.CharField(
@@ -86,9 +81,6 @@ class CheckPoint(OrderedModel):
     def __str__(self):
         return self.text
 
-    def full_info(self):
-        print(self.text)
-        print(self.land_type,self.discount_type,self.for_geo,self.for_lang,self.manual_link, sep=' | ')
 
 class ActualUserList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -109,7 +101,6 @@ class ActualUserList(models.Model):
     def get_or_create(user, url):
         try:
             user_list = ActualUserList.objects.get(user=user,url=url)
-            print('GET')
         except ActualUserList.DoesNotExist as error:
             user_list = ActualUserList.objects.create(user=user, url=url)
             check_points = CheckPoint.objects.all()
@@ -118,7 +109,6 @@ class ActualUserList(models.Model):
                 obj = UserSiteCheckPoint(user_list=user_list,check_point=check_point)
                 user_check_points.append(obj)
             UserSiteCheckPoint.objects.bulk_create(user_check_points)
-            print('CREATE')
         return user_list
 
 

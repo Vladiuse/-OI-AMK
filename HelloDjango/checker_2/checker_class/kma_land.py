@@ -9,13 +9,6 @@ import os
 from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
 
 
-# class PrelandNoAdminError(BaseException):
-#     """Прелэндинг не подключен к админке (нет ?ufl=)"""
-#
-# class IncorrectPrelandUrl(BaseException):
-#     """Не правильный url прелэнда"""
-
-
 class Land:
     TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
 
@@ -158,8 +151,6 @@ class KMALand(Land):
     INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
-    # STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
-    # JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
     STYLES_FILE = './checker_2/checker_class/front_data/styles.css'
     JS_FILE = './checker_2/checker_class/front_data/script.js'
 

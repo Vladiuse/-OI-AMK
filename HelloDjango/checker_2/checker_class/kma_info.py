@@ -15,16 +15,13 @@ def get_rekl_by_id(offer_id,camp_id):
 
     soup = BeautifulSoup(res.text, 'lxml')
     token = soup.find('input', {'name': '_csrf-backend'})['value']
-    # print(res, f'get token - {token}')
     login_data = {
         '_csrf-backend': token,
         'login-form[login]': 'v.doronin',
         'login-form[password]': 'djvHN729',
     }
     r = client.post(URL_LOGIN, data=login_data, headers=headers)
-    # print(r, 'req LOGIn')
     r = client.get(f'https://cpanel.kma.biz/offer/module/campaign/update?offer_id={offer_id}&id={camp_id}', headers=headers)
-    # print(r, 'req get cAMP',)
     soup = BeautifulSoup(r.text, 'lxml')
     select = soup.find('select', {'id': 'campaign-company_id'})
     option = select.find('option', {'selected': True})

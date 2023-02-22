@@ -3,17 +3,15 @@ import requests as req
 from requests.exceptions import ConnectionError
 import time
 from django.conf import settings
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .checker_class.text_finder import TextAnaliz
-from .checker_class.kma_land import KMALand, Land
-from kma.models import OfferPosition, PhoneNumber
+from .checker_class.kma_land import KMALand
 from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
 from .checker_class.checker_class import UrlChecker
 from django.template import Template
-from django.template import Context, RequestContext
+from django.template import RequestContext
 from bs4 import BeautifulSoup
 from .checker_class.errors import CheckerError
 
@@ -35,8 +33,6 @@ def read_check_list():
 
 @login_required
 def index(request):
-    # with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
-    #     debug_styles = file.read()
     settings = CheckerUserSetting.objects.get(user=request.user)
     content = {
         'user_settings':settings,
@@ -84,11 +80,6 @@ def check_url(request):
                 'checker': url_checker,
                 'kma': url_checker.land,
                 'user_settings': settings,
-                # 'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
-                #                     # dark_color='#2496ff',
-                #                     dark_color='white',
-                #                     light_color='#404040',
-                #                     ),
             }
             end = time.time()
 
@@ -101,12 +92,6 @@ def check_url(request):
                 'user_settings':settings,
             }
             return render(request, 'checker_2/index.html', content)
-        # except IncorrectPrelandUrl as error:
-        #     content = {
-        #         'error_text': error.__doc__,
-        #         'user_settings':settings,
-        #     }
-        #     return render(request, 'checker_2/index.html', content)
 
 
 @login_required
@@ -116,34 +101,6 @@ def analiz_land_text(request):
         land_text = request.POST['land_text']
         url_checker = UrlChecker
         result = url_checker.text_analiz(land_text)
-        # offers = OfferPosition.objects.values('name')
-        # offers_names = [offer['name'] for offer in offers]
-        # phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
-        # phone_codes = [phone['phone_code'] for phone in phones]
-        # currencys = [phone['currency'] for phone in phones]
-        # geo_words = {}
-        # geo_words_templates = {}
-        # for phone in phones:
-        #     if phone['words']['words']:
-        #         dic = {phone['short']: phone['words']['words']}
-        #         geo_words.update(dic)
-        # for phone in phones:
-        #     if phone['words']['templates']:
-        #         dic = {phone['short']: phone['words']['templates']}
-        #         geo_words_templates.update(dic)
-        # data = {
-        #     'offers': offers_names,
-        #     'currencys': currencys,
-        #     'phone_codes': phone_codes,
-        #     'geo_words': geo_words,
-        #     'geo_words_templates': geo_words_templates,
-        # }
-
-        # land = Land(source_text=land_text,url='0', parser='lxml')
-        # land.drop_tags_from_dom(KMALand.POLICY_IDS)
-        # human_text = land.get_human_land_text()
-        # analizer = TextAnaliz(source_text=str(land.soup.text),human_text=human_text, data=data)
-        # analizer.process()
         answer = {
             'success': True,
             'result': result['old'],

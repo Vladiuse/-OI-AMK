@@ -34,8 +34,6 @@ class UrlChecker:
         analizer.process()
         old_analizer_result = analizer.result
         messages = []
-        # for check in PhoneCountryMask, OffersInLand, Currency, Dates,\
-        #         GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText:
         for check in checks_list:
             check = check(land=land, text_finder_result=analizer.result)
             check.process()

@@ -1,11 +1,8 @@
 import hashlib
-from bs4 import BeautifulSoup
-from django.conf import settings
 
 
 class Img:
     IMG_DOUBLE_CLASS = ' __debug_double'
-    # to_find_img_attr = 'data-oi-img'
     oi_double_attr = 'data-oi-img-double'
     ATTRS = [
         'data-src',
