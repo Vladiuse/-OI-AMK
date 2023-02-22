@@ -25,8 +25,8 @@ class CheckListView:
         return block
 
     def is_need_add(self, check_point):
-        if check_point.land_type in [self.land_type, None] and \
-                check_point.discount_type in [self.discount_type, None] and \
+        if check_point.land_type in [self.land_type, ''] and \
+                check_point.discount_type in [self.discount_type, ''] and \
                 (self.country in check_point.for_geo or check_point.for_geo == '') and \
                 (self.language in check_point.for_lang or check_point.for_lang == '') and \
                 (check_point.filter in self.land_attrs or check_point.filter == ''):
