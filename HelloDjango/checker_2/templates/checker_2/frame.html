@@ -405,7 +405,7 @@
       $('#text-info').empty()
       $('#analize-load').show()
       let url = currentUrl + '/checker_2/analiz_land_text/'
-      data = { 'land_text': land_code }
+      data = { 'land_text': land_code , 'checked_url': checkedUrl}
       $.post(url, data, function (response) {
         let analiz_response = response;
         console.log(analiz_response)

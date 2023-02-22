@@ -21,9 +21,9 @@ class UrlChecker:
             self.land.full_lang = 'no lang in BD'
 
     @staticmethod
-    def text_analiz(land_text):
+    def text_analiz(land_text, url):
         data_for_text_analiz = UrlChecker.get_data_for_text_analiz()
-        land = KMALand(source_text=land_text, url='0', parser='lxml')
+        land = KMALand(source_text=land_text, url=url, parser='lxml')
         land.drop_tags_from_dom(KMALand.POLICY_IDS)
         # land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
         country_db_data = PhoneNumber.objects.get(short=land.country)
