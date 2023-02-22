@@ -303,17 +303,52 @@ class HtmlPeaceOfCodeInText(Check):
 
     HTML_PEACE_IN_TEXT = 'Элементы html кода найдены в тексте'
     STATUS_SET = {
-        HTML_PEACE_IN_TEXT: Check.ERROR,
+        HTML_PEACE_IN_TEXT: Check.WARNING,
     }
 
     def process(self):
         land_human_text = self.land.get_human_land_text()
-        html_peaces = re.findall(r'<!?-?|-{0,2}>', land_human_text)
+        html_peaces = set(re.findall(r'<!?-?|-{0,2}>', land_human_text))
         if html_peaces:
             self.add_mess(self.HTML_PEACE_IN_TEXT, *html_peaces)
 
+class SpaceCharInTest(Check):
+    DESCRIPTION = 'Поиск лишних пробелов кода html'
+    KEY_NAME = 'extra_spaces'
+
+    EXTRA_SPACE = 'Лишний пробел'
+    STATUS_SET = {
+        EXTRA_SPACE: Check.WARNING,
+    }
+
+    def process(self):
+        land_human_text = self.land.get_human_land_text()
+        html_peaces = set(re.findall(r' {1,3}[\\.?!]', land_human_text))
+        html_bracket_peaces = set(re.findall(r' {1,3}["\'»]|["\'«] {1,3}', land_human_text))
+        # TODO write new req - this not work
+        html_peaces = set(map(lambda x: f'"{x}"', html_peaces))
+        html_bracket_peaces = set(map(lambda x: f'<{x}>', html_bracket_peaces))
+        result = html_peaces | html_bracket_peaces
+        if result:
+            self.add_mess(self.EXTRA_SPACE, *result)
+
+class RekvOnPage(Check):
+    DESCRIPTION = 'Поиск реквизитов на лэнде'
+    KEY_NAME = 'rekv_on_land'
+
+    NO_REKV = 'Реквизиты не найдены'
+    STATUS_SET = {
+        NO_REKV: Check.ERROR,
+    }
+
+    def process(self):
+        # TODO нет типа лэнда
+        if self.land.land_type == 'land':
+            rekv = self.land.soup.find('rekv')
+            if rekv is None or not len(rekv.text):
+                self.add_mess(self.NO_REKV)
 
 checks_list = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
-    GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText
+    GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage
 ]
