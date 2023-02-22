@@ -8,12 +8,12 @@ import os
 
 from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
 
+
 # class PrelandNoAdminError(BaseException):
 #     """Прелэндинг не подключен к админке (нет ?ufl=)"""
 #
 # class IncorrectPrelandUrl(BaseException):
 #     """Не правильный url прелэнда"""
-
 
 
 class Land:
@@ -41,13 +41,12 @@ class Land:
 
     def get_favicon_links(self, add_base_url=True):
         links = self.soup.find_all('link')
-        links = list(filter(self.is_favicon_links,links))
+        links = list(filter(self.is_favicon_links, links))
         if add_base_url:
             for l in links:
                 if not l['href'].startswith('http'):
                     l['href'] = Land.get_url_for_base_tag(self.url) + l['href']
                 yield str(l)
-        
 
     @staticmethod
     def is_favicon_links(link):
@@ -72,7 +71,8 @@ class Land:
 
     @staticmethod
     def re_escape_html_chars(html_text):
-        chars = [('&copy;', '©'),('&#8211;', '-'), ('&#8220;', '“'), ('&#8221;', '”'), ('&#39;', "'"), ('&nbsp;', ' '), ('&quot;', '"'),
+        chars = [('&copy;', '©'), ('&#8211;', '-'), ('&#8220;', '“'), ('&#8221;', '”'), ('&#39;', "'"), ('&nbsp;', ' '),
+                 ('&quot;', '"'),
                  ('&apos;', "'"),
                  ('&&', '@@'), ('&', '&amp;&amp;'), ('@@', '&&')]
         for char, chat_to in chars:
@@ -146,25 +146,26 @@ class Land:
 
 class KMALand(Land):
     """Сайт KMA"""
-    TEST_DOMAINS = ['127.0.0.1', 'vladiuse.beget.tech']
-    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info','previewpreland.pro', 'feed-news.org', 'blogs-feed.org'] + TEST_DOMAINS
+    TEST_DOMAINS = [
+        # '127.0.0.1',
+        'vladiuse.beget.tech'
+    ]
+    LAND = 'land'
+    PRELAND = 'preland'
+
+    PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
+                        'blogs-feed.org'] + TEST_DOMAINS
     INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     # STYLES_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/styles.css'
     # JS_FILE = str(settings.BASE_DIR) + '/checker_2/checker_class/front_data/script.js'
     STYLES_FILE = './checker_2/checker_class/front_data/styles.css'
-    JS_FILE =  './checker_2/checker_class/front_data/script.js'
+    JS_FILE = './checker_2/checker_class/front_data/script.js'
 
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
-        if self.land_type == 'preland':
-            for domain in KMALand.INCORRECT_PRELAND_URLS:
-                if domain in url:
-                    raise IncorrectPreLandUrl
-            if KMALand.LAND_ADMIN_UTM not in url:
-                raise NoUflParamPreLand
-
+        self.validate_url()
         self.__kma_script = self._find_kma_back_data()
         self.country = self._country()
         self.language = self._language()
@@ -173,7 +174,13 @@ class KMALand(Land):
         self.list_of_form_parameters = self._list_of_form_parameters()
         self.land_attrs = list()
 
-
+    def validate_url(self):
+        if self.land_type == 'preland':
+            for domain in KMALand.INCORRECT_PRELAND_URLS:
+                if domain in self.url:
+                    raise IncorrectPreLandUrl
+            if KMALand.LAND_ADMIN_UTM not in self.url:
+                raise NoUflParamPreLand
 
     def get_clean_url(self):
         url = super().get_no_protocol_url()
@@ -231,7 +238,7 @@ class KMALand(Land):
         start = self.__kma_script.find('list_of_parameters=') + len('list_of_parameters=')
         if start == -1:
             return dict()
-        end = self.__kma_script.find('};',start) + 1
+        end = self.__kma_script.find('};', start) + 1
         var = self.__kma_script[start:end]
         try:
             list_of_parameters = json.loads(var)
@@ -257,7 +264,6 @@ class KMALand(Land):
             dic[k.lower()] = v
         return dic
 
-
     def add_site_attrs(self):
         if self._is_video_tag_on_site():
             self.land_attrs.append('video')
@@ -267,7 +273,6 @@ class KMALand(Land):
 
     def process(self):
         self.find_n_mark_img_doubles()
-
 
     @property
     def iframe_srcdoc(self):
@@ -342,6 +347,7 @@ class KMALand(Land):
     @property
     def landing_id(self):
         return self.list_of_parameters['landing']
+
     @property
     def preland_id(self):
         return self.list_of_form_parameters['transit']
