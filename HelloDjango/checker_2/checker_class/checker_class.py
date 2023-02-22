@@ -1,6 +1,6 @@
 from .kma_land import KMALand
 from .text_finder import TextAnaliz
-from .check_list_view import CheckListView, get_check_list
+from .check_list_view import get_check_list
 from kma.models import PhoneNumber, OfferPosition, Language
 from .checkers import checks_list, Check
 
@@ -8,14 +8,12 @@ class UrlChecker:
 
     def __init__(self, source_text, url, user):
         self.land = KMALand(source_text, url, escape_chars=True)
-        # self.check_list = CheckListView(land=self.land, user=user)
         self.check_list = get_check_list(self.land, user)
         self.user = user
 
     def process(self):
         self.land.add_site_attrs()
         self.land.process()
-        # self.check_list.process()
         self.land.phone_code = PhoneNumber.get_phone_code_by_country(self.land.country)
         try:
             self.land.full_lang = Language.objects.get(pk=self.land.language)
