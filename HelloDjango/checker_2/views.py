@@ -18,6 +18,8 @@ from django.template import Context, RequestContext
 from bs4 import BeautifulSoup
 from .checker_class.errors import CheckerError
 
+from shell import *
+
 
 
 # Create your views here.
@@ -49,20 +51,16 @@ def check_url(request):
     url = KMALand.format_url(url)
     start = time.time()
     settings = CheckerUserSetting.objects.get(user=request.user)
-
     left_bar = request.GET['checker_leftbar']
     click_elem = request.GET['checker_clickelems']
     other = request.GET['checker_other_elems']
-    print(left_bar,click_elem,other, 'xxxxxxx')
     left_bar = True if left_bar.lower() == 'true' else False
     click_elem = True if click_elem.lower() == 'true' else False
     other = True if other.lower() == 'true' else False
     settings.left_bar = left_bar
     settings.click_elem = click_elem
     settings.other = other
-    print(left_bar,click_elem,other, 'yyyyyy')
     settings.save()
-    print(settings)
     try:
         res = req.get(url)
     except ConnectionError:
@@ -96,6 +94,7 @@ def check_url(request):
             end = time.time()
 
             print(f'Total:{round(end - start, 2)}')
+            print(ST)
             return render(request, 'checker_2/frame.html', content)
         except CheckerError as error:
             content = {

@@ -214,7 +214,7 @@
                       <div id="text-info">
                       </div>
                     </div>
-
+<!--                    CHECK LIST-->
                     <div class="navigation__checker-list" id="check_list">
                       <div class="list-group">
                         {%for block in checker.check_list %}
@@ -232,9 +232,9 @@
                             </b>
 
                             <div class="list-group-item__row tab-content">
-                              {%for sub in block.subs %}
-                              <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.id}}">
-                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked %}checked{%endif%}>
+                              {%for sub in block.checkpoint_set.all %}
+                              <label class="list-group-item sub {%if sub.is_notice %}notice{%endif%}" data-checkpoint-id="{{sub.pk}}">
+                                <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.usersitecheckpoint_set.all.0.is_checked %}checked{%endif%}>
                                 {{sub.text}}
                                 {%if sub.manual_link%}
                               <a href="" data-manual-link="{{sub.manual_link}}">

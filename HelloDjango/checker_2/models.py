@@ -105,11 +105,26 @@ class ActualUserList(models.Model):
         old.delete()
         return len(old)
 
+    @staticmethod
+    def get_or_create(user, url):
+        try:
+            user_list = ActualUserList.objects.get(user=user,url=url)
+            print('GET')
+        except ActualUserList.DoesNotExist as error:
+            user_list = ActualUserList.objects.create(user=user, url=url)
+            check_points = CheckPoint.objects.all()
+            user_check_points = []
+            for check_point in check_points:
+                obj = UserSiteCheckPoint(user_list=user_list,check_point=check_point)
+                user_check_points.append(obj)
+            UserSiteCheckPoint.objects.bulk_create(user_check_points)
+            print('CREATE')
+        return user_list
+
+
 
 class UserSiteCheckPoint(models.Model):
     check_point = models.ForeignKey(CheckPoint, on_delete=models.CASCADE)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # url = models.CharField(max_length=70)
     user_list = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
     is_checked = models.BooleanField(default=False)
 
