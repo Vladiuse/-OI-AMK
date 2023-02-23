@@ -8,6 +8,10 @@
     <title>Document</title>
 </head>
 <body>
-<h1>xx  xx </h1>
+<form method="POST">
+    {%csrf_token%}
+    {{form}}
+    <button type="submit">SEND</button>
+</form>
 </body>
 </html>

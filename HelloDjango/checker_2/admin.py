@@ -14,9 +14,11 @@ class CheckPointAdmin(OrderedModelAdmin):
     list_display_links = ['id', 'text']
     list_filter = ['parent__name']
 
-
+class CheckerUserSettingAdmin(admin.ModelAdmin):
+    list_display = ['user', 'left_bar', 'click_elem', 'other']
+    list_display_links = ['user']
 
 
 admin.site.register(CheckPoint, CheckPointAdmin)
 admin.site.register(CheckBlock, CheckBlockAdmin)
-admin.site.register(CheckerUserSetting)
+admin.site.register(CheckerUserSetting, CheckerUserSettingAdmin)

@@ -14,7 +14,7 @@ from django.template import Template
 from django.template import RequestContext
 from bs4 import BeautifulSoup
 from .checker_class.errors import CheckerError
-
+from .forms import CheckerUserSettingsForm
 from shell import *
 
 
@@ -34,28 +34,23 @@ def read_check_list():
 @login_required
 def index(request):
     settings = CheckerUserSetting.objects.get(user=request.user)
+    settings_form = CheckerUserSettingsForm(instance=settings, prefix='ch_set')
     content = {
-        'user_settings':settings,
+        'settings_form':settings_form,
     }
     return render(request, 'checker_2/index.html', content)
 
 @login_required
 def check_url(request):
     # получения кода для iframe
-    url = request.GET['url']
+    url = request.POST['url']
     url = KMALand.format_url(url)
     start = time.time()
     settings = CheckerUserSetting.objects.get(user=request.user)
-    left_bar = request.GET['checker_leftbar']
-    click_elem = request.GET['checker_clickelems']
-    other = request.GET['checker_other_elems']
-    left_bar = True if left_bar.lower() == 'true' else False
-    click_elem = True if click_elem.lower() == 'true' else False
-    other = True if other.lower() == 'true' else False
-    settings.left_bar = left_bar
-    settings.click_elem = click_elem
-    settings.other = other
-    settings.save()
+    setting_form = CheckerUserSettingsForm(request.POST, instance=settings, prefix='ch_set')
+    if setting_form.is_valid():
+        setting_form.user = request.user
+        setting_form.save()
     try:
         res = req.get(url)
     except ConnectionError:
@@ -116,13 +111,7 @@ def analiz_land_text(request):
     return JsonResponse(answer, safe=False)
 
 
-@login_required
-def test(request):
-    content = {
-        'var': 'VAR',
-        'list': list(range(10)),
-    }
-    return render(request, 'checker_2/test.html', content)
+
 
 @login_required
 def change_status_of_user_checklist(request):
@@ -198,4 +187,18 @@ def dell_old(requests):
     return JsonResponse(res)
 
 
+@login_required
+def test(request):
+    settings = CheckerUserSetting.objects.get(user=request.user)
+    if request.method == 'POST':
+        form = CheckerUserSettingsForm(request.POST, instance=settings)
+        if form.is_valid():
+            form.user = request.user
+            form.save()
+
+    form = CheckerUserSettingsForm(instance=settings)
+    content = {
+        'form': form,
+    }
+    return render(request, 'checker_2/test.html', content)
 

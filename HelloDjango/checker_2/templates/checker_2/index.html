@@ -15,7 +15,7 @@
         </div>
         {%endif%}
        
-        <form action="{% url 'checker_2:check_url' %}" method="GET" target1="_blank" id="url-for-check">
+        <form action="{% url 'checker_2:check_url' %}" method="POST" target1="_blank" id="url-for-check">
             <label>Url для проверки:</label>
             {% csrf_token %}
             <input type="url" name="url" class="form-control" required placeholder="Введите url">
@@ -23,49 +23,42 @@
             <input type="hidden" id="checker_clickelems" value="{{user_settings.click_elem}}" name="checker_clickelems">
             <input type="hidden" id="checker_other_elems" value="{{user_settings.other}}" name="checker_other_elems">
             <button class="btn btn-primary">Проверить</button>
+            <div id="settings" class="">
+                <i class="fa-solid fa-gear"></i>
+                <div class="form">
+                    {{ settings_form.non_field_errors }}
+                    <div>
+                        {{ settings_form.left_bar.errors }}
+                                
+                        {{ settings_form.left_bar }}
+                        <label for="{{ settings_form.left_bar.id_for_label }}">{{settings_form.left_bar.label}}:</label>
+                    </div>
+                            <div>
+                        {{ settings_form.click_elem.errors }}
+                                
+                        {{ settings_form.click_elem }}
+                        <label for="{{ settings_form.click_elem.id_for_label }}">{{settings_form.click_elem.label}}:</label>
+                    </div>
+                            <div>
+                        {{ settings_form.other.errors }}
+                                
+                        {{ settings_form.other }}
+                        <label for="{{ settings_form.other.id_for_label }}">{{settings_form.other.label}}:</label>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
     
 </div>
-<div id="settings">
-    <i class="fa-solid fa-gear"></i>
-    <form style="">
-        <div>
-            <input type="checkbox" id="leftbar"  
-            {%if user_settings.left_bar%}checked{%endif%}
-            >
-            <label for="leftbar">Показывать панель</label>
-        </div>
-        <div>
-            <input type="checkbox" id="clickelems" 
-            {%if user_settings.click_elem%}checked{%endif%}
-            >
-            <label for="clickelems">Кликабельные элементы</label>
-        </div>
-        <div>
-            <input type="checkbox" id="other_elems"
-            {%if user_settings.other%}checked{%endif%}
-            >
-             <label for="other_elems">Даты, Формы и Цены</label>
-        </div>
-    </form>
-</div>
+
 <script>
     $('#settings').hover(function(){
         $(this).addClass('active')
-        // $('#settings i').hide()
-        // $('#settings form').show()
-    })
-    $('.main-wrapper').hover(function(){
-        $('#settings').removeClass('active')
     })
 
-    $('#settings').click(function(){
-        let inputs = $('#settings input')
-        $.each(inputs,function(){
-            let id = 'checker_' + $(this).attr('id')
-            let input = $('#'+id).val($(this).is(':checked'))
-        })
+    $('#settings').mouseleave(function(){
+        $('#settings').removeClass('active')
     })
 </script>
 <style>
@@ -111,7 +104,7 @@
         align-items: center;
         text-transform: uppercase;
     }
-    form#url-for-check input{
+    form#url-for-check input.form-control{
     padding: 0px 4px 0px 24px;
     border-width: 1px;
     border-style: solid;
@@ -129,7 +122,7 @@
     height: 70px;
    
     }
-    form#url-for-check input:focus{
+    form#url-for-check input.form-control:focus{
         box-shadow: rgb(36 155 255) 0 0 0 1px;
     }
     form#url-for-check button{
@@ -160,7 +153,7 @@
         height: 40px;
     }
     #settings.active{
-        width: 200px;
+        width: 240px;
         height: 100px;
         font-size: 11px;
         border-radius: 0px;
@@ -173,20 +166,21 @@
     #settings.active i{
         display: none;
     }
-    #settings form div{
+    #settings .form div{
         display: flex;
         align-items: center;
         color:#ebebeb;
         text-transform: uppercase;
     }
-    #settings form{
+    #settings .form{
         display: none;
+        
     }
-    #settings.active form{
+    #settings.active .form{
         display: block;
         margin: 0;
     }
-    #settings form input{
+    #settings .form input{
         margin-right: 3px;
     }
 </style>
