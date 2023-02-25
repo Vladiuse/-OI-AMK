@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .checker_class.text_fixxer import DomFixxer, TextFixxer, TOOLBAR_STYLES_FILE
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_info import get_rekl_by_id
-from kma.models import OfferPosition, PhoneNumber
+from kma.models import OfferPosition, Country
 import requests as req
 from bs4 import BeautifulSoup
 from django.views.decorators.csrf import csrf_exempt
@@ -60,7 +60,7 @@ def analiz_land_text(request):
         # print('россииа' in land_text)
         offers = OfferPosition.objects.values('name')
         offers_names = [offer['name'] for offer in offers]
-        phones = PhoneNumber.objects.values('short','currency', 'phone_code', 'words')
+        phones = Country.objects.values('short','currency', 'phone_code', 'words')
         phone_codes = [phone['phone_code'] for phone in phones]
         currencys = [phone['currency'] for phone in phones]
         geo_words = {}

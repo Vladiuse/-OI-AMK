@@ -1,7 +1,7 @@
 from .kma_land import KMALand
 from .text_finder import TextAnaliz
 from .check_list_view import get_check_list
-from kma.models import PhoneNumber, OfferPosition, Language
+from kma.models import Country, OfferPosition, Language
 from .checkers import checks_list, Check
 
 class UrlChecker:
@@ -14,7 +14,7 @@ class UrlChecker:
     def process(self):
         self.land.add_site_attrs()
         self.land.process()
-        self.land.phone_code = PhoneNumber.get_phone_code_by_country(self.land.country)
+        self.land.phone_code = Country.get_phone_code_by_country(self.land.country)
         try:
             self.land.full_lang = Language.objects.get(pk=self.land.language)
         except Language.DoesNotExist:
@@ -26,7 +26,7 @@ class UrlChecker:
         land = KMALand(source_text=land_text, url=url, parser='lxml')
         land.drop_tags_from_dom(KMALand.POLICY_IDS)
         # land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
-        country_db_data = PhoneNumber.objects.get(short=land.country)
+        country_db_data = Country.objects.get(short=land.country)
         land.phone_code = country_db_data.phone_code
         land.available_langs = country_db_data.langs
         human_text = land.get_human_land_text()
@@ -60,7 +60,7 @@ class UrlChecker:
     def get_data_for_text_analiz():
         offers = OfferPosition.objects.values('name')
         offers_names = [offer['name'] for offer in offers]
-        phones = PhoneNumber.objects.values('short', 'currency', 'phone_code', 'words')
+        phones = Country.objects.values('short', 'currency', 'phone_code', 'words')
         phone_codes = [phone['phone_code'] for phone in phones]
         currencys = [phone['currency'] for phone in phones]
         geo_words = {}

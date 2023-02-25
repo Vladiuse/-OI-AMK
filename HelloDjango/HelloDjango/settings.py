@@ -120,14 +120,27 @@ DATABASES = {
     }
 }
 
-# for MySql database remote
+# for MySql database remote server
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': 'vladiuse_kma',
+#          'USER': 'vladiuse_kma',
+#          'PASSWORD': get_secret('vladiuse_kma'),
+#          'HOST': 'vladiuse.beget.tech',
+#          'PORT': '3306',
+#
+#      }
+#  }
+
+# local kma_db for test
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'vladiuse_kma',
-         'USER': 'vladiuse_kma',
-         'PASSWORD': get_secret('vladiuse_kma'),
-         'HOST': 'vladiuse.beget.tech',
+         'NAME': get_secret('test_kma_db'),
+         'USER': get_secret('test_kma_user'),
+         'PASSWORD': get_secret('test_kma_db_pass'),
+         'HOST': 'localhost',
          'PORT': '3306',
 
      }

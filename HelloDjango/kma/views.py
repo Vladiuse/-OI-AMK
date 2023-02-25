@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import DefaultWeb, PhoneNumber, UserApiKey
+from .models import DefaultWeb, Country, UserApiKey
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .test_lead.kma_leads import KmaAPITest, KmaAPiError
@@ -16,7 +16,7 @@ def default_webs(request):
 
 @login_required
 def phones(requests):
-    phones = PhoneNumber.objects.all().order_by('short')
+    phones = Country.objects.all().order_by('short')
     try:
         user_api_key = UserApiKey.objects.get(user=requests.user)
         content = {
@@ -37,7 +37,7 @@ def get_phone_code(request):
     try:
         country_code = request.GET['country_code']
         country_code = country_code.lower()
-        phone_model = PhoneNumber.objects.get(short=country_code)
+        phone_model = Country.objects.get(short=country_code)
         answer = {
             'success': True,
             'phone_code': phone_model.phone_code,
@@ -63,7 +63,7 @@ def test_rekl(requests):
         countrys_list = countrys.split(',')
         test_name = requests.POST['test_name']
         offer_id = requests.POST['offer_id']
-        country_phones = PhoneNumber.get_country_phone(*countrys_list)
+        country_phones = Country.get_country_phone(*countrys_list)
         test_name = False if test_name != 'eng_test' else True
         user_api_key = UserApiKey.objects.get(user=requests.user)
         kma = KmaAPITest(user_api_key.token,offer_id, country_phones, test_name)

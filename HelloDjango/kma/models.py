@@ -12,27 +12,28 @@ class DefaultWeb(models.Model):
         verbose_name_plural = 'Вебы по умолчаниюа'
 
 
-class PhoneNumber(models.Model):
-    short = models.CharField(max_length=2, verbose_name='Код страны ISO', unique=True)
+class Country(models.Model):
+    iso = models.CharField(max_length=2, verbose_name='Код страны ISO', unique=True, primary_key=True)
     phone = models.CharField(max_length=15, verbose_name='Валидный номер')
     ru_full_name = models.CharField(max_length=20, verbose_name='Русское название', blank=True, unique=True)
     phone_code = models.CharField(max_length=15, verbose_name='Моб код страны', blank=True)
     currency = models.CharField(max_length=5, verbose_name='Валюта', blank=True)
     words = models.JSONField(default={"words": [], "templates": []}, verbose_name='Слова под гео')
     langs = models.CharField(max_length=15, verbose_name='Языки гео', blank=True)
+    language = models.ManyToManyField('Language', blank=True)
 
     class Meta:
-        verbose_name = 'Валидный номер'
-        verbose_name_plural = 'Валидные номера'
+        verbose_name = 'Страна'
+        verbose_name_plural = 'Страны'
 
     @staticmethod
     def get_phone_code_by_country(iso_code):
         """Получить моб код по коду страны"""
         iso_code = iso_code.lower()
         try:
-            phone = PhoneNumber.objects.get(short=iso_code)
+            phone = Country.objects.get(short=iso_code)
             return phone.phone_code
-        except PhoneNumber.DoesNotExist as error:
+        except Country.DoesNotExist as error:
             return f'{iso_code}:{error}'
 
     @staticmethod
@@ -41,7 +42,7 @@ class PhoneNumber(models.Model):
         ключ:county_iso
         значение: номер телефона
         """
-        phones = PhoneNumber.objects.filter(short__in=countrys_iso).values()
+        phones = Country.objects.filter(short__in=countrys_iso).values()
         country_phone = dict()
         for p in phones:
             dic = {p['short']: p['phone']}
