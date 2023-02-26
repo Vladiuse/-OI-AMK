@@ -1,70 +1,16 @@
-import os
+import csv
+from kma.models import Country
 
-from kma.models import PhoneNumber, OfferPosition
-
-
-def add_phones():
-    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/Тесты - Лист13.csv') as file:
-        for line in file:
-            if line.endswith('\n'):
-                line = line[:-1]
-            short, phone, ru_full_name, phone_code, currency = line.split(',')
-            model = PhoneNumber(
-                short=short,
-                phone=phone,
-                ru_full_name=ru_full_name,
-                phone_code=phone_code,
-                currency=currency,
-            )
-            try:
-                model.save()
-                print(model)
-            except BaseException:
-                print(line)
-
-
-
-def add_phone_codes():
-    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/Тесты - Лист13.csv') as file:
-        for line in file:
-            if line.endswith('\n'):
-                line = line[:-1]
-            short, phone, ru_full_name, phone_code, currency = line.split(',')
-            model = PhoneNumber.objects.get(short=short)
-            model.currency = currency
-            model.save()
-
-
-def fix_offers_names():
-    offers = OfferPosition.objects.all()
-    for offer in offers:
-        if '+' in offer.name and not offer.name.endswith('+'):
-            print(offer)
-
-
-
-def add_geo_words():
-    with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/geo_words.csv') as file:
-        for line in file:
-            if line.endswith('\n'):
-                line = line[:-1]
-            name, short, *templates = line.split(',')
-            templates = set(templates)
-            templates.remove('')
-            print(name, short, templates)
-            try:
-                phone = PhoneNumber.objects.get(short=short)
-                dic = {'templates': list(templates)}
-                phone.words.update(dic)
-                phone.save()
-                print(phone)
-            except:
-                print(short, 'Not Found')
-
-
-phones = PhoneNumber.objects.all()
-for p in phones:
-    print(p.short,p.words['templates'])
-
-
-
+path = '/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/scripts/db_data/all_countrys.csv'
+with open(path) as file:
+    csv_file = csv.reader(file)
+    for line in csv_file:
+        name, iso, iso3, *other = line
+        iso, iso3 = iso.lower(), iso3.lower()
+        try:
+            country = Country.objects.get(pk=iso)
+            country.iso3 = iso3
+        except:
+            country = Country(iso=iso, iso3=iso3, ru_full_name=name)
+            print(country)
+        country.save()

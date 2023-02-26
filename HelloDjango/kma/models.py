@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class DefaultWeb(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя веба', unique=True)
 
@@ -10,17 +11,62 @@ class DefaultWeb(models.Model):
     class Meta:
         verbose_name = 'Веб по умолчанию'
         verbose_name_plural = 'Вебы по умолчаниюа'
-
+class ActualCountryManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().exclude(phone='')
 
 class Country(models.Model):
-    iso = models.CharField(max_length=2, verbose_name='Код страны ISO', unique=True, primary_key=True)
-    phone = models.CharField(max_length=15, verbose_name='Валидный номер')
-    ru_full_name = models.CharField(max_length=20, verbose_name='Русское название', blank=True, unique=True)
-    phone_code = models.CharField(max_length=15, verbose_name='Моб код страны', blank=True)
-    currency = models.CharField(max_length=5, verbose_name='Валюта', blank=True)
-    words = models.JSONField(default={"words": [], "templates": []}, verbose_name='Слова под гео')
-    langs = models.CharField(max_length=15, verbose_name='Языки гео', blank=True)
-    language = models.ManyToManyField('Language', blank=True)
+
+    objects = models.Manager()
+    actual = ActualCountryManager()
+
+    iso = models.CharField(
+        max_length=2,
+        verbose_name='Код страны ISO',
+        unique=True,
+        primary_key=True
+    )
+    iso3 = models.CharField(
+        max_length=3,
+        verbose_name='ISO 3',
+        unique=True,
+        blank=True,
+        null=True
+    )
+    ru_full_name = models.CharField(
+        max_length=60,
+        verbose_name='Русское название',
+        blank=True,
+        unique=True
+    )
+    phone = models.CharField(
+        max_length=15,
+        verbose_name='Валидный номер',
+        blank=True
+    )
+    phone_code = models.CharField(
+        max_length=15,
+        verbose_name='Моб код страны',
+        blank=True
+    )
+    currency = models.CharField(
+        max_length=5,
+        verbose_name='Валюта',
+        blank=True
+    )
+    words = models.JSONField(
+        default={"words": [], "templates": []},
+        verbose_name='Слова под гео'
+    )
+    langs = models.CharField(
+        max_length=15,
+        verbose_name='Языки гео',
+        blank=True
+    )
+    language = models.ManyToManyField(
+        'Language',
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Страна'

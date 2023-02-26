@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 from .models import DefaultWeb, Country, OfferPosition, UserApiKey, Language
 
 
@@ -8,9 +9,16 @@ class DefaultWebAdmin(admin.ModelAdmin):
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ['iso', 'ru_full_name', 'phone', 'phone_code', 'currency', 'langs',]
-    list_display_links = ['iso', 'phone', 'ru_full_name']
+    list_display = ['iso', 'ru_full_name', 'phone', 'phone_code', 'currency', 'langs','iso3']
+    list_display_links = ['iso', 'ru_full_name']
+    search_fields = ['iso', 'ru_full_name']
     autocomplete_fields = ['language']
+
+    list_filter = (
+        ('phone', admin.EmptyFieldListFilter),
+    )
+
+
 
 
 class OfferPositionAdmin(admin.ModelAdmin):
