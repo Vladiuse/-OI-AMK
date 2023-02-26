@@ -111,14 +111,11 @@ class OfferPosition(models.Model):
 
 
     def save(self):
-        words = self.name.split(' ')
-        for id, w in enumerate(words):
-            words[id] = w.title()
-        self.name = ' '.join(words)
+        self.name = str(self.name).lower()
         super().save()
 
     def __str__(self):
-        return self.name
+        return str(self.name).title()
 
     class Meta:
         verbose_name = 'Оффер'

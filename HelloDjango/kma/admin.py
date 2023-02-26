@@ -22,8 +22,12 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class OfferPositionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_display_links = ['name']
+    list_display = ['id', 'pretty_name']
+    list_display_links = ['pretty_name']
+
+    @admin.display
+    def pretty_name(self, obj):
+        return obj.name.title()
 
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ['iso', 'russian_name']
