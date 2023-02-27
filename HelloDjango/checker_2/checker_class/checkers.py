@@ -228,13 +228,24 @@ class GeoWords(Check):
     }
 
     def process(self):
-        countrys = self.text_finder_result['geo_words_templates']
-        for iso, countrys in countrys.items():
-            countrys.insert(0, iso.upper())
-            if self.land.country == iso:
-                self.add_mess(self.ALL_COUNTRYS, *countrys)
-            else:
-                self.add_mess(self.INCORECT_COUNTRY, *countrys)
+        self.search_by_template()
+
+    def search_by_word(self):
+        pass
+
+    def search_by_template(self):
+        for country in self.url_checker.countrys:
+            templates = country.words['templates']
+            for template in templates:
+                regEx = '\W' + template + '[\W\w][^\s]{0,6}[.\-;:,«»\s]'
+                symbols_to_clean = """ .-;:”,"\n"""
+                find_templates = re.findall(regEx, self.land.human_text_lower)
+                if find_templates:
+                    if country.iso == self.land.country:
+                        self.add_mess(self.ALL_COUNTRYS,*find_templates)
+                    else:
+                        self.add_mess(self.INCORECT_COUNTRY,*find_templates)
+
 
 
 class CountyLang(Check):
