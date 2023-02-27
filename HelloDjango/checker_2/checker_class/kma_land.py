@@ -296,10 +296,8 @@ class KMALand(Land):
 
         if len(self.country_list) > 1:
             self.land_attrs.append('more_one_select')
-        print('add_site_attrs', self.land_attrs)
 
-    def process(self):
-        self.find_n_mark_img_doubles()
+
 
     @property
     def iframe_srcdoc(self):

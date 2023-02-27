@@ -99,7 +99,7 @@ def analiz_land_text(request):
         result = url_checker.text_analiz()
         answer = {
             'success': True,
-            'result': result['old'],
+            # 'result': result['old'],
             'new_checker': result['new'],
             'jeneral_status': result['jeneral_status'],
         }

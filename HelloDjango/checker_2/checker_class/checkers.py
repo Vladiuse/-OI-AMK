@@ -12,10 +12,9 @@ class Check:
 
     STATUS_SET = {}
 
-    def __init__(self, land, url_checker,text_finder_result):
+    def __init__(self, land, url_checker):
         self.land = land
         self.url_checker = url_checker
-        self.text_finder_result = text_finder_result
         self.errors = set()
         self.info = set()
         self.messages = list()
@@ -258,11 +257,14 @@ class CountyLang(Check):
         INCORRECT_LANG: Check.WARNING,
     }
 
-    def process(self):
+    def process(self): #TODO переделать на prefetsh
         site_lang = self.land.language
-        list_of_langs = self.land.available_langs.split(',')
-        if site_lang not in self.land.available_langs:
-            self.add_mess(self.INCORRECT_LANG, 'должен быть', *list_of_langs)
+        country_langs = None
+        for country in self.url_checker.countrys:
+            if self.land.country == country.iso:
+                country_langs = country.langs.split(',')
+        if site_lang not in country_langs:
+            self.add_mess(self.INCORRECT_LANG, 'должен быть', *country_langs)
 
 
 class PhpTempVar(Check):
@@ -292,9 +294,7 @@ class UndefinedInText(Check):
     }
 
     def process(self):
-
         land_human_text = self.land.get_human_land_text()
-        print(self.land.human_text)
         if 'undefined' in land_human_text:
             self.add_mess(self.UNDEFINED_IN_TEXT)
 
