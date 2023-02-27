@@ -77,7 +77,7 @@ class Country(models.Model):
         """Получить моб код по коду страны"""
         iso_code = iso_code.lower()
         try:
-            phone = Country.objects.get(short=iso_code)
+            phone = Country.objects.get(pk=iso_code)
             return phone.phone_code
         except Country.DoesNotExist as error:
             return f'{iso_code}:{error}'

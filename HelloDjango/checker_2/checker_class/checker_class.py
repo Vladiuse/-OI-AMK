@@ -8,7 +8,7 @@ class UrlChecker:
 
     def __init__(self, source_text, url, user):
         self.land = KMALand(source_text, url, escape_chars=True)
-        self.check_list = get_check_list(self.land, user)
+        self.check_list = get_check_list(self.land, user)  #TODO filter not added before land processed
         self.user = user
 
     def process(self):
@@ -26,7 +26,7 @@ class UrlChecker:
         land = KMALand(source_text=land_text, url=url, parser='lxml')
         land.drop_tags_from_dom(KMALand.POLICY_IDS)
         # land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
-        country_db_data = Country.objects.get(short=land.country)
+        country_db_data = Country.objects.get(pk=land.country)
         land.phone_code = country_db_data.phone_code
         land.available_langs = country_db_data.langs
         human_text = land.get_human_land_text()
@@ -60,18 +60,18 @@ class UrlChecker:
     def get_data_for_text_analiz():
         offers = OfferPosition.objects.values('name')
         offers_names = [offer['name'] for offer in offers]
-        phones = Country.objects.values('short', 'currency', 'phone_code', 'words')
+        phones = Country.actual.values('iso', 'currency', 'phone_code', 'words')
         phone_codes = [phone['phone_code'] for phone in phones]
         currencys = [phone['currency'] for phone in phones]
         geo_words = {}
         geo_words_templates = {}
         for phone in phones:
             if phone['words']['words']:
-                dic = {phone['short']: phone['words']['words']}
+                dic = {phone['iso']: phone['words']['words']}
                 geo_words.update(dic)
         for phone in phones:
             if phone['words']['templates']:
-                dic = {phone['short']: phone['words']['templates']}
+                dic = {phone['iso']: phone['words']['templates']}
                 geo_words_templates.update(dic)
         data_for_text_analiz = {
             'offers': offers_names,
