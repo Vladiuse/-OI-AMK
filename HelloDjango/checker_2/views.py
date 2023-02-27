@@ -135,7 +135,7 @@ def change_status_of_user_checklist(request):
 
 @login_required
 @csrf_exempt
-def doc_page(request):
+def doc_page(request):  #TODO -  перенести в kma?
     manual_land = request.POST['manual_land']
     manual_land = manual_land.replace('.', '/')
     block_id = None

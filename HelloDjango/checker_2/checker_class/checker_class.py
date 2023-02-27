@@ -3,6 +3,7 @@ from .check_list_view import get_check_list
 from kma.models import Country, OfferPosition, Language
 from .checkers import checks_list, Check
 
+
 class UrlChecker:
 
     def __init__(self, source_text, url, user):
@@ -10,8 +11,8 @@ class UrlChecker:
         self.url = url
         self.user = user
 
-
-
+        self.land = None
+        self.check_list = None
         # db data
         self.offers = OfferPosition.objects.all()
         self.countrys = Country.actual.all()
