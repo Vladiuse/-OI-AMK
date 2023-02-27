@@ -12,6 +12,7 @@ class UrlChecker:
         self.user = user
         # db data
         self.offers = OfferPosition.objects.all()
+        self.countrys = Country.actual.all()
 
     def process(self):
         self.land.add_site_attrs()

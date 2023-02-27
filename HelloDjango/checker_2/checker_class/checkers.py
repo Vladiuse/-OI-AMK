@@ -45,13 +45,15 @@ class PhoneCountryMask(Check):
     }
 
     def process(self):
-        phone_codes_on_land = self.text_finder_result['phone_codes']
-        country_phone_code = '+' + self.land.phone_code
-        for code in phone_codes_on_land:
-            if code == country_phone_code:
-                self.add_mess(self.MASK_ON_LAND, code)
+        phone_codes_on_land = []
+        for country in self.url_checker.countrys:
+            if '+' + country.phone_code in self.land.human_text_lower:
+                phone_codes_on_land.append(country)
+        for country in phone_codes_on_land:
+            if country.iso == self.land.country:
+                self.add_mess(self.MASK_ON_LAND, '+'+country.phone_code)
             else:
-                self.add_mess(self.INCORECT_MASK_ON_LAND, code)
+                self.add_mess(self.INCORECT_MASK_ON_LAND, '+'+country.phone_code)
 
 
 class Currency(Check):

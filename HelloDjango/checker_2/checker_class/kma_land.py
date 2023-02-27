@@ -21,7 +21,7 @@ class Land:
         self.img_doubles = None
         self._dates = None
         self._years = None
-
+        
     def find_dates(self):
         pattern = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # убран захват символов перед датой
         text = self.human_text
@@ -34,18 +34,18 @@ class Land:
                 self._years.append(i)
             else:
                 self._dates.append(i)
-
-    @property
+    
+    @property    
     def years(self):
         if self._years is None:
             self.find_dates()
         return self._years
-    @property
+    @property  
     def dates(self):
         if self._dates is None:
             self.find_dates()
         return self._dates
-
+    
 
     def get_no_protocol_url(self):
         return self.url.replace('http://', '')
@@ -175,7 +175,7 @@ class Land:
 class KMALand(Land):
     """Сайт KMA"""
     TEST_DOMAINS = [
-        # '127.0.0.1',
+        '127.0.0.1',
         'vladiuse.beget.tech'
     ]
     LAND = 'land'
