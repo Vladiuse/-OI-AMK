@@ -10,6 +10,8 @@ class UrlChecker:
         self.land = KMALand(source_text, url, escape_chars=True)
         self.check_list = get_check_list(self.land, user)  #TODO filter not added before land processed
         self.user = user
+        # db data
+        self.offers = OfferPosition.objects.all()
 
     def process(self):
         self.land.add_site_attrs()
@@ -20,10 +22,10 @@ class UrlChecker:
         except Language.DoesNotExist:
             self.land.full_lang = 'no lang in BD'
 
-    @staticmethod
-    def text_analiz(land_text, url):
+    def text_analiz(self):
         data_for_text_analiz = UrlChecker.get_data_for_text_analiz()
-        land = KMALand(source_text=land_text, url=url, parser='lxml')
+        # land = KMALand(source_text=land_text, url=url, parser='lxml')
+        land = self.land
         land.drop_tags_from_dom(KMALand.POLICY_IDS)
         # land.phone_code = PhoneNumber.get_phone_code_by_country(land.country)
         country_db_data = Country.objects.get(pk=land.country)
@@ -35,7 +37,7 @@ class UrlChecker:
         old_analizer_result = analizer.result
         messages = []
         for check in checks_list:
-            check = check(land=land, text_finder_result=analizer.result)
+            check = check(land=land, url_checker=self,text_finder_result=analizer.result)
             check.process()
             messages += check.messages
         statuses = set()

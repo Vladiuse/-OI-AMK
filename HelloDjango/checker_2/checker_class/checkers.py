@@ -12,8 +12,9 @@ class Check:
 
     STATUS_SET = {}
 
-    def __init__(self, land, text_finder_result):
+    def __init__(self, land, url_checker,text_finder_result):
         self.land = land
+        self.url_checker = url_checker
         self.text_finder_result = text_finder_result
         self.errors = set()
         self.info = set()
@@ -96,7 +97,12 @@ class OffersInLand(Check):
     }
 
     def process(self):
-        offers_in_land = self.text_finder_result['offers']
+        offers = self.url_checker.offers
+        offers_in_land = list()
+        for offer in offers:
+            if re.search('\W'+offer.name+'\W', self.land.human_text_lower):
+                offers_in_land.append(str(offer))
+        # offers_in_land = self.text_finder_result['offers']
         if not offers_in_land:
             self.add_mess(self.NO_OFFER_FIND)
         if len(offers_in_land) > 1:
@@ -274,7 +280,9 @@ class UndefinedInText(Check):
     }
 
     def process(self):
+
         land_human_text = self.land.get_human_land_text()
+        print(self.land.human_text)
         if 'undefined' in land_human_text:
             self.add_mess(self.UNDEFINED_IN_TEXT)
 

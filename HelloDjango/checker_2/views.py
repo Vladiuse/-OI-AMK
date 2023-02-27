@@ -95,8 +95,8 @@ def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
         checked_url = request.POST['checked_url']
-        url_checker = UrlChecker
-        result = url_checker.text_analiz(land_text, checked_url)
+        url_checker = UrlChecker(land_text, checked_url, request.user)
+        result = url_checker.text_analiz()
         answer = {
             'success': True,
             'result': result['old'],
