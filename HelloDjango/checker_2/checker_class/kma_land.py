@@ -19,6 +19,33 @@ class Land:
         self.human_text = None
         self._human_land_text_lower = None
         self.img_doubles = None
+        self._dates = None
+        self._years = None
+
+    def find_dates(self):
+        pattern = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # убран захват символов перед датой
+        text = self.human_text
+        dates_n_years = re.findall(pattern, text)
+        dates_n_years = list(set(dates_n_years))
+        self._dates = []
+        self._years = []
+        for i in dates_n_years:
+            if len(i) == 4:
+                self._years.append(i)
+            else:
+                self._dates.append(i)
+
+    @property
+    def years(self):
+        if self._years is None:
+            self.find_dates()
+        return self._years
+    @property
+    def dates(self):
+        if self._dates is None:
+            self.find_dates()
+        return self._dates
+
 
     def get_no_protocol_url(self):
         return self.url.replace('http://', '')

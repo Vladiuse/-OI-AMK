@@ -132,9 +132,8 @@ class Dates(Check):
     }
 
     def process(self):
-        dates = self.text_finder_result['dates_on_land']
-        # dates += ['00.12.20', '01.13.20', '20-12-20',]
-        years = self.text_finder_result['years_on_land']
+        dates = self.land.dates
+        years = self.land.years
         if years:
             years.sort(key=lambda x: int(x))
             self.add_mess(self.ALL_YEARS, *years)
