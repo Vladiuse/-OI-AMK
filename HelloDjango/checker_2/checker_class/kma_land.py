@@ -17,6 +17,7 @@ class Land:
         self.url = url
         self.soup = BeautifulSoup(self.source_text, parser)
         self.human_text = None
+        self.human_land_text_lower = None
         self.img_doubles = None
 
     def get_no_protocol_url(self):
@@ -125,6 +126,13 @@ class Land:
             clean_land_text += placeholders_text
             self.human_text = clean_land_text
         return self.human_text
+
+
+    @property
+    def human_text_lower(self):
+        if not self.human_text_lower:
+            self.human_land_text_lower = self.get_human_land_text().lower()
+        return self.human_text_lower
 
     @property
     def title(self):
