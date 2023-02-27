@@ -71,17 +71,17 @@ class Currency(Check):
     }
 
     def process(self):
-        currency = self.land.curr.lower()
-        currencies_on_land = self.text_finder_result['currencys']
-        if '' in currencies_on_land:
-            currencies_on_land.remove('')
+        currencies_on_land = []
+        for country in self.url_checker.countrys:
+            if country.currency in self.land.human_text_lower:
+                currencies_on_land.append(country)
         if not currencies_on_land:
             self.add_mess(self.NO_CURRENCIES)
-        for curr in currencies_on_land:
-            if curr == currency:
-                self.add_mess(self.ONE_CURR_FOUND, curr.upper())
-            if curr != currency and curr not in ['all', 'try', 'gel', 'peso']:
-                self.add_mess(self.MORE_ONE_CURRENCIES, curr)
+        for country in currencies_on_land:
+            if country.currency == self.land.curr:
+                self.add_mess(self.ONE_CURR_FOUND, country.currency.upper())
+            if country.currency != self.land.curr and country.currency not in ['all', 'try', 'gel', 'peso']:
+                self.add_mess(self.MORE_ONE_CURRENCIES, country.currency.upper())
 
 
 class OffersInLand(Check):
