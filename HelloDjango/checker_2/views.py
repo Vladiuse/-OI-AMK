@@ -18,19 +18,6 @@ from .forms import CheckerUserSettingsForm
 from shell import *
 
 
-
-# Create your views here.
-
-
-def read_check_list():
-    yaml_path = str(settings.BASE_DIR) + '/checker_2/check_list.yaml'
-    with open(yaml_path, encoding='utf-8') as f:
-        template = yaml.safe_load(f)
-    for k,v in template.items():
-        if v is None:
-            template[k] = []
-    return template
-
 @login_required
 def index(request):
     settings = CheckerUserSetting.objects.get(user=request.user)
@@ -99,14 +86,13 @@ def analiz_land_text(request):
         result = url_checker.text_analiz()
         answer = {
             'success': True,
-            # 'result': result['old'],
             'new_checker': result['new'],
             'jeneral_status': result['jeneral_status'],
         }
     except IndentationError as error:
         answer = {
             'success': False,
-            'error': str(error),
+            'error': str(error), #TODO добавит на фронт сообщение об ошибке
         }
     return JsonResponse(answer, safe=False)
 
