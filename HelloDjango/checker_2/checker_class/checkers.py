@@ -399,6 +399,19 @@ class RekvOnPage(Check):
             if rekv is None or not len(rekv.text):
                 self.add_mess(self.NO_REKV)
 
+class FindIncorrectCity(Check):
+    #TODO
+    pass
+
+class FindPhoneNumbers(Check):
+    #TODO
+    pass
+
+class IncorrectDataInComments(Check):
+    #TODO
+    pass
+
+
 checks_list = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
     GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage
