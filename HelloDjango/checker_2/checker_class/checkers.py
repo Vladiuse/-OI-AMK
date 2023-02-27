@@ -257,14 +257,15 @@ class CountyLang(Check):
         INCORRECT_LANG: Check.WARNING,
     }
 
-    def process(self): #TODO переделать на prefetsh
+    def process(self):
         site_lang = self.land.language
         country_langs = None
         for country in self.url_checker.countrys:
             if self.land.country == country.iso:
-                country_langs = country.langs.split(',')
-        if site_lang not in country_langs:
-            self.add_mess(self.INCORRECT_LANG, 'должен быть', *country_langs)
+                country_langs = country.language.all()
+        if not any(site_lang == country_lang.iso for country_lang in country_langs):
+            needed_langs = [lang.iso for lang in country_langs]
+            self.add_mess(self.INCORRECT_LANG, 'должен быть', *needed_langs)
 
 
 class PhpTempVar(Check):
