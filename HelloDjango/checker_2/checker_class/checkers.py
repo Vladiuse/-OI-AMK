@@ -337,21 +337,51 @@ class SpaceCharInTest(Check):
     DESCRIPTION = 'Поиск лишних пробелов кода html'
     KEY_NAME = 'extra_spaces'
 
-    EXTRA_SPACE = 'Лишний пробел'
+    EXTRA_SPACE_SENTENCE = 'Лишний пробел в конце предложения'
+    EXTRA_SPACE_TEXT_BLOCK_BEFORE = 'Лишний пробел перед ковычкой'
+    EXTRA_SPACE_TEXT_BLOCK_AFTER = 'Лишний пробел после ковычки'
+    EXTRA_SPACE_TEXT_BLOCK_TOW = 'Лишние провебы перед ковычками'
     STATUS_SET = {
-        EXTRA_SPACE: Check.WARNING,
+        EXTRA_SPACE_SENTENCE: Check.WARNING,
+        EXTRA_SPACE_TEXT_BLOCK_BEFORE: Check.WARNING,
+        EXTRA_SPACE_TEXT_BLOCK_AFTER: Check.WARNING,
+        EXTRA_SPACE_TEXT_BLOCK_TOW: Check.WARNING,
     }
+    BRACKET_CHARS_OPEN = '["\'“„«]'
+    BRACKET_CHARS_CLOSE = '["\'“„»]'
+    LEN_OF_TEXT_BLOCK = 1000
+    CROP_TEXT_BLOCK = 10
 
     def process(self):
-        land_human_text = self.land.get_human_land_text()
-        html_peaces = set(re.findall(r' {1,3}[\\.?!]', land_human_text))
-        html_bracket_peaces = set(re.findall(r' {1,3}["\'»]|["\'«] {1,3}', land_human_text))
-        # TODO write new req - this not work
-        html_peaces = set(map(lambda x: f'"{x}"', html_peaces))
-        html_bracket_peaces = set(map(lambda x: f'<{x}>', html_bracket_peaces))
-        result = html_peaces | html_bracket_peaces
-        if result:
-            self.add_mess(self.EXTRA_SPACE, *result)
+        self.space_before_end_of_sentence()
+        self.space_before_after_brackets()
+
+    def space_before_end_of_sentence(self):
+        html_peaces = re.findall(r' {1,3}[\\.?!]', self.land.human_text_lower)
+        html_peaces = set(map(lambda elem: f'"{elem}"', html_peaces))
+        if html_peaces:
+            self.add_mess(self.EXTRA_SPACE_SENTENCE, *html_peaces)
+
+    def space_before_after_brackets(self):
+        text = self.land.human_text_lower
+        SPASE_BEFORE_REG = self.BRACKET_CHARS_OPEN + '\s{1,3}.{5,1000}\S' + self.BRACKET_CHARS_CLOSE
+        SPASE_AFTER_REG = self.BRACKET_CHARS_OPEN + '\S{1,3}.{5,1000}\s' + self.BRACKET_CHARS_CLOSE
+        TWO_SPACE = self.BRACKET_CHARS_OPEN + '\s{1,3}.{5,1000}\s{1,3}' + self.BRACKET_CHARS_CLOSE
+
+        before = re.findall(SPASE_BEFORE_REG,text)
+        if before:
+            before = map(lambda text_block: text_block[:self.CROP_TEXT_BLOCK], before)
+            self.add_mess(self.EXTRA_SPACE_TEXT_BLOCK_AFTER, *before)
+
+        after = re.findall(SPASE_AFTER_REG,text)
+        if after:
+            after_ = map(lambda text_block: text_block[len(after) - self.CROP_TEXT_BLOCK:], after)
+            self.add_mess(self.EXTRA_SPACE_TEXT_BLOCK_BEFORE, *after_)
+
+        two = re.findall(TWO_SPACE,text)
+        if two:
+            two_ = map(lambda text_block: text_block[:self.CROP_TEXT_BLOCK] + '...' + text_block[len(after) - self.CROP_TEXT_BLOCK:], two)
+            self.add_mess(self.EXTRA_SPACE_TEXT_BLOCK_TOW, *two_)
 
 class RekvOnPage(Check):
     DESCRIPTION = 'Поиск реквизитов на лэнде'
