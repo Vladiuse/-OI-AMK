@@ -139,7 +139,7 @@ body {
 #text-info p,
 #text-info span {
   color: aliceblue;
-  display: inline-block;
+  display: inline;
   margin-right: 6px;
   font-size: 15px;
 }
@@ -450,6 +450,10 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
 .info-block.error{
   border: 2px solid #fc5f2e;
   border-left: 7px solid  #fc5f2e;
+}
+.info-block i{
+float: left;
+padding-right: 3px;
 }
 
 i.fa-triangle-exclamation{
