@@ -78,7 +78,7 @@ class Currency(Check):
                 currencies_on_land.append(country)
         if not currencies_on_land:
             self.add_mess(self.NO_CURRENCIES)
-        for country in currencies_on_land:
+        for country in currencies_on_land: # TODO вывести сгкутсн в отделюную модель
             if country.currency == self.land.curr.lower():  #TODO убрать lower
                 self.add_mess(self.ONE_CURR_FOUND, country.currency.upper())
             if country.currency != self.land.curr.lower() and country.currency not in ['all', 'try', 'gel', 'peso']:
@@ -404,6 +404,22 @@ class RekvOnPage(Check):
             if rekv is None or not len(rekv.text):
                 self.add_mess(self.NO_REKV)
 
+
+class NoOldPrice(Check):
+    DESCRIPTION = 'Наличие старой цена'
+    KEY_NAME = 'old_price_on_land'
+
+    NO_OLD_PRICE = 'Отстутствует старая цена'
+    STATUS_SET = {
+        NO_OLD_PRICE: Check.WARNING,
+    }
+
+    def process(self):
+        old_price = self.land.soup.select('.price_land_s4')
+        if not old_price:
+            self.add_mess(self.NO_OLD_PRICE)
+
+
 class FindIncorrectCity(Check):
     #TODO
     pass
@@ -416,8 +432,13 @@ class IncorrectDataInComments(Check):
     #TODO
     pass
 
+class PercentChar(Check):
+    #составляет     85 - 90 %
+    # TODO
+    pass
 
 checks_list = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
-    GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage
+    GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
+    NoOldPrice,
 ]

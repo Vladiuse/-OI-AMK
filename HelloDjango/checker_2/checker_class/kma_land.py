@@ -188,6 +188,7 @@ class KMALand(Land):
     POLICY_IDS = ['polit', 'agreement']
     STYLES_FILE = './checker_2/checker_class/front_data/styles.css'
     JS_FILE = './checker_2/checker_class/front_data/script.js'
+    OLD_PRICE_CLASS  = ''
 
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
