@@ -105,6 +105,24 @@ class Language(models.Model):
     def __str__(self):
         return f'{self.russian_name}({self.iso.upper()})'
 
+class Currency(models.Model):
+    name = models.CharField(
+        max_length=60,
+        verbose_name='Название валюты'
+    )
+    iso = models.CharField(
+        max_length=3,
+        primary_key=True,
+        verbose_name='Код валюты',
+        unique=True)
+    iso_3366 = models.CharField(
+        max_length=3,
+        verbose_name='ISO 3166-1',
+        unique=True,
+        blank=True,
+        null=True
+    )
+
 
 class OfferPosition(models.Model):
     name = models.CharField(max_length=50, verbose_name='Оффер', unique=True)
