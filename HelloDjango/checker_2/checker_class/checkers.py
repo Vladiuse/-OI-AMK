@@ -237,15 +237,18 @@ class GeoWords(Check):
     def search_by_template(self):
         for country in self.url_checker.countrys:
             templates = country.words['templates']
+            country_words_found = []
             for template in templates:
                 regEx = '\W' + template + '[\W\w][^\s]{0,6}[.\-;:,«»\s]'
-                symbols_to_clean = """ .-;:”,"\n"""
+                # symbols_to_clean = """ .-;:”,"\n"""
                 find_templates = re.findall(regEx, self.land.human_text_lower)
-                if find_templates:
-                    if country.iso == self.land.country:
-                        self.add_mess(self.ALL_COUNTRYS,*find_templates)
-                    else:
-                        self.add_mess(self.INCORECT_COUNTRY,*find_templates)
+                country_words_found += find_templates
+            if country_words_found:
+                country_words_found = set(country_words_found)
+                if country.iso == self.land.country:
+                    self.add_mess(self.ALL_COUNTRYS,*country_words_found)
+                else:
+                    self.add_mess(self.INCORECT_COUNTRY,*country_words_found)
 
 
 
