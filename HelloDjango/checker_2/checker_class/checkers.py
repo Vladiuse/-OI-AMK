@@ -48,11 +48,13 @@ class PhoneCountryMask(Check):
         for country in self.url_checker.countrys:
             if '+' + country.phone_code in self.land.human_text_lower:
                 phone_codes_on_land.append(country)
+        incorrect_countrys = set()
         for country in phone_codes_on_land:
             if country.iso == self.land.country:
                 self.add_mess(self.MASK_ON_LAND, '+'+country.phone_code)
             else:
-                self.add_mess(self.INCORECT_MASK_ON_LAND, '+'+country.phone_code)
+                incorrect_countrys.add('+'+country.phone_code)
+        self.add_mess(self.INCORECT_MASK_ON_LAND, *incorrect_countrys)
 
 
 class Currency(Check):
