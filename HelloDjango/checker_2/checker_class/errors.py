@@ -11,3 +11,6 @@ class NoAdminSiteDataScript(CheckerError):
 
 class IncorrectPreLandUrl(CheckerError):
     """Не правильный url прелэнда"""
+
+class NoCountryInDB(CheckerError):
+    """Нет страны в базе данных"""

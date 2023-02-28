@@ -434,13 +434,35 @@ class IncorrectDataInComments(Check):
     #TODO
     pass
 
-class PercentChar(Check):
+class PercentCharCorrectSide(Check):
     #составляет     85 - 90 %
     # TODO
-    pass
+    DESCRIPTION = 'Неправильная сторона %'
+    KEY_NAME = 'old_price_on_land'
+
+    INCORRECTS = '% не с той стороны'
+    STATUS_SET = {
+        INCORRECTS: Check.WARNING,
+    }
+
+    RIGHT_SIDE = '\d{1,6}\s?%'
+    LEFT_SIDE = '%\s?\d{1,6}'
+
+    NO_LIKE_OTHER_LANGS = ['tr', 'ar']
+
+    def process(self):
+        country_langs = [lang.iso for lang in self.url_checker.current_languages]
+        if any(self.NO_LIKE_OTHER_LANGS) in country_langs:
+            regEx = self.RIGHT_SIDE
+        else:
+            regEx = self.LEFT_SIDE
+        incorrect_percent_side = re.findall(regEx, self.land.human_text_lower)
+        if incorrect_percent_side:
+            incorrect_percent_side = set(incorrect_percent_side)
+            self.add_mess(self.INCORRECTS, *incorrect_percent_side)
 
 checks_list = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
     GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
-    NoOldPrice,
+    NoOldPrice,PercentCharCorrectSide,
 ]
