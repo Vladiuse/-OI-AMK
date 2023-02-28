@@ -72,14 +72,16 @@ class Currency(Check):
     def process(self):
         currencies_on_land = []
         for country in self.url_checker.countrys:
-            if country.currency in self.land.human_text_lower:
+            reg = '[\W\d]'+country.currency+'[.\W\d]'
+            if re.search(reg,self.land.human_text_lower):
+            # if country.currency in self.land.human_text_lower:
                 currencies_on_land.append(country)
         if not currencies_on_land:
             self.add_mess(self.NO_CURRENCIES)
         for country in currencies_on_land:
-            if country.currency == self.land.curr:
+            if country.currency == self.land.curr.lower():  #TODO убрать lower
                 self.add_mess(self.ONE_CURR_FOUND, country.currency.upper())
-            if country.currency != self.land.curr and country.currency not in ['all', 'try', 'gel', 'peso']:
+            if country.currency != self.land.curr.lower() and country.currency not in ['all', 'try', 'gel', 'peso']:
                 self.add_mess(self.MORE_ONE_CURRENCIES, country.currency.upper())
 
 
