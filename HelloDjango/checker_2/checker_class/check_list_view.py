@@ -4,9 +4,9 @@ from django.db.models import Q, Prefetch
 def get_check_list(land, user):
     user_check_list = ActualUserList.get_or_create(user,land.url)
     user_check_points = UserSiteCheckPoint.objects.filter(user_list=user_check_list)
-    print(land.land_attrs)
     checks = CheckPoint.objects.filter(
         Q(land_type__iexact=land.land_type) | Q(land_type__iexact=''),
+        Q(discount_type__iexact=land.discount_type) | Q(discount_type__iexact=''),
         Q(for_geo__icontains=land.country) | Q(for_geo__iexact=''),
         Q(for_lang__icontains=land.language) | Q(for_lang__iexact=''),
         Q(filter__in=land.land_attrs) | Q(filter__iexact=''),
