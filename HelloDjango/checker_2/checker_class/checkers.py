@@ -54,7 +54,8 @@ class PhoneCountryMask(Check):
                 self.add_mess(self.MASK_ON_LAND, '+'+country.phone_code)
             else:
                 incorrect_countrys.add('+'+country.phone_code)
-        self.add_mess(self.INCORECT_MASK_ON_LAND, *incorrect_countrys)
+        if incorrect_countrys:
+            self.add_mess(self.INCORECT_MASK_ON_LAND, *incorrect_countrys)
 
 
 class Currency(Check):
