@@ -355,8 +355,8 @@ class SpaceCharInTest(Check):
         EXTRA_SPACE_TEXT_BLOCK_AFTER: Check.WARNING,
         EXTRA_SPACE_TEXT_BLOCK_TOW: Check.WARNING,
     }
-    BRACKET_CHARS_OPEN = '["\'“„«]'
-    BRACKET_CHARS_CLOSE = '["\'“„»]'
+    BRACKET_CHARS_OPEN = '["\'“«]'
+    BRACKET_CHARS_CLOSE = '["\'”»]'
     LEN_OF_TEXT_BLOCK = 1000
     CROP_TEXT_BLOCK = 10
 
@@ -365,7 +365,7 @@ class SpaceCharInTest(Check):
         self.space_before_after_brackets()
 
     def space_before_end_of_sentence(self):
-        html_peaces = re.findall(r' {1,3}[\\.?!]', self.land.human_text_lower)
+        html_peaces = re.findall(r' {1,3}[.?!]', self.land.human_text_lower)
         html_peaces = set(map(lambda elem: f'"{elem}"', html_peaces))
         if html_peaces:
             self.add_mess(self.EXTRA_SPACE_SENTENCE, *html_peaces)
