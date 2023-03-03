@@ -40,6 +40,7 @@ def check_url(request):
         setting_form.save()
     try:
         res = req.get(url)
+        res.encoding = 'utf-8'
     except ConnectionError:
         content = {
             'error_text': 'Ссылка не работает',
