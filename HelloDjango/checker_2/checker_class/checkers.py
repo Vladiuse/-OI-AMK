@@ -71,21 +71,21 @@ class Currency(Check):
         MORE_ONE_CURRENCIES: Check.ERROR,
         ONE_CURR_FOUND: Check.INFO,
     }
-
     def process(self):
         currencies_on_land = []
-        for country in self.url_checker.countrys:
-            reg = '[\W\d]'+country.currency+'[.\W\d]'
+        for currency in self.url_checker.currencys:
+            reg = '[\W\d]'+currency.iso+'[.\W\d]'
             if re.search(reg,self.land.human_text_lower):
-            # if country.currency in self.land.human_text_lower:
-                currencies_on_land.append(country)
+                currencies_on_land.append(currency)
         if not currencies_on_land:
             self.add_mess(self.NO_CURRENCIES)
-        for country in currencies_on_land: # TODO вывести сгкутсн в отделюную модель
-            if country.currency == self.land.curr.lower():  #TODO убрать lower
-                self.add_mess(self.ONE_CURR_FOUND, country.currency.upper())
-            if country.currency != self.land.curr.lower() and country.currency not in ['all', 'try', 'gel', 'peso']:
-                self.add_mess(self.MORE_ONE_CURRENCIES, country.currency.upper())
+        for curr in currencies_on_land:
+            if self.url_checker.current_country not in currency.country_set.all():
+                self.add_mess(self.MORE_ONE_CURRENCIES, curr.iso.upper())
+            else:
+                self.add_mess(self.ONE_CURR_FOUND, curr.iso.upper())
+
+    # ['all', 'try', 'gel', 'peso']
 
 
 class OffersInLand(Check):
