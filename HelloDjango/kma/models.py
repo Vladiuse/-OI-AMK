@@ -67,6 +67,10 @@ class Country(models.Model):
         'Language',
         blank=True
     )
+    curr = models.ManyToManyField(
+        'Currency',
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Страна'
@@ -123,6 +127,8 @@ class Currency(models.Model):
         null=True
     )
 
+    def __str__(self):
+        return f'<{self.iso.upper()}> {self.name}'
 
 class OfferPosition(models.Model):
     name = models.CharField(max_length=50, verbose_name='Оффер', unique=True)

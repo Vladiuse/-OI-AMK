@@ -139,7 +139,7 @@ body {
 #text-info p,
 #text-info span {
   color: aliceblue;
-  display: inline;
+  /* display: inline; */
   margin-right: 6px;
   font-size: 15px;
 }
@@ -434,7 +434,7 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
   line-height: 20px;
 }
 .info-block p{
-  display: inline-block;
+  /* display: inline-block; */
   margin: 0;
   padding: 0;
   color: aliceblue;
