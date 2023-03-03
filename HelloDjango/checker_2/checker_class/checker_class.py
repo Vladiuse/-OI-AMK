@@ -1,6 +1,6 @@
 from .kma_land import KMALand
 from .check_list_view import get_check_list
-from kma.models import Country, OfferPosition, Language
+from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency
 from .checkers import checks_list, Check
 from .errors import NoCountryInDB
 
@@ -14,9 +14,10 @@ class UrlChecker:
 
         self.land = None
         self.check_list = None
-        # db data
+        # db datalanguage
         self.offers = OfferPosition.objects.all()
         self.countrys = Country.actual.prefetch_related('language').all()
+        self.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
 
     def process(self):
         self.land = KMALand(self.source_text, self.url, escape_chars=True)

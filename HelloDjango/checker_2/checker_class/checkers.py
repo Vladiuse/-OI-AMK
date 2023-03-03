@@ -63,29 +63,44 @@ class Currency(Check):
     KEY_NAME = 'currencies_on_land'
 
     NO_CURRENCIES = 'Валюты не найдены'
-    MORE_ONE_CURRENCIES = 'Найдена валюта другой страны'
-    ONE_CURR_FOUND = 'Найденая валюта'
+    INCORRECT_COUNTRY_CURRENCY = 'Найдена валюта другой страны'
+    CURR_FOUND = 'Найденая валюта'
+    INCORRECT_CURE_CODE = 'Неправильный код валюты'
 
     STATUS_SET = {
         NO_CURRENCIES: Check.WARNING,
-        MORE_ONE_CURRENCIES: Check.ERROR,
-        ONE_CURR_FOUND: Check.INFO,
+        INCORRECT_CURE_CODE: Check.WARNING,
+        INCORRECT_COUNTRY_CURRENCY: Check.ERROR,
+        CURR_FOUND: Check.INFO,
     }
     def process(self):
-        currencies_on_land = []
+        incorrect_currencys = set()
+        incorrect_cyrrencys_code = set()
         for currency in self.url_checker.currencys:
-            reg = '[\W\d]'+currency.iso+'[.\W\d]'
-            if re.search(reg,self.land.human_text_lower):
-                currencies_on_land.append(currency)
-        if not currencies_on_land:
-            self.add_mess(self.NO_CURRENCIES)
-        for curr in currencies_on_land:
-            if self.url_checker.current_country not in currency.country_set.all():
-                self.add_mess(self.MORE_ONE_CURRENCIES, curr.iso.upper())
-            else:
-                self.add_mess(self.ONE_CURR_FOUND, curr.iso.upper())
+            # main curr
+            reg = '[\W\d]'+currency.main_curr+'[.\W\d]'
+            if re.search(reg, self.land.human_text_lower):
+                if self.url_checker.current_country not in currency.country_set.all():
+                    incorrect_currencys.add(currency.main_curr.upper())
+                else:
+                    self.add_mess(self.CURR_FOUND, currency.main_curr.upper())
 
-    # ['all', 'try', 'gel', 'peso']
+            # other currs codes
+            for curr in currency.other_currs:
+                reg = '[\W\d]' + curr + '[.\W\d]'
+                if re.search(reg, self.land.human_text_lower):
+                    if self.url_checker.current_country not in currency.country_set.all():
+                        incorrect_currencys.add(curr.upper())
+                    else:
+                        incorrect_cyrrencys_code.add(curr.upper())
+
+        if not self.messages:
+            self.add_mess(self.NO_CURRENCIES)
+        if incorrect_currencys:
+            self.add_mess(self.INCORRECT_COUNTRY_CURRENCY, *incorrect_currencys)
+        if incorrect_cyrrencys_code:
+            self.add_mess(self.INCORRECT_CURE_CODE, *incorrect_cyrrencys_code)
+
 
 
 class OffersInLand(Check):
@@ -312,17 +327,25 @@ class StarCharInText(Check):
     DESCRIPTION = 'Поиск * в текста'
     KEY_NAME = 'star_in_text'
 
-    VARIABLE_ON_SITE = 'Найдена * в тексте'
+    STAR_ON_SITE = 'Найдена * в тексте'
+    STAR_NOT_IN_TEXT = '* не найдена'
 
     STATUS_SET = {
-        VARIABLE_ON_SITE: Check.WARNING,
+        STAR_ON_SITE: Check.WARNING,
+        STAR_NOT_IN_TEXT: Check.WARNING,
     }
     STAR_CHAR = '*'
 
     def process(self):
         land_human_text = self.land.get_human_land_text()
         if float(self.land.discount) <= 50 and self.STAR_CHAR in land_human_text:
-            self.add_mess(self.VARIABLE_ON_SITE)
+            self.add_mess(self.STAR_ON_SITE)
+        if self.land.discount_type == 'full_price':
+            if self.STAR_CHAR in self.land.get_human_land_text():
+                self.add_mess(self.STAR_ON_SITE)
+        else:
+            if self.STAR_CHAR not in self.land.get_human_land_text():
+                self.add_mess(self.STAR_NOT_IN_TEXT)
 
 
 class HtmlPeaceOfCodeInText(Check):
