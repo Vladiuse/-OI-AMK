@@ -388,14 +388,21 @@
     function addInfo(x_data) {
       let info = $('#text-analiz .info-block.' + x_data['status']).clone()
       let main_text = $('<p>')
-      main_text.text(x_data['text'] + ': ')
+
+
+      mess = x_data['items'].join(', ')
+      if (mess){main_text.text(x_data['text'] + ': ' + mess)}
+      else{main_text.text(x_data['text'])}
+      
+
+      // main_text.text(x_data['text'] + ': ')
       info.append(main_text)
-      for (pos in x_data['items']) {
-        let item_text = x_data['items'][pos]
-        let item_elem = $('<p>')
-        item_elem.text(item_text)
-        info.append(item_elem)
-      }
+      // for (pos in x_data['items']) {
+      //   let item_text = x_data['items'][pos]
+      //   let item_elem = $('<p>')
+      //   item_elem.text(item_text)
+      //   info.append(item_elem)
+      // }
       $('#text-info').append(info)
     }
 
