@@ -7,12 +7,21 @@ class DefaultWebAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
     list_display_links = ['id', 'name']
 
+class CountryCurrencyInline(admin.TabularInline):
+    model = Country.curr.through
+    extra = 0
+
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ['iso', 'ru_full_name', 'phone', 'phone_code', 'currency', 'langs','iso3']
+    list_display = ['iso', 'ru_full_name', 'phone', 'phone_code', 'currency', 'langs']
     list_display_links = ['iso', 'ru_full_name']
     search_fields = ['iso', 'ru_full_name']
     autocomplete_fields = ['language', 'curr']
+    # exclude = ['curr']
+
+    inlines = [
+        CountryCurrencyInline,
+    ]
 
     list_filter = (
         ('phone', admin.EmptyFieldListFilter),
@@ -22,6 +31,10 @@ class CountryAdmin(admin.ModelAdmin):
 class CurrencyAdmin(admin.ModelAdmin):
     list_display = ['upper_iso', 'name']
     search_fields = ['iso', 'name']
+
+    inlines = [
+        CountryCurrencyInline,
+    ]
 
     @admin.display
     def upper_iso(self, obj):
