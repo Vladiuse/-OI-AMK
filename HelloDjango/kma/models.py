@@ -104,6 +104,23 @@ class Country(models.Model):
         return country_phone
 
 
+class City(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Название города')
+    country = models.ForeignKey(Country, on_delete=models.PROTECT)
+
+    class Meta:
+        unique_together = [['name', 'country'],]
+
+
+    def save(self, **kwargs):
+        self.name = self.name.lower()
+        self.name = self.name.strip()
+        super().save()
+
+    def __str__(self):
+        return self.name
+
+
 class Language(models.Model):
     iso = models.CharField(max_length=2, verbose_name='Код iso языка', primary_key=True)
     russian_name = models.CharField(max_length=25, verbose_name='Русское название', blank=True)
