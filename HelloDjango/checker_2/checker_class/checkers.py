@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from collections import defaultdict
 
 
 class Check:
@@ -446,10 +447,6 @@ class NoOldPrice(Check):
             self.add_mess(self.NO_OLD_PRICE)
 
 
-class FindIncorrectCity(Check):
-    #TODO
-    pass
-
 class FindPhoneNumbers(Check):
     #TODO
     pass
@@ -459,8 +456,6 @@ class IncorrectDataInComments(Check):
     pass
 
 class PercentCharCorrectSide(Check):
-    #составляет     85 - 90 %
-    # TODO
     DESCRIPTION = 'Неправильная сторона %'
     KEY_NAME = 'old_price_on_land'
 
@@ -485,8 +480,32 @@ class PercentCharCorrectSide(Check):
             incorrect_percent_side = set(incorrect_percent_side)
             self.add_mess(self.INCORRECTS, *incorrect_percent_side)
 
+
+class CityInText(Check):
+    DESCRIPTION = 'Поиск городов'
+    KEY_NAME = 'city_search'
+
+    INCORRECTS_CITY_GEO = 'Найден город другого гео'
+    STATUS_SET = {
+        INCORRECTS_CITY_GEO: Check.WARNING,
+    }
+
+    def process(self):
+        land_words = self.land.unique_words
+        geo_city_in_text = defaultdict(list)
+        for country in self.url_checker.countrys:
+            for city in country.city_set.all():
+                city_parts = city.name.split('-')
+                if all(part in land_words for part in city_parts) or city.name in land_words:
+                # if city.name in land_words:
+                    if country != self.url_checker.current_country:
+                        geo_city_in_text[country.pk].append(city.name)
+        for country, citys in geo_city_in_text.items():
+            self.add_mess(self.INCORRECTS_CITY_GEO, *citys)
+
+
 checks_list = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
     GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
-    NoOldPrice,PercentCharCorrectSide,
+    NoOldPrice,PercentCharCorrectSide, CityInText
 ]

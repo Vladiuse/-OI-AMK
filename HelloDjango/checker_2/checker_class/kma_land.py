@@ -21,6 +21,9 @@ class Land:
         self.img_doubles = None
         self._dates = None
         self._years = None
+
+        with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/source.html', 'w') as file:
+            file.write(source_text)
         
     def find_dates(self):
         pattern = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # убран захват символов перед датой
@@ -34,6 +37,19 @@ class Land:
                 self._years.append(i)
             else:
                 self._dates.append(i)
+
+    @property
+    def unique_words(self):
+        unique = set()
+        word = ''
+        for char in self.human_text_lower:
+            if char.isalpha() or char.isdigit() or char=='-':
+                word += char
+            else:
+                unique.add(word)
+                word = ''
+        unique = filter(lambda word: len(word) >= 3, unique)
+        return set(unique)
     
     @property    
     def years(self):
@@ -152,6 +168,8 @@ class Land:
             placeholders_text = ' '.join(placeholders_text)
             clean_land_text += placeholders_text
             self.human_text = clean_land_text
+            with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/text.html', 'w') as file:
+                file.write(self.human_text)
         return self.human_text
 
 
@@ -176,7 +194,8 @@ class KMALand(Land):
     """Сайт KMA"""
     TEST_DOMAINS = [
         '127.0.0.1',
-        'vladiuse.beget.tech'
+        'vladiuse.beget.tech',
+        'vim-store.ru',
     ]
     LAND = 'land'
     PRELAND = 'preland'
