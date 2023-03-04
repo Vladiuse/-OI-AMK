@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DefaultWeb, Country, OfferPosition, UserApiKey, Language, Currency
+from .models import DefaultWeb, Country, OfferPosition, UserApiKey, Language, Currency, City
 
 
 class DefaultWebAdmin(admin.ModelAdmin):
@@ -55,10 +55,16 @@ class LanguageAdmin(admin.ModelAdmin):
     list_display = ['iso', 'russian_name']
     search_fields = ['russian_name', 'iso']
 
+class CityAdmin(admin.ModelAdmin):
+    list_display = ['country_id', 'name']
+    list_display_links = ['name']
+    search_fields = [ 'name']
+
 admin.site.register(DefaultWeb, DefaultWebAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(OfferPosition, OfferPositionAdmin)
 admin.site.register(UserApiKey)
 admin.site.register(Language, LanguageAdmin)
 admin.site.register(Currency,CurrencyAdmin)
+admin.site.register(City, CityAdmin)
 
