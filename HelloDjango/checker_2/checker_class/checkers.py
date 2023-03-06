@@ -477,8 +477,17 @@ class NoOldPrice(Check):
 
 
 class FindPhoneNumbers(Check):
-    #TODO
-    pass
+    DESCRIPTION = 'Наличие номера на сайте'
+    KEY_NAME = 'phone_number_in_text'
+
+    FOUND_PHONE_NUMBER = 'Найден номер телефона'
+    STATUS_SET = {
+        FOUND_PHONE_NUMBER: Check.WARNING,
+    }
+    def process(self):
+        phones = re.findall('\+?[\d()\- x]{7,20}', self.land.human_text_lower)
+        if phones:
+            self.add_mess(self.FOUND_PHONE_NUMBER, *phones)
 
 class IncorrectDataInComments(Check):
     #TODO
@@ -534,8 +543,8 @@ class CityInText(Check):
             self.add_mess(self.INCORRECTS_CITY_GEO, *citys)
 
 
-checks_list = [
+KMA_checkers = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
     GeoWords, CountyLang, PhpTempVar, JsVarsInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
-    NoOldPrice,PercentCharCorrectSide, CityInText
+    NoOldPrice,PercentCharCorrectSide, CityInText,FindPhoneNumbers
 ]
