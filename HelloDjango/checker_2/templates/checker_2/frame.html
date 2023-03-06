@@ -78,8 +78,8 @@
               <div class="topbar__btn" id="jeneral-status" style="display: {%if user_settings.left_bar %}none;{%else%}flex;{%endif%}">
 
               </div>
-              <div class="topbar__item">
-                <div class="topbar__btn"><span id="offer_name" style="display: none;"></span></div>
+              <div class="topbar__item" id="offer_name" style="display: none;">
+                <div class="topbar__btn">Оффер: <span></span></div>
               </div>
               <div class="topbar__item">
                 <div id="scripts-img">
@@ -290,7 +290,7 @@
         </div>
 
         <div class="frame-wrapper">
-          <iframe srcdoc="{{kma.iframe_srcdoc|safe}}" id="iframe"></iframe>
+          <iframe srcdoc="{{kma.iframe_srcdoc}}" id="iframe"></iframe>
         </div>
 
       </div>
@@ -458,7 +458,7 @@
     function showOfferName(offer_name){
       if (offer_name)
       {
-        $('#offer_name').text(offer_name)
+        $('#offer_name span').text(offer_name)
         $('#offer_name').show()
       }
     }
@@ -838,6 +838,9 @@
     }
     #text-info::-webkit-scrollbar-thumb:hover {
       background: #888; 
+    }
+    #offer_name span{
+      margin-left: 5px;
     }
   </style>
    <script>

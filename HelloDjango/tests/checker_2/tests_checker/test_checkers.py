@@ -43,5 +43,7 @@ class TestCheck(unittest.TestCase):
         self.assertEqual(message['items'], some_arsg)
         self.assertEqual(len(message['items']), len(some_arsg))
 
+if __name__ == '__main__':
+    unittest.main()
 
 

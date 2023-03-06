@@ -309,7 +309,7 @@ class PhpTempVar(Check):
     }
 
     def process(self):
-        land_human_text = self.land.get_human_land_text()
+        land_human_text = self.land.human_text
         var_templates = re.findall(r'\{\$[\S.]{1,40}}', land_human_text)
         if var_templates:
             self.add_mess(self.VARIABLE_ON_SITE, *var_templates)
@@ -350,7 +350,7 @@ class JsVarsInText(Check):
             self.vars_in_text.add(self.UNDEFINED)
 
     def search_nan(self):
-        if self.NaN in self.land.get_human_land_text():
+        if self.NaN in self.land.human_text:
             self.vars_in_text.add(self.NaN)
 
     def search_null(self):
@@ -374,10 +374,10 @@ class StarCharInText(Check):
 
     def process(self):
         if self.land.discount_type == 'full_price':
-            if self.STAR_CHAR in self.land.get_human_land_text():
+            if self.STAR_CHAR in self.land.human_text:
                 self.add_mess(self.STAR_ON_SITE)
         else:
-            if self.STAR_CHAR not in self.land.get_human_land_text():
+            if self.STAR_CHAR not in self.land.human_text:
                 self.add_mess(self.STAR_NOT_IN_TEXT)
 
 
@@ -392,7 +392,7 @@ class HtmlPeaceOfCodeInText(Check):
     }
 
     def process(self):
-        land_human_text = self.land.get_human_land_text()
+        land_human_text = self.land.human_text
         html_peaces = set(re.findall(r'<!?-?|-{0,2}>', land_human_text))
         if html_peaces:
             self.add_mess(self.HTML_PEACE_IN_TEXT, *html_peaces)

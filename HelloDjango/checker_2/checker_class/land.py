@@ -10,7 +10,7 @@ class Land:
         self.source_text = Land.re_escape_html_chars(source_text) if escape_chars else source_text
         self.url = url
         self.soup = BeautifulSoup(self.source_text, parser)
-        self.human_text = None
+        self._human_text = None
         self._human_land_text_lower = None
         self.img_doubles = None
         self._dates = None
@@ -21,7 +21,7 @@ class Land:
 
     def find_dates(self):
         pattern = '19\d\d|20\d\d|\d{1,2}[.\\\/]\d{1,2}[.\\\/]\d{2,4}'  # убран захват символов перед датой
-        text = self.human_text
+        text = self._human_text
         dates_n_years = re.findall(pattern, text)
         dates_n_years = list(set(dates_n_years))
         self._dates = []
@@ -105,6 +105,7 @@ class Land:
 
     @staticmethod
     def re_escape_html_chars(html_text):
+        return html_text
         chars = [('&copy;', '©'), ('&#8211;', '-'), ('&#8220;', '“'), ('&#8221;', '”'), ('&#39;', "'"), ('&nbsp;', ' '),
                  ('&quot;', '"'),
                  ('&apos;', "'"),
@@ -115,6 +116,7 @@ class Land:
 
     @staticmethod
     def escape_html_for_iframe(html_text):
+        return html_text
         chars = [
             # ('&', '&amp;&amp;'),
             ('"', '&quot;'), ("'", '&apos;')]
@@ -149,9 +151,9 @@ class Land:
             elem = self.soup.find(id=id)
             if elem:
                 elem.decompose()
-
-    def get_human_land_text(self):
-        if not self.human_text:
+    @property
+    def human_text(self):
+        if not self._human_text:
             clean_land_text = self.soup.text
             clean_land_text += ' ' + self.title
             inputs = self.soup.find_all('input')
@@ -164,15 +166,15 @@ class Land:
                     pass
             placeholders_text = ' '.join(placeholders_text)
             clean_land_text += placeholders_text
-            self.human_text = clean_land_text
+            self._human_text = clean_land_text
             with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/text.html', 'w') as file:
                 file.write(self.human_text_lower)
-        return self.human_text
+        return self._human_text
 
     @property
     def human_text_lower(self):
         if not self._human_land_text_lower:
-            self._human_land_text_lower = self.get_human_land_text().lower()
+            self._human_land_text_lower = self.human_text.lower()
         return self._human_land_text_lower
 
     @property
