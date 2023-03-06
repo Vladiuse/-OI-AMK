@@ -93,7 +93,7 @@
   {% for phone in phones %}
     <tr>
       <th scope="row"><span class="flag-icon flag-icon-{{phone.pk}}"></span></th>
-      <th scope="row">{{phone.iso}}</th>
+      <th scope="row" style="text-transform: uppercase;">{{phone.iso}}</th>
       <td>{{phone.ru_full_name}}</td>
       <td>{{phone.phone}}</td>
       <td>+{{phone.phone_code}}</td>
