@@ -309,19 +309,48 @@ class PhpTempVar(Check):
             self.add_mess(self.VARIABLE_ON_SITE, *var_templates)
 
 
-class UndefinedInText(Check):
+class JsVarsInText(Check):
     DESCRIPTION = 'Поиск undefined по тектсу'
     KEY_NAME = 'undefined_in_text'
 
-    UNDEFINED_IN_TEXT = 'Найден undefined в тексте'
+    UNDEFINED = 'undefined'
+    NaN = 'NaN'
+    NULL = 'null'
+
+    # UNDEFINED_IN_TEXT = 'Найден undefined в тексте'
+    # Nan_IN_TEXT = 'Найден NaN в тексте'
+    # NULL_IN_TEXT = 'Найден null в тексте'
+    JS_VARIABLE_IN_TEXT = 'Найдены переменные скрипта'
     STATUS_SET = {
-        UNDEFINED_IN_TEXT: Check.ERROR,
+        # UNDEFINED_IN_TEXT: Check.ERROR,
+        # Nan_IN_TEXT: Check.ERROR,
+        # NULL_IN_TEXT: Check.ERROR,
+        JS_VARIABLE_IN_TEXT: Check.ERROR,
     }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.vars_in_text = set()
+
     def process(self):
-        land_human_text = self.land.get_human_land_text()
-        if 'undefined' in land_human_text:
-            self.add_mess(self.UNDEFINED_IN_TEXT)
+        self.search_undefined()
+        self.search_nan()
+        self.search_null()
+        if self.vars_in_text:
+            self.add_mess(self.JS_VARIABLE_IN_TEXT, *self.vars_in_text)
+
+    def search_undefined(self):
+        if self.UNDEFINED in self.land.human_text_lower:
+            self.vars_in_text.add(self.UNDEFINED)
+
+    def search_nan(self):
+        if self.NaN in self.land.get_human_land_text():
+            self.vars_in_text.add(self.NaN)
+
+    def search_null(self):
+        if self.NULL in self.land.human_text_lower:
+            self.vars_in_text.add(self.NULL)
+
 
 
 class StarCharInText(Check):
@@ -506,6 +535,6 @@ class CityInText(Check):
 
 checks_list = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
-    GeoWords, CountyLang, PhpTempVar, UndefinedInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
+    GeoWords, CountyLang, PhpTempVar, JsVarsInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
     NoOldPrice,PercentCharCorrectSide, CityInText
 ]

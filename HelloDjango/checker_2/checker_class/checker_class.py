@@ -51,7 +51,7 @@ class UrlChecker:
         if Check.ERROR in statuses:
             jeneral_status = Check.ERROR
         result = {
-            'new': messages,
+            'new_checker': messages,
             'jeneral_status': jeneral_status
         }
         return result
