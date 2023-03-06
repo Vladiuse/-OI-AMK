@@ -23,10 +23,10 @@ class Check:
     def process(self):
         pass
 
-    def add_mess(self, message_text, *args):
+    def add_mess(self, error, *args, text=None):
         message = {
-            'text': message_text,
-            'status': self.STATUS_SET[message_text],
+            'text': error if not text else text,
+            'status': self.STATUS_SET[error],
             'items': args,
         }
         self.messages.append(message)
@@ -239,11 +239,11 @@ class GeoWords(Check):
     DESCRIPTION = 'Поиск стран по тексту'
     KEY_NAME = 'countrys_in_land'
 
-    ALL_COUNTRYS = 'Найдена страна'
+    CURRENT_COUNTRY = 'Найдена страна'
     INCORECT_COUNTRY = 'Другие страны'
 
     STATUS_SET = {
-        ALL_COUNTRYS: Check.WARNING,
+        CURRENT_COUNTRY: Check.WARNING,
         INCORECT_COUNTRY: Check.ERROR,
     }
 
@@ -256,18 +256,24 @@ class GeoWords(Check):
     def search_by_template(self):
         for country in self.url_checker.countrys:
             templates = country.words['templates']
-            country_words_found = []
+            country_words_found = set()
             for template in templates:
                 regEx = '\W' + template + '[\W\w][^\s]{0,6}[.\-;:,«»\s]'
-                # symbols_to_clean = """ .-;:”,"\n"""
                 find_templates = re.findall(regEx, self.land.human_text_lower)
-                country_words_found += find_templates
+                for temp in find_templates:
+                    temp = self.clean_word(temp)
+                    country_words_found.add(temp)
             if country_words_found:
-                country_words_found = set(country_words_found)
                 if country.iso == self.land.country:
-                    self.add_mess(self.ALL_COUNTRYS,*country_words_found)
+                    self.add_mess(self.CURRENT_COUNTRY, *country_words_found,
+                                  text=f'{self.CURRENT_COUNTRY} ({country})')
                 else:
-                    self.add_mess(self.INCORECT_COUNTRY,*country_words_found)
+                    self.add_mess(self.INCORECT_COUNTRY,*country_words_found,
+                                  text=f'{self.INCORECT_COUNTRY} ({country})')
+
+    def clean_word(self,word):
+        return ''.join(filter(lambda char: char.isalpha(), word))
+
 
 
 
@@ -540,7 +546,8 @@ class CityInText(Check):
                         geo_city_in_text[country.pk].append(city.name)
         for country, citys in geo_city_in_text.items():
             citys.insert(0,country.upper())
-            self.add_mess(self.INCORRECTS_CITY_GEO, *citys)
+            self.add_mess(self.INCORRECTS_CITY_GEO, *citys,
+                          text=f'{self.INCORRECTS_CITY_GEO} ({country.upper()})')
 
 
 KMA_checkers = [

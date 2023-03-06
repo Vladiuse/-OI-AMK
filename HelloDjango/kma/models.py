@@ -80,6 +80,9 @@ class Country(models.Model):
         verbose_name = 'Страна'
         verbose_name_plural = 'Страны'
 
+    def __str__(self):
+        return self.pk.upper()
+
     @staticmethod
     def get_phone_code_by_country(iso_code):
         """Получить моб код по коду страны"""
