@@ -373,9 +373,6 @@ class StarCharInText(Check):
     STAR_CHAR = '*'
 
     def process(self):
-        land_human_text = self.land.get_human_land_text()
-        if float(self.land.discount) <= 50 and self.STAR_CHAR in land_human_text:
-            self.add_mess(self.STAR_ON_SITE)
         if self.land.discount_type == 'full_price':
             if self.STAR_CHAR in self.land.get_human_land_text():
                 self.add_mess(self.STAR_ON_SITE)
