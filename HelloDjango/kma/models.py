@@ -103,10 +103,18 @@ class Country(models.Model):
             country_phone.update(dic)
         return country_phone
 
+class CityToTextSearchManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().exclude(use_in_text_search=False)
 
 class City(models.Model):
+
+    objects = models.Manager()
+    text_search = CityToTextSearchManager()
+
     name = models.CharField(max_length=50, verbose_name='Название города')
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
+    use_in_text_search = models.BooleanField(default=True)
 
     class Meta:
         unique_together = [['name', 'country'],]

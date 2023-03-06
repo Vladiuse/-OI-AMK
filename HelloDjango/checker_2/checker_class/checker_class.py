@@ -4,6 +4,7 @@ from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency, 
 from .checkers import KMA_checkers, Check
 from .errors import NoCountryInDB, UrlNotLoad
 import requests as req
+from django.db.models import Prefetch
 
 
 class UrlChecker:
@@ -21,7 +22,9 @@ class UrlChecker:
         self.check_list = None
         # db datalanguage
         self.offers = OfferPosition.objects.all()
-        self.countrys = Country.actual.prefetch_related('language').prefetch_related('city_set').all()
+        self.citys = City.text_search.all()
+        self.countrys = Country.actual.prefetch_related('language').prefetch_related(
+            Prefetch('city_set', queryset=self.citys)).all()
         self.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
 
     def load_url(self):

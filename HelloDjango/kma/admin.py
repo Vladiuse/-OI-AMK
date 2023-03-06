@@ -56,9 +56,9 @@ class LanguageAdmin(admin.ModelAdmin):
     search_fields = ['russian_name', 'iso']
 
 class CityAdmin(admin.ModelAdmin):
-    list_display = ['country_id', 'name']
+    list_display = ['country_id', 'name', 'use_in_text_search']
     list_display_links = ['name']
-    search_fields = [ 'name']
+    search_fields = ['name']
 
 admin.site.register(DefaultWeb, DefaultWebAdmin)
 admin.site.register(Country, CountryAdmin)
