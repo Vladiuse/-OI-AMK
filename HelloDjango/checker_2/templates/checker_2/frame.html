@@ -442,7 +442,14 @@
           showOfferName(response['offer_name'])
 
         } else {
+          $('#analize-load').hide()
           console.error('Ошибка загрузки анализатора')
+                        addInfo(
+                          {'text': 'Ошибка загрузки анализатора',
+                            'status': 'error',
+                            'items': [response['error']],
+                          }
+                        )
         }
 
       })
