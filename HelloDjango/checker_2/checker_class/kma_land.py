@@ -81,9 +81,13 @@ class Land:
         links = list(filter(self.is_favicon_links, links))
         if add_base_url:
             for l in links:
-                if not l['href'].startswith('http'):
-                    l['href'] = Land.get_url_for_base_tag(self.url) + l['href']
-                yield str(l)
+                try:
+                    if not l['href'].startswith('http'):
+                        l['href'] = Land.get_url_for_base_tag(self.url) + l['href']
+                        yield str(l)
+                except KeyError:
+                    pass
+
 
     @staticmethod
     def is_favicon_links(link):
@@ -169,7 +173,7 @@ class Land:
             clean_land_text += placeholders_text
             self.human_text = clean_land_text
             with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/text.html', 'w') as file:
-                file.write(self.human_text)
+                file.write(self.human_text_lower)
         return self.human_text
 
 
