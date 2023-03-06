@@ -221,6 +221,7 @@
                     <div class="navigation__checker-list" id="check_list">
                       <div class="list-group">
                         {%for block in checker.check_list %}
+                        {%if block.checkpoint_set.all%}
                         <div class="block block group-id-{{ forloop.counter }}">
 
                           <label class="list-group__items tab">
@@ -255,10 +256,11 @@
                             </div>
                             </label>
                         </div>
+                        {%endif%}
                         {%endfor%}
                       </div>
                     </div>
-
+<!--                    CHECK LIST-->
                   </div>
 
 
