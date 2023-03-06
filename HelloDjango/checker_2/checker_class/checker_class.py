@@ -2,12 +2,13 @@ from .kma_land import KMALand
 from .check_list_view import get_check_list
 from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency, City
 from .checkers import checks_list, Check
-from .errors import NoCountryInDB
+from .errors import NoCountryInDB, UrlNotLoad
+import requests as req
 
 
 class UrlChecker:
 
-    def __init__(self, source_text, url, user):
+    def __init__(self,  url, user, source_text=None):
         self.source_text = source_text
         self.url = url
         self.user = user
@@ -22,6 +23,18 @@ class UrlChecker:
         self.offers = OfferPosition.objects.all()
         self.countrys = Country.actual.prefetch_related('language').prefetch_related('city_set').all()
         self.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
+
+    def load_url(self):
+        url = KMALand.format_url(self.url)
+        try:
+            res = req.get(url)
+            res.encoding = 'utf-8'
+        except ConnectionError:
+            raise UrlNotLoad
+        if res.status_code != 200:
+            raise UrlNotLoad
+        res.encoding = 'utf-8'
+        self.source_text = res.text
 
     def process(self):
         self.land = KMALand(self.source_text, self.url, escape_chars=True)

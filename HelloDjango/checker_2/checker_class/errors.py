@@ -14,3 +14,6 @@ class IncorrectPreLandUrl(CheckerError):
 
 class NoCountryInDB(CheckerError):
     """Нет страны в базе данных"""
+
+class UrlNotLoad(CheckerError):
+    """Ссылка не работает"""
