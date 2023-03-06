@@ -180,7 +180,9 @@ class KmaCurrency(Currency):
         return self.iso
     @property
     def other_currs(self):
-        other = [self.iso]
+        other = []
+        if self.kma_code:
+            other = [self.iso]
         if self.iso_3366:
             other.append(self.iso_3366)
         return other
