@@ -464,8 +464,8 @@ class PercentCharCorrectSide(Check):
         INCORRECTS: Check.WARNING,
     }
 
-    RIGHT_SIDE = '\d{1,6}\s?%'
-    LEFT_SIDE = '%\s?\d{1,6}'
+    RIGHT_SIDE = '\d{1,6} ?%'
+    LEFT_SIDE = '% ?\d{1,6}'
 
     NO_LIKE_OTHER_LANGS = ['tr', 'ar']
 
