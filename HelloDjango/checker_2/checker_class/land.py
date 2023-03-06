@@ -7,7 +7,8 @@ class Land:
     TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
 
     def __init__(self, source_text, url, *, parser='html5lib', escape_chars=False):
-        self.source_text = Land.re_escape_html_chars(source_text) if escape_chars else source_text
+        # self.source_text = Land.re_escape_html_chars(source_text) if escape_chars else source_text
+        self.source_text = source_text
         self.url = url
         self.soup = BeautifulSoup(self.source_text, parser)
         self._human_text = None
@@ -18,6 +19,20 @@ class Land:
 
         with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/source.html', 'w') as file:
             file.write(source_text)
+
+    def get_no_protocol_url(self):
+        return self.url.replace('http://', '')
+
+    @staticmethod
+    def get_url_for_base_tag(url):
+        if '?' in url:
+            url = url.split('?')[0]
+        if not url.endswith('/'):
+            url += '/'
+        return url
+    @property
+    def title(self):
+        return self._get_title()
 
     def find_dates(self):
         pattern = '19\d\d|20\d\d|\d{1,2}[.\\\/]\d{1,2}[.\\\/]\d{2,4}'  # убран захват символов перед датой
@@ -57,9 +72,6 @@ class Land:
             self.find_dates()
         return self._dates
 
-    def get_no_protocol_url(self):
-        return self.url.replace('http://', '')
-
     def _get_title(self):
         """найти title сайта"""
         title = self.soup.find('title')
@@ -67,7 +79,12 @@ class Land:
 
     def _is_video_tag_on_site(self):
         """Есть ли на сайте тэг video"""
-        if self.soup.find_all('video'):
+        if self.soup.find('video'):
+            return True
+
+    def _is_audio_tag_on_site(self):
+        """Есть ли на сайте тэг video"""
+        if self.soup.find('audio'):
             return True
 
     def get_favicon_links(self, add_base_url=True):
@@ -124,14 +141,6 @@ class Land:
             html_text = html_text.replace(char, chat_to)
         return html_text
 
-    @staticmethod
-    def get_url_for_base_tag(url):
-        if '?' in url:
-            url = url.split('?')[0]
-        if not url.endswith('/'):
-            url += '/'
-        return url
-
     def add_style_tag(self, style_text):
         DomFixxer.add_css(self.soup, style_text)
 
@@ -155,21 +164,44 @@ class Land:
     def human_text(self):
         if not self._human_text:
             clean_land_text = self.soup.text
-            clean_land_text += ' ' + self.title
-            inputs = self.soup.find_all('input')
-            placeholders_text = ['']
-            for inpt in inputs:
-                try:
-                    placeholder = inpt['placeholder']
-                    placeholders_text.append(placeholder)
-                except KeyError:
-                    pass
-            placeholders_text = ' '.join(placeholders_text)
-            clean_land_text += placeholders_text
+            clean_land_text += ' '.join(self._human_text_from_placeholders())
+            clean_land_text += ' '.join(self._human_text_from_input_values())
             self._human_text = clean_land_text
             with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/text.html', 'w') as file:
                 file.write(self.human_text_lower)
         return self._human_text
+
+    def _human_text_from_placeholders(self) -> list:
+        inputs = self.soup.find_all('input')
+        placeholders_text = list()
+        for inpt in inputs:
+            try:
+                placeholder = inpt['placeholder']
+                placeholders_text.append(placeholder)
+            except KeyError:
+                pass
+        return placeholders_text
+
+    def _human_text_from_input_values(self) -> list:
+        inputs = self.soup.find_all('input')
+        values = []
+        for inp in inputs:
+            value = ''
+            is_hidden = False
+            try:
+                value = inp['value']
+            except KeyError:
+                pass
+            try:
+                if inp['type'] == 'hidden':
+                    is_hidden = True
+            except KeyError:
+                pass
+            if value and not is_hidden:
+                values.append(value)
+        return values
+
+
 
     @property
     def human_text_lower(self):
@@ -177,9 +209,6 @@ class Land:
             self._human_land_text_lower = self.human_text.lower()
         return self._human_land_text_lower
 
-    @property
-    def title(self):
-        return self._get_title()
 
     def is_yam_script(self):
         yam_link = 'https://mc.yandex.ru/metrika'
