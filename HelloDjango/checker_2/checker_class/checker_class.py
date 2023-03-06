@@ -11,6 +11,7 @@ class UrlChecker:
         self.source_text = source_text
         self.url = url
         self.user = user
+        self.messages = list()
 
         self.land = None
         self.check_list = None
@@ -18,11 +19,10 @@ class UrlChecker:
         self.offers = OfferPosition.objects.all()
         self.countrys = Country.actual.prefetch_related('language').prefetch_related('city_set').all()
         self.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
-        # self.citys = City.objects.select_related('country')
 
     def process(self):
         self.land = KMALand(self.source_text, self.url, escape_chars=True)
-        self.check_list = get_check_list(self.land, self.user)  # TODO filter not added before land processed
+        self.check_list = get_check_list(self.land, self.user)
         self.land.add_site_attrs()
         self.land.find_n_mark_img_doubles()
         self.land.phone_code = Country.get_phone_code_by_country(self.land.country)
@@ -35,13 +35,19 @@ class UrlChecker:
         self.land = KMALand(source_text=self.source_text, url=self.url, parser='lxml')
         land = self.land
         land.drop_tags_from_dom(KMALand.POLICY_IDS)
-        messages = []
         for check in checks_list:
             check = check(land=land, url_checker=self)
             check.process()
-            messages += check.messages
+            self.messages += check.messages
+        result = {
+            'new_checker': self.messages,
+            'jeneral_status': self.get_jeneral_check_status(),
+        }
+        return result
+
+    def get_jeneral_check_status(self):
         statuses = set()
-        for m in messages:
+        for m in self.messages:
             statuses.add(m['status'])
         jeneral_status = ''
         if Check.INFO in statuses:
@@ -50,11 +56,8 @@ class UrlChecker:
             jeneral_status = Check.WARNING
         if Check.ERROR in statuses:
             jeneral_status = Check.ERROR
-        result = {
-            'new_checker': messages,
-            'jeneral_status': jeneral_status
-        }
-        return result
+        return jeneral_status
+
 
     @property
     def current_country(self):
