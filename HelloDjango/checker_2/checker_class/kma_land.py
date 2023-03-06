@@ -26,7 +26,7 @@ class Land:
             file.write(source_text)
         
     def find_dates(self):
-        pattern = '19\d\d|20\d\d|\d{1,2}[.\\/\--]\d{1,2}[.\\/\--]\d{2,4}'  # убран захват символов перед датой
+        pattern = '19\d\d|20\d\d|\d{1,2}[.\\\/]\d{1,2}[.\\\/]\d{2,4}'  # убран захват символов перед датой
         text = self.human_text
         dates_n_years = re.findall(pattern, text)
         dates_n_years = list(set(dates_n_years))
