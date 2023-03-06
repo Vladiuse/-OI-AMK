@@ -810,6 +810,27 @@
 <!--      display: inline-block;-->
     }
   </style>
+  <style>
+    #text-info{
+      max-height: 46vh;
+      overflow: hidden;
+      overflow-y: scroll;
+    }
+    #text-info::-webkit-scrollbar {
+      width: 4px;
+    }
+    #text-info::-webkit-scrollbar-track {
+      background: inherit; 
+      border-radius: 25px;
+    }
+    #text-info::-webkit-scrollbar-thumb {
+      background: #f1f1f1;
+      border-radius: 25px;
+    }
+    #text-info::-webkit-scrollbar-thumb:hover {
+      background: #888; 
+    }
+  </style>
    <script>
     function onLazy(){
         // LAZY LOAD

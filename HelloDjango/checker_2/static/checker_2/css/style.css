@@ -161,6 +161,7 @@ margin: 0 5px;
 #checker-data{
   border-bottom: 1px solid rgba(33, 43, 52, 1);
   padding: 5px;
+  padding-right: 2px;
   padding-bottom: 8px;
 }
 #checker-data #img-doubles img {
@@ -428,6 +429,7 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
 /* ------------info-block------------------ */
 .info-block{
   margin: 5px 0;
+  margin-right: 2px;
   padding: 4px 9px;
   border-radius: 3px;
   border: 1px solid #d3d4d5;
