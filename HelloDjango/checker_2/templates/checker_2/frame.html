@@ -79,6 +79,9 @@
 
               </div>
               <div class="topbar__item">
+                <div class="topbar__btn"><span id="offer_name" style="display: none;"></span></div>
+              </div>
+              <div class="topbar__item">
                 <div id="scripts-img">
                   {%if kma.is_yam_script%}
                   <img src="{% static 'checker_2/scripts/yam.png' %}">
@@ -434,12 +437,21 @@
           }
           setJeneralStatus(response['jeneral_status'])
           loadImfoItems(response['new_checker'])
+          showOfferName(response['offer_name'])
 
         } else {
           console.error('Ошибка загрузки анализатора')
         }
 
       })
+    }
+
+    function showOfferName(offer_name){
+      if (offer_name)
+      {
+        $('#offer_name').text(offer_name)
+        $('#offer_name').show()
+      }
     }
 
     // Добавить иконку общего статуса

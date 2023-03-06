@@ -12,6 +12,9 @@ class UrlChecker:
         self.url = url
         self.user = user
         self.messages = list()
+        self.land_data = {
+            'offer_name': None
+        }
 
         self.land = None
         self.check_list = None
@@ -43,6 +46,7 @@ class UrlChecker:
             'new_checker': self.messages,
             'jeneral_status': self.get_jeneral_check_status(),
         }
+        result.update(self.land_data)
         return result
 
     def get_jeneral_check_status(self):

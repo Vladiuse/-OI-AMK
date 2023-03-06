@@ -124,13 +124,13 @@ class OffersInLand(Check):
         for offer in offers:
             if re.search('\W'+offer.name+'\W', self.land.human_text_lower):
                 offers_in_land.append(str(offer))
-        # offers_in_land = self.text_finder_result['offers']
         if not offers_in_land:
             self.add_mess(self.NO_OFFER_FIND)
         if len(offers_in_land) > 1:
             self.add_mess(self.MORE_ONE_OFFER_FOUND, *offers_in_land)
         if len(offers_in_land) == 1:
-            self.add_mess(self.ONE_OFFER_FOUND, *offers_in_land)
+            self.url_checker.land_data['offer_name'] = offers_in_land[0]
+            # self.add_mess(self.ONE_OFFER_FOUND, *offers_in_land)
 
 
 class Dates(Check):
