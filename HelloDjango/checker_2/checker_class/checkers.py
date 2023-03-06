@@ -485,7 +485,7 @@ class FindPhoneNumbers(Check):
         FOUND_PHONE_NUMBER: Check.WARNING,
     }
     def process(self):
-        phones = re.findall('\+?[\d()\- x]{7,20}', self.land.human_text_lower)
+        phones = re.findall('\+?\d[\d()\- x]{9,18}[\dx]', self.land.human_text_lower)
         if phones:
             self.add_mess(self.FOUND_PHONE_NUMBER, *phones)
 
