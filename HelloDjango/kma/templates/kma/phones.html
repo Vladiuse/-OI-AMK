@@ -47,8 +47,8 @@
                 {% for phone in phones %}
                 <li id="{{phone.short}}">
                   <a href="#">
-                    <div><span class="flag-icon flag-icon-{{phone.short}}"></span>
-                      {{phone.ru_full_name}} ({{phone.short|upper}})</div>
+                    <div><span class="flag-icon flag-icon-{{phone.pk}}"></span>
+                      {{phone.ru_full_name}} ({{phone.pk|upper}})</div>
                     <div class="status remove">
                       <i class="fa-solid fa-circle-check success" style="display: none;"></i>
                       <i class="fa-solid fa-circle-xmark error" style="display: none;"></i>
@@ -82,7 +82,8 @@
   <table class="table table table-striped">
   <thead>
     <tr>
-      <th scope="col">Код ISO</th>
+      <th scope="col"></th>
+      <th scope="col">ISO</th>
       <th scope="col">Страна</th>
       <th scope="col">Номер</th>
       <th scope="col">Моб Код</th>
@@ -91,6 +92,7 @@
   <tbody>
   {% for phone in phones %}
     <tr>
+      <th scope="row"><span class="flag-icon flag-icon-{{phone.pk}}"></span></th>
       <th scope="row">{{phone.iso}}</th>
       <td>{{phone.ru_full_name}}</td>
       <td>{{phone.phone}}</td>
