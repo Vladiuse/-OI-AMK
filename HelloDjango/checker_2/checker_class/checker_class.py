@@ -1,7 +1,7 @@
 from .kma_land import KMALand
 from .check_list_view import get_check_list
 from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency, City
-from .checkers import checks_list, Check
+from .checkers import KMA_checkers, Check
 from .errors import NoCountryInDB, UrlNotLoad
 import requests as req
 
@@ -37,10 +37,10 @@ class UrlChecker:
 
     def process(self):
         self.land = KMALand(self.source_text, self.url, escape_chars=True)
-        self.check_list = get_check_list(self.land, self.user)
         self.land.add_site_attrs()
+        self.check_list = get_check_list(self.land, self.user)
         self.land.find_n_mark_img_doubles()
-        self.land.phone_code = Country.get_phone_code_by_country(self.land.country)
+        self.land.phone_code = self.current_country.phone_code
         try:
             self.land.full_lang = Language.objects.get(pk=self.land.language)
         except Language.DoesNotExist:
@@ -48,10 +48,9 @@ class UrlChecker:
 
     def text_analiz(self):
         self.land = KMALand(source_text=self.source_text, url=self.url, parser='lxml')
-        land = self.land
-        land.drop_tags_from_dom(KMALand.POLICY_IDS)
-        for check in checks_list:
-            check = check(land=land, url_checker=self)
+        self.land.drop_tags_from_dom(KMALand.POLICY_IDS)
+        for check in KMA_checkers:
+            check = check(land=self.land, url_checker=self)
             check.process()
             self.messages += check.messages
         result = {
