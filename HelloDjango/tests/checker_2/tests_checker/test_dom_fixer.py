@@ -1,6 +1,6 @@
 import unittest
 from bs4 import BeautifulSoup
-from HelloDjango.checker_2.checker_class.text_fixxer import Img, DomFixxer
+from HelloDjango.checker_2.checker_class.dom_fixxer import Img, DomFixxer
 
 
 class DomFixerTest(unittest.TestCase):
