@@ -28,7 +28,6 @@ class UrlChecker:
         url = KMALand.format_url(self.url)
         try:
             res = req.get(url)
-            res.encoding = 'utf-8'
         except ConnectionError:
             raise UrlNotLoad
         if res.status_code != 200:

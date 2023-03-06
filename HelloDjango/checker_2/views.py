@@ -31,50 +31,27 @@ def index(request):
 def check_url(request):
     # получения кода для iframe
     url = request.POST['url']
-    url = KMALand.format_url(url)
-    start = time.time()
     settings = CheckerUserSetting.objects.get(user=request.user)
     setting_form = CheckerUserSettingsForm(request.POST, instance=settings, prefix='ch_set')
     if setting_form.is_valid():
         setting_form.user = request.user
         setting_form.save()
     try:
-        res = req.get(url)
-        res.encoding = 'utf-8'
-    except ConnectionError:
+        url_checker = UrlChecker(url=url, user=request.user)
+        url_checker.load_url()
+        url_checker.process()
         content = {
-            'error_text': 'Ссылка не работает',
+            'checker': url_checker,
+            'kma': url_checker.land,
+            'user_settings': settings,
+        }
+        return render(request, 'checker_2/frame.html', content)
+    except CheckerError as error:
+        content = {
+            'error_text': error.__doc__,
             'user_settings':settings,
         }
         return render(request, 'checker_2/index.html', content)
-    end_load_url = time.time()
-    print(f'Site Load:{round(end_load_url - start,2)}')
-    if res.status_code != 200:
-        content = {
-            'error_text': 'Ссылка не работает',
-            'user_settings':settings,
-        }
-        return render(request, 'checker_2/index.html', content)
-    else:
-        try:
-            url_checker = UrlChecker(res.text, url=url, user=request.user)
-            url_checker.process()
-            content = {
-                'checker': url_checker,
-                'kma': url_checker.land,
-                'user_settings': settings,
-            }
-            end = time.time()
-
-            print(f'Total:{round(end - start, 2)}')
-            print(ST)
-            return render(request, 'checker_2/frame.html', content)
-        except CheckerError as error:
-            content = {
-                'error_text': error.__doc__,
-                'user_settings':settings,
-            }
-            return render(request, 'checker_2/index.html', content)
 
 
 @login_required
@@ -83,18 +60,17 @@ def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
         checked_url = request.POST['checked_url']
-        url_checker = UrlChecker(land_text, checked_url, request.user)
+        url_checker = UrlChecker(checked_url, request.user, source_text=land_text)
         result = url_checker.text_analiz()
-        answer = {
-            'success': True,
-            'new_checker': result['new'],
-            'jeneral_status': result['jeneral_status'],
-        }
-    except IndentationError as error:
+        answer = result
+        answer['success'] = True
+    except BaseException as error:
+        print(error)
         answer = {
             'success': False,
             'error': str(error), #TODO добавит на фронт сообщение об ошибке
         }
+    # print(ST)
     return JsonResponse(answer, safe=False)
 
 
