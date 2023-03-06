@@ -530,6 +530,7 @@ class CityInText(Check):
                     if country != self.url_checker.current_country:
                         geo_city_in_text[country.pk].append(city.name)
         for country, citys in geo_city_in_text.items():
+            citys.insert(0,country.upper())
             self.add_mess(self.INCORRECTS_CITY_GEO, *citys)
 
 
