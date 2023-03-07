@@ -511,8 +511,9 @@ class PercentCharCorrectSide(Check):
     NO_LIKE_OTHER_LANGS = ['tr', 'ar']
 
     def process(self):
+        #todo rewrite check on cluntry, not lang(cat be not set)
         country_langs = [lang.iso for lang in self.url_checker.current_languages]
-        if any(self.NO_LIKE_OTHER_LANGS) in country_langs:
+        if any(lang in country_langs for lang in self.NO_LIKE_OTHER_LANGS):
             regEx = self.RIGHT_SIDE
         else:
             regEx = self.LEFT_SIDE
