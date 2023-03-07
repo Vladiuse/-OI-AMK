@@ -30,6 +30,7 @@ class Land:
         if not url.endswith('/'):
             url += '/'
         return url
+
     @property
     def title(self):
         return self._get_title()
@@ -77,15 +78,17 @@ class Land:
         title = self.soup.find('title')
         return title.text
 
-    def _is_video_tag_on_site(self):
-        """Есть ли на сайте тэг video"""
-        if self.soup.find('video'):
+    def is_html_tag_on_page(self, tag_name):
+        if self.soup.find(tag_name):
             return True
 
-    def _is_audio_tag_on_site(self):
+    def _is_video_tag_on_site(self):
         """Есть ли на сайте тэг video"""
-        if self.soup.find('audio'):
-            return True
+        return self.is_html_tag_on_page('video')
+
+    def _is_audio_tag_on_site(self):
+        """Есть ли на сайте тэг audio"""
+        return self.is_html_tag_on_page('audio')
 
     def get_favicon_links(self, add_base_url=True):
         links = self.soup.find_all('link')
@@ -95,7 +98,7 @@ class Land:
                 try:
                     if not l['href'].startswith('http'):
                         l['href'] = Land.get_url_for_base_tag(self.url) + l['href']
-                        yield str(l)
+                    yield str(l)
                 except KeyError:
                     pass
 
@@ -201,14 +204,11 @@ class Land:
                 values.append(value)
         return values
 
-
-
     @property
     def human_text_lower(self):
         if not self._human_land_text_lower:
             self._human_land_text_lower = self.human_text.lower()
         return self._human_land_text_lower
-
 
     def is_yam_script(self):
         yam_link = 'https://mc.yandex.ru/metrika'
