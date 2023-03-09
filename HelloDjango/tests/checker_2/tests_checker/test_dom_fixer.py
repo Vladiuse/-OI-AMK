@@ -1,6 +1,6 @@
 import unittest
 from bs4 import BeautifulSoup
-from HelloDjango.checker_2.checker_class.dom_fixxer import Img, DomFixxer
+from HelloDjango.checker_2.checker_class.dom_fixxer import Img, DomFixxerMixin
 
 
 class DomFixerTest(unittest.TestCase):
@@ -38,7 +38,7 @@ class DomFixerTest(unittest.TestCase):
         </html>
         """
         soup = BeautifulSoup(text, 'lxml')
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.add_base_tag(soup, 'http://goole.com')
         self.assertTrue(soup.find('base'))
         self.assertTrue(soup.find('base')['href'] == 'http://goole.com')
@@ -60,7 +60,7 @@ class DomFixerTest(unittest.TestCase):
         </html>
         """
         soup = BeautifulSoup(text, 'lxml')
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.add_base_tag(soup, 'http://goole.com')
         self.assertTrue(soup.find('base'))
         self.assertTrue(soup.find('base')['href'] == 'http://goole.com')
@@ -71,7 +71,7 @@ class DomFixerTest(unittest.TestCase):
         color: red;
         }
         """
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.add_css(self.soup, css)
         css_in_land = self.soup.find('style')
         self.assertIn(css, str(css_in_land))
@@ -80,7 +80,7 @@ class DomFixerTest(unittest.TestCase):
         js = """
         console.log();
         """
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.add_js(self.soup, js)
         js_in_land = self.soup.find('script')
         self.assertIn(js, str(js_in_land))
@@ -105,7 +105,7 @@ class DomFixerTest(unittest.TestCase):
         </html>
         """
         soup = BeautifulSoup(html, 'lxml')
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.find_double_img(soup)
         images = soup.find_all('img')
         for img in images:
@@ -132,7 +132,7 @@ class DomFixerTest(unittest.TestCase):
         </html>
         """
         soup = BeautifulSoup(html, 'lxml')
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.find_double_img(soup)
         images = soup.find_all('img', attrs={'class': Img.IMG_DOUBLE_CLASS})
         self.assertTrue(len(images) == 2, msg="Проверка на количество")
@@ -162,7 +162,7 @@ class DomFixerTest(unittest.TestCase):
         </html>
         """
         soup = BeautifulSoup(html, 'lxml')
-        dom = DomFixxer()
+        dom = DomFixxerMixin()
         dom.find_double_img(soup)
         images = soup.find_all('img', attrs={'class': Img.IMG_DOUBLE_CLASS})
         self.assertTrue(len(images) == 2, msg="Проверка на количество")

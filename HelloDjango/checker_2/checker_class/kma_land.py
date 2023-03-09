@@ -142,11 +142,11 @@ class KMALand(Land):
         js_path = os.path.join(settings.BASE_DIR, self.JS_FILE)
         with open(styles_path, encoding='utf-8') as file:
             style_text = file.read()
-            self.add_style_tag(style_text)
+            self.add_css(style_text)
         with open(js_path, encoding='utf-8') as file:
             js_text = file.read()
-            self.add_script_tag(js_text)
-        self.add_base_tag()
+            self.add_js(js_text)
+        self.add_base_tag(self.base_url)
         html_code = str(self.soup)
         html_code = self.escape_html_for_iframe(html_code)
         return html_code

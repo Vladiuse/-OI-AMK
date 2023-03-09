@@ -71,22 +71,29 @@ class Img:
                 pass
 
 
-class DomFixxer:
+class DomFixxerMixin:
     """Изменение верстки сайта"""
 
-    @staticmethod
-    def add_css(soup, css_text):
+    def add_css(self, css_text):
         """Добавить стили на сайт"""
-        styles_tag = soup.new_tag('style')
+        styles_tag = self.soup.new_tag('style')
         styles_tag.string = css_text
-        soup.html.body.append(styles_tag)
+        self.soup.html.body.append(styles_tag)
 
-    @staticmethod
-    def add_js(soup, js_text):
+    def add_js(self, js_text):
         """Добавить скрипт на сайт"""
-        script_tag = soup.new_tag("script")
+        script_tag = self.soup.new_tag("script")
         script_tag.string = js_text
-        soup.html.body.append(script_tag)
+        self.soup.html.body.append(script_tag)
+
+    def add_base_tag(self, url):
+        """Добавить тэг base или замена его href"""
+        base = self.soup.find('base')
+        if base:
+            base.extract()
+        new_base = self.soup.new_tag('base')
+        new_base['href'] = url
+        self.soup.html.head.insert(0, new_base)
 
     @staticmethod
     def find_double_img(soup, base_url='') -> list:
@@ -107,13 +114,5 @@ class DomFixxer:
             img_doubles.append(dic)
         return img_doubles
 
-    @staticmethod
-    def add_base_tag(soup, url):
-        """Добавить тэг base или замена его href"""
-        base = soup.find('base')
-        if base:
-            base.extract()
-        new_base = soup.new_tag('base')
-        new_base['href'] = url
-        soup.html.head.insert(0, new_base)
+
 

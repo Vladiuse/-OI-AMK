@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
-from .dom_fixxer import DomFixxer
+from .dom_fixxer import DomFixxerMixin
 import re
 from .errors import CheckerError
 from bs4.element import Tag
 from urllib.parse import urlparse, urlunparse
 
-class Land:
+class Land(DomFixxerMixin):
 
     TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
 
@@ -28,6 +28,10 @@ class Land:
         for s in 'https://','http://':
             url = url.replace(s,'')
         return url
+
+    @property
+    def base_url(self):
+        return self.get_url_for_base_tag(self.url)
 
     @staticmethod
     def get_url_for_base_tag(url):
@@ -158,19 +162,9 @@ class Land:
         return html_text
 
 
-    def add_style_tag(self, style_text):
-        DomFixxer.add_css(self.soup, style_text)
-
-    def add_script_tag(self, scritp_text):
-        DomFixxer.add_js(self.soup, scritp_text)
-
-    def add_base_tag(self):
-        url_base_tag = self.get_url_for_base_tag(self.url)
-        DomFixxer.add_base_tag(self.soup, url_base_tag)
-
     def find_n_mark_img_doubles(self):
         base_url = self.get_url_for_base_tag(self.url)
-        self.img_doubles = DomFixxer.find_double_img(self.soup, base_url=base_url)
+        self.img_doubles = DomFixxerMixin.find_double_img(self.soup, base_url=base_url)
 
     def drop_tags_from_dom(self, elems_ids):
         for id in elems_ids:
