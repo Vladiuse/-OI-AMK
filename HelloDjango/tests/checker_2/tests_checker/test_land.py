@@ -306,6 +306,194 @@ class LandDateSearchTest(unittest.TestCase):
     def setUp(self):
         self.empty_land = Land(source_text='', url='')
 
+    def test_years_search_change_attr_type_call_dates(self):
+        x = self.empty_land.dates
+        self.assertEqual(self.empty_land._dates, [])
+        self.assertEqual(self.empty_land._years, [])
+
+    def test_years_search_change_attr_type_call_years(self):
+        x = self.empty_land.years
+        self.assertEqual(self.empty_land._dates, [])
+        self.assertEqual(self.empty_land._years, [])
+
+    def test_dates_years_search_count_call(self):
+        self.empty_land._dates, self.empty_land._years = [],[]
+        mock = MagicMock(return_value='')
+        x = self.empty_land.dates
+        x = self.empty_land.years
+        self.assertEqual(mock.call_count, 0)
+
+    def test_search_years(self):
+        text = '_2020 sada 1990d 2500 _'
+        land = Land(text, url='')
+        res = land._find_years(land.human_text)
+        self.assertEqual(len(res), 3)
+        for date in '2020', '1990', '2500':
+            self.assertTrue(date in res)
+
+    def test_no_search_years(self):
+        text1 = '312312323213321'
+        text2 = """
+        1800 dasd
+        2200  dsd 
+        2100 dsda
+        """
+        for text in text1, text2:
+            land = Land(text, url='')
+            res = land._find_years(land.human_text)
+            self.assertEqual(len(res), 0)
+
+    def test_search_years_some_chars_before_after(self):
+        text = '_2020_  a1990a .2500.'
+        land = Land(text, url='')
+        res = land._find_years(land.human_text)
+        self.assertEqual(len(res), 3)
+        for date in '2020', '1990', '2500':
+            self.assertTrue(date in res)
+
+
+    def test_search_years_number_before_after(self):
+        text = '202019992020'
+        land = Land(text, url='')
+        res = land._find_years(land.human_text)
+        self.assertEqual(len(res), 0)
+
+    def test_find_dates_end_year_full(self):
+        text = """
+        01.01.2020 
+        01.01.1920 
+        01.01.2500
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 3)
+        for date in text.split():
+            date = date.strip()
+            self.assertTrue(date in res)
+
+
+    def test_test_find_dates_end_year_full_separs(self):
+        text = """
+        01/01/2020
+        01\\01\\1920
+        01-01-2500
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 3)
+        for date in text.split():
+            date = date.strip()
+            self.assertTrue(date in res)
+
+
+    def test_find_dates_start_year_full(self):
+        text = """
+        2020.01.01 
+        1920.01.01 
+        2500.01.01
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 3)
+        for date in text.split():
+            date = date.strip()
+            self.assertTrue(date in res)
+
+    def test_find_dates_start_year_full_separs(self):
+        text = """
+        2020/01/01 
+        1920\\01\\01 
+        2500-01-01
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 3)
+        for date in text.split():
+            date = date.strip()
+            self.assertTrue(date in res)
+
+    def test_short_dates(self):
+        text = """
+        20.01.01 
+        20.01.01 
+        00.01.01
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 3)
+
+    def test_short_dates_separs(self):
+        text = """
+        20/01/01 ds
+        20\\01\\01 ds
+        20-20-10
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 2)
+        self.assertTrue('20-20-20' not in res)
+
+    def test_no_search_dates(self):
+        text = """
+        20.20.230 
+        201.10.10
+        
+        20\\20\\230 
+        201\\10\\10
+        
+        20/20/230 
+        201/10/10
+        
+        10-10-10
+        """
+        res = self.empty_land._find_dates(text)
+        self.assertEqual(len(res), 0)
+
+    def test_search_years_not_in_dates(self):
+        text = """
+        20.10.2020
+        20.10.1980
+        
+        2021
+        2022
+        """
+        land = Land(text, url='')
+        land._find_dates_n_years()
+        self.assertTrue(len(land.years),2)
+        for year in '2021', '2022':
+            self.assertTrue(year in land.years)
+
+        for year in '2020', '1980':
+            self.assertFalse(year in land.years)
+
+
+class LandUniqueWordsTest(unittest.TestCase):
+
+    def test_unique_words(self):
+        text = 'some get text some'
+        land = Land(text, url='')
+        unique = land.unique_words
+        self.assertTrue(len(unique) == 3)
+
+    def test_unique_words_split_text(self):
+        text = 'some_text-text!xxx;yyy ddd'
+        land = Land(text, url='')
+        unique = land.unique_words
+        self.assertEqual(len(unique),5)
+
+    def test_unique_words_word_find(self):
+        text = 'some_text-text!xxx;yyy'
+        land = Land(text, url='')
+        unique = land.unique_words
+        for word in 'some', 'text-text', 'xxx', 'yyy':
+            self.assertTrue(word in unique)
+
+    def test_unique_words_drop_short(self):
+        text = 'xx yy zz'
+        land = Land(text, url='')
+        unique = land.unique_words
+        self.assertTrue(len(unique)==0)
+
+
+
+
+
+
+
 
 
 
@@ -317,6 +505,7 @@ class LandDateSearchTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
