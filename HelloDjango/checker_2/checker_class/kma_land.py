@@ -207,7 +207,7 @@ class KMALand(Land):
 
     @property
     def curr(self):
-        return self.country_list[self.country]['curr']
+        return self.country_list[self.country]['curr'].lower()
 
     @property
     def offer_id(self):
