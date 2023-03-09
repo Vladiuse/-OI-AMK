@@ -40,18 +40,31 @@ class Land:
     def title(self):
         return self._get_title()
 
-    def find_dates(self):
-        pattern = '19\d\d|20\d\d|\d{1,2}[.\\\/]\d{1,2}[.\\\/]\d{2,4}'  # убран захват символов перед датой
-        text = self._human_text
-        dates_n_years = re.findall(pattern, text)
-        dates_n_years = list(set(dates_n_years))
-        self._dates = []
-        self._years = []
-        for i in dates_n_years:
-            if len(i) == 4:
-                self._years.append(i)
-            else:
-                self._dates.append(i)
+    def _find_years(self, text):
+        pattern = '\D(19\d\d|20\d\d|25\d\d)\D'
+        years_in_text = re.findall(pattern, text)
+        clean_years = []
+        for year in years_in_text:
+            clean_year = re.sub('\D', '', year)
+            clean_years.append(clean_year)
+        return clean_years
+
+    def _find_dates(self, text):
+        date_in_text = []
+        pattern_d_m_y = '\d{1,2}[.\\\/-]\d{1,2}[.\\\/-]\d{4}'
+        pattern_y_m_d = '\d{4}[.\\\/-]\d{1,2}[.\\\/-]\d{1,2}'
+        pattern_6_digit = '\D\d{2}[.\\\/]\d{1,2}[.\\\/]\d{1,2}\D|\Dd{1,2}[.\\\/]\d{1,2}[.\\\/]\d{2}\D'
+        for pattern in pattern_d_m_y,pattern_y_m_d, pattern_6_digit:
+            date_in_text.extend(re.findall(pattern,text))
+        return date_in_text
+
+
+    def _find_dates_n_years(self):
+        text = self.human_text
+        self._dates = self._find_dates(text)
+        for date in self._dates:
+            text = text.replace(date, '')
+        self._years = self._find_years(text)
 
     @property
     def unique_words(self):
@@ -63,19 +76,21 @@ class Land:
             else:
                 unique.add(word)
                 word = ''
+        else:
+            unique.add(word)
         unique = filter(lambda word: len(word) >= 3, unique)
         return set(unique)
 
     @property
     def years(self):
         if self._years is None:
-            self.find_dates()
+            self._find_dates_n_years()
         return self._years
 
     @property
     def dates(self):
         if self._dates is None:
-            self.find_dates()
+            self._find_dates_n_years()
         return self._dates
 
     def _get_title(self):
@@ -164,7 +179,7 @@ class Land:
                 elem.decompose()
     @property
     def human_text(self):
-        if not self._human_text:
+        if self._human_text is None:
             clean_land_text = self.soup.text
             clean_land_text += ' '.join(self._human_text_from_placeholders())
             clean_land_text += ' '.join(self._human_text_from_input_values())
