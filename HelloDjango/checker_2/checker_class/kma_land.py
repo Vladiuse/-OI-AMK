@@ -49,7 +49,6 @@ class KMALand(Land):
         self.country_list = self._country_list()
         self.list_of_parameters = self._list_of_parameters()
         self.list_of_form_parameters = self._list_of_form_parameters()
-        self.land_attrs = list()
 
     def validate_url(self):
         if self.land_type == KMALand.PRE_LAND:
@@ -141,12 +140,7 @@ class KMALand(Land):
         return dic
 
     def add_site_attrs(self):
-        if self._is_video_tag_on_site():
-            self.land_attrs.append('video')
-
-        if self._is_audio_tag_on_site():
-            self.land_attrs.append('audio')
-
+        super().add_site_attrs()
         if len(self.country_list) > 1:
             self.land_attrs.append('more_one_select')
 
@@ -180,13 +174,16 @@ class KMALand(Land):
         else:
             return KMALand.FULL_PRICE
 
-    @property
-    def land_type(self):
+    def _get_land_type(self):
         """Получить тип сайта"""
         for domain in self.PRE_LAND_DOMAINS:
             if domain in self.url:
                 return KMALand.PRE_LAND
         return KMALand.LAND
+
+    @property
+    def land_type(self):
+        return self._get_land_type()
 
     @property
     def s1(self):
