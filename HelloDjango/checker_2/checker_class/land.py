@@ -1,6 +1,9 @@
 from bs4 import BeautifulSoup
 from .dom_fixxer import DomFixxer
 import re
+from .errors import CheckerError
+from bs4.element import Tag
+from urllib.parse import urlparse, urlunparse
 
 class Land:
 
@@ -21,15 +24,17 @@ class Land:
             file.write(source_text)
 
     def get_no_protocol_url(self):
-        return self.url.replace('http://', '')
+        url = self.url
+        for s in 'https://','http://':
+            url = url.replace(s,'')
+        return url
 
     @staticmethod
     def get_url_for_base_tag(url):
-        if '?' in url:
-            url = url.split('?')[0]
-        if not url.endswith('/'):
-            url += '/'
-        return url
+        s, n, p, a, q, frag = urlparse(url)
+        base_url = urlunparse([s, n, p, '', '', ''])
+        return base_url
+
 
     @property
     def title(self):
@@ -94,16 +99,21 @@ class Land:
         links = self.soup.find_all('link')
         links = list(filter(self.is_favicon_links, links))
         if add_base_url:
-            for l in links:
-                try:
-                    if not l['href'].startswith('http'):
-                        l['href'] = Land.get_url_for_base_tag(self.url) + l['href']
-                    yield str(l)
-                except KeyError:
-                    pass
+            for link in links:
+                if not link['href'].startswith('http'):
+                    link['href'] = Land.get_url_for_base_tag(self.url) + link['href']
+        links = list(map(lambda link: str(link), links))
+        return links
 
     @staticmethod
-    def is_favicon_links(link):
+    def is_favicon_links(link:Tag):
+        if not isinstance(link, Tag):
+            raise CheckerError
+        try:
+            if not link['href']:
+                return False
+        except KeyError:
+            return False
         res = []
         for attr in ['rel', 'type']:
             try:
@@ -126,23 +136,12 @@ class Land:
     @staticmethod
     def re_escape_html_chars(html_text):
         return html_text
-        chars = [('&copy;', '©'), ('&#8211;', '-'), ('&#8220;', '“'), ('&#8221;', '”'), ('&#39;', "'"), ('&nbsp;', ' '),
-                 ('&quot;', '"'),
-                 ('&apos;', "'"),
-                 ('&&', '@@'), ('&', '&amp;&amp;'), ('@@', '&&')]
-        for char, chat_to in chars:
-            html_text = html_text.replace(char, chat_to)
-        return html_text
+
 
     @staticmethod
     def escape_html_for_iframe(html_text):
         return html_text
-        chars = [
-            # ('&', '&amp;&amp;'),
-            ('"', '&quot;'), ("'", '&apos;')]
-        for char, chat_to in chars:
-            html_text = html_text.replace(char, chat_to)
-        return html_text
+
 
     def add_style_tag(self, style_text):
         DomFixxer.add_css(self.soup, style_text)
