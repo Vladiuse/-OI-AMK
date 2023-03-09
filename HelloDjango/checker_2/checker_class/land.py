@@ -9,8 +9,7 @@ class Land(DomFixxerMixin):
 
     TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
 
-    def __init__(self, source_text, url, *, parser='html5lib', escape_chars=False):
-        # self.source_text = Land.re_escape_html_chars(source_text) if escape_chars else source_text
+    def __init__(self, source_text, url, *, parser='html5lib',):
         self.source_text = source_text
         self.url = url
         self.soup = BeautifulSoup(self.source_text, parser)
@@ -151,15 +150,6 @@ class Land(DomFixxerMixin):
     def scripts(self):
         for script in self.soup.find_all('script'):
             yield str(script)
-
-    @staticmethod
-    def re_escape_html_chars(html_text):
-        return html_text
-
-
-    @staticmethod
-    def escape_html_for_iframe(html_text):
-        return html_text
 
 
     def find_n_mark_img_doubles(self):

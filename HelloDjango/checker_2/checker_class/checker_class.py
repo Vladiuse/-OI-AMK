@@ -39,7 +39,7 @@ class UrlChecker:
         self.source_text = res.text
 
     def process(self):
-        self.land = KMALand(self.source_text, self.url, escape_chars=True)
+        self.land = KMALand(self.source_text, self.url)
         self.land.add_site_attrs()
         self.check_list = get_check_list(self.land, self.user)
         self.land.find_n_mark_img_doubles()

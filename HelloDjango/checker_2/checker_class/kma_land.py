@@ -148,7 +148,6 @@ class KMALand(Land):
             self.add_js(js_text)
         self.add_base_tag(self.base_url)
         html_code = str(self.soup)
-        html_code = self.escape_html_for_iframe(html_code)
         return html_code
 
     def is_social_script(self):
