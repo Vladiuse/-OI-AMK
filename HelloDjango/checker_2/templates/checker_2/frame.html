@@ -138,7 +138,7 @@
             <div class="topbar__items">
               {%if kma.discount_type == "low_price" %}
               <div class="topbar__item">
-                <a href="{{kma.get_commision_page_url}}" target="_blank" id="original-link">
+                <a href="{{kma.get_commision_page_url}}" target="_blank" >
                   <div class="topbar__btn">
                     <i class="fa-solid fa-star-of-life"></i>
                   </div>
@@ -146,7 +146,7 @@
               </div>
               {% endif %}
               <div class="topbar__item">
-                <a href="{{kma.get_land_admin_url}}" target="_blank" id="original-link">
+                <a href="{{kma.get_land_admin_url}}" target="_blank" >
                   <div class="topbar__btn">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </div>
@@ -155,7 +155,7 @@
               <div class="topbar__item">
                 <a href="{{kma.url}}" target="_blank" id="original-link">
                   <div class="topbar__btn">            
-                      {{kma.get_clean_url}}
+                      {{kma.display_url}}
                   </div>
                 </a>
               </div>

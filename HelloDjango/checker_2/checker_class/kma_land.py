@@ -2,7 +2,7 @@ import re
 import json
 from json import JSONDecodeError
 import requests as req
-
+from urllib.parse import urlparse, urlunparse
 import os
 from .land import Land
 from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
@@ -16,13 +16,14 @@ class KMALand(Land):
         'vim-store.ru',
     ]
     LAND = 'land'
-    PRELAND = 'preland'
+    PRE_LAND = 'preland'
 
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
                         'blogs-feed.org'] + TEST_DOMAINS
     INCORRECT_PRELAND_URLS = ['previewpreland.pro']
     LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
+    REQUISITES_TAG = 'rekv'
     STYLES_FILE = './checker_2/checker_class/front_data/styles.css'
     JS_FILE = './checker_2/checker_class/front_data/script.js'
     OLD_PRICE_CLASS = ''
@@ -39,12 +40,20 @@ class KMALand(Land):
         self.land_attrs = list()
 
     def validate_url(self):
-        if self.land_type == 'preland':
+        if self.land_type == KMALand.PRE_LAND:
             for domain in KMALand.INCORRECT_PRELAND_URLS:
                 if domain in self.url:
                     raise IncorrectPreLandUrl
             if KMALand.LAND_ADMIN_UTM not in self.url:
                 raise NoUflParamPreLand
+
+    @property
+    def display_url(self):
+        if self.land_type == KMALand.LAND:
+            return super().get_no_protocol_url()
+        else:
+            s, n, p, a, q, frag = urlparse(self.url)
+            return urlunparse(['', '', p, a, q, frag])
 
     def get_clean_url(self):
         url = super().get_no_protocol_url()
@@ -132,6 +141,9 @@ class KMALand(Land):
         if self._is_video_tag_on_site():
             self.land_attrs.append('video')
 
+        if self._is_audio_tag_on_site():
+            self.land_attrs.append('audio')
+
         if len(self.country_list) > 1:
             self.land_attrs.append('more_one_select')
 
@@ -170,8 +182,8 @@ class KMALand(Land):
         """Получить тип сайта"""
         for domain in self.PRE_LAND_DOMAINS:
             if domain in self.url:
-                return 'preland'
-        return 'land'
+                return KMALand.PRE_LAND
+        return KMALand.LAND
 
     @property
     def s1(self):

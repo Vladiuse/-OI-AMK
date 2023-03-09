@@ -29,11 +29,15 @@ class Land(DomFixxerMixin):
         return url
 
     @property
+    def display_url(self):
+        return self.get_no_protocol_url()
+
+    @property
     def base_url(self):
         return self.get_url_for_base_tag(self.url)
 
-    @staticmethod
-    def get_url_for_base_tag(url):
+
+    def get_url_for_base_tag(self,url):
         s, n, p, a, q, frag = urlparse(url)
         base_url = urlunparse([s, n, p, '', '', ''])
         return base_url
@@ -119,7 +123,7 @@ class Land(DomFixxerMixin):
         if add_base_url:
             for link in links:
                 if not link['href'].startswith('http'):
-                    link['href'] = Land.get_url_for_base_tag(self.url) + link['href']
+                    link['href'] = self.get_url_for_base_tag(self.base_url) + link['href']
         links = list(map(lambda link: str(link), links))
         return links
 
