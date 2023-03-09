@@ -22,6 +22,12 @@ class Land(DomFixxerMixin):
         with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/source.html', 'w') as file:
             file.write(source_text)
 
+    @staticmethod
+    def prepare_url(url):
+        url = url.strip()
+        url = url.replace('https://', 'http://')
+        return url
+
     def get_no_protocol_url(self):
         url = self.url
         for s in 'https://','http://':

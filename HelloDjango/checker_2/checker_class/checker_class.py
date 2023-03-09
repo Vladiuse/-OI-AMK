@@ -28,7 +28,7 @@ class UrlChecker:
         self.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
 
     def load_url(self):
-        url = KMALand.format_url(self.url)
+        url = KMALand.prepare_url(self.url)
         try:
             res = req.get(url)
         except ConnectionError:

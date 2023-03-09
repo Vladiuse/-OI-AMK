@@ -26,6 +26,8 @@ class KMALand(Land):
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
                         'blogs-feed.org'] + TEST_DOMAINS
     INCORRECT_PRE_LAND_URLS = ['previewpreland.pro']
+    NOT_WORKED_PRE_LAND_DOMAINS = ['blogs-info.info']
+    MAIN_PRE_LAND_DOMAIN = 'blog-feed.org'
     PRE_LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     REQUISITES_TAG = 'rekv'
@@ -34,6 +36,8 @@ class KMALand(Land):
     # data to add on page
     STYLES_FILE = './front_data/styles.css'
     JS_FILE = './front_data/script.js'
+
+
 
 
     def __init__(self, source_text, url, **kwargs):
@@ -55,6 +59,13 @@ class KMALand(Land):
             if KMALand.PRE_LAND_ADMIN_UTM not in self.url:
                 raise NoUflParamPreLand
 
+    @staticmethod
+    def prepare_url(url):
+        url = super(KMALand, KMALand).prepare_url(url)
+        for domain in KMALand.NOT_WORKED_PRE_LAND_DOMAINS:
+            url = url.replace(domain, KMALand.MAIN_PRE_LAND_DOMAIN)
+        return url
+
     @property
     def display_url(self):
         if self.land_type == KMALand.LAND:
@@ -63,13 +74,6 @@ class KMALand(Land):
             s, n, p, a, q, frag = urlparse(self.url)
             return urlunparse(['', '', p, a, q, frag])
 
-
-    @staticmethod
-    def format_url(url):
-        url = url.strip()
-        url = url.replace('https://', 'http://')
-        url = url.replace('blogs-info.info', 'blog-feed.org')
-        return url
 
     def _find_kma_back_data(self) -> str:
         """Ищет и возвражает тело скрипта с переменными для лэндинга"""
