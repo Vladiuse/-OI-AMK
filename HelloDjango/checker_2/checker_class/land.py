@@ -18,9 +18,11 @@ class Land(DomFixxerMixin):
         self.img_doubles = None
         self._dates = None
         self._years = None
+        self.land_attrs = None
 
         with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/source.html', 'w') as file:
             file.write(source_text)
+
 
     @staticmethod
     def prepare_url(url):
@@ -160,6 +162,14 @@ class Land(DomFixxerMixin):
     def scripts(self):
         for script in self.soup.find_all('script'):
             yield str(script)
+
+    def add_site_attrs(self):
+        self.land_attrs = []
+        if self._is_video_tag_on_site():
+            self.land_attrs.append('video')
+
+        if self._is_audio_tag_on_site():
+            self.land_attrs.append('audio')
 
 
     def find_n_mark_img_doubles(self):
