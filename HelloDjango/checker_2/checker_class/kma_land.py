@@ -6,27 +6,35 @@ from urllib.parse import urlparse, urlunparse
 import os
 from .land import Land
 from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
+import os
+
 
 
 class KMALand(Land):
     """Сайт KMA"""
+
+    LAND = 'land'
+    PRE_LAND = 'preland'
+    FULL_PRICE = 'full_price'
+    LOW_PRICE = 'low_price'
+
     TEST_DOMAINS = [
         '127.0.0.1',
         'vladiuse.beget.tech',
         'vim-store.ru',
     ]
-    LAND = 'land'
-    PRE_LAND = 'preland'
-
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
                         'blogs-feed.org'] + TEST_DOMAINS
-    INCORRECT_PRELAND_URLS = ['previewpreland.pro']
-    LAND_ADMIN_UTM = 'ufl='
+    INCORRECT_PRE_LAND_URLS = ['previewpreland.pro']
+    PRE_LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     REQUISITES_TAG = 'rekv'
-    STYLES_FILE = './checker_2/checker_class/front_data/styles.css'
-    JS_FILE = './checker_2/checker_class/front_data/script.js'
     OLD_PRICE_CLASS = ''
+
+    # data to add on page
+    STYLES_FILE = './front_data/styles.css'
+    JS_FILE = './front_data/script.js'
+
 
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
@@ -41,10 +49,10 @@ class KMALand(Land):
 
     def validate_url(self):
         if self.land_type == KMALand.PRE_LAND:
-            for domain in KMALand.INCORRECT_PRELAND_URLS:
+            for domain in KMALand.INCORRECT_PRE_LAND_URLS:
                 if domain in self.url:
                     raise IncorrectPreLandUrl
-            if KMALand.LAND_ADMIN_UTM not in self.url:
+            if KMALand.PRE_LAND_ADMIN_UTM not in self.url:
                 raise NoUflParamPreLand
 
     @property
@@ -55,15 +63,6 @@ class KMALand(Land):
             s, n, p, a, q, frag = urlparse(self.url)
             return urlunparse(['', '', p, a, q, frag])
 
-    def get_clean_url(self):
-        url = super().get_no_protocol_url()
-        for domain in KMALand.PRE_LAND_DOMAINS:
-            url = url.replace(domain, '')
-        if url.startswith('/'):
-            url = url[1:]
-        if url.endswith('/'):
-            url = url[:-1]
-        return url
 
     @staticmethod
     def format_url(url):
@@ -149,9 +148,9 @@ class KMALand(Land):
 
     @property
     def iframe_srcdoc(self):
-        from django.conf import settings
-        styles_path = os.path.join(settings.BASE_DIR, self.STYLES_FILE)
-        js_path = os.path.join(settings.BASE_DIR, self.JS_FILE)
+        modul_path = os.path.dirname(__file__)
+        styles_path = os.path.join(modul_path, self.STYLES_FILE)
+        js_path = os.path.join(modul_path, self.JS_FILE)
         with open(styles_path, encoding='utf-8') as file:
             style_text = file.read()
             self.add_css(style_text)
@@ -172,10 +171,10 @@ class KMALand(Land):
     def discount_type(self):
         """Получить тип скидки"""
         discount = self.country_list[self.country]['discount']
-        if int(discount) > 50:
-            return 'low_price'
+        if float(discount) > 50:
+            return KMALand.LOW_PRICE
         else:
-            return 'full_price'
+            return KMALand.FULL_PRICE
 
     @property
     def land_type(self):
