@@ -1,5 +1,7 @@
 import unittest
+from bs4 import BeautifulSoup
 from HelloDjango.checker_2.checker_class.land import Land
+from HelloDjango.checker_2.checker_class.errors import CheckerError
 from unittest.mock import MagicMock
 
 class TestLandSoup(unittest.TestCase):
@@ -22,6 +24,7 @@ class TestLandSoup(unittest.TestCase):
                     </html>
         """
         self.land = Land(source_text=html_code, url='')
+        self.empty_land = Land(source_text='', url='')
 
 
     def test_get_title_of_land(self):
@@ -176,6 +179,132 @@ class TestLandSoup(unittest.TestCase):
         self.assertTrue('https://mc.yandex.ru/metrika' in text)
         self.assertTrue(count == 2)
 
+    def test_is_favicon_links_raise_error(self):
+        link = '<link rel="ICO">'
+        link_bs  = BeautifulSoup(link, 'lxml')
+        with self.assertRaises(CheckerError) as context:
+            self.empty_land.is_favicon_links(link)
+            self.empty_land.is_favicon_links(link_bs)
+
+    def test_is_favicon_links_true(self):
+        Land.TYPES_REL = ['ICO', 'XXX', 'YYY']
+        links = [
+            '<link rel="ICO" href="some">',
+            '<link rel="XXX aaaa" type="" href="some">',
+            '<link rel="" type="ICO" href="some">',
+            '<link type="YYY" rel="" href="some">',
+        ]
+        for link in links:
+            soup = BeautifulSoup(link, 'lxml')
+            link = soup.find('link')
+            self.assertTrue(Land.is_favicon_links(link), str(link))
+
+    def test_is_favicon_links_no_href(self):
+        Land.TYPES_REL = ['ICO', 'XXX', 'YYY']
+        links = [
+            '<link rel="ICO" href="">',
+            '<link rel="XXX aaaa" type="" href="">',
+            '<link rel="" type="ICO" >',
+            '<link type="YYY" rel="" >',
+        ]
+        for link in links:
+            soup = BeautifulSoup(link, 'lxml')
+            link = soup.find('link')
+            self.assertFalse(Land.is_favicon_links(link), str(link))
+
+
+    def test_is_favicon_links_no_attrs(self):
+        Land.TYPES_REL = ['ICO', 'XXX', 'YYY']
+        links = [
+            '<link rel="">',
+            '<link type="">',
+            '<link rel="" type="">',
+            '<link rel="some gfg" type="sddwd">',
+        ]
+        for link in links:
+            soup = BeautifulSoup(link, 'lxml')
+            link = soup.find('link')
+            self.assertFalse(Land.is_favicon_links(link))
+
+    def test_get_favicon_links(self):
+        html = """
+        <head>
+        <base href="https://feed-news.org/otoryx-blog/"/>
+        <meta charset=utf-8 />
+        <link rel=preconnect href="https://fonts.googleapis.com">
+        <link rel=preconnect href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Roboto&family=Roboto+Condensed&display=swap" rel=stylesheet>
+        <link rel=stylesheet href="css/A.main.css.pagespeed.cf.c9kfEOZmfL.css">
+        '<link rel="ICO" href="some">',
+        '<link type="XXX" href="some">',
+        </head>
+        <body>
+        some text
+        </body>
+        """
+        land  = Land(html, url='')
+        Land.TYPES_REL = ['ICO', 'XXX', 'YYY']
+        fav_links = land.get_favicon_links()
+        self.assertEqual(len(fav_links), 2)
+
+    def test_get_favicon_links_no_add_base_url(self):
+        html = """
+        <head>
+        <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Roboto&family=Roboto+Condensed&display=swap" rel=stylesheet>
+        <link rel=stylesheet href="css/A.main.css.pagespeed.cf.c9kfEOZmfL.css">
+        '<link rel="ICO" href="some">',
+        '<link type="XXX" href="some">',
+        </head>
+        <body>
+        some text
+        </body>
+        """
+        land = Land(html, url='')
+        Land.TYPES_REL = ['ICO', 'XXX', 'YYY']
+        fav_links = land.get_favicon_links(add_base_url=False)
+        self.assertEqual(len(fav_links), 2)
+        for link in fav_links:
+            link = BeautifulSoup(link, 'lxml').find('link')
+            self.assertEqual(link['href'], 'some')
+
+    def test_get_favicon_links_add_base_url_no_http(self):
+        html = """
+        '<link rel="ICO" href="some">',
+        """
+        land = Land(html, url='')
+        mock  = MagicMock(return_value='http://google.com/')
+        Land.TYPES_REL = ['ICO', 'XXX', 'YYY']
+        Land.get_url_for_base_tag = mock
+        fav_links = land.get_favicon_links(add_base_url=True)
+        self.assertEqual(len(fav_links), 1)
+        link = fav_links[0]
+        self.assertTrue(isinstance(link, str))
+        link = BeautifulSoup(link, 'lxml').find('link')
+        self.assertTrue(link['href']=='http://google.com/some')
+
+
+class LandUrlFuncsTest(unittest.TestCase):
+
+    def setUp(self):
+        self.empty_land = Land(source_text='', url='')
+
+
+    def test_get_no_protokol_url_http(self):
+        self.empty_land.url = 'http://google.com/some'
+        self.assertEqual(self.empty_land.get_no_protocol_url(), 'google.com/some')
+
+    def test_get_no_protokol_url_https(self):
+        self.empty_land.url = 'https://google.com/some'
+        self.assertEqual(self.empty_land.get_no_protocol_url(), 'google.com/some')
+
+    def test_get_url_for_base_tag(self):
+        url = 'https://feed-news.org/visio-blog/#some?ufl=17446'
+        self.assertEqual(self.empty_land.get_url_for_base_tag(url), 'https://feed-news.org/visio-blog/')
+
+
+class LandDateSearchTest(unittest.TestCase):
+    def setUp(self):
+        self.empty_land = Land(source_text='', url='')
 
 
 
@@ -184,6 +313,10 @@ class TestLandSoup(unittest.TestCase):
 
 
 
+
+
+if __name__ == '__main__':
+    unittest.main()
 
 
 
