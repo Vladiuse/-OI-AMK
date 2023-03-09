@@ -39,7 +39,8 @@ class DomFixerTest(unittest.TestCase):
         """
         soup = BeautifulSoup(text, 'lxml')
         dom = DomFixxerMixin()
-        dom.add_base_tag(soup, 'http://goole.com')
+        dom.soup = soup
+        dom.add_base_tag('http://goole.com')
         self.assertTrue(soup.find('base'))
         self.assertTrue(soup.find('base')['href'] == 'http://goole.com')
 
@@ -61,9 +62,10 @@ class DomFixerTest(unittest.TestCase):
         """
         soup = BeautifulSoup(text, 'lxml')
         dom = DomFixxerMixin()
-        dom.add_base_tag(soup, 'http://goole.com')
-        self.assertTrue(soup.find('base'))
-        self.assertTrue(soup.find('base')['href'] == 'http://goole.com')
+        dom.soup = soup
+        dom.add_base_tag('http://goole.com')
+        self.assertTrue(dom.soup.find('base'))
+        self.assertTrue(dom.soup.find('base')['href'] == 'http://goole.com')
 
     def test_add_css(self):
         css = """
@@ -72,7 +74,8 @@ class DomFixerTest(unittest.TestCase):
         }
         """
         dom = DomFixxerMixin()
-        dom.add_css(self.soup, css)
+        dom.soup = self.soup
+        dom.add_css(css)
         css_in_land = self.soup.find('style')
         self.assertIn(css, str(css_in_land))
 
@@ -81,8 +84,9 @@ class DomFixerTest(unittest.TestCase):
         console.log();
         """
         dom = DomFixxerMixin()
-        dom.add_js(self.soup, js)
-        js_in_land = self.soup.find('script')
+        dom.soup = self.soup
+        dom.add_js(js)
+        js_in_land =  dom.soup.find('script')
         self.assertIn(js, str(js_in_land))
 
     def test_img_double_find(self):
