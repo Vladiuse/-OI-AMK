@@ -1,7 +1,7 @@
 from datetime import datetime
 import re
 from collections import defaultdict
-
+from .kma_land import KMALand
 
 class Check:
     DESCRIPTION = 'No'
@@ -23,10 +23,10 @@ class Check:
     def process(self):
         pass
 
-    def add_mess(self, error, *args, text=None):
+    def add_mess(self, error_text, *args, text=None):
         message = {
-            'text': error if not text else text,
-            'status': self.STATUS_SET[error],
+            'text': error_text if not text else text,
+            'status': self.STATUS_SET[error_text],
             'items': args,
         }
         self.messages.append(message)
@@ -373,7 +373,7 @@ class StarCharInText(Check):
     STAR_CHAR = '*'
 
     def process(self):
-        if self.land.discount_type == 'full_price':
+        if self.land.discount_type == KMALand.FULL_PRICE:
             if self.STAR_CHAR in self.land.human_text:
                 self.add_mess(self.STAR_ON_SITE)
         else:
@@ -458,8 +458,8 @@ class RekvOnPage(Check):
 
     def process(self):
         # TODO нет типа лэнда
-        if self.land.land_type == 'land':
-            rekv = self.land.soup.find('rekv')
+        if self.land.land_type == KMALand.LAND:
+            rekv = self.land.soup.find(KMALand.REQUISITES_TAG)
             if rekv is None or not len(rekv.text):
                 self.add_mess(self.NO_REKV)
 
