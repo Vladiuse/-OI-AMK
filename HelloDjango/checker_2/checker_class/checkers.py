@@ -80,6 +80,7 @@ class Currency(Check):
         for currency in self.url_checker.currencys:
             # main curr
             reg = '[\W\d]'+currency.main_curr+'[.\W\d]'
+            #TODO - проэкронировать точку
             if re.search(reg, self.land.human_text_lower):
                 if self.url_checker.current_country not in currency.country_set.all():
                     incorrect_currencys.add(currency.main_curr.upper())
@@ -94,7 +95,6 @@ class Currency(Check):
                         incorrect_currencys.add(curr.upper())
                     else:
                         incorrect_cyrrencys_code.add(curr.upper())
-
         if not self.messages:
             self.add_mess(self.NO_CURRENCIES)
         if incorrect_currencys:
@@ -154,8 +154,8 @@ class Dates(Check):
     }
 
     def process(self):
-        dates = self.land.dates
-        years = self.land.years
+        dates = list(set(self.land.dates))
+        years = list(set(self.land.years))
         if years:
             years.sort(key=lambda x: int(x))
             self.add_mess(self.ALL_YEARS, *years)
@@ -413,12 +413,12 @@ class SpaceCharInTest(Check):
     }
     BRACKET_CHARS_OPEN = '["\'“«]'
     BRACKET_CHARS_CLOSE = '["\'”»]'
-    LEN_OF_TEXT_BLOCK = 1000
+    LEN_OF_TEXT_BLOCK = 100
     CROP_TEXT_BLOCK = 10
 
     def process(self):
         self.space_before_end_of_sentence()
-        self.space_before_after_brackets()
+        # self.space_before_after_brackets()
 
     def space_before_end_of_sentence(self):
         html_peaces = re.findall(r' {1,3}[.?!]', self.land.human_text_lower)
@@ -428,9 +428,9 @@ class SpaceCharInTest(Check):
 
     def space_before_after_brackets(self):
         text = self.land.human_text_lower
-        SPASE_BEFORE_REG = self.BRACKET_CHARS_OPEN + '\s{1,3}.{5,1000}\S' + self.BRACKET_CHARS_CLOSE
-        SPASE_AFTER_REG = self.BRACKET_CHARS_OPEN + '\S{1,3}.{5,1000}\s' + self.BRACKET_CHARS_CLOSE
-        TWO_SPACE = self.BRACKET_CHARS_OPEN + '\s{1,3}.{5,1000}\s{1,3}' + self.BRACKET_CHARS_CLOSE
+        SPASE_BEFORE_REG = self.BRACKET_CHARS_OPEN + '\s{1,3}.{5,100}\S' + self.BRACKET_CHARS_CLOSE
+        SPASE_AFTER_REG = self.BRACKET_CHARS_OPEN + '\S{1,3}.{5,100}\s' + self.BRACKET_CHARS_CLOSE
+        TWO_SPACE = self.BRACKET_CHARS_OPEN + '\s{1,3}.{5,100}\s{1,3}' + self.BRACKET_CHARS_CLOSE
 
         before = re.findall(SPASE_BEFORE_REG,text)
         if before:
@@ -488,7 +488,7 @@ class FindPhoneNumbers(Check):
         FOUND_PHONE_NUMBER: Check.WARNING,
     }
     def process(self):
-        phones = re.findall('\+?\d[\d()\- x]{9,18}[\dx]', self.land.human_text_lower)
+        phones = re.findall('\+\s?\d[\d()\- x]{9,18}[\dx]', self.land.human_text_lower)
         if phones:
             self.add_mess(self.FOUND_PHONE_NUMBER, *phones)
 
