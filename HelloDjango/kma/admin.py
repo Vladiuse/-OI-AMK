@@ -46,6 +46,7 @@ class CurrencyAdmin(admin.ModelAdmin):
 class OfferPositionAdmin(admin.ModelAdmin):
     list_display = ['id', 'pretty_name']
     list_display_links = ['pretty_name']
+    search_fields = ['name']
 
     @admin.display
     def pretty_name(self, obj):
