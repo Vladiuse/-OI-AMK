@@ -66,12 +66,18 @@ class Land(DomFixxerMixin):
 
     def _find_dates(self, text):
         date_in_text = []
-        pattern_d_m_y = '\d{1,2}[.\\\/-]\d{1,2}[.\\\/-]\d{4}'
-        pattern_y_m_d = '\d{4}[.\\\/-]\d{1,2}[.\\\/-]\d{1,2}'
+        clean_dates = []
+        pattern_d_m_y = '\D\d{1,2}[.\\\/-]\d{1,2}[.\\\/-]\d{4}\D'
+        pattern_y_m_d = '\D\d{4}[.\\\/-]\d{1,2}[.\\\/-]\d{1,2}\D'
         pattern_6_digit = '\D\d{2}[.\\\/]\d{1,2}[.\\\/]\d{1,2}\D|\Dd{1,2}[.\\\/]\d{1,2}[.\\\/]\d{2}\D'
         for pattern in pattern_d_m_y,pattern_y_m_d, pattern_6_digit:
-            date_in_text.extend(re.findall(pattern,text))
-        return date_in_text
+            dates = re.findall(pattern,text)
+            date_in_text.extend(dates)
+
+        for date in date_in_text:
+            clean_date = date[1:-1]
+            clean_dates.append(clean_date)
+        return clean_dates
 
 
     def _find_dates_n_years(self):
@@ -173,8 +179,8 @@ class Land(DomFixxerMixin):
 
 
     def find_n_mark_img_doubles(self):
-        base_url = self.get_url_for_base_tag(self.url)
-        self.img_doubles = DomFixxerMixin.find_double_img(self.soup, base_url=base_url)
+        # base_url = self.get_url_for_base_tag(self.url)
+        self.img_doubles = DomFixxerMixin.find_double_img(self.soup, base_url=self.base_url)
 
     def drop_tags_from_dom(self, elems_ids):
         for id in elems_ids:

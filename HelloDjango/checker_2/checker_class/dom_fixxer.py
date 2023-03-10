@@ -1,5 +1,5 @@
 import hashlib
-
+from urllib.parse import urljoin
 
 class Img:
     IMG_DOUBLE_CLASS = ' __debug_double'
@@ -106,7 +106,7 @@ class DomFixxerMixin:
         [img.set_img_as_double() for img in imgs]
         for hash, src in Img.IMG_SRC_DOUBLES.items():
             if not src.startswith('http'):
-                src = base_url + src
+                src = urljoin(base_url, src)
             dic = {
                 'hash': hash,
                 'src': src,
