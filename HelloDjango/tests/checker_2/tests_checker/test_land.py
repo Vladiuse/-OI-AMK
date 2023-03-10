@@ -445,20 +445,25 @@ class LandDateSearchTest(unittest.TestCase):
 
     def test_search_years_not_in_dates(self):
         text = """
-        20.10.2020
-        20.10.1980
+        text 
+        20.10.2020 text
+        20.10.1980 text
+        2020.10.10 text
+        
+        20.10.10 text
+        10.10.20 text
         
         2021
         2022
+        some text end
         """
         land = Land(text, url='')
         land._find_dates_n_years()
         self.assertTrue(len(land.years),2)
         for year in '2021', '2022':
             self.assertTrue(year in land.years)
-
         for year in '2020', '1980':
-            self.assertFalse(year in land.years)
+            self.assertTrue(year not in land.years)
 
 
 class LandUniqueWordsTest(unittest.TestCase):
