@@ -501,17 +501,25 @@ class PercentCharCorrectSide(Check):
     KEY_NAME = 'old_price_on_land'
 
     INCORRECTS = '% не с той стороны'
+    SPACE_PERCENT_FIND = 'Лишний пробел у процента'
     STATUS_SET = {
         INCORRECTS: Check.WARNING,
+        SPACE_PERCENT_FIND: Check.WARNING,
     }
 
-    RIGHT_SIDE = '\d{1,6} ?%'
-    LEFT_SIDE = '% ?\d{1,6}'
+    RIGHT_SIDE = '\d{1,6} ?[%٪]'
+    LEFT_SIDE = '[%٪] ?\d{1,6}'
 
-    NO_LIKE_OTHER_LANGS = ['tr', 'ar']
+    SPACE_PERCENT = '\d{1,6} [%٪]|[%٪] \d{1,6}'
+
+    NO_LIKE_OTHER_LANGS = ['tr']
 
     def process(self):
-        #todo rewrite check on cluntry, not lang(cat be not set)
+        self.percent_incorrect_side()
+        self.percent_n_space()
+
+    def percent_incorrect_side(self):
+        # todo rewrite check on cluntry, not lang(cat be not set)
         country_langs = [lang.iso for lang in self.url_checker.current_languages]
         if any(lang in country_langs for lang in self.NO_LIKE_OTHER_LANGS):
             regEx = self.RIGHT_SIDE
@@ -521,6 +529,12 @@ class PercentCharCorrectSide(Check):
         if incorrect_percent_side:
             incorrect_percent_side = set(incorrect_percent_side)
             self.add_mess(self.INCORRECTS, *incorrect_percent_side)
+
+    def percent_n_space(self):
+        space_percent = re.findall(self.SPACE_PERCENT, self.land.human_text)
+        if space_percent:
+            self.add_mess(self.SPACE_PERCENT_FIND, *space_percent)
+
 
 
 class CityInText(Check):
