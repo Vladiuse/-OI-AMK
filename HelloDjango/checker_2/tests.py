@@ -90,6 +90,25 @@ class ActualUserListTest(TestCase):
         self.assertEqual(count_of_user_check_points, 9 * 2)
 
 
+    def test_add_user_site_check_point_if_add_new_check_point(self):
+        self.create_check_list()
+        block = CheckBlock.objects.last()
+        ActualUserList.get_or_create(self.user, self.test_url)
+        self.assertEqual(UserSiteCheckPoint.objects.count(),9)
+        new_check = CheckPoint(text='some text', parent=block)
+        new_check.save()
+        self.assertEqual(UserSiteCheckPoint.objects.count(),10)
+
+    def test_add_user_site_check_point_if_edit_check_point(self):
+        self.create_check_list()
+        ActualUserList.get_or_create(self.user, self.test_url)
+        check_point = CheckPoint.objects.last()
+        check_point.text = 'dasdas'
+        check_point.save()
+        self.assertEqual(CheckPoint.objects.count(), 9)
+
+
+
 
 
 
