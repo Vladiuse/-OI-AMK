@@ -68,11 +68,11 @@ class CheckPoint(OrderedModel):
         verbose_name_plural = 'Пункты проверки'
         ordering = ['order']
 
-    def save(self):
+    def save(self, **kwargs):
         if self.pk:
-            super().save()
+            super().save(**kwargs)
         else:
-            super().save()
+            super().save(**kwargs)
             actual_lists = ActualUserList.objects.all()
             for user_list in actual_lists:
                 user_check_point = UserSiteCheckPoint(user_list=user_list, check_point=self)
