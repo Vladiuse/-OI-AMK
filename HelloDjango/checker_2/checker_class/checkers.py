@@ -322,7 +322,7 @@ class JsVarsInText(Check):
     UNDEFINED = 'undefined'
     NaN = 'NaN'
     NULL = 'null'
-
+	
     # UNDEFINED_IN_TEXT = 'Найден undefined в тексте'
     # Nan_IN_TEXT = 'Найден NaN в тексте'
     # NULL_IN_TEXT = 'Найден null в тексте'
@@ -339,6 +339,7 @@ class JsVarsInText(Check):
         self.vars_in_text = set()
 
     def process(self):
+    #TODO искать через r'\WVAR\W'
         self.search_undefined()
         self.search_nan()
         self.search_null()
@@ -488,13 +489,11 @@ class FindPhoneNumbers(Check):
         FOUND_PHONE_NUMBER: Check.WARNING,
     }
     def process(self):
-        phones = re.findall('\+\s?\d[\d()\- x]{9,18}[\dx]', self.land.human_text_lower)
+        phones = re.findall('\+\s?\d[\d()\- x]{7,18}[\dx]', self.land.human_text_lower)
         if phones:
             self.add_mess(self.FOUND_PHONE_NUMBER, *phones)
 
-class IncorrectDataInComments(Check):
-    #TODO
-    pass
+
 
 class PercentCharCorrectSide(Check):
     DESCRIPTION = 'Неправильная сторона %'
@@ -561,6 +560,14 @@ class CityInText(Check):
             self.add_mess(self.INCORRECTS_CITY_GEO, *citys,
                           text=f'{self.INCORRECTS_CITY_GEO} ({country.upper()})')
 
+
+class IncorrectDataInComments(Check):
+    #TODO
+    pass
+
+class KmaFormCheck(Check):
+    #TODO
+    pass
 
 KMA_checkers = [
     PhoneCountryMask, OffersInLand, Currency, Dates,
