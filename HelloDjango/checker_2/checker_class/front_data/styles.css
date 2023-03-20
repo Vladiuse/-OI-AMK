@@ -57,19 +57,19 @@
 
     /* Цены */
     .price_land_s1.__debug{
-        border: 2px solid var(--price-color);
+        border: 2px solid var(--price-color) !important;
     }
     .price_land_s2.__debug{
-        border: 2px solid var(--price-color);
+        border: 2px solid var(--price-color) !important;
     }
     .price_land_s3.__debug{
-        border: 2px solid var(--price-color);
+        border: 2px solid var(--price-color) !important;
     }
     .price_land_s4.__debug{
-        border: 2px solid var(--price-color);
+        border: 2px solid var(--price-color) !important;
     }
     .price_land_curr.__debug{
-        border: 2px solid var(--currency-color);
+        border: 2px solid var(--currency-color) !important;
     }
     .price_land_discount.__debug{
         border: 2px solid var(--discount-color) !important;
