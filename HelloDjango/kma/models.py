@@ -3,7 +3,6 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 
-
 class DefaultWeb(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя веба', unique=True)
 
@@ -28,30 +27,30 @@ class Country(models.Model):
         max_length=2,
         verbose_name='Код страны ISO',
         unique=True,
-        primary_key=True
+        primary_key=True,
     )
     iso3 = models.CharField(
         max_length=3,
         verbose_name='ISO 3',
         unique=True,
         blank=True,
-        null=True
+        null=True,
     )
     ru_full_name = models.CharField(
         max_length=60,
         verbose_name='Русское название',
         blank=True,
-        unique=True
+        unique=True,
     )
     phone = models.CharField(
         max_length=15,
         verbose_name='Валидный номер',
-        blank=True
+        blank=True,
     )
     phone_code = models.CharField(
         max_length=15,
         verbose_name='Моб код страны',
-        blank=True
+        blank=True,
     )
     words = models.JSONField(
         default={"words": [], "templates": []},
@@ -59,11 +58,11 @@ class Country(models.Model):
     )
     language = models.ManyToManyField(
         'Language',
-        blank=True
+        blank=True,
     )
     curr = models.ManyToManyField(
         'Currency',
-        blank=True
+        blank=True,
     )
 
     class Meta:
@@ -72,7 +71,6 @@ class Country(models.Model):
 
     def __str__(self):
         return self.pk.upper()
-
 
     @staticmethod
     def get_country_phone(*countrys_iso) -> dict:
@@ -87,22 +85,28 @@ class Country(models.Model):
             country_phone.update(dic)
         return country_phone
 
+
 class CityToTextSearchManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().exclude(use_in_text_search=False)
 
-class City(models.Model):
 
+class City(models.Model):
     objects = models.Manager()
     text_search = CityToTextSearchManager()
 
-    name = models.CharField(max_length=50, verbose_name='Название города')
-    country = models.ForeignKey(Country, on_delete=models.PROTECT)
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Название города',
+    )
+    country = models.ForeignKey(
+        Country,
+        on_delete=models.PROTECT,
+    )
     use_in_text_search = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = [['name', 'country'],]
-
+        unique_together = [['name', 'country'], ]
 
     def save(self, **kwargs):
         self.name = self.name.lower()
@@ -114,8 +118,15 @@ class City(models.Model):
 
 
 class Language(models.Model):
-    iso = models.CharField(max_length=2, verbose_name='Код iso языка', primary_key=True)
-    russian_name = models.CharField(max_length=25, verbose_name='Русское название', blank=True)
+    iso = models.CharField(
+        max_length=2,
+        verbose_name='Код iso языка',
+        primary_key=True)
+    russian_name = models.CharField(
+        max_length=25,
+        verbose_name='Русское название',
+        blank=True
+    )
 
     class Meta:
         ordering = ['iso']
@@ -129,8 +140,8 @@ class ActualCurrencyManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().annotate(count=Count('country')).filter(count__gt=0)
 
-class Currency(models.Model):
 
+class Currency(models.Model):
     objects = models.Manager()
     actual = ActualCurrencyManager()
 
@@ -170,6 +181,7 @@ class KmaCurrency(Currency):
         if self.kma_code:
             return self.kma_code
         return self.iso
+
     @property
     def other_currs(self):
         other = []
@@ -181,11 +193,15 @@ class KmaCurrency(Currency):
 
 
 class OfferPosition(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Оффер', unique=True)
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Оффер',
+        unique=True,
+    )
 
-    def save(self):
+    def save(self, **kwargs):
         self.name = str(self.name).lower()
-        super().save()
+        super().save(**kwargs)
 
     def __str__(self):
         return str(self.name).title()
@@ -196,8 +212,14 @@ class OfferPosition(models.Model):
 
 
 class UserApiKey(models.Model):
-    token = models.CharField(max_length=40, unique=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    token = models.CharField(
+        max_length=40,
+        unique=True,
+    )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
         return self.user.username

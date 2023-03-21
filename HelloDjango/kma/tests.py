@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Country, City, Currency
+from .models import Country, City, Currency, KmaCurrency
 
 class CountryTest(TestCase):
 
@@ -49,6 +49,29 @@ class CurrencyTest(TestCase):
         self.assertTrue(len(currencys), 3)
         for curr in actual:
             self.assertTrue(curr in currencys)
+
+
+class KmaCurrencyTest(TestCase):
+
+    def setUp(self) -> None:
+        self.no_kma_curr = KmaCurrency.objects.create(name='belarus', iso='byn', iso_3366='bnr')
+        self.kma_curr = KmaCurrency.objects.create(name='russia', iso='rub', iso_3366='rus', kma_code='руб')
+
+    def test_no_kma_curr_main_curr(self):
+        self.assertEqual(self.no_kma_curr.main_curr, 'byn')
+
+    def test_no_kma_curr_other_curs(self):
+        other = self.no_kma_curr.other_currs
+        self.assertEqual(len(other), 1)
+        self.assertTrue('bnr' in other)
+
+    def test_kma_currency_main_curr(self):
+        self.assertEqual(self.kma_curr.main_curr, 'руб')
+
+    def test_kma_curr_other_curs(self):
+        other = self.kma_curr.other_currs
+        self.assertEqual(other, ['rub', 'rus'])
+
 
 
 
