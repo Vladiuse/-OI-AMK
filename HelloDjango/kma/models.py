@@ -53,19 +53,9 @@ class Country(models.Model):
         verbose_name='Моб код страны',
         blank=True
     )
-    currency = models.CharField(
-        max_length=5,
-        verbose_name='Валюта',
-        blank=True
-    )
     words = models.JSONField(
         default={"words": [], "templates": []},
         verbose_name='Слова под гео'
-    )
-    langs = models.CharField(
-        max_length=15,
-        verbose_name='Языки гео',
-        blank=True
     )
     language = models.ManyToManyField(
         'Language',

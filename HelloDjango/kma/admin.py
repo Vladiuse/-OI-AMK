@@ -13,11 +13,10 @@ class CountryCurrencyInline(admin.TabularInline):
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ['iso', 'ru_full_name', 'phone', 'phone_code', 'currency', 'langs']
+    list_display = ['iso', 'ru_full_name', 'phone', 'phone_code', ]
     list_display_links = ['iso', 'ru_full_name']
     search_fields = ['iso', 'ru_full_name']
     autocomplete_fields = ['language', 'curr']
-    # exclude = ['curr']
 
     inlines = [
         CountryCurrencyInline,
