@@ -93,7 +93,7 @@ class LinkChecker:
     def get_check_list(land, user):
         user_check_list = ActualUserList.get_or_create(user, land.url)
         user_check_points = UserSiteCheckPoint.objects.filter(user_list=user_check_list)
-        checks = CheckBlock.filter_check_points(land)
+        checks = CheckPoint.filter_check_points(land)
         blocks_w_checks = CheckBlock.objects.prefetch_related(
             Prefetch('checkpoint_set', queryset=checks)
         ).prefetch_related(
