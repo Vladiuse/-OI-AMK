@@ -73,15 +73,6 @@ class Country(models.Model):
     def __str__(self):
         return self.pk.upper()
 
-    @staticmethod
-    def get_phone_code_by_country(iso_code):
-        """Получить моб код по коду страны"""
-        iso_code = iso_code.lower()
-        try:
-            phone = Country.objects.get(pk=iso_code)
-            return phone.phone_code
-        except Country.DoesNotExist as error:
-            return f'{iso_code}:{error}'
 
     @staticmethod
     def get_country_phone(*countrys_iso) -> dict:
