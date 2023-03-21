@@ -2,6 +2,7 @@ from django.db import models
 from ordered_model.models import OrderedModel
 from django.contrib.auth.models import User
 from datetime import date, timedelta
+from django.db.models import Q
 
 
 class CheckBlock(OrderedModel):
@@ -80,6 +81,17 @@ class CheckPoint(OrderedModel):
 
     def __str__(self):
         return self.text
+
+    @staticmethod
+    def filter_check_points(land):
+        checks = CheckPoint.objects.filter(
+            Q(land_type__iexact=land.land_type) | Q(land_type__iexact=''),
+            Q(discount_type__iexact=land.discount_type) | Q(discount_type__iexact=''),
+            Q(for_geo__icontains=land.country) | Q(for_geo__iexact=''),
+            Q(for_lang__icontains=land.language) | Q(for_lang__iexact=''),
+            Q(filter__in=land.land_attrs) | Q(filter__iexact=''),
+        )
+        return checks
 
 
 class ActualUserList(models.Model):
