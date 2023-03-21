@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .checker_class.kma_land import KMALand
 from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
-from .checker_class.checker_class import UrlChecker
+from .checker_class.link_checker import LinkChecker
 from django.template import Template
 from django.template import RequestContext
 from bs4 import BeautifulSoup
@@ -37,7 +37,7 @@ def check_url(request):
         setting_form.user = request.user
         setting_form.save()
     try:
-        url_checker = UrlChecker(url=url, user=request.user)
+        url_checker = LinkChecker(url=url, user=request.user)
         url_checker.load_url()
         url_checker.process()
         content = {
@@ -60,7 +60,7 @@ def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
         checked_url = request.POST['checked_url']
-        url_checker = UrlChecker(checked_url, request.user, source_text=land_text)
+        url_checker = LinkChecker(checked_url, request.user, source_text=land_text)
         result = url_checker.text_analiz()
         answer = result
         answer['success'] = True

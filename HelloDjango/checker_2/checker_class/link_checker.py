@@ -1,13 +1,14 @@
 from .kma_land import KMALand
-from .check_list_view import get_check_list
+# from .check_list_view import get_check_list
 from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency, City
 from .checkers import KMA_checkers, Check
 from .errors import NoCountryInDB, UrlNotLoad
 import requests as req
-from django.db.models import Prefetch
+from django.db.models import Q, Prefetch
+from checker_2.models import CheckPoint, CheckBlock, UserSiteCheckPoint, ActualUserList
 
 
-class UrlChecker:
+class LinkChecker:
 
     def __init__(self,  url, user, source_text=None):
         self.source_text = source_text
@@ -41,7 +42,7 @@ class UrlChecker:
     def process(self):
         self.land = KMALand(self.source_text, self.url)
         self.land.add_site_attrs()
-        self.check_list = get_check_list(self.land, self.user)
+        self.check_list = LinkChecker.get_check_list(self.land, self.user)
         self.land.find_n_mark_img_doubles()
         self.land.phone_code = self.current_country.phone_code
         try:
@@ -87,4 +88,16 @@ class UrlChecker:
     @property
     def current_languages(self):
         return self.current_country.language.all()
+
+    @staticmethod
+    def get_check_list(land, user):
+        user_check_list = ActualUserList.get_or_create(user, land.url)
+        user_check_points = UserSiteCheckPoint.objects.filter(user_list=user_check_list)
+        checks = CheckBlock.filter_check_points(land)
+        blocks_w_checks = CheckBlock.objects.prefetch_related(
+            Prefetch('checkpoint_set', queryset=checks)
+        ).prefetch_related(
+            Prefetch('checkpoint_set__usersitecheckpoint_set', queryset=user_check_points)
+        )
+        return blocks_w_checks
 
