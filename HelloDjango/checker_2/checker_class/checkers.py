@@ -13,9 +13,9 @@ class Check:
 
     STATUS_SET = {}
 
-    def __init__(self, land, url_checker):
+    def __init__(self, land, link_checker):
         self.land = land
-        self.url_checker = url_checker
+        self.link_checker = link_checker
         self.errors = set()
         self.info = set()
         self.messages = list()
@@ -44,20 +44,38 @@ class PhoneCountryMask(Check):
         INCORECT_MASK_ON_LAND: Check.ERROR,
     }
 
-    def process(self):
-        phone_codes_on_land = []
-        for country in self.url_checker.countrys:
-            if '+' + country.phone_code in self.land.human_text_lower:
-                phone_codes_on_land.append(country)
-        incorrect_countrys = set()
-        for country in phone_codes_on_land:
-            if country.iso == self.land.country:
-                self.add_mess(self.MASK_ON_LAND, '+'+country.phone_code)
-            else:
-                incorrect_countrys.add('+'+country.phone_code)
-        if incorrect_countrys:
-            self.add_mess(self.INCORECT_MASK_ON_LAND, *incorrect_countrys)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_curr_country_phone_on_land = False
+        self.incorrect_countries = []
 
+    def process(self):
+        countrys = self.find_countries_phone_code_on_land()
+        self.separate_countries_by_error_type(countrys)
+        self.add_messages()
+
+    def find_countries_phone_code_on_land(self) -> list:
+        country_phone_codes_on_land = []
+        for country in self.link_checker.countrys:
+            if '+' + country.phone_code in self.land.human_text_lower:
+                country_phone_codes_on_land.append(country)
+        return country_phone_codes_on_land
+
+    def separate_countries_by_error_type(self, countries):
+        for country in countries:
+            if country == self.link_checker.current_country:
+                self.is_curr_country_phone_on_land = True
+            else:
+                self.incorrect_countries.append(country)
+
+    def add_messages(self):
+        # info
+        if self.is_curr_country_phone_on_land:
+            self.add_mess(self.MASK_ON_LAND, '+' + self.link_checker.current_country.phone_code)
+        # error
+        if self.incorrect_countries:
+            phone_codes = ['+'+country.phone_code for country in self.incorrect_countries]
+            self.add_mess(self.INCORECT_MASK_ON_LAND, *phone_codes)
 
 class Currency(Check):
     DESCRIPTION = 'Поиск валют по тексту'
@@ -77,12 +95,12 @@ class Currency(Check):
     def process(self):
         incorrect_currencys = set()
         incorrect_cyrrencys_code = set()
-        for currency in self.url_checker.currencys:
+        for currency in self.link_checker.currencys:
             # main curr
             reg = '[\W\d]'+currency.main_curr+'[.\W\d]'
             #TODO - проэкронировать точку
             if re.search(reg, self.land.human_text_lower):
-                if self.url_checker.current_country not in currency.country_set.all():
+                if self.link_checker.current_country not in currency.country_set.all():
                     incorrect_currencys.add(currency.main_curr.upper())
                 else:
                     self.add_mess(self.CURR_FOUND, currency.main_curr.upper())
@@ -91,7 +109,7 @@ class Currency(Check):
             for curr in currency.other_currs:
                 reg = '[\W\d]' + curr + '[.\W\d]'
                 if re.search(reg, self.land.human_text_lower):
-                    if self.url_checker.current_country not in currency.country_set.all():
+                    if self.link_checker.current_country not in currency.country_set.all():
                         incorrect_currencys.add(curr.upper())
                     else:
                         incorrect_cyrrencys_code.add(curr.upper())
@@ -119,7 +137,7 @@ class OffersInLand(Check):
     }
 
     def process(self):
-        offers = self.url_checker.offers
+        offers = self.link_checker.offers
         offers_in_land = list()
         for offer in offers:
             if re.search('\W'+offer.name+'\W', self.land.human_text_lower):
@@ -129,7 +147,7 @@ class OffersInLand(Check):
         if len(offers_in_land) > 1:
             self.add_mess(self.MORE_ONE_OFFER_FOUND, *offers_in_land)
         if len(offers_in_land) == 1:
-            self.url_checker.land_data['offer_name'] = offers_in_land[0]
+            self.link_checker.land_data['offer_name'] = offers_in_land[0]
             # self.add_mess(self.ONE_OFFER_FOUND, *offers_in_land)
 
 
@@ -254,7 +272,7 @@ class GeoWords(Check):
         pass
 
     def search_by_template(self):
-        for country in self.url_checker.countrys:
+        for country in self.link_checker.countrys:
             templates = country.words['templates']
             country_words_found = set()
             for template in templates:
@@ -290,7 +308,7 @@ class CountyLang(Check):
     def process(self):
         site_lang = self.land.language
         country_langs = None
-        for country in self.url_checker.countrys:
+        for country in self.link_checker.countrys:
             if self.land.country == country.iso:
                 country_langs = country.language.all()
         if not any(site_lang == country_lang.iso for country_lang in country_langs):
@@ -519,7 +537,7 @@ class PercentCharCorrectSide(Check):
 
     def percent_incorrect_side(self):
         # todo rewrite check on cluntry, not lang(cat be not set)
-        country_langs = [lang.iso for lang in self.url_checker.current_languages]
+        country_langs = [lang.iso for lang in self.link_checker.current_languages]
         if any(lang in country_langs for lang in self.NO_LIKE_OTHER_LANGS):
             regEx = self.RIGHT_SIDE
         else:
@@ -548,12 +566,12 @@ class CityInText(Check):
     def process(self):
         land_words = self.land.unique_words
         geo_city_in_text = defaultdict(list)
-        for country in self.url_checker.countrys:
+        for country in self.link_checker.countrys:
             for city in country.city_set.all():
                 city_parts = city.name.split('-')
                 if all(part in land_words for part in city_parts) or city.name in land_words:
                 # if city.name in land_words:
-                    if country != self.url_checker.current_country:
+                    if country != self.link_checker.current_country:
                         geo_city_in_text[country.pk].append(city.name)
         for country, citys in geo_city_in_text.items():
             citys.insert(0,country.upper())
@@ -574,3 +592,6 @@ KMA_checkers = [
     GeoWords, CountyLang, PhpTempVar, JsVarsInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest,RekvOnPage,
     NoOldPrice,PercentCharCorrectSide, CityInText,FindPhoneNumbers
 ]
+
+if __name__ == '__main__':
+    pass

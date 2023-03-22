@@ -54,7 +54,7 @@ class LinkChecker:
         self.land = KMALand(source_text=self.source_text, url=self.url, parser='lxml')
         self.land.drop_tags_from_dom(KMALand.POLICY_IDS)
         for check in KMA_checkers:
-            check = check(land=self.land, url_checker=self)
+            check = check(land=self.land, link_checker=self)
             check.process()
             self.messages += check.messages
         result = {
