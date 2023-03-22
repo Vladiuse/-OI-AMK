@@ -77,6 +77,7 @@ class PhoneCountryMask(Check):
             phone_codes = ['+'+country.phone_code for country in self.incorrect_countries]
             self.add_mess(self.INCORECT_MASK_ON_LAND, *phone_codes)
 
+
 class Currency(Check):
     DESCRIPTION = 'Поиск валют по тексту'
     KEY_NAME = 'currencies_on_land'
@@ -92,33 +93,46 @@ class Currency(Check):
         INCORRECT_COUNTRY_CURRENCY: Check.ERROR,
         CURR_FOUND: Check.INFO,
     }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_find_current_currency = False
+        self.incorrect_currencys = set()
+        self.incorrect_cyrrencys_code = set()
+
     def process(self):
-        incorrect_currencys = set()
-        incorrect_cyrrencys_code = set()
+        self.find_currencys()
+        self.add_messages()
+
+    def find_currencys(self):
         for currency in self.link_checker.currencys:
             # main curr
             reg = '[\W\d]'+currency.main_curr+'[.\W\d]'
             #TODO - проэкронировать точку
             if re.search(reg, self.land.human_text_lower):
                 if self.link_checker.current_country not in currency.country_set.all():
-                    incorrect_currencys.add(currency.main_curr.upper())
+                    self.incorrect_currencys.add(currency.main_curr.upper())
                 else:
-                    self.add_mess(self.CURR_FOUND, currency.main_curr.upper())
+                    self.is_find_current_currency = currency.main_curr.upper()
 
             # other currs codes
             for curr in currency.other_currs:
                 reg = '[\W\d]' + curr + '[.\W\d]'
                 if re.search(reg, self.land.human_text_lower):
                     if self.link_checker.current_country not in currency.country_set.all():
-                        incorrect_currencys.add(curr.upper())
+                        self.incorrect_currencys.add(curr.upper())
                     else:
-                        incorrect_cyrrencys_code.add(curr.upper())
+                        self.incorrect_cyrrencys_code.add(curr.upper())
+
+    def add_messages(self):
+        if self.is_find_current_currency:
+            self.add_mess(self.CURR_FOUND, self.is_find_current_currency)
+        if self.incorrect_currencys:
+            self.add_mess(self.INCORRECT_COUNTRY_CURRENCY, *self.incorrect_currencys)
+        if self.incorrect_cyrrencys_code:
+            self.add_mess(self.INCORRECT_CURE_CODE, *self.incorrect_cyrrencys_code)
         if not self.messages:
             self.add_mess(self.NO_CURRENCIES)
-        if incorrect_currencys:
-            self.add_mess(self.INCORRECT_COUNTRY_CURRENCY, *incorrect_currencys)
-        if incorrect_cyrrencys_code:
-            self.add_mess(self.INCORRECT_CURE_CODE, *incorrect_cyrrencys_code)
 
 
 
