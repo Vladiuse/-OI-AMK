@@ -1,17 +1,11 @@
 from django.test import TestCase
-from checker_2.checker_class.checkers import PhoneCountryMask, Check
-from kma.models import Country
+from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency
+from kma.models import Country, KmaCurrency
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
 from unittest.mock import Mock
 
 
-def get_kma_land(source_text=''):
-    try:
-        kma_land = KMALand(source_text=source_text, url='')
-    except BaseException:
-        pass
-    return kma_land
 
 
 class PhoneCountryMaskTest(TestCase):
@@ -107,6 +101,96 @@ class PhoneCountryMaskTest(TestCase):
         checker.add_messages()
         mess = checker.messages[0]
         self.assertTrue('+'+self.BY.phone_code in mess['items'])
+
+
+
+
+class CurrencyTest(TestCase):
+
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.link_checker.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
+        self.RU = Country.objects.create(iso='ru', ru_full_name='russia', phone_code='7')
+        self.link_checker.current_country = self.RU
+        #create
+        self.RUB = KmaCurrency.objects.create(name='some', iso='rub', iso_3366='rus', kma_code='руб.')
+        self.BYN = KmaCurrency.objects.create(name='some2', iso='byn', iso_3366='bnr', kma_code='бел')
+        self.USD = KmaCurrency.objects.create(name='some3', iso='usd', iso_3366='usa',)
+
+        self.BY = Country.objects.create(iso='by', ru_full_name='belarus', phone_code='375')
+        self.UA = Country.objects.create(iso='ua', ru_full_name='ucraine', phone_code='380')
+
+        self.RU.curr.add(self.RUB)
+        self.BY.curr.add(self.BYN)
+        self.UA.curr.add(self.USD)
+
+
+
+        self.check = Currency(self.land, self.link_checker)
+
+
+    def test_no_fount(self):
+        self.land.human_text_lower = 'some text dodsd'
+        self.check.find_currencys()
+        self.assertFalse(self.check.incorrect_currencys)
+        self.assertFalse(self.check.incorrect_cyrrencys_code)
+
+    def test_find_correct_curr(self):
+        self.land.human_text_lower = 'some text dodsd руб. dasdas'
+        self.check.find_currencys()
+        self.assertEqual(self.check.is_find_current_currency, 'РУБ.')
+
+    def test_find_icorect_curr_code(self):
+        self.land.human_text_lower = 'some text dodsd rub dasdas  rus  dsd'
+        self.check.find_currencys()
+        self.assertTrue(len(self.check.incorrect_cyrrencys_code), 2)
+        self.assertTrue('RUB' in self.check.incorrect_cyrrencys_code)
+        self.assertTrue('RUS' in self.check.incorrect_cyrrencys_code)
+
+    def find_incorrect_country_curr(self):
+        self.land.human_text_lower = 'some usa dodsd uds dasdas  rus  byn csdasd bnr'
+        self.check.find_currencys()
+        self.assertTrue(len(self.check.incorrect_currencys), 4)
+
+
+    def test_add_mess_no_currs_found(self):
+        self.check.add_messages()
+        self.assertTrue(len(self.check.messages), 1)
+        mess = self.check.messages[0]
+        self.assertEqual(mess['text'], Currency.NO_CURRENCIES)
+
+    def test_add_mess_curr_found(self):
+        self.check.is_find_current_currency = 'XXX'
+        self.check.add_messages()
+        self.assertTrue(len(self.check.messages), 1)
+        mess = self.check.messages[0]
+        self.assertEqual(mess['text'], Currency.CURR_FOUND)
+
+    def test_mess_incorrect_curr_code(self):
+        self.check.incorrect_cyrrencys_code.add('XXX')
+        self.check.add_messages()
+        self.assertTrue(len(self.check.messages), 1)
+        mess = self.check.messages[0]
+        self.assertEqual(mess['text'], Currency.INCORRECT_CURE_CODE)
+
+    def test_add_medd_incorrect_currency(self):
+        self.check.incorrect_currencys.add('XXX')
+        self.check.add_messages()
+        self.assertTrue(len(self.check.messages), 1)
+        mess = self.check.messages[0]
+        self.assertEqual(mess['text'], Currency.INCORRECT_COUNTRY_CURRENCY)
+
+    def test_find_all_errors(self):
+        self.check.is_find_current_currency = 'XXX'
+        self.check.incorrect_cyrrencys_code.add('XXX')
+        self.check.incorrect_currencys.add('XXX')
+        self.check.add_messages()
+        self.assertTrue(len(self.check.messages), 3)
+
+
+
+
 
 
 
