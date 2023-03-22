@@ -1,6 +1,6 @@
 from django.test import TestCase
-from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency
-from kma.models import Country, KmaCurrency
+from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand
+from kma.models import Country, KmaCurrency, OfferPosition
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
 from unittest.mock import Mock
@@ -187,6 +187,58 @@ class CurrencyTest(TestCase):
         self.check.incorrect_currencys.add('XXX')
         self.check.add_messages()
         self.assertTrue(len(self.check.messages), 3)
+
+
+class OffersInLandTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.link_checker.offers = OfferPosition.objects.all()
+        self.link_checker.land_data = dict()
+        self.checker = OffersInLand(self.land, self.link_checker)
+
+        # create
+        for name in 'offer', 'two words':
+            OfferPosition.objects.create(name=name)
+
+    def test_no_offers_found(self):
+        self.land.human_text_lower = ''
+        self.checker.find_offers()
+        self.assertEqual(len(self.checker.offers_in_land), 0)
+
+    def test_find_some_offers(self):
+        self.land.human_text_lower = 'some text offer aaaaa two words dsadas'
+        self.checker.find_offers()
+        self.assertEqual(len(self.checker.offers_in_land), 2)
+
+    def test_add_mesages_no_offers(self):
+        self.checker.add_messages()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'],OffersInLand.NO_OFFER_FIND)
+
+    def test_add_mess_more_than_one_found(self):
+        self.checker.offers_in_land = {'1', '2'}
+        self.checker.add_messages()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'],OffersInLand.MORE_ONE_OFFER_FOUND)
+
+    def test_add_to_link_checker_find_offer(self):
+        self.checker.offers_in_land = {'1',}
+        self.checker.return_find_offer()
+        self.assertEqual(self.link_checker.land_data['offer_name'], '1')
+
+    def test_not_add_to_link_checker_find_offer(self):
+        self.checker.return_find_offer()
+        self.assertTrue('offer_name' not in self.link_checker.land_data)
+
+
+
+
+
+
+
 
 
 
