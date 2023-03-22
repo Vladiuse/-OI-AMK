@@ -135,7 +135,6 @@ class Currency(Check):
             self.add_mess(self.NO_CURRENCIES)
 
 
-
 class OffersInLand(Check):
     DESCRIPTION = 'Поиск офферов по тексту'
     KEY_NAME = 'offers_on_land'
@@ -150,19 +149,36 @@ class OffersInLand(Check):
         ONE_OFFER_FOUND: Check.INFO
     }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.offers_in_land = set()
+
     def process(self):
+        self.find_offers()
+        self.add_messages()
+        self.return_find_offer()
+
+    def find_offer(self, offer_name):
+        # TODO
+        pass
+
+    def find_offers(self):
         offers = self.link_checker.offers
-        offers_in_land = list()
         for offer in offers:
-            if re.search('\W'+offer.name+'\W', self.land.human_text_lower):
-                offers_in_land.append(str(offer))
-        if not offers_in_land:
+            if re.search('\W' + offer.name + '\W', self.land.human_text_lower):
+                self.offers_in_land.add(str(offer))
+
+    def add_messages(self):
+        if not self.offers_in_land:
             self.add_mess(self.NO_OFFER_FIND)
-        if len(offers_in_land) > 1:
-            self.add_mess(self.MORE_ONE_OFFER_FOUND, *offers_in_land)
-        if len(offers_in_land) == 1:
-            self.link_checker.land_data['offer_name'] = offers_in_land[0]
-            # self.add_mess(self.ONE_OFFER_FOUND, *offers_in_land)
+        if len(self.offers_in_land) > 1:
+            self.add_mess(self.MORE_ONE_OFFER_FOUND, *self.offers_in_land)
+
+    def return_find_offer(self):
+        if len(self.offers_in_land) == 1:
+            for offer in self.offers_in_land:
+                self.link_checker.land_data['offer_name'] = offer
+
 
 
 class Dates(Check):
