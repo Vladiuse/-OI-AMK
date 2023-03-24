@@ -385,15 +385,10 @@ class JsVarsInText(Check):
     UNDEFINED = 'undefined'
     NaN = 'NaN'
     NULL = 'null'
-	
-    # UNDEFINED_IN_TEXT = 'Найден undefined в тексте'
-    # Nan_IN_TEXT = 'Найден NaN в тексте'
-    # NULL_IN_TEXT = 'Найден null в тексте'
+
     JS_VARIABLE_IN_TEXT = 'Найдены переменные скрипта'
+
     STATUS_SET = {
-        # UNDEFINED_IN_TEXT: Check.ERROR,
-        # Nan_IN_TEXT: Check.ERROR,
-        # NULL_IN_TEXT: Check.ERROR,
         JS_VARIABLE_IN_TEXT: Check.ERROR,
     }
 
@@ -406,6 +401,9 @@ class JsVarsInText(Check):
         self.search_undefined()
         self.search_nan()
         self.search_null()
+        self.add_messages()
+
+    def add_messages(self):
         if self.vars_in_text:
             self.add_mess(self.JS_VARIABLE_IN_TEXT, *self.vars_in_text)
 
@@ -466,11 +464,13 @@ class SpaceCharInTest(Check):
     KEY_NAME = 'extra_spaces'
 
     EXTRA_SPACE_SENTENCE = 'Лишний пробел в конце предложения'
+
     EXTRA_SPACE_TEXT_BLOCK_BEFORE = 'Лишний пробел перед ковычкой'
     EXTRA_SPACE_TEXT_BLOCK_AFTER = 'Лишний пробел после ковычки'
     EXTRA_SPACE_TEXT_BLOCK_TOW = 'Лишние провебы перед ковычками'
     STATUS_SET = {
         EXTRA_SPACE_SENTENCE: Check.WARNING,
+
         EXTRA_SPACE_TEXT_BLOCK_BEFORE: Check.WARNING,
         EXTRA_SPACE_TEXT_BLOCK_AFTER: Check.WARNING,
         EXTRA_SPACE_TEXT_BLOCK_TOW: Check.WARNING,
