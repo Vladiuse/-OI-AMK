@@ -329,7 +329,7 @@ class GeoWords(Check):
                     temp = self.clean_word(temp)
                     country_words_found.add(temp)
             if country_words_found:
-                if country.iso == self.land.country:
+                if country == self.link_checker.current_country:
                     self.add_mess(self.CURRENT_COUNTRY, *country_words_found,
                                   text=f'{self.CURRENT_COUNTRY} ({country})')
                 else:
