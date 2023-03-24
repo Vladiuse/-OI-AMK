@@ -352,15 +352,13 @@ class CountyLang(Check):
         INCORRECT_LANG: Check.WARNING,
     }
 
+
     def process(self):
-        site_lang = self.land.language
-        country_langs = None
-        for country in self.link_checker.countrys:
-            if self.land.country == country.iso:
-                country_langs = country.language.all()
-        if not any(site_lang == country_lang.iso for country_lang in country_langs):
-            needed_langs = [str(lang) for lang in country_langs]
+        currenc_country_langs_iso = [lang.iso for lang in self.link_checker.current_languages]
+        if self.land.language not in currenc_country_langs_iso:
+            needed_langs = [str(lang) for lang in self.link_checker.current_languages]
             self.add_mess(self.INCORRECT_LANG, *needed_langs, text=f'{self.INCORRECT_LANG}, должен быть')
+
 
 
 class PhpTempVar(Check):
