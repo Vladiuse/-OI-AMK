@@ -1,9 +1,9 @@
 from django.test import TestCase
 from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand, Dates,\
     GeoWords, CountyLang, PhpTempVar, JsVarsInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest , \
-    RekvOnPage
+    RekvOnPage, NoOldPrice, FindPhoneNumbers, PercentCharCorrectSide, CityInText
 
-from kma.models import Country, KmaCurrency, OfferPosition, Language
+from kma.models import Country, KmaCurrency, OfferPosition, Language, City
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
 from unittest.mock import Mock
@@ -658,6 +658,163 @@ class RekvOnPageTest(TestCase):
         self.land.soup.html.body.append(rekv)
         self.checker.process()
         self.assertEqual(len(self.checker.messages), 0)
+
+
+class NoOldPriceTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = NoOldPrice(self.land, self.link_checker)
+
+    def test_no_old_price(self):
+        text = 'dasd dasd dsad'
+        self.land.soup = BeautifulSoup(text, 'lxml')
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess=  self.checker.messages[0]
+        self.assertEqual(mess['text'], NoOldPrice.NO_OLD_PRICE)
+
+    def test_old_price_in_land(self):
+        text = f'dasd dasd dsad <p class="{KMALand.OLD_PRICE_CLASS}">sdasdsa</p>'
+        self.land.soup = BeautifulSoup(text, 'lxml')
+        self.checker.process
+        self.assertEqual(len(self.checker.messages), 0)
+
+
+class FindPhoneNumbersTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = FindPhoneNumbers(self.land, self.link_checker)
+
+    def test_no_phone(self):
+        self.land.human_text_lower = 'dsdsad'
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_find_phone_number_in_text(self):
+        self.land.human_text_lower = 'dsdsad sdsa +7 (213) 343-43-43'
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], FindPhoneNumbers.FOUND_PHONE_NUMBER)
+
+
+class PercentCharCorrectSideTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = PercentCharCorrectSide(self.land, self.link_checker)
+        self.RU = Country.objects.create(iso='ru', ru_full_name='russia', phone_code='7')
+        self.TR = Country.objects.create(iso='tr', ru_full_name='turkey', phone_code='345')
+
+    def test_find_percent_n_space(self):
+        self.land.human_text_lower = ''
+        self.checker.find_percent_n_space()
+        self.assertEqual(len(self.checker.percent_n_space), 0)
+
+    def test_find_percent_space_right_side(self):
+        self.land.human_text_lower = 'dasdas d 50 % sdasd 100 %'
+        self.checker.find_percent_n_space()
+        self.assertEqual(len(self.checker.percent_n_space), 2)
+
+    def test_find_percent_space_left_side(self):
+        self.land.human_text_lower = 'dasdas d  % 50. sdasd % 100 sda '
+        self.checker.find_percent_n_space()
+        self.assertEqual(len(self.checker.percent_n_space), 2)
+
+    def test_normal_side_not_found(self):
+        self.land.human_text_lower = 'dasdas d  50%. sdasd 100% sda '
+        self.link_checker.current_country = self.RU
+        self.checker.percent_incorrect_side()
+        self.assertEqual(len(self.checker.incorrect_percent_side), 0)
+
+    def test_normal_side_found(self):
+        self.land.human_text_lower = 'dasdas d  % 50. sdasd %100 sda '
+        self.link_checker.current_country = self.RU
+        self.checker.percent_incorrect_side()
+        self.assertEqual(len(self.checker.incorrect_percent_side), 2)
+
+    def test_not_norman_side_notrnal_country(self):
+        self.land.human_text_lower = 'dasdas d  50%. sdasd 100 % sda '
+        self.link_checker.current_country = self.TR
+        self.checker.percent_incorrect_side()
+        self.assertEqual(len(self.checker.incorrect_percent_side), 2)
+
+    def test_normal_side_not_normal_country(self):
+        self.land.human_text_lower = 'dasdas d  %50. sdasd % 100 sda '
+        self.link_checker.current_country = self.TR
+        self.checker.percent_incorrect_side()
+        self.assertEqual(len(self.checker.incorrect_percent_side), 0)
+
+
+    def test_add_messages_space(self):
+        self.checker.percent_n_space = {'1'}
+        self.checker.add_messages()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'],PercentCharCorrectSide.SPACE_PERCENT_FIND )
+
+    def test_add_mess_incorrect_side(self):
+        self.checker.incorrect_percent_side = {'1',}
+        self.checker.add_messages()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'],PercentCharCorrectSide.INCORRECTS )
+
+    def test_no_messages(self):
+        self.checker.add_messages()
+        self.assertEqual(len(self.checker.messages), 0)
+
+
+
+
+class CityInTextTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.link_checker.citys = City.text_search.all()
+        self.link_checker.countrys = Country.objects.all()
+        self.checker = CityInText(self.land, self.link_checker)
+        self.RU = Country.objects.create(iso='ru', ru_full_name='russia', phone_code='7')
+        self.BY = Country.objects.create(iso='by', ru_full_name='belarus', phone_code='375')
+
+        self.MOSCOW = City.objects.create(name='москва', country=self.RU)
+        self.PITER = City.objects.create(name='санкт-перербург', country=self.RU)
+
+        self.MINKS = City.objects.create(name='минск', country=self.BY)
+
+        self.link_checker.current_country = self.BY
+
+    def test_not_found(self):
+        self.land.unique_words = set()
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_not_found_city_current_country(self):
+        self.land.unique_words = {'минск',}
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_found_incorrect_city(self):
+        self.land.unique_words = {'москва',}
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess= self.checker.messages[0]
+        self.assertTrue(CityInText.INCORRECTS_CITY_GEO in mess['text'])
+
+    def test_found_city_with_space(self):
+        self.land.unique_words = {'санкт', 'перербург'}
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+
+    def test_found_city_with_dash(self):
+        self.land.unique_words = {'санкт-перербург'}
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+
+
+
 
 
 
