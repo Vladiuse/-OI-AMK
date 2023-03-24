@@ -1,5 +1,6 @@
 from django.test import TestCase
-from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand, Dates
+from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand, Dates,\
+    GeoWords
 from kma.models import Country, KmaCurrency, OfferPosition
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
@@ -339,6 +340,62 @@ class DatesCheckTest(TestCase):
         self.checker.add_messages()
         mess = self.checker.messages[0]
         self.assertEqual(mess['text'], Dates.EARLIEST_DATE)
+
+
+class GeoWordsTest(TestCase):
+
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.link_checker.countrys = Country.objects.all()
+        # create
+        ru_words = {"words": [], "templates": ['росси', 'русск']}
+        self.RU = Country.objects.create(iso='ru', ru_full_name='russia',words=ru_words)
+        by_words = {"words": [], "templates": ['беларус',]}
+        self.BY = Country.objects.create(iso='by', ru_full_name='belarus', words=by_words)
+        ua_words = {"words": [], "templates": ['украин',]}
+        self.UA = Country.objects.create(iso='ua', ru_full_name='ucraine', words=ua_words)
+
+        self.link_checker.current_country = self.RU
+
+        self.checker = GeoWords(self.land, self.link_checker)
+
+
+    def test_func_currect_country_words(self):
+        self.land.human_text_lower = 'ntrc русский ыа российский'
+        self.checker.search_by_template()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertTrue(GeoWords.CURRENT_COUNTRY in mess['text'])
+
+    def test_func_not_currect_country_words(self):
+        self.land.human_text_lower = 'ntrc беларус ыа буларусский'
+        self.checker.search_by_template()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertTrue(GeoWords.INCORECT_COUNTRY in mess['text'])
+
+    def test_func_not_currect_country_words_two(self):
+        self.land.human_text_lower = 'ntrc беларус ыа украинский выфв '
+        self.checker.search_by_template()
+        self.assertEqual(len(self.checker.messages), 2)
+
+    def test_no_found(self):
+        self.land.human_text_lower = ''
+        self.checker.search_by_template()
+        self.assertEqual(len(self.checker.messages), 0)
+
+
+    def test_clead_word(self):
+        words = [
+            ['__word++','word'],
+            ['11word11', 'word'],
+            ['- word;.', 'word'],
+        ]
+        for word, res in words:
+            self.assertEqual(self.checker.clean_word(word), res)
+
+
 
 
 
