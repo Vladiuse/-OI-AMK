@@ -1,9 +1,11 @@
 from django.test import TestCase
-from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand
+from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand, Dates
 from kma.models import Country, KmaCurrency, OfferPosition
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
 from unittest.mock import Mock
+from datetime import date as _date
+from datetime import datetime, timedelta
 
 
 
@@ -211,7 +213,7 @@ class OffersInLandTest(TestCase):
         self.checker.find_offers()
         self.assertEqual(len(self.checker.offers_in_land), 2)
 
-    def test_add_mesages_no_offers(self):
+    def test_add_messages_no_offers(self):
         self.checker.add_messages()
         self.assertEqual(len(self.checker.messages), 1)
         mess = self.checker.messages[0]
@@ -232,6 +234,112 @@ class OffersInLandTest(TestCase):
     def test_not_add_to_link_checker_find_offer(self):
         self.checker.return_find_offer()
         self.assertTrue('offer_name' not in self.link_checker.land_data)
+
+
+class DatesCheckTest(TestCase):
+
+
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.land.dates = []
+        self.land.years = []
+        self.checker = Dates(self.land, self.link_checker)
+
+    def test_is_incorrect_date_format_no(self):
+        for correct_date in '20.20.2020', '2020.12.10', '20.10.10':
+            self.assertFalse(Dates.is_incorrect_date_format(correct_date))
+
+    def test_test_is_incorrect_date_format(self):
+        for incorrect_date in '20\\20\\2020', '2020/12/10':
+            self.assertTrue(Dates.is_incorrect_date_format(incorrect_date))
+
+    def test_make_date_point_delimeter(self):
+        dates_to_test = ['20\\20\\2020','20/20/2020', '20.20.2020']
+        for date in dates_to_test:
+            self.assertEqual(self.checker.make_date_point_delimeter(date), '20.20.2020')
+
+    def test_make_date_Y(self):
+        result = self.checker.make_date('10.10.2020')
+        self.assertTrue(isinstance(result, _date))
+
+    def test_make_date_y(self):
+        result = self.checker.make_date('10.10.20')
+        self.assertTrue(isinstance(result, _date))
+
+    def test_not_create_date(self):
+        result = self.checker.make_date('1010.10.20')
+        self.assertFalse(result)
+
+    def test_is_date_incorrect_correct(self):
+        self.assertFalse(self.checker.is_date_incorrect('10.10.20'))
+
+    def test_is_date_incorrect_incorrect_day(self):
+        self.assertTrue(self.checker.is_date_incorrect('40.10.20'))
+
+    def test_is_date_incorrect_incorrect_day(self):
+        self.assertTrue(self.checker.is_date_incorrect('10.13.20'))
+
+    def test_is_date_from_future_yes(self):
+        for format in '%d.%m.%Y', '%d.%m.%y':
+            tomorrow = (datetime.today() + timedelta(days=1)).strftime(format)
+            self.assertTrue(self.checker.is_date_from_future(tomorrow))
+
+    def test_is_date_from_future_not(self):
+        for format in '%d.%m.%Y', '%d.%m.%y':
+            today = datetime.today().strftime(format)
+            self.assertFalse(self.checker.is_date_from_future(today))
+
+    def test_get_earliest_date(self):
+        dates = ['10.10.10', '10/12/20', '10.10.2012', '10\\10\\2012', '123']
+        self.assertEqual(self.checker.get_earliest_date(dates), '10.10.2010')
+
+
+    def test_process_dates(self):
+        tomorrow = (datetime.today() + timedelta(days=1)).strftime('%d.%m.%y')
+        self.checker.dates = ['10\\10\\10', tomorrow, '20.20.20']
+        self.checker.process_dates()
+        self.assertEqual(self.checker.incorrect_format_dates, ['10\\10\\10'])
+        self.assertEqual(self.checker.incorrect_dates, ['20.20.20'])
+        self.assertEqual(self.checker.earliest_date, '10.10.2010')
+        self.assertEqual(self.checker.future_dates, [tomorrow])
+
+    def test_add_messages_yesrs(self):
+        self.checker.years = ['1']
+        self.checker.add_messages()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], Dates.ALL_YEARS)
+
+    def test_add_messages_all_dates(self):
+        self.checker.dates = ['1']
+        self.checker.add_messages()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], Dates.ALL_DATES)
+
+    def test_add_messages_incorrect_format_dates(self):
+        self.checker.incorrect_format_dates = ['1']
+        self.checker.add_messages()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], Dates.INCORRECT_DATE_FORMAT)
+
+    def test_add_messages_incorrect_format_dates(self):
+        self.checker.incorrect_dates = ['1']
+        self.checker.add_messages()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], Dates.INCORRECT_DATE)
+
+    def test_add_messages_future_dates(self):
+        self.checker.future_dates = ['1']
+        self.checker.add_messages()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], Dates.FUTURE_DATE)
+
+    def test_add_messages_incorrect_earliest_date(self):
+        self.checker.earliest_date = ['1']
+        self.checker.add_messages()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], Dates.EARLIEST_DATE)
+
 
 
 
