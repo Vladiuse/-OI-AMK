@@ -538,7 +538,7 @@ class NoOldPrice(Check):
     }
 
     def process(self):
-        old_price = self.land.soup.select('.price_land_s4')
+        old_price = self.land.soup.select(KMALand.OLD_PRICE_CLASS)
         if not old_price:
             self.add_mess(self.NO_OLD_PRICE)
 
@@ -575,12 +575,28 @@ class PercentCharCorrectSide(Check):
     SPACE_PERCENT = '\d{1,6} [%٪]|[%٪] \d{1,6}'
 
     NO_LIKE_OTHER_LANGS = ['tr']
+    NO_LIKE_OTHER_COUNTRIES = ['tr']
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.percent_n_space = set()
+        self.incorrect_percent_side = set()
 
     def process(self):
         self.percent_incorrect_side()
-        self.percent_n_space()
+        self.find_percent_n_space()
+        self.add_messages()
 
     def percent_incorrect_side(self):
+        regEx = self.LEFT_SIDE
+        if self.link_checker.current_country.iso  in self.NO_LIKE_OTHER_COUNTRIES:
+            regEx = self.RIGHT_SIDE
+        incorrect_percent_side = re.findall(regEx, self.land.human_text_lower)
+        if incorrect_percent_side:
+            self.incorrect_percent_side = set(incorrect_percent_side)
+
+    def __percent_incorrect_side_old(self):
         # todo rewrite check on cluntry, not lang(cat be not set)
         country_langs = [lang.iso for lang in self.link_checker.current_languages]
         if any(lang in country_langs for lang in self.NO_LIKE_OTHER_LANGS):
@@ -592,11 +608,16 @@ class PercentCharCorrectSide(Check):
             incorrect_percent_side = set(incorrect_percent_side)
             self.add_mess(self.INCORRECTS, *incorrect_percent_side)
 
-    def percent_n_space(self):
-        space_percent = re.findall(self.SPACE_PERCENT, self.land.human_text)
-        if space_percent:
-            self.add_mess(self.SPACE_PERCENT_FIND, *space_percent)
+    def find_percent_n_space(self):
+        space_percent = re.findall(self.SPACE_PERCENT, self.land.human_text_lower)
+        self.percent_n_space = set(space_percent)
 
+    def add_messages(self):
+        if self.percent_n_space:
+            self.add_mess(self.SPACE_PERCENT_FIND, *self.percent_n_space)
+
+        if self.incorrect_percent_side:
+            self.add_mess(self.INCORRECTS, *self.incorrect_percent_side)
 
 
 class CityInText(Check):

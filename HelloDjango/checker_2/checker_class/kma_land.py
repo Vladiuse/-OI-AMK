@@ -33,6 +33,8 @@ class KMALand(Land):
     REQUISITES_TAG = 'rekv'
     OLD_PRICE_CLASS = ''
 
+    OLD_PRICE_CLASS = '.price_land_s4'
+
     # data to add on page
     STYLES_FILE = './front_data/styles.css'
     JS_FILE = './front_data/script.js'
