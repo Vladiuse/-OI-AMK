@@ -201,29 +201,46 @@ class Dates(Check):
         FUTURE_DATE: Check.ERROR,
     }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dates = list(set(self.land.dates))
+        self.years = list(set(self.land.years))
+        #
+        self.incorrect_format_dates = None
+        self.incorrect_dates = None
+        self.future_dates = None
+        self.earliest_date = None
+
     def process(self):
-        dates = list(set(self.land.dates))
-        years = list(set(self.land.years))
-        if years:
-            years.sort(key=lambda x: int(x))
-            self.add_mess(self.ALL_YEARS, *years)
-        if dates:
-            self.add_mess(self.ALL_DATES, *dates)
+        self.process_dates()
+        self.add_messages()
 
-        incorrect_format_dates = list(filter(self.is_incorrect_date_format, dates))
-        if incorrect_format_dates:
-            self.add_mess(self.INCORRECT_DATE_FORMAT, *incorrect_format_dates)
+    def process_dates(self):
+        self.incorrect_format_dates = list(filter(self.is_incorrect_date_format, self.dates))
+        self.incorrect_dates = list(filter(self.is_date_incorrect, self.dates))
+        self.future_dates = list(filter(self.is_date_from_future, self.dates))
+        self.earliest_date = self.get_earliest_date(self.dates)
 
-        incorrect_dates = list(filter(self.is_date_incorrect, dates))
-        if incorrect_dates:
-            self.add_mess(self.INCORRECT_DATE, *incorrect_dates)
+    def add_messages(self):
+        if self.years:
+            self.years.sort(key=lambda x: int(x))
+            self.add_mess(self.ALL_YEARS, *self.years)
 
-        future_dates = list(filter(self.is_date_from_future, dates))
-        if future_dates:
-            self.add_mess(self.FUTURE_DATE, *future_dates)
-        earliest_date = self.get_earliest_date(dates)
-        if earliest_date:
-            self.add_mess(self.EARLIEST_DATE, earliest_date)
+        if self.dates:
+            self.add_mess(self.ALL_DATES, *self.dates)
+
+        if self.incorrect_format_dates:
+            self.add_mess(self.INCORRECT_DATE_FORMAT, *self.incorrect_format_dates)
+
+        if self.incorrect_dates:
+            self.add_mess(self.INCORRECT_DATE, *self.incorrect_dates)
+
+        if self.future_dates:
+            self.add_mess(self.FUTURE_DATE, *self.future_dates)
+
+        if self.earliest_date:
+            self.add_mess(self.EARLIEST_DATE, self.earliest_date)
+
 
     @staticmethod
     def is_incorrect_date_format(date):
