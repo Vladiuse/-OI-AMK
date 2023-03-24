@@ -1,7 +1,7 @@
 from django.test import TestCase
 from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand, Dates,\
-    GeoWords
-from kma.models import Country, KmaCurrency, OfferPosition
+    GeoWords, CountyLang
+from kma.models import Country, KmaCurrency, OfferPosition, Language
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
 from unittest.mock import Mock
@@ -397,9 +397,51 @@ class GeoWordsTest(TestCase):
 
 
 
+class CountyLangTest(TestCase):
+
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+
+        self.checker = CountyLang(self.land, self.link_checker)
+        self.land.language = 'ru'
+        self.RU = Country.objects.create(iso='ru', ru_full_name='russia', phone_code='7')
+        self.BY = Country.objects.create(iso='by', ru_full_name='belarus', phone_code='375')
+        self.UA = Country.objects.create(iso='ua', ru_full_name='ucraine', phone_code='380')
+
+        self.RU_LANG = Language.objects.create(iso='ru')
+        self.BY_LANG = Language.objects.create(iso='by')
+        self.UA_LANG_1 = Language.objects.create(iso='u1')
+        self.UA_LANG_2 = Language.objects.create(iso='u2')
+
+        self.RU.language.add(self.RU_LANG)
+        self.BY.language.add(self.BY_LANG)
+        self.UA.language.add(self.UA_LANG_1, self.UA_LANG_2)
+
+        self.link_checker.countrys = Country.objects.all()
+        self.link_checker.current_country = self.RU
+        self.link_checker.current_languages = self.RU.language.all()
+
+    def test_correct_lang(self):
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
 
 
+    def test_lang_incorrect(self):
+        self.link_checker.current_country = self.BY
+        self.link_checker.current_languages = self.BY.language.all()
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertTrue(CountyLang.INCORRECT_LANG in mess['text'])
 
+    def test_need_langs_more_one(self):
+        self.link_checker.current_country = self.UA
+        self.link_checker.current_languages = self.UA.language.all()
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(len(mess['items']), 2)
 
 
 
