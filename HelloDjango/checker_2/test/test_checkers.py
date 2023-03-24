@@ -1,12 +1,15 @@
 from django.test import TestCase
 from checker_2.checker_class.checkers import PhoneCountryMask, Check, Currency,OffersInLand, Dates,\
-    GeoWords, CountyLang
+    GeoWords, CountyLang, PhpTempVar, JsVarsInText, StarCharInText, HtmlPeaceOfCodeInText, SpaceCharInTest , \
+    RekvOnPage
+
 from kma.models import Country, KmaCurrency, OfferPosition, Language
 from checker_2.checker_class.kma_land import KMALand
 from checker_2.checker_class.link_checker import LinkChecker
 from unittest.mock import Mock
 from datetime import date as _date
 from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
 
 
 
@@ -444,15 +447,217 @@ class CountyLangTest(TestCase):
         self.assertEqual(len(mess['items']), 2)
 
 
+class PhpTempVartest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = PhpTempVar(self.land, self.link_checker)
+
+    def test_clean_text(self):
+        self.land.human_text = ''
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+
+    def test_find_php_template(self):
+        self.land.human_text = 'some test {$php_var.sads} dasdasd'
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], PhpTempVar.VARIABLE_ON_SITE)
+
+
+class JsVarsInTexttest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = JsVarsInText(self.land, self.link_checker)
+        self.land.human_text_lower = ''
+        self.land.human_text = ''
+
+    def test_clean_text(self):
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_process(self):
+        self.land.human_text_lower = 'das undefined dsad null sdad'
+        self.land.human_text = 'das undefined dsad null sdad NaN dsadasd'
+        self.checker.process()
+        self.assertEqual(len(self.checker.vars_in_text), 3)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], JsVarsInText.JS_VARIABLE_IN_TEXT)
+
+
+    def test_search_undefined(self):
+        self.land.human_text_lower = 'some text undefined sdsad'
+        self.checker.search_undefined()
+        self.assertTrue(JsVarsInText.UNDEFINED in self.checker.vars_in_text)
+
+    def test_search_nan(self):
+        self.land.human_text = 'some NaN undefined sdsad'
+        self.checker.search_nan()
+        self.assertTrue(JsVarsInText.NaN in self.checker.vars_in_text)
+
+    def test_search_nan_lower(self):
+        self.land.human_text = 'some nan undefined sdsad'
+        self.checker.search_nan()
+        self.assertTrue(JsVarsInText.NaN not in self.checker.vars_in_text)
+
+    def test_search_null(self):
+        self.land.human_text_lower = 'some text null sdsad'
+        self.checker.search_null()
+        self.assertTrue(JsVarsInText.NULL in self.checker.vars_in_text)
+
+    def test_add_messages(self):
+        self.checker.vars_in_text = {JsVarsInText.NULL, JsVarsInText.UNDEFINED, JsVarsInText.NaN}
+        self.checker.add_messages()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], JsVarsInText.JS_VARIABLE_IN_TEXT)
+
+
+
+class StarCharInTextTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = StarCharInText(self.land, self.link_checker)
+
+    def test_full_price_no_star(self):
+        self.land.human_text = ''
+        self.land.discount_type = KMALand.FULL_PRICE
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_full_price_star_in_text(self):
+        self.land.human_text = 'dsads dsad * sdad'
+        self.land.discount_type = KMALand.FULL_PRICE
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], StarCharInText.STAR_ON_SITE)
+
+    def test_low_price_no_star(self):
+        self.land.human_text = ''
+        self.land.discount_type = KMALand.LOW_PRICE
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], StarCharInText.STAR_NOT_IN_TEXT)
+
+    def test_low_price_star_in_text(self):
+        self.land.human_text = 'dsads dsad * sdad'
+        self.land.discount_type = KMALand.LOW_PRICE
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
 
 
 
 
+class HtmlPeaceOfCodeInTextTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = HtmlPeaceOfCodeInText(self.land, self.link_checker)
+
+    def test_no_found(self):
+        self.land.human_text = ''
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages),0)
+
+    def test_find_comment_peace_1(self):
+        self.land.human_text = 'dasdas <!- dsadsadasd'
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages),1)
+        mess = self.checker.messages[0]
+        self.assertTrue('<!-' in  mess['items'])
+
+    def test_find_comment_peace_2(self):
+        self.land.human_text = 'dasdas --> dsadsadasd'
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages),1)
+        mess = self.checker.messages[0]
+        self.assertTrue('-->' in  mess['items'])
+
+    def test_correct_message_text(self):
+        self.land.human_text = 'dasdas --> dsadsadasd'
+        self.checker.process()
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], HtmlPeaceOfCodeInText.HTML_PEACE_IN_TEXT)
 
 
 
 
+class SpaceCharInTestTest(TestCase):
 
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = SpaceCharInTest(self.land, self.link_checker)
+
+    def test_cleand_text(self):
+        self.land.human_text_lower = ''
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_space_before_end_of_sentence(self):
+        examples = [
+            'some testds . dasd ',
+            'some testds ! dasd ',
+            'some testds ? dasd ',
+        ]
+        for text in examples:
+            self.land.human_text_lower = text
+            self.checker.space_before_end_of_sentence()
+            self.assertEqual(len(self.checker.messages), 1)
+            mess = self.checker.messages[0]
+            self.assertEqual(mess['text'], SpaceCharInTest.EXTRA_SPACE_SENTENCE)
+            self.assertEqual(len(mess['items']), 1)
+            self.checker.messages.clear()
+
+
+
+class RekvOnPageTest(TestCase):
+    def setUp(self) -> None:
+        self.land = Mock()
+        self.link_checker = Mock()
+        self.checker = RekvOnPage(self.land, self.link_checker)
+
+    def test_no_revk_land_type(self):
+        self.land.land_type = KMALand.LAND
+        text = ''
+        self.land.soup = BeautifulSoup(text, 'lxml')
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 1)
+        mess = self.checker.messages[0]
+        self.assertEqual(mess['text'], RekvOnPage.NO_REKV)
+
+    def test_find_recv_land_type(self):
+        self.land.land_type = KMALand.LAND
+        text = 'dasd dssad das '
+        self.land.soup = BeautifulSoup(text, 'lxml')
+        rekv = self.land.soup.new_tag(KMALand.REQUISITES_TAG)
+        rekv.string = 'sdasdsa dsada'
+        self.land.soup.html.body.append(rekv)
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_no_rekv_pre_land_type(self):
+        self.land.land_type = KMALand.PRE_LAND
+        text = ''
+        self.land.soup = BeautifulSoup(text, 'lxml')
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
+
+    def test_find_recv_preland_type(self):
+        self.land.land_type = KMALand.PRE_LAND
+        text = 'dasd dssad das '
+        self.land.soup = BeautifulSoup(text, 'lxml')
+        rekv = self.land.soup.new_tag(KMALand.REQUISITES_TAG)
+        rekv.string = 'sdasdsa dsada'
+        self.land.soup.html.body.append(rekv)
+        self.checker.process()
+        self.assertEqual(len(self.checker.messages), 0)
 
 
 
