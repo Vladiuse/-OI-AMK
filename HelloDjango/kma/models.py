@@ -3,16 +3,6 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 
-class DefaultWeb(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Имя веба', unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Веб по умолчанию'
-        verbose_name_plural = 'Вебы по умолчаниюа'
-
 
 class ActualCountryManager(models.Manager):
     def get_queryset(self):

@@ -1,11 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import DefaultWeb, Country, OfferPosition, UserApiKey, Language, Currency, City
+from .models import Country, OfferPosition, UserApiKey, Language, Currency, City
 
-
-class DefaultWebAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_display_links = ['id', 'name']
 
 class CountryCurrencyInline(admin.TabularInline):
     model = Country.curr.through
@@ -60,7 +56,6 @@ class CityAdmin(admin.ModelAdmin):
     list_display_links = ['name']
     search_fields = ['name']
 
-admin.site.register(DefaultWeb, DefaultWebAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(OfferPosition, OfferPositionAdmin)
 admin.site.register(UserApiKey)
