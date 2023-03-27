@@ -84,9 +84,10 @@
     <tr>
       <th scope="col"></th>
       <th scope="col">ISO</th>
+      <th scope="col">Моб Код</th>
       <th scope="col">Страна</th>
       <th scope="col">Номер</th>
-      <th scope="col">Моб Код</th>
+
     </tr>
   </thead>
   <tbody>
@@ -94,9 +95,10 @@
     <tr>
       <th scope="row"><span class="flag-icon flag-icon-{{phone.pk}}"></span></th>
       <th scope="row" style="text-transform: uppercase;">{{phone.iso}}</th>
+      <td>+{{phone.phone_code}}</td>
       <td>{{phone.ru_full_name}}</td>
       <td>{{phone.phone}}</td>
-      <td>+{{phone.phone_code}}</td>
+
     </tr>
   {% endfor %}
   </tbody>
