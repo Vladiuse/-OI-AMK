@@ -94,6 +94,8 @@ class Currency(Check):
         CURR_FOUND: Check.INFO,
     }
 
+    CURRENCY_TO_NOT_ADD = {'ALL', 'SAU', 'ARE', 'L'}
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_find_current_currency = False
@@ -102,6 +104,7 @@ class Currency(Check):
 
     def process(self):
         self.find_currencys()
+        self.clean_incorrect_currency()
         self.add_messages()
 
     def find_currencys(self):
@@ -123,6 +126,10 @@ class Currency(Check):
                         self.incorrect_currencys.add(curr.upper())
                     else:
                         self.incorrect_cyrrencys_code.add(curr.upper())
+
+    def clean_incorrect_currency(self):
+        #TODO tests need
+        self.incorrect_currencys = self.incorrect_currencys - self.CURRENCY_TO_NOT_ADD
 
     def add_messages(self):
         if self.is_find_current_currency:
