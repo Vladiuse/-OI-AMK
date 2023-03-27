@@ -20,8 +20,6 @@ class Land(DomFixxerMixin):
         self._years = None
         self.land_attrs = None
 
-        with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/source.html', 'w') as file:
-            file.write(source_text)
 
 
     @staticmethod
@@ -194,8 +192,6 @@ class Land(DomFixxerMixin):
             clean_land_text += ' '.join(self._human_text_from_placeholders())
             clean_land_text += ' '.join(self._human_text_from_input_values())
             self._human_text = clean_land_text
-            with open('/home/vlad/PycharmProjects/-OI-AMK/HelloDjango/media/tech/checker/text.html', 'w') as file:
-                file.write(self.human_text_lower)
         return self._human_text
 
     def _human_text_from_placeholders(self) -> list:
