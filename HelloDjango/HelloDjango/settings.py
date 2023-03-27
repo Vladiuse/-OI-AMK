@@ -101,12 +101,6 @@ TEMPLATES = [
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 # for MySql local server
 DATABASES = {
@@ -134,17 +128,17 @@ DATABASES = {
 #  }
 
 # local kma_db for test
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': get_secret('test_kma_db'),
-         'USER': get_secret('test_kma_user'),
-         'PASSWORD': get_secret('test_kma_db_pass'),
-         'HOST': 'localhost',
-         'PORT': '3306',
-
-     }
- }
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': get_secret('test_kma_db'),
+#          'USER': get_secret('test_kma_user'),
+#          'PASSWORD': get_secret('test_kma_db_pass'),
+#          'HOST': 'localhost',
+#          'PORT': '3306',
+#
+#      }
+#  }
 
 
 # Password validation
