@@ -78,10 +78,10 @@ class Country(models.Model):
         ключ:county_iso
         значение: номер телефона
         """
-        phones = Country.objects.filter(short__in=countrys_iso).values()
+        phones = Country.objects.filter(iso__in=countrys_iso).values()
         country_phone = dict()
         for p in phones:
-            dic = {p['short']: p['phone']}
+            dic = {p['iso']: p['phone']}
             country_phone.update(dic)
         return country_phone
 

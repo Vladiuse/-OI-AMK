@@ -45,7 +45,7 @@
               <a href="#" class="btn btn-secondary active" role="button" aria-pressed="true" id="lead-link" target="_blank" style="display:none;">Перейти в трекер</a>
               <ul id="myUL">
                 {% for phone in phones %}
-                <li id="{{phone.short}}">
+                <li id="{{phone.pk}}">
                   <a href="#">
                     <div><span class="flag-icon flag-icon-{{phone.pk}}"></span>
                       {{phone.ru_full_name}} ({{phone.pk|upper}})</div>

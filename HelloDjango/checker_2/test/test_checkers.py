@@ -131,8 +131,6 @@ class CurrencyTest(TestCase):
         self.BY.curr.add(self.BYN)
         self.UA.curr.add(self.USD)
 
-
-
         self.check = Currency(self.land, self.link_checker)
 
 
@@ -812,6 +810,8 @@ class CityInTextTest(TestCase):
         self.land.unique_words = {'санкт-перербург'}
         self.checker.process()
         self.assertEqual(len(self.checker.messages), 1)
+
+
 
 
 
