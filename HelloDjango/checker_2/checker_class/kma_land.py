@@ -24,23 +24,19 @@ class KMALand(Land):
         'vim-store.ru',
     ]
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
-                        'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org'] + TEST_DOMAINS
+                        'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org', 'thirstday-news.org', 'monday-news.org', 'atirs-news.org'] + TEST_DOMAINS
     INCORRECT_PRE_LAND_URLS = ['previewpreland.pro']
     NOT_WORKED_PRE_LAND_DOMAINS = ['blogs-info.info']
     MAIN_PRE_LAND_DOMAIN = 'blog-feed.org'
     PRE_LAND_ADMIN_UTM = 'ufl='
     POLICY_IDS = ['polit', 'agreement']
     REQUISITES_TAG = 'rekv'
-    OLD_PRICE_CLASS = ''
 
     OLD_PRICE_CLASS = '.price_land_s4'
 
     # data to add on page
     STYLES_FILE = './front_data/styles.css'
     JS_FILE = './front_data/script.js'
-
-
-
 
     def __init__(self, source_text, url, **kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)

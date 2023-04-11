@@ -94,7 +94,7 @@ class Currency(Check):
         CURR_FOUND: Check.INFO,
     }
 
-    CURRENCY_TO_NOT_ADD = {'ALL', 'SAU', 'ARE', 'L'}
+    CURRENCY_TO_NOT_ADD = {'ALL', 'SAU', 'ARE', 'L', 'NGA', 'PER', 'PAK'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
