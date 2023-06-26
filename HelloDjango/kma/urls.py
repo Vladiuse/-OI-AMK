@@ -5,6 +5,7 @@ app_name = 'kma'
 urlpatterns = [
     path('default_webs/', views.default_webs, name='default_webs'),
     path('phones/', views.phones, name='phones'),
+    path('discount_text/', views.discount_text, name='discount_text'),
     path('get_phone_code/', views.get_phone_code),
     path('manual/', views.manual, name='manual'),
     path('test_rekl/', views.test_rekl,),

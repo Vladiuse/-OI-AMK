@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Country, UserApiKey, CopyPasteText
+from .models import Country, UserApiKey, CopyPasteText, Language
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .test_lead.kma_leads import KmaAPITest, KmaAPiError
@@ -13,6 +13,15 @@ def default_webs(request):
         'default_webs': default_webs,
     }
     return render(request, 'kma/default_webs.html', content)
+
+
+@login_required
+def discount_text(request):
+    langs = Language.objects.exclude(discount_text__exact='').order_by('russian_name')
+    content = {
+        'langs': langs,
+    }
+    return render(request, 'kma/discount_text.html', content)
 
 @login_required
 def phones(requests):

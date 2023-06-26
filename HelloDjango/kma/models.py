@@ -125,6 +125,7 @@ class Language(models.Model):
         verbose_name='Русское название',
         blank=True
     )
+    discount_text = models.CharField(max_length=250, blank=True)
 
     class Meta:
         ordering = ['iso']
