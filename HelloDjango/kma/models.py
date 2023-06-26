@@ -3,6 +3,14 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 
+class CopyPasteText(models.Model):
+    id = models.CharField(max_length=30, primary_key=True)
+    name =  models.CharField(max_length=50)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 
 class ActualCountryManager(models.Manager):
     def get_queryset(self):

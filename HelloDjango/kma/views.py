@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Country, UserApiKey
+from .models import Country, UserApiKey, CopyPasteText
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .test_lead.kma_leads import KmaAPITest, KmaAPiError
@@ -8,7 +8,11 @@ from .test_lead.kma_leads import KmaAPITest, KmaAPiError
 
 @login_required
 def default_webs(request):
-    return render(request, 'kma/default_webs.html')
+    default_webs = CopyPasteText.objects.get(pk='default_webs')
+    content = {
+        'default_webs': default_webs,
+    }
+    return render(request, 'kma/default_webs.html', content)
 
 @login_required
 def phones(requests):
