@@ -15,7 +15,10 @@
         - Изменение цены и отчислений: news.price_comm_change
         - Изменение условий: news.condition_change
     - Новый лэндинг / прелэндинг: news.new_land
-    - Расширение гео: news.new_geo
+    - Гео:
+        - Расширение гео: news.new_geo
+        - Приостановка гео: news.stop_geo
+    - Смена упаковки: news.change_cover
 - Офферы:
     - Правила оформления:
         - Основная информация(dev): offer.rules_main
@@ -25,13 +28,13 @@
         - Порядок заведения: offer.order
         - CPA оффер: offer.cpa_offer
         - SS оффер: offer.ss_offer
-    - Расширение гео: offer.new_geo
-    - Вывод в паблик/эксклюзив: offer.to_publik
     - Изменение: 
-        - Возобновление: offer.restart_offer
         - Приостановка оффера/гео: offer.stop
         - Изменение условий работы: offer.change_work
         - Перевод трафика на другого рекла: offer.change_traff_pass
+    - Расширение гео: offer.new_geo
+    - Вывод в паблик/эксклюзив: offer.to_publik
+    - Возобновление: offer.restart_offer
 - Промо:
     - Правила оформления:
         - Чек-боксы(dev): check_land.rules_checkbox

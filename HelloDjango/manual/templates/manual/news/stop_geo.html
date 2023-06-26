@@ -1,0 +1,35 @@
+{% extends 'manual/base.html' %}
+{% block content %}
+{% load static %}
+{% load note %}
+<h1>Приостановка гео</h1>
+{%news%}
+Изменение ГЕО
+Изменение географии оффера. Закрыт трафик
+{%end%}
+<p>Выставить галку <span-x>Отключение оффера</span-x> для автоматического отключения оффера.</p>
+{% check c%}
+Отключение оффера
+{%end%}
+{%notice w%}
+Если оффер/гео приватный - выставить соответствующую галочку
+{%end%}
+<p>Выбираем останавливаемое гео</p>
+{%img%}
+https://i.imgur.com/c8R74bF.png
+{%end%}
+<p>Указываем время отключения</p>
+{%img%}
+https://i.imgur.com/u3wATrm.png
+{%end%}
+{%news_desc%}
+Изменение географии оффера <b>"Hair Growth Oil - масло для роста волос"</b>.
+Приём трафика будет закрыт (AE) 22.06.2023 в 12:00 (МСК).
+$
+Geography of the offer <b>"Hair Growth Oil - oil for hair growth"</b> was changed.
+Traffic acceptance will be closed (AE) 22.06.2023 at 12:00 (MSK).
+{%end%}
+{%notice d%}
+Необходимо проверять, действительно ли оффер выключился автоматически
+{%end%}
+{%endblock%}
