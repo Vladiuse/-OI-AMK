@@ -18,6 +18,7 @@ def phones(requests):
         content = {
             'phones': phones,
             'user_api_key': user_api_key,
+            'test_names': KmaAPITest.TEST_NAMES,
         }
         return render(requests, 'kma/phones.html', content)
     except UserApiKey.DoesNotExist:
@@ -60,16 +61,12 @@ def test_rekl(requests):
         test_name = requests.POST['test_name']
         offer_id = requests.POST['offer_id']
         country_phones = Country.get_country_phone(*countrys_list)
-        test_name = False if test_name != 'eng_test' else True
         user_api_key = UserApiKey.objects.get(user=requests.user)
         kma = KmaAPITest(user_api_key.token,offer_id, country_phones, test_name)
         kma.test_offer()
-        link = 'https://google.com/'
-        leads = ['ru', 'by', 'ua']
         answer = {
             'success': True,
             'link': kma.get_tracker_link(),
-            # 'link': link,
             'leads': kma.get_leads_data(),
         }
     except KmaAPiError as error:

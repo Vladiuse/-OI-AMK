@@ -39,7 +39,7 @@ def fix_phone_tail(phone: str):
     return phone
 
 
-API_KEY = 'T5Ug9l_5gStBTeg6mUCUSQ25hjAZbRjO'
+TEST_API_KEY = 'T5Ug9l_5gStBTeg6mUCUSQ25hjAZbRjO'
 REFERER = 'Referer: https://facobook.com/'
 
 # headers = {
@@ -132,16 +132,18 @@ class Lead:
 
 
 class KmaAPITest:
-    TEST_NAME_1 = 'Пробный_заказ'
-    TEST_NAME_2 = 'Probniy_zakaz'
-    # TEST_NAME_1 = 'тест'
-    # TEST_NAME_2 = 'test'
+    TEST_NAMES = [
+        'Пробный_заказ',
+        'Probniy_zakaz',
+        'Тест_интеграции',
+        'test',
+    ]
 
-    def __init__(self, token, offer_id, country_n_phone: dict, custom_name=False):
+    def __init__(self, token, offer_id, country_n_phone: dict, test_name):
         self.token = token
         self.offer_id = offer_id
         self.country_n_phone = country_n_phone
-        self.test_name = KmaAPITest.TEST_NAME_1 if not custom_name else KmaAPITest.TEST_NAME_2
+        self.test_name = test_name
         self.leads = list()
 
     @staticmethod
@@ -210,4 +212,4 @@ class KmaAPITest:
 
 if __name__ == '__main__':
     # print(KmaAPITest.get_offer('7217',API_KEY))
-    print(KmaAPITest.create_stream('7217', API_KEY))
+    print(KmaAPITest.create_stream('7217', TEST_API_KEY))
