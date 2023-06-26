@@ -16,7 +16,7 @@ def default_webs(request):
 
 @login_required
 def phones(requests):
-    phones = Country.actual.all().order_by('ru_full_name')
+    phones = Country.actual.prefetch_related('language').prefetch_related('curr').order_by('ru_full_name')
     try:
         user_api_key = UserApiKey.objects.get(user=requests.user)
         content = {

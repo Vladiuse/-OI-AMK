@@ -167,7 +167,7 @@ class Currency(models.Model):
     )
 
     def __str__(self):
-        return f'<{self.iso.upper()}> {self.name}'
+        return f'{self.name}({self.iso.upper()})'
 
 
 class KmaCurrency(Currency):

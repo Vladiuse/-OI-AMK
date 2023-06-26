@@ -2,22 +2,12 @@
 {% load static %}
 {% block content %}
 <div class="main-wrapper">
-    <h1>Номера для тестов</h1>
     <div class="to-copy container">
-      <div class="row">
-        <div class="col-4">
-              <h5>Пробный_заказ</h5>
-              <h5>Probniy_zakaz</h5>
-          <a href="https://ru.wikipedia.org/wiki/ISO_3166-1" target="_blank">Коды Стран ISO</a><br>
-          <a href="https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D1%8F%D0%B7%D1%8B%D0%BA%D0%BE%D0%B2" target="_blank">Коды языков</a>
-          <br>
-          <div class="copypaste">
-            <textarea class="form-control" name="" id="" cols="30" rows="8">
-            </textarea>
-          </div>
-        </div>
+      <!-- <div class="row"> -->
         {% if user_api_key %}
-        <div class="col-4" id="auto-test">
+        <!-- <div class="col-4" id="auto-test"> -->
+       <textarea class="form-control" name="" id="" cols="30" rows="8">
+            </textarea>
           <h5>Автотест</h5>
           {%for test_name in test_names%}
           <div class="form-check">
@@ -29,25 +19,6 @@
             </label>
           </div>
           {%endfor%}
-<!--          -->
-<!--          <div class="form-check">-->
-<!--            <input class="form-check-input" type="radio" name="flexRadioDefault" id="ru_test" checked data-test-name="Пробный_заказ">-->
-<!--            <label class="form-check-label" for="ru_test">-->
-<!--              Пробный_заказ-->
-<!--            </label>-->
-<!--          </div>-->
-<!--          <div class="form-check">-->
-<!--            <input class="form-check-input" type="radio" name="flexRadioDefault" id="eng_test" data-test-name="Probniy_zakaz">-->
-<!--            <label class="form-check-label" for="eng_test">-->
-<!--              Probniy_zakaz-->
-<!--            </label>-->
-<!--          </div>-->
-<!--          <div class="form-check">-->
-<!--            <input class="form-check-input" type="radio" name="flexRadioDefault" id="eng_test1" data-test-name="Тест_интеграции">-->
-<!--            <label class="form-check-label" for="eng_test1">-->
-<!--              Тест_интеграции-->
-<!--            </label>-->
-<!--          </div>-->
 
 
           <div >
@@ -78,21 +49,9 @@
                 {%endfor%}
               </ul>
           </div>
-        </div>
+        <!-- </div> -->
         {%endif%}
-      </div>
-      <!-- <div class="row">
-        <div class="col">
-          <div class="managers">
-          <button class="btn btn-primary">@Max KMA#6702 </button>
-          <button class="btn btn-secondary">@Nadezhda Sokolova#1960</button><br>
-          <button class="btn btn-warning">@Наталья Полищук#3551</button>
-          <button class="btn btn-info">@Olya KMA#4825</button>
-         </div>
-          <div class="container1">
-            <textarea class="form-control" name="" id="" cols="30" rows="7"></textarea>
-          </div></div>
-      </div> -->
+      <!-- </div> -->
     </div>
 
 <div class="phones-table">
@@ -104,7 +63,9 @@
       <th scope="col">Моб Код</th>
       <th scope="col">Страна</th>
       <th scope="col">Номер</th>
-
+      <th scope="col">Язык</th>
+      <th scope="col">Валюта</th>
+      <th scope="col">Валюта KMA</th>
     </tr>
   </thead>
   <tbody>
@@ -115,7 +76,21 @@
       <td>+{{phone.phone_code}}</td>
       <td>{{phone.ru_full_name}}</td>
       <td>{{phone.phone}}</td>
-
+      <td>
+        {%for lang in phone.language.all%}
+        {{lang}}
+        {%endfor%}
+      </td>
+        <td>
+        {%for curr in phone.curr.all%}
+        {{curr}}
+        {%endfor%}
+      </td>
+        <td>
+        {%for curr in phone.curr.all%}
+        {{curr.kma_code}}
+        {%endfor%}
+      </td>
     </tr>
   {% endfor %}
   </tbody>
@@ -137,14 +112,15 @@
   justify-content: flex-start; */
   /* margin: 10px 0; */
   position: fixed;
-  top: 160px;
-  left: 600px;
+  right: 0;
+  width: 33%;
+  padding-right: 50px;
   }
   /* .to-copy h5, .to-copy a{
   margin: 0 5px;
   } */
   .to-copy textarea{
-    width: 400px;
+    width: 100%;
   }
   .copypaste{
     margin: 30px 0;
@@ -386,7 +362,7 @@
   //   $('.container1 textarea').val(string)
     
   // })
-  $('.copypaste textarea').val('@Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx')
+  $('textarea').val('@Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx')
 
   $('textarea').click(function(){
     $(this).select()
