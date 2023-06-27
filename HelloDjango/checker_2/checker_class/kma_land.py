@@ -25,7 +25,9 @@ class KMALand(Land):
     ]
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
                         'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org', 'thirstday-news.org', 'monday-news.org', 'atirs-news.org', 'calm-shop.org', 'newproblog.name'] + TEST_DOMAINS
-    INCORRECT_PRE_LAND_URLS = ['previewpreland.pro']
+    INCORRECT_PRE_LAND_URLS = [
+        # 'previewpreland.pro',
+    ]
     NOT_WORKED_PRE_LAND_DOMAINS = ['blogs-info.info']
     MAIN_PRE_LAND_DOMAIN = 'blog-feed.org'
     PRE_LAND_ADMIN_UTM = 'ufl='
