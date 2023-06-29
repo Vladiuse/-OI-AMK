@@ -265,7 +265,7 @@
     })
     function getTestName(){
         let test = ''
-        $('#auto-test .form-check-input').each(function(){
+        $('.form-check-input').each(function(){
         if ($(this).is(':checked')) {test = $(this).attr('data-test-name')}
           })
       return test
