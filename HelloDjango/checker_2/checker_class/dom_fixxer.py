@@ -78,7 +78,7 @@ class DomFixxerMixin:
         """Добавить стили на сайт"""
         styles_tag = self.soup.new_tag('style')
         styles_tag.string = css_text
-        self.soup.html.body.append(styles_tag)
+        self.soup.html.body.insert(0,styles_tag)
 
     def add_js(self, js_text):
         """Добавить скрипт на сайт"""

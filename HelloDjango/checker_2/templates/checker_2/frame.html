@@ -315,6 +315,15 @@
     let recordIframeScroll = true
 
 
+    // BUBLES
+    window.addEventListener('resize', remove_bubbles_in_frame);
+    // BUBLES
+
+    function remove_bubbles_in_frame(){
+      runFuncIframe('remove_bubbles')
+    }
+
+
     iframe.onload = function () {
       if (land_data_from_js) { loadLandParams() }
       if (get_phone_code_api) { getPhoneCode() }

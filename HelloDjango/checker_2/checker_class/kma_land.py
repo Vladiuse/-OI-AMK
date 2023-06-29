@@ -7,6 +7,7 @@ import os
 from .land import Land
 from .errors import NoUflParamPreLand, IncorrectPreLandUrl, NoAdminSiteDataScript
 import os
+from django.template import Template, RequestContext
 
 
 
@@ -24,7 +25,7 @@ class KMALand(Land):
         'vim-store.ru',
     ]
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
-                        'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org', 'thirstday-news.org', 'monday-news.org', 'atirs-news.org', 'calm-shop.org', 'newproblog.name'] + TEST_DOMAINS
+                        'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org', 'thirstday-news.org', 'monday-news.org', 'atirs-news.org', 'calm-shop.org', 'newproblog.name', 'hiblock.name'] + TEST_DOMAINS
     INCORRECT_PRE_LAND_URLS = [
         # 'previewpreland.pro',
     ]
@@ -40,8 +41,17 @@ class KMALand(Land):
     STYLES_FILE = './front_data/styles.css'
     JS_FILE = './front_data/script.js'
 
-    def __init__(self, source_text, url, **kwargs):
+    LOAD_IMG_JS = './front_data/load_image_info.js'
+    LOAD_IMG_CSS = './front_data/load_img_info.css'
+
+    STATIC = {
+        'css':[STYLES_FILE,LOAD_IMG_CSS],
+        'js': [JS_FILE, LOAD_IMG_JS],
+    }
+
+    def __init__(self, source_text, url, request=None,**kwargs):
         super().__init__(source_text=source_text, url=url, **kwargs)
+        self.request = request
         self.validate_url()
         self.__kma_script = self._find_kma_back_data()
         self.country = self._country()
@@ -146,18 +156,36 @@ class KMALand(Land):
 
     @property
     def iframe_srcdoc(self):
-        modul_path = os.path.dirname(__file__)
-        styles_path = os.path.join(modul_path, self.STYLES_FILE)
-        js_path = os.path.join(modul_path, self.JS_FILE)
-        with open(styles_path, encoding='utf-8') as file:
-            style_text = file.read()
-            self.add_css(style_text)
-        with open(js_path, encoding='utf-8') as file:
-            js_text = file.read()
-            self.add_js(js_text)
+        # modul_path = os.path.dirname(__file__)
+        # styles_path = os.path.join(modul_path, self.STYLES_FILE)
+        # js_path = os.path.join(modul_path, self.JS_FILE)
+        # with open(styles_path, encoding='utf-8') as file:
+        #     style_text = file.read()
+        #     self.add_css(style_text)
+        # with open(js_path, encoding='utf-8') as file:
+        #     js_text = file.read()
+        #     self.add_js(js_text)
+        self.add_static()
         self.add_base_tag(self.base_url)
         html_code = str(self.soup)
         return html_code
+
+    def add_static(self):
+        funcs = {
+            'css': self.add_css,
+            'js': self.add_js,
+        }
+        modul_path = os.path.dirname(__file__)
+        for type, files_paths in self.STATIC.items():
+            func = funcs[type]
+            for file_path in files_paths:
+                file_path = os.path.join(modul_path, file_path)
+                with open(file_path, encoding='utf-8') as file:
+                    file_text = file.read()
+                    template = Template(file_text)
+                    context = RequestContext(self.request,{})
+                    text_to_add = str(template.render(context))
+                    func(text_to_add)
 
     def is_social_script(self):
         socialFish = 'duhost'

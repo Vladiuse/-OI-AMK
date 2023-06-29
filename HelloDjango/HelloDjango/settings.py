@@ -115,17 +115,17 @@ DATABASES = {
 }
 
 # for MySql database remote server
-# DATABASES = {
-#      'default': {
-#          'ENGINE': 'django.db.backends.mysql',
-#          'NAME': 'vladiuse_kma',
-#          'USER': 'vladiuse_kma',
-#          'PASSWORD': get_secret('vladiuse_kma'),
-#          'HOST': 'vladiuse.beget.tech',
-#          'PORT': '3306',
-#
-#      }
-#  }
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'vladiuse_kma',
+         'USER': 'vladiuse_kma',
+         'PASSWORD': get_secret('vladiuse_kma'),
+         'HOST': 'vladiuse.beget.tech',
+         'PORT': '3306',
+
+     }
+ }
 
 # local kma_db for test
 # DATABASES = {

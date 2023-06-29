@@ -16,7 +16,8 @@ from bs4 import BeautifulSoup
 from .checker_class.errors import CheckerError
 from .forms import CheckerUserSettingsForm
 from shell import *
-
+from .img_info import get_image_info
+from django.views.decorators.http import require_http_methods
 
 @login_required
 def index(request):
@@ -37,7 +38,7 @@ def check_url(request):
         setting_form.user = request.user
         setting_form.save()
     try:
-        url_checker = LinkChecker(url=url, user=request.user)
+        url_checker = LinkChecker(url=url, user=request.user, request=request)
         url_checker.load_url()
         url_checker.process()
         content = {
@@ -165,3 +166,12 @@ def test(request):
     }
     return render(request, 'checker_2/test.html', content)
 
+@csrf_exempt
+@require_http_methods(['GET','POST'])
+def image_info(request):
+    if request.method == 'GET':
+        return JsonResponse({'x':'x'})
+    print(request.POST)
+    img_href = request.POST['img_href']
+    info = get_image_info(img_href)
+    return JsonResponse(info, safe=True)

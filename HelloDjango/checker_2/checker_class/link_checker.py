@@ -10,11 +10,12 @@ from checker_2.models import CheckPoint, CheckBlock, UserSiteCheckPoint, ActualU
 
 class LinkChecker:
 
-    def __init__(self,  url, user, source_text=None):
+    def __init__(self,  url, user, request=None,source_text=None):
         self.source_text = source_text
         self.url = url
         self.user = user
         self.messages = list()
+        self.request = request
         self.land_data = {
             'offer_name': None
         }
@@ -40,7 +41,7 @@ class LinkChecker:
         self.source_text = res.text
 
     def process(self):
-        self.land = KMALand(self.source_text, self.url)
+        self.land = KMALand(self.source_text, self.url, request=self.request)
         self.land.add_site_attrs()
         self.check_list = LinkChecker.get_check_list(self.land, self.user)
         self.land.find_n_mark_img_doubles()
