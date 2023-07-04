@@ -1,11 +1,12 @@
 {% extends 'root/base.html' %}
 {% load static %}
 {% block content %}
+{%load copy_paste%}
 <div class="main-wrapper">
     <h1>Вебы по умолчанию</h1>
     <div class="mb-3" >
       <label for="exampleFormControlTextarea1" class="form-label"></label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="25" style="width: 350px;">{{default_webs.text}}</textarea>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="25" style="width: 350px;">{%copy_paste "default_webs" %}</textarea>
 </div>
 
 </div>

@@ -1,12 +1,13 @@
 {% extends 'root/base.html' %}
 {% load static %}
 {% block content %}
+{%load copy_paste%}
 <div class="main-wrapper">
     <div class="to-copy container">
       <!-- <div class="row"> -->
         {% if user_api_key %}
         <!-- <div class="col-4" id="auto-test"> -->
-       <textarea class="form-control" name="" id="" cols="30" rows="8">{{test_integration_text.text}}</textarea>
+       <textarea class="form-control" name="" id="" cols="30" rows="8">{%copy_paste "slava_test_rekl" %}</textarea>
           <h5>Автотест итеграции с реклом 
             <a href="{%url 'manual:page_name' 'other.test_rekl'%}" target="_blank" class="link-secondary"><i>(как пользоваться)</i></a>
           </h5>
