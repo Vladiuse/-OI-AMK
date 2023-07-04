@@ -1,6 +1,6 @@
 from .kma_land import KMALand
 # from .check_list_view import get_check_list
-from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency, City
+from kma.models import Country, OfferPosition, Language, Currency, KmaCurrency, City, KmaPreland
 from .checkers import KMA_checkers, Check
 from .errors import NoCountryInDB, UrlNotLoad
 import requests as req
@@ -27,6 +27,7 @@ class LinkChecker:
         self.countrys = Country.actual.prefetch_related('language').prefetch_related(
             Prefetch('city_set', queryset=self.citys)).all()
         self.currencys = KmaCurrency.actual.prefetch_related('country_set').all()
+        self.kma_prelands = KmaPreland.get_domains()
 
     def load_url(self):
         url = KMALand.prepare_url(self.url)
@@ -40,7 +41,7 @@ class LinkChecker:
         self.source_text = res.text
 
     def process(self):
-        self.land = KMALand(self.source_text, self.url)
+        self.land = KMALand(self.source_text, self.url, checker=self)
         self.land.add_site_attrs()
         self.check_list = LinkChecker.get_check_list(self.land, self.user)
         self.land.find_n_mark_img_doubles()
@@ -51,7 +52,7 @@ class LinkChecker:
             self.land.full_lang = 'no lang in BD'
 
     def text_analiz(self):
-        self.land = KMALand(source_text=self.source_text, url=self.url, parser='lxml')
+        self.land = KMALand(source_text=self.source_text, url=self.url, checker=self,parser='lxml')
         self.land.drop_tags_from_dom(KMALand.POLICY_IDS)
         for check in KMA_checkers:
             check = check(land=self.land, link_checker=self)

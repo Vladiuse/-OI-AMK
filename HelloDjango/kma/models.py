@@ -11,6 +11,15 @@ class CopyPasteText(models.Model):
     def __str__(self):
         return self.name
 
+class KmaPreland(models.Model):
+    domain = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.domain
+    @staticmethod
+    def get_domains():
+        return [obj.domain for obj in KmaPreland.objects.all()]
+
 
 class ActualCountryManager(models.Manager):
     def get_queryset(self):

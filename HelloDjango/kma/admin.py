@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Country, OfferPosition, UserApiKey, Language, Currency, City, CopyPasteText
+from .models import Country, OfferPosition, UserApiKey, Language, Currency, City, CopyPasteText, KmaPreland
 
 
 class CountryCurrencyInline(admin.TabularInline):
@@ -63,3 +63,4 @@ admin.site.register(Language, LanguageAdmin)
 admin.site.register(Currency,CurrencyAdmin)
 admin.site.register(City, CityAdmin)
 admin.site.register(CopyPasteText)
+admin.site.register(KmaPreland)
