@@ -6,20 +6,18 @@
       <!-- <div class="row"> -->
         {% if user_api_key %}
         <!-- <div class="col-4" id="auto-test"> -->
-       <textarea class="form-control" name="" id="" cols="30" rows="8">
-            </textarea>
-          <h5>Автотест</h5>
-          {%for test_name in test_names%}
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="{{forloop.counter}}"
-                   {%if forloop.counter == 1%}checked{%endif%}
-                   data-test-name="{{test_name}}">
-            <label class="form-check-label" for="{{forloop.counter}}">
-              {{test_name}}
-            </label>
-          </div>
-          {%endfor%}
-
+       <textarea class="form-control" name="" id="" cols="30" rows="8">{{test_integration_text.text}}</textarea>
+          <h5>Автотест итеграции с реклом 
+            <a href="{%url 'manual:page_name' 'other.test_rekl'%}" target="_blank" class="link-secondary"><i>(как пользоваться)</i></a>
+          </h5>
+            <label for="select-test-name">Имя теста:</label>
+            <select class="form-select form-control custom-select" id="select-test-name">
+              {%for test_name in test_names%}
+              <option 
+              {%if forloop.counter == 1%}selected {%endif%}
+              value="{{test_name}}">{{test_name}}</option>
+              {%endfor%}
+            </select>
 
           <div >
               <input type="text" id="chose-offer"  data-offer-id='' placeholder="Введите id оффера...">
@@ -183,7 +181,14 @@
   border: 1px solid #ddd; /* Add a grey border */
   margin-bottom: 12px; /* Add some space below the input */
 }
-
+#select-test-name{
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+  
+}
 #myUL,#myUL-chosen {
   /* Remove default list styling */
   list-style-type: none;
@@ -264,11 +269,7 @@
       } else {$('#myUL').hide();$('#myUL li').hide()}
     })
     function getTestName(){
-        let test = ''
-        $('.form-check-input').each(function(){
-        if ($(this).is(':checked')) {test = $(this).attr('data-test-name')}
-          })
-      return test
+      return $('#select-test-name').val()
       }
 
     function onOffsendButton(){
@@ -362,7 +363,7 @@
   //   $('.container1 textarea').val(string)
     
   // })
-  $('textarea').val('@Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx')
+  // $('textarea').val('@Славик#6278 \n**Тест интеграции** \nОффер: xxxx \nТаска: xxxx \nРекл: xxxx \nГео: xxxx \nВнешний ID: xxxx')
 
   $('textarea').click(function(){
     $(this).select()

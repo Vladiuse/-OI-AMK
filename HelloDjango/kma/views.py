@@ -26,12 +26,14 @@ def discount_text(request):
 @login_required
 def phones(requests):
     phones = Country.actual.prefetch_related('language').prefetch_related('curr').order_by('ru_full_name')
+    test_integration_text = CopyPasteText.objects.get(pk='slava_test_rekl')
     try:
         user_api_key = UserApiKey.objects.get(user=requests.user)
         content = {
             'phones': phones,
             'user_api_key': user_api_key,
             'test_names': KmaAPITest.TEST_NAMES,
+            'test_integration_text': test_integration_text,
         }
         return render(requests, 'kma/phones.html', content)
     except UserApiKey.DoesNotExist:
