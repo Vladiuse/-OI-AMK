@@ -79,21 +79,26 @@ function add_bubble_img(img, back_data,href){
     let color_style = get_bubble_style_class(img, back_data)
     let HDiff = Math.round(back_data['width']/img.width()*10)/10
 
+    var image_display_style = img.css('display')
+
     var page_size = `page: ${img.width()}x${img.height()}`
     var orig_size = `orig: ${back_data['width']}x${back_data['height']}`
     var img_size = 'size: ' + back_data['bytes'] + 'kb'
     var coof_compression = `coof: x${HDiff}`
     var coof_small = `x<b>${HDiff}</b>`
     var image_ext = `ext: <b>${get_image_extension(href)}</b>`
+    var image_display = `display: ${image_display_style}`
 
 
     // POPOVER
-    var bs_text = [page_size,orig_size,img_size,coof_compression,image_ext].join('<br>')
+    var bs_text = [
+        page_size,orig_size,img_size,coof_compression,
+        image_ext,image_display].join('<br>')
     // img.attr('data-bs-html', true)
     img.attr('data-bs-toggle', 'popover')
     img.attr('title', coof_small)
     img.attr('data-bs-content', bs_text)
-    img.attr('data-bs-placement', 'right')
+    img.attr('data-bs-placement', 'left')
     img.attr('data-bs-custom-class', color_style)
     img.popover({html:true}).popover('show')
 }

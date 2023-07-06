@@ -116,9 +116,11 @@
   margin-bottom: 0;
   font-size: 1rem;
   background-color: #f0f0f0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
+  border-bottom: none !important;
   border-top-left-radius: calc(0.3rem - 1px);
   border-top-right-radius: calc(0.3rem - 1px);
+  color: black;
 }
 .popover-header:empty {
   display: none;
@@ -146,10 +148,19 @@
  .popover-body{
   display: none;
 }
+/* .popover-header:hover{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+.popover-body:hover ~ .popover-header{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+} */
+
 .popover-header:hover + .popover-body{
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
   display: block;
 }
 .popover-body:hover{
+  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
   display: block;
 }
 
