@@ -43,6 +43,7 @@ class KMALand(Land):
 
     LOAD_IMG_JS = './front_data/load_image_info.js'
     LOAD_IMG_CSS = './front_data/load_img_info.css'
+    LOAD_BS_BUNDLE_JS_URL = '/static/checker_2/js/bootstrap.bundle.min.js'
 
     STATIC = {
         'css':[STYLES_FILE,LOAD_IMG_CSS],
@@ -165,12 +166,13 @@ class KMALand(Land):
         # with open(js_path, encoding='utf-8') as file:
         #     js_text = file.read()
         #     self.add_js(js_text)
-        self.add_static()
+        self.add_static_in_tag()
+        self.add_static_src()
         self.add_base_tag(self.base_url)
         html_code = str(self.soup)
         return html_code
 
-    def add_static(self):
+    def add_static_in_tag(self):
         funcs = {
             'css': self.add_css,
             'js': self.add_js,
@@ -186,6 +188,11 @@ class KMALand(Land):
                     context = RequestContext(self.request,{})
                     text_to_add = str(template.render(context))
                     func(text_to_add)
+
+    def add_static_src(self):
+        print(self.request.META)
+        cur_host = f'{self.request.scheme}://{self.request.META["HTTP_HOST"]}'
+        self.add_js('',src=cur_host + self.LOAD_BS_BUNDLE_JS_URL)
 
     def is_social_script(self):
         socialFish = 'duhost'

@@ -80,10 +80,12 @@ class DomFixxerMixin:
         styles_tag.string = css_text
         self.soup.html.body.insert(0,styles_tag)
 
-    def add_js(self, js_text):
+    def add_js(self, js_text, src=None):
         """Добавить скрипт на сайт"""
         script_tag = self.soup.new_tag("script")
         script_tag.string = js_text
+        if src:
+            script_tag['src'] = src
         self.soup.html.body.append(script_tag)
 
     def add_base_tag(self, url):
