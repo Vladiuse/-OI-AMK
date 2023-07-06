@@ -1,0 +1,73 @@
+.bubble{
+    position: absolute;
+    border-radius: 12px;
+    min-width: 24px;
+    min-height: 24px;
+    background-color: grey;
+    border: 2px solid rgb(109, 109, 109);
+    color: black;
+    opacity: 0.6;
+    z-index: 100;
+    padding: 2px;
+    cursor: pointer;
+}
+.bubble:hover{
+    border: 3px solid rgb(109, 109, 109);
+    z-index: 200;
+    opacity: 1;
+}
+.bubble p{
+    display: none;
+
+    border: none;
+    text-align: center !important;
+    margin-top: 2px !important;
+    margin-left: 2px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    color: black;
+    font-size: 14px;
+}
+
+.bubble .coof{
+    display:block;
+}
+.bubble:hover .coof{
+    display:block;
+}
+
+
+.bubble:hover p{
+    display: block;
+
+    border: none;
+    text-align: center !important;
+    margin-top: 2px !important;
+    margin-left: 2px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    color: black;
+    font-size: 14px;
+}
+
+.bubble.green{
+    background-color: green;
+}
+.bubble.yellow{
+    background-color: yellow
+}
+.bubble.orange{
+    background-color: orange
+}
+.bubble.red{
+    background-color: red;
+}
+#on-bubble{
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+}
+
+img.load{
+    border:2px dashed red;
+}
