@@ -2,6 +2,19 @@
 
 // const IMAGE_LOAD_INFO = '/get-img-info/'
 const IMAGE_LOAD_INFO = '{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:get_img_info' %}'
+
+function get_image_extension(href){
+    var result = undefined
+    var href = href.toLowerCase()
+    let extensions = ['.png','.gif', '.bmp', '.webp', '.jpg', '.jpeg','data:image']
+    extensions.forEach(function(ext){
+        console.log(ext,href.includes('.'+ext))
+        if (href.includes(ext))
+        {result= ext}
+    })
+    return result
+}
+
 function is_need_to_load(href){
     if (href==''){return false}
     result = true
@@ -42,11 +55,8 @@ function add_http_to_url(url){
 
 const base_href = get_base_tag_href()
 const base_url = get_base_url()
-var bubbles = []
 
 
-// MarkAllImages()
-// window.addEventListener('resize', remove_bubbles);
 function get_img_info(img){
     let href = img.attr('src')
     img.css('border', '2px dashed red')
@@ -56,61 +66,45 @@ function get_img_info(img){
             href = add_http_to_url(href)
             data = {'img_href': href}
                 $.post(IMAGE_LOAD_INFO, data=data,function(res){
-                add_bubble_img(img, res)
+                add_bubble_img(img, res,href)
                 })
+        } else{
+            console.log(href)
+            add_extention_bubble(img,href)
         }
     }
 }
 
-function add_bubble_img(img, back_data){
-    let BUBLE_MARGIN = 3
-    //
-    let bubble = document.createElement('div')
-    bubble.classList.add('bubble')
-    set_bubble_on_image(bubble,img)
-    $('body').append(bubble)
-    bubble.classList.add(
-        get_bubble_style_class(img, back_data)
-        )
-    add_text_to_buuble(bubble,`page: ${img.width()}x${img.height()}`)
-    add_text_to_buuble(bubble,`orig: ${back_data['width']}x${back_data['height']}`)
-    add_text_to_buuble(bubble,'size: ' + back_data['bytes'] + 'kb')
+function add_bubble_img(img, back_data,href){
+    let color_style = get_bubble_style_class(img, back_data)
     let HDiff = Math.round(back_data['width']/img.width()*10)/10
-    add_text_to_buuble(bubble,`coof: x${HDiff}`)
-    add_text_to_buuble(bubble,`x${HDiff}`, 'coof')
+
+    var page_size = `page: ${img.width()}x${img.height()}`
+    var orig_size = `orig: ${back_data['width']}x${back_data['height']}`
+    var img_size = 'size: ' + back_data['bytes'] + 'kb'
+    var coof_compression = `coof: x${HDiff}`
+    var coof_small = `x<b>${HDiff}</b>`
+    var image_ext = `ext: <b>${get_image_extension(href)}</b>`
 
 
-    bubbles.push({
-        'bubble': bubble,
-        'img': img,
-    })
-}
-function fix_bubbles_positions(){
-    bubbles.forEach(function(item){
-        set_bubble_on_image(
-            item['bubble'],
-            item['img'],
-        )
-    })
-}
-
-$(document).click(function(e) { 
-    // Check for left button
-    fix_bubbles_positions()
-    });
-
-function set_bubble_on_image(bubble,img){
-    let BUBLE_MARGIN = 3
-    bubble.style.top = img.offset().top + BUBLE_MARGIN + 'px'
-    bubble.style.left = img.offset().left + BUBLE_MARGIN + 'px'
+    // POPOVER
+    var bs_text = [page_size,orig_size,img_size,coof_compression,image_ext].join('<br>')
+    // img.attr('data-bs-html', true)
+    img.attr('data-bs-toggle', 'popover')
+    img.attr('title', coof_small)
+    img.attr('data-bs-content', bs_text)
+    img.attr('data-bs-placement', 'right')
+    img.attr('data-bs-custom-class', color_style)
+    img.popover({html:true}).popover('show')
 }
 
-function add_text_to_buuble(bubble,text, _class){
-    let TEXT_TAG = 'p'
-    let elem = document.createElement(TEXT_TAG)
-    elem.textContent += text
-    bubble.appendChild(elem)
-    if (_class != undefined){elem.classList.add(_class)}
+function add_extention_bubble(img,href){
+    let ext = get_image_extension(href)
+    img.attr('data-bs-toggle', 'popover')
+    img.attr('title', ext)
+    // img.attr('data-bs-content', ext)
+    img.attr('data-bs-placement', 'right')
+    img.popover({html:true}).popover('show')
 }
 
 function get_bubble_style_class(img, back_data){
@@ -119,26 +113,15 @@ function get_bubble_style_class(img, back_data){
     let ORANGE = 3
     let RED = 3
     let HDiff = Math.round(back_data['width']/img.width()*10)/10
-    if (HDiff <= GREEN) 
+    if (HDiff <= GREEN)
         {return 'green'}
-    if (HDiff > GREEN && HDiff <= YELLOW) 
+    if (HDiff > GREEN && HDiff <= YELLOW)
         {return 'yellow'}
-    if (HDiff > YELLOW && HDiff <= ORANGE) 
+    if (HDiff > YELLOW && HDiff <= ORANGE)
         {return 'orange'}
-    if (HDiff > ORANGE) 
+    if (HDiff > ORANGE)
         {return 'red'}
 }
-
-function remove_bubbles(){
-    $('.bubble').remove()
-    $('img.load').removeClass('load')
-}
-
-
-$('img').click(function(){
-    get_img_info($(this))
-})
-
 
 function markImage(img){
     get_img_info($(img))
