@@ -380,7 +380,7 @@ class PhpTempVar(Check):
 
     def process(self):
         land_human_text = self.land.human_text
-        var_templates = re.findall(r'\{\$[\S.]{1,40}}', land_human_text)
+        var_templates = re.findall(r'\{\$[\S]{1,40}}|\{/?[\S]{1,40}}', land_human_text)
         if var_templates:
             self.add_mess(self.VARIABLE_ON_SITE, *var_templates)
 
