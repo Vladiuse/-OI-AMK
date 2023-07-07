@@ -36,7 +36,7 @@
 .popover .popover-arrow::before, .popover .popover-arrow::after {
   position: absolute;
   display: block;
-  content: "";
+  /* content: "";  Корявая шлашка возле стрелки */
   border-color: transparent;
   border-style: solid;
 }
@@ -91,7 +91,7 @@
   display: block;
   width: 1rem;
   margin-left: -0.5rem;
-  content: "";
+  /* content: "";  Корявая шлашка возле стрелки */
   border-bottom: 1px solid #f0f0f0;
 }
 
