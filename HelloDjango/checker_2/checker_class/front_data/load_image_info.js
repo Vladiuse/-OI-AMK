@@ -2,7 +2,7 @@
 
 // const IMAGE_LOAD_INFO = '/get-img-info/'
 const IMAGE_LOAD_INFO = '{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:get_img_info' %}'
-
+const POPOVER_TEMPLATE = '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-header"></div><div class="popover-body"></div></div>'
 function get_image_extension(href){
     var result = undefined
     var href = href.toLowerCase()
@@ -100,7 +100,7 @@ function add_bubble_img(img, back_data,href){
     img.attr('data-bs-content', bs_text)
     img.attr('data-bs-placement', get_position_of_bubble())
     img.attr('data-bs-custom-class', color_style)
-    img.popover({html:true}).popover('show')
+    img.popover({html:true, template: POPOVER_TEMPLATE}).popover('show')
 }
 var POSITION = 0
 function get_position_of_bubble(){
@@ -121,7 +121,7 @@ function add_extention_bubble(img,href){
     img.attr('title', ext)
     // img.attr('data-bs-content', ext)
     img.attr('data-bs-placement', 'right')
-    img.popover({html:true}).popover('show')
+    img.popover({html:true, template: POPOVER_TEMPLATE}).popover('show')
 }
 
 function get_bubble_style_class(img, back_data){
@@ -157,16 +157,15 @@ const options = {
 function handleImg(myImg, observer){
     myImg.forEach(myImgSingle => {
     if (myImgSingle.intersectionRatio > 0){
-    //   loadImage(myImgSingle.target)
         markImage(myImgSingle.target)
     }
     })
 }
 
-
 const observer = new IntersectionObserver(handleImg, options);
 
 images.forEach(img => {
     observer.observe(img)
+
 })
 
