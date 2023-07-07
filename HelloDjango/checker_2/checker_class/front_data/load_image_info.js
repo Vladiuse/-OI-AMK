@@ -98,9 +98,21 @@ function add_bubble_img(img, back_data,href){
     img.attr('data-bs-toggle', 'popover')
     img.attr('title', coof_small)
     img.attr('data-bs-content', bs_text)
-    img.attr('data-bs-placement', 'left')
+    img.attr('data-bs-placement', get_position_of_bubble())
     img.attr('data-bs-custom-class', color_style)
     img.popover({html:true}).popover('show')
+}
+var POSITION = 0
+function get_position_of_bubble(){
+    let data = {
+        1: 'left',
+        2: 'top',
+        3: 'right',
+        4: 'bottom',
+    }
+    POSITION ++
+    if (POSITION == 5) {POSITION = 1}
+    return data[POSITION]
 }
 
 function add_extention_bubble(img,href){
