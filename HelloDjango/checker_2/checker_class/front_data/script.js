@@ -101,6 +101,7 @@ console.log('MY SCRIPNT START')
 
     // Удаление всех классов и элементов debug
     function removeAllDebug(){
+        Off()
         RemoveIoPlaceholder();
         removeDebugMsg()
         let forms = $('form.'+formNoSelectClass)

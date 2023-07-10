@@ -155,6 +155,8 @@ const ImgSelector = 'body img'
 const ImgNotLoadedSelector = 'body img:not(.load)'
 const IMAGES = document.querySelectorAll('body img')
 
+var POPOVER_DISPLAY = false
+
 const options = {
     root: null,
     rootMargin: '100px',
@@ -186,6 +188,7 @@ function ShowPopover(){
 }
 
 function On(){
+    console.log('ON')
     var images = document.querySelectorAll(ImgNotLoadedSelector)
     observer = new IntersectionObserver(handleImg, options);
 
@@ -197,6 +200,7 @@ function On(){
 }
 
 function Off(){
+    console.log('OFF')
     IMAGES.forEach(img => {
         observer.unobserve(img)
     })
@@ -204,3 +208,14 @@ function Off(){
     HidePopover()
 }
 
+//function showImagePopover(){
+//console.log('RUN showImagePopover')
+//if (POPOVER_DISPLAY){
+//    Off()
+//    POPOVER_DISPLAY = false
+//} else {
+//On()
+//POPOVER_DISPLAY = true
+//}
+//}
+On()
