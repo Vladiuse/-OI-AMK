@@ -173,13 +173,6 @@ function handleImg(myImg, observer){
     })
 }
 
-var observer = new IntersectionObserver(handleImg, options);
-
-IMAGES.forEach(img => {
-    observer.observe(img)
-
-})
-
 function HidePopover(){
     $('img[data-bs-toggle="popover"]').popover('hide')
 }
@@ -208,14 +201,4 @@ function Off(){
     HidePopover()
 }
 
-//function showImagePopover(){
-//console.log('RUN showImagePopover')
-//if (POPOVER_DISPLAY){
-//    Off()
-//    POPOVER_DISPLAY = false
-//} else {
-//On()
-//POPOVER_DISPLAY = true
-//}
-//}
 On()
