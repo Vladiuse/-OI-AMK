@@ -191,14 +191,15 @@ function On(){
     })
     ShowPopover()
 }
-
+observer = null;
 function Off(){
-    console.log('OFF')
-    IMAGES.forEach(img => {
-        observer.unobserve(img)
-    })
-    observer.disconnect();
-    HidePopover()
+    if (observer){
+        console.log('OFF')
+        IMAGES.forEach(img => {
+            observer.unobserve(img)
+        })
+        observer.disconnect();
+        HidePopover()
+    }
 }
 
-On()
