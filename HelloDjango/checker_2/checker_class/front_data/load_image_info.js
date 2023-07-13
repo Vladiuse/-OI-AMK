@@ -1,8 +1,6 @@
-
-
-// const IMAGE_LOAD_INFO = '/get-img-info/'
-const IMAGE_LOAD_INFO = '{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:get_img_info' %}'
-const POPOVER_TEMPLATE = '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-header"></div><div class="popover-body"></div></div>'
+// const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/get-img-info/'
+const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
+const  CSRF_TOKEN = getCookie('csrftoken');
 var popover_display = 'show'
 const table = document.getElementById('window-table')
 var site_images = []
@@ -10,6 +8,22 @@ var RES = null;
 
 function print(...args) {
     console.log(...args);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 class SiteImage {
@@ -97,6 +111,7 @@ class SiteImage {
         let _class = this
         var data = {
             'image_url': this.full_src(),
+            'csrfmiddlewaretoken': CSRF_TOKEN,
         }
         $.post(IMAGE_LOAD_INFO, data = data, )
             .done(function (res, ) {
@@ -366,7 +381,7 @@ const ImgNotLoadedSelector = 'body img:not(.load)'
 const IMAGES = document.querySelectorAll('body img')
 
 var POPOVER_DISPLAY = false
-var observer = null;
+
 const options = {
     root: null,
     rootMargin: '100px',
@@ -390,7 +405,7 @@ function handleImg(myImg, observer) {
     })
 }
 
-
+var observer = null;
 function HidePopover() {
     // $('img[data-bs-toggle="popover"]').popover('hide')
     site_images.forEach(site_image => {
@@ -427,7 +442,6 @@ function Off() {
         HidePopover()
     }
 }
-
 
 
 $('body').on('click', '.popover a', function () {

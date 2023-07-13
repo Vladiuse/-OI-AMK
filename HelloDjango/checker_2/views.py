@@ -1,23 +1,23 @@
-import yaml
-import requests as req
-from requests.exceptions import ConnectionError
-import time
+from rest_framework.decorators import api_view, action, permission_classes, authentication_classes
+from .serializers import SiteImagesSerializer, UserSiteSerializer
+from rest_framework.response import Response
+from rest_framework import viewsets
+from shell import *
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .checker_class.kma_land import KMALand
-from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
+from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting, SiteImage
 from .checker_class.link_checker import LinkChecker
 from django.template import Template
 from django.template import RequestContext
 from bs4 import BeautifulSoup
 from .checker_class.errors import CheckerError
 from .forms import CheckerUserSettingsForm
-from shell import *
 from .img_info import get_image_info
 from django.views.decorators.http import require_http_methods
+from rest_framework import permissions
 
 @login_required
 def index(request):
@@ -177,3 +177,82 @@ def image_info(request):
     img_href = request.POST['img_href']
     info = get_image_info(img_href)
     return JsonResponse(info, safe=True)
+
+
+
+
+
+class DomainViewSet(viewsets.ModelViewSet):
+    queryset = ActualUserList.objects.all()
+    serializer_class = UserSiteSerializer
+
+
+class SiteImageViewSet(viewsets.ModelViewSet):
+    serializer_class = SiteImagesSerializer
+
+    lookup_field = 'image_id'
+    lookup_url_kwarg = 'image_id'
+
+    # def domain(self):
+    #     return ActualUserList.objects.get(pk=self.kwargs['domain_id'])
+
+    def get_queryset(self):
+        return SiteImage.objects.filter(domain_id=self.kwargs['domain_id'])
+
+    @action(methods=['GET', 'POST'], detail=True)
+    def create_or_update(self, request, *args, **kwargs):
+        print(request)
+        try:
+            site_image = SiteImage.objects.get(
+                domain_id=self.kwargs['domain_id'],
+                image_url=self.request.data['image_url'])
+            serializer = self.get_serializer(site_image, data=request.data)
+        except SiteImage.DoesNotExist:
+            serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        site_image = serializer.save(domain_id=self.kwargs['domain_id'])
+        load_result = site_image.load_orig_img()
+        return Response({
+            'image': serializer.data,
+            'load_result': load_result,
+        })
+
+    def get_object(self):
+        if 'image_id' in self.kwargs:
+            return SiteImage.objects.get(pk=self.kwargs['image_id'])
+        else:
+            return SiteImage.objects.get(
+                domain_id=self.kwargs['domain_id'],
+                image_url=self.request.data['image_url'])
+
+    @action(detail=True, methods=['GET'])
+    def load_orig(self, request, image_id):
+        obj = self.get_object()
+        obj.load_orig_img()
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def make_thumb(self, request, image_id):
+        obj = self.get_object()
+        obj.make_thumb()
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def load_make_thumb(self, request, image_id):
+        obj = self.get_object()
+        res = obj.load_make_thumb()
+        serializer = self.get_serializer(obj)
+        return Response({
+            'result': res,
+            'image': serializer.data
+        })
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+
+@api_view(['GET', 'POST'], )
+@permission_classes([permissions.IsAuthenticated])
+def test_api(request):
+    return Response({'res': str(request.method)})
+

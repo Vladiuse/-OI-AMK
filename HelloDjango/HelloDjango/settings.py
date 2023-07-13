@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'ordered_model',
     'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -139,17 +140,17 @@ DATABASES = {
  }
 
 # local kma_db for test
-# DATABASES = {
-#      'default': {
-#          'ENGINE': 'django.db.backends.mysql',
-#          'NAME': get_secret('test_kma_db'),
-#          'USER': get_secret('test_kma_user'),
-#          'PASSWORD': get_secret('test_kma_db_pass'),
-#          'HOST': 'localhost',
-#          'PORT': '3306',
-#
-#      }
-#  }
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': get_secret('test_kma_db'),
+         'USER': get_secret('test_kma_user'),
+         'PASSWORD': get_secret('test_kma_db_pass'),
+         'HOST': 'localhost',
+         'PORT': '3306',
+
+     }
+ }
 
 
 # Password validation
