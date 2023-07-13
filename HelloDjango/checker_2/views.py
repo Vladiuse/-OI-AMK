@@ -46,6 +46,8 @@ def check_url(request):
             'kma': url_checker.land,
             'user_settings': settings,
         }
+        if 'no-iframe' in request.POST:
+            return HttpResponse(url_checker.land.iframe_srcdoc)
         return render(request, 'checker_2/frame.html', content)
     except CheckerError as error:
         content = {

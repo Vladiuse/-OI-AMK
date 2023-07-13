@@ -190,7 +190,6 @@ class KMALand(Land):
                     func(text_to_add)
 
     def add_static_src(self):
-        print(self.request.META)
         cur_host = f'{self.request.scheme}://{self.request.META["HTTP_HOST"]}'
         self.add_js('',src=cur_host + self.LOAD_BS_BUNDLE_JS_URL)
 

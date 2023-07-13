@@ -22,7 +22,12 @@
             <input type="hidden" id="checker_leftbar" value="{{user_settings.left_bar}}" name="checker_leftbar">
             <input type="hidden" id="checker_clickelems" value="{{user_settings.click_elem}}" name="checker_clickelems">
             <input type="hidden" id="checker_other_elems" value="{{user_settings.other}}" name="checker_other_elems">
-            <button class="btn btn-primary">Проверить</button>
+            <div id="form-buttons">
+                 <button class="btn btn-primary" style="width: 100%">Проверить</button>
+                {% if user.is_superuser %}
+                <button  name="no-iframe" class="btn btn-primary" id="no-iframe-button"><i class="fa-solid fa-stethoscope"></i></button>
+                {%endif%}
+            </div>
             <div id="settings" class="">
                 <i class="fa-solid fa-gear"></i>
                 <div class="form">
@@ -182,6 +187,16 @@
     }
     #settings .form input{
         margin-right: 3px;
+    }
+
+
+    #form-buttons{
+    display: flex;
+
+    }
+    #no-iframe-button{
+    width : 70px;
+    margin-left: 5px;
     }
 </style>
 
