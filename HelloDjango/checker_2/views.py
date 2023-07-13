@@ -185,10 +185,13 @@ def image_info(request):
 class DomainViewSet(viewsets.ModelViewSet):
     queryset = ActualUserList.objects.all()
     serializer_class = UserSiteSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class SiteImageViewSet(viewsets.ModelViewSet):
     serializer_class = SiteImagesSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
 
     lookup_field = 'image_id'
     lookup_url_kwarg = 'image_id'
