@@ -36,7 +36,7 @@
 .popover .popover-arrow::before, .popover .popover-arrow::after {
   position: absolute;
   display: block;
-  content: "";  /* Корявая шлашка возле стрелки */
+  content: "";
   border-color: transparent;
   border-style: solid;
 }
@@ -71,7 +71,7 @@
   border-right-color: #fff;
 }
 
-.bs-popover-bottokm > .popover-arrow, .bs-popover-auto[data-popper-placement^=bottom] > .popover-arrow {
+.bs-popover-bottom > .popover-arrow, .bs-popover-auto[data-popper-placement^=bottom] > .popover-arrow {
   top: calc(-0.5rem - 1px);
 }
 .bs-popover-bottom > .popover-arrow::before, .bs-popover-auto[data-popper-placement^=bottom] > .popover-arrow::before {
@@ -91,7 +91,7 @@
   display: block;
   width: 1rem;
   margin-left: -0.5rem;
-   content: ""; /* Корявая шлашка возле стрелки */
+  content: "";
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -116,10 +116,9 @@
   margin-bottom: 0;
   font-size: 1rem;
   background-color: #f0f0f0;
-  border-bottom: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   border-top-left-radius: calc(0.3rem - 1px);
   border-top-right-radius: calc(0.3rem - 1px);
-  color: black;
 }
 .popover-header:empty {
   display: none;
@@ -132,31 +131,28 @@
 
 
  /* MY STYLES */
- img.load{
-  border:2px dashed red;
-}
-
-
+  .fade{
+    opacity: 1 !important;
+  }
  .popover{
   z-index: 1000;
+  font-size: 20px;
  }
  .popover-body{
   z-index: 2000;
  }
 
+ .popover:hover{
+  z-index: 9999;
+ }
+
  .popover-body{
   display: none;
 }
-.popover br{
-    content: none !important; /* Для переноса */
-}
-
 .popover-header:hover + .popover-body{
-  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
   display: block;
 }
 .popover-body:hover{
-  border-top: 1px solid rgba(0, 0, 0, 0.2) !important;
   display: block;
 }
 
@@ -234,4 +230,10 @@
 }
 .popover.red.bs-popover-start .popover-arrow:after{
     border-left-color:  var(--RED);
+}
+
+.popover-body a{
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
 }
