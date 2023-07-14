@@ -1,9 +1,9 @@
 // const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/get-img-info/'
 const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
-const  CSRF_TOKEN = getCookie('csrftoken');
+const CSRF_TOKEN = getCookie('csrftoken');
 var popover_display = 'show'
 const table = document.getElementById('window-table')
-var site_images = []
+var image_files = {}
 var RES = null;
 
 function print(...args) {
@@ -25,23 +25,125 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+class ImageFile {
+    constructor(src, img_tag) {
+        this.src = src;
+        this.backend_data = null;
+        this._is_loaded = false
+        this.response = null;
+        this._is_req_error = null;
+        this.site_images = [new SiteImage(this, img_tag), ];
+    }
 
-class SiteImage {
+    add_image_tag(img_tag) {
+        var site_image = new SiteImage(this, img_tag)
+        this.site_images.push(site_image)
+        if (this._is_loaded) {
 
-    constructor(img, popover, backend_data) {
-        this.img = img;
-        this.popover = popover;
-        this.backend_data = backend_data;
-        this.is_loaded = false
+            if (this._is_req_error == false) {
+                site_image.add_loaded_popover()
+            } else {
+                print('addd_req_error')
+                site_image.add_req_error_popover(this._is_req_error)
+            }
+        }
+
+        if (this.is_need_to_load() == false) {
+            site_image.add_not_loaded_popover()
+        }
+    }
+
+    set_is_loaded() {
+        this._is_loaded = true
+    }
+
+    load_back_info() {
+        let _class = this
+        var data = {
+            'image_url': this.full_src(),
+            'csrfmiddlewaretoken': CSRF_TOKEN,
+        }
+        console.warn('LOAD', this.src)
+        $.post(IMAGE_LOAD_INFO, data = data, )
+            .done(function (res, ) {
+                print('DONE')
+                _class.response = res;
+                _class._is_req_error = false
+                _class.backend_data = res
+                _class.site_images.forEach(function (site_image) {
+                    site_image.add_loaded_popover()
+                })
+            })
+            .fail(function (res) {
+                print('FAIL')
+                _class.response = res;
+                _class._is_req_error = true
+                _class.site_images.forEach(function (site_image) {
+                    site_image.add_req_error_popover(res)
+                })
+
+            })
+            .always(function (res) {
+                _class.set_is_loaded()
+            })
     }
 
     is_need_to_load() {
         var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png']
-        if (this.img.src == '') {
+        if (this.src == '') {
             return false
         }
         return ALLOWED_IMG_FORMATS.includes(this.image_extension())
     }
+    image_extension() {
+        var result = 'No exception'
+        var href = this.src.toLowerCase()
+        let extensions = ['.png', '.gif', '.bmp', '.webp', '.jpg', '.jpeg', 'data:image']
+        extensions.forEach(function (ext) {
+            if (href.includes(ext)) {
+                result = ext
+            }
+        })
+        return result
+    }
+
+    full_src() {
+        let url = this.src;
+        if (!url.startsWith('http')) {
+            url = base_url + url
+        }
+        return url
+    }
+
+    process() {
+        if (this.is_need_to_load()) {
+            this.load_back_info()
+        } else {
+            this.site_images.forEach(function (site_image) {
+                site_image.add_not_loaded_popover()
+            })
+        }
+    }
+
+    show_popovers() {
+        this.site_images.forEach(function (site_image) {
+            site_image.show_popover()
+        })
+    }
+    hide_popovers() {
+        this.site_images.forEach(function (site_image) {
+            site_image.hide_popover()
+        })
+    }
+}
+class SiteImage {
+
+    constructor(file, img_tag) {
+        this.file = file;
+        this.img = img_tag;
+        this.popover = null;
+    }
+
 
     image_commpress() {
         return Math.round((this.img.naturalWidth / this.img.width) * 10) / 10
@@ -67,25 +169,6 @@ class SiteImage {
         }
     }
 
-    image_extension() {
-        var result = undefined
-        var href = this.img.src.toLowerCase()
-        let extensions = ['.png', '.gif', '.bmp', '.webp', '.jpg', '.jpeg', 'data:image']
-        extensions.forEach(function (ext) {
-            if (href.includes(ext)) {
-                result = ext
-            }
-        })
-        return result
-    }
-
-    full_src() {
-        let url = this.img.src;
-        if (!url.startsWith('http')) {
-            url = base_url + url
-        }
-        return url
-    }
     add_popover(title, content = '', customClass = '') {
         const options = {
             'html': true,
@@ -106,29 +189,12 @@ class SiteImage {
         this.popover.show()
     }
 
-    load_back_info() {
-        let _class = this
-        var data = {
-            'image_url': this.full_src(),
-            'csrfmiddlewaretoken': CSRF_TOKEN,
-        }
-        $.post(IMAGE_LOAD_INFO, data = data, )
-            .done(function (res, ) {
-                print('DONE')
-                _class.backend_data = res
-                _class.add_loaded_popover()
-            })
-            .fail(function (res) {
-                print('FAIL')
-                _class.add_req_error_popover(res.responseJSON)
-            })
-    }
 
     add_loaded_popover() {
         let coof = `x${this.image_commpress()}`
         let page_size = `page: ${this.img.naturalWidth}x${this.img.naturalHeight}`
         let orig_size = `orig: ${this.img.width}x${this.img.height}`
-        let img_size = `size: ${this.backend_data['image']['orig_img_params']['size_text']}`
+        let img_size = `size: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
         let content_text = [
             page_size, orig_size, img_size
         ].join('<br>')
@@ -137,7 +203,7 @@ class SiteImage {
     }
 
     add_not_loaded_popover() {
-        let title = this.image_extension()
+        let title = this.file.image_extension()
         this.add_popover(title)
     }
 
@@ -146,13 +212,6 @@ class SiteImage {
         this.add_popover('Error REQ', text, 'red')
     }
 
-    process() {
-        if (this.is_need_to_load()) {
-            this.load_back_info()
-        } else {
-            this.add_not_loaded_popover()
-        }
-    }
 }
 
 var gif = document.getElementById('gif')
@@ -246,30 +305,40 @@ const options = {
 }
 
 function handleImg(myImg, observer) {
+    var image_observed_class = '_observed'
     myImg.forEach(myImgSingle => {
         if (myImgSingle.intersectionRatio > 0) {
             img = myImgSingle.target
-            if (!img.classList.contains('_loaded')) {
-                img.classList.add('_loaded')
-                site_image = new SiteImage(img)
-                site_images.push(site_image)
-                site_image.process()
+            if (!img.classList.contains(image_observed_class)) {
+                img.classList.add(image_observed_class)
+                if (img.src in image_files) {
+                    print(1)
+                    image_file = image_files[img.src];
+                    image_file.add_image_tag(img)
+                } else {
+                    var image_file = new ImageFile(img.src, img)
+                    image_files[img.src] = image_file
+                    image_file.process()
+                }
             }
         }
     })
 }
 
 var observer = null;
+
 function HidePopover() {
-    site_images.forEach(site_image => {
-        site_image.hide_popover()
-    })
+    for (src in image_files){
+        var image_file = image_files[src]
+        image_file.hide_popovers()
+    }
 }
 
 function ShowPopover() {
-    site_images.forEach(site_image => {
-        site_image.show_popover()
-    })
+    for (src in image_files){
+        var image_file = image_files[src]
+        image_file.show_popovers()
+    }
 }
 
 function On() {
@@ -285,7 +354,7 @@ function On() {
 }
 
 function Off() {
-    if (observer){
+    if (observer) {
         console.log('OFF')
         IMAGES.forEach(img => {
             observer.unobserve(img)
@@ -294,8 +363,3 @@ function Off() {
         HidePopover()
     }
 }
-
-
-$('body').on('click', '.popover a', function () {
-    console.log('click')
-})
