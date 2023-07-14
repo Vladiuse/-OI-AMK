@@ -5,6 +5,7 @@ var popover_display = 'show'
 const table = document.getElementById('window-table')
 var image_files = {}
 var RES = null;
+const domToInstance = new Map();
 
 function print(...args) {
     console.log(...args);
@@ -25,14 +26,72 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+class ImageCropTool{
+    constructor(){
+        this.table = table;
+        this.added_files = {}
+    }
+
+    add_image_file(image_file){
+        if (image_file._is_add_in_tool == false){
+            image_file._is_add_in_tool = true
+            this._add_row(image_file)
+        } else {
+            console.warn('Image already in tool', image_file)
+        }
+    }
+
+    _add_row(image_file){
+        var row = document.createElement('tr')
+        var image_tag = document.createElement('img')
+        image_tag.src = image_file.src
+
+        var c1_image = document.createElement('td')
+        var c2_orig_size = document.createElement('td')
+        var c3_weight = document.createElement('td')
+        var c4_remove = document.createElement('td')
+        c4_remove.classList.add('_remove')
+
+        c1_image.appendChild(image_tag)
+        c2_orig_size.innerText = image_file.orig_img_size_text()
+        c3_weight.innerText = image_file.file_size_text()
+        c4_remove.innerHTML = '<span>X</span>'
+
+        row.appendChild(c1_image)
+        row.appendChild(c2_orig_size)
+        row.appendChild(c3_weight)
+        row.appendChild(c4_remove)
+
+        this.table.querySelector('tbody').append(row)
+    }
+}
+
+var image_crop_tool = new ImageCropTool()
+
 class ImageFile {
-    constructor(src, img_tag) {
+    constructor(src) {
         this.src = src;
         this.backend_data = null;
         this._is_loaded = false
         this.response = null;
         this._is_req_error = null;
-        this.site_images = [new SiteImage(this, img_tag), ];
+        this.site_images = [];
+        this._is_add_in_tool = false;
+    }
+
+    add_in_tool(){
+
+    }
+
+    file_size_text(){
+        return this.backend_data['image']['orig_img_params']['size_text']
+    }
+
+    orig_img_size_text(){
+        var w = this.backend_data['image']['orig_img_params']['width']
+        var h = this.backend_data['image']['orig_img_params']['height']
+        return `${w}x${h}`
     }
 
     add_image_tag(img_tag) {
@@ -142,6 +201,8 @@ class SiteImage {
         this.file = file;
         this.img = img_tag;
         this.popover = null;
+
+        domToInstance.set(img_tag, this)
     }
 
 
@@ -312,13 +373,13 @@ function handleImg(myImg, observer) {
             if (!img.classList.contains(image_observed_class)) {
                 img.classList.add(image_observed_class)
                 if (img.src in image_files) {
-                    print(1)
                     image_file = image_files[img.src];
                     image_file.add_image_tag(img)
                 } else {
-                    var image_file = new ImageFile(img.src, img)
-                    image_files[img.src] = image_file
+                    var image_file = new ImageFile(img.src)
+                    image_file.add_image_tag(img)
                     image_file.process()
+                    image_files[img.src] = image_file
                 }
             }
         }

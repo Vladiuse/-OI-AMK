@@ -249,6 +249,8 @@ class SiteImage(models.Model):
             if self.thumb:
                 remove_file_if_exists(self.thumb.path)
             size = (self.page_width, self.page_height)
+            if not all(size):
+                size = (50, 50)
             thumb = make_thumb(self.orig_img.path, size)
             blob = io.BytesIO()
             thumb.save(blob, thumb.format)
