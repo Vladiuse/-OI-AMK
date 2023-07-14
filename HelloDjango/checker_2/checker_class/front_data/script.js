@@ -1,5 +1,12 @@
 console.log('MY SCRIPNT START')
 // $(document).ready(function(){
+
+    var iframe_text_manager = null;
+
+    function call_manager(){
+    iframe_text_manager.add_text()
+    }
+
     let toggleTime = 300;
 
     let isDebug = false;
