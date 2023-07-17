@@ -27,14 +27,14 @@ function getCookie(name) {
     return cookieValue;
 }
 
-class ImageCropTool{
-    constructor(){
+class ImageCropTool {
+    constructor() {
         this.table = table;
         this.added_files = {}
     }
 
-    add_image_file(image_file){
-        if (image_file._is_add_in_tool == false){
+    add_image_file(image_file) {
+        if (image_file._is_add_in_tool == false) {
             image_file._is_add_in_tool = true
             this._add_row(image_file)
         } else {
@@ -42,28 +42,64 @@ class ImageCropTool{
         }
     }
 
-    _add_row(image_file){
+    _add_row(image_file) {
         var row = document.createElement('tr')
+        var first_image = image_file.site_images[0]
         var image_tag = document.createElement('img')
         image_tag.src = image_file.src
 
         var c1_image = document.createElement('td')
         var c2_orig_size = document.createElement('td')
-        var c3_weight = document.createElement('td')
-        var c4_remove = document.createElement('td')
-        c4_remove.classList.add('_remove')
+        var c3_page_size = document.createElement('td')
+        var c4_weight = document.createElement('td')
+        var c5_remove = document.createElement('td')
+        var file_cells = [c1_image, c2_orig_size, c4_weight, c5_remove]
+        c5_remove.classList.add('_remove')
 
         c1_image.appendChild(image_tag)
         c2_orig_size.innerText = image_file.orig_img_size_text()
-        c3_weight.innerText = image_file.file_size_text()
-        c4_remove.innerHTML = '<span>X</span>'
+        c3_page_size.innerText = first_image.size_text()
+        c4_weight.innerText = image_file.file_size_text()
+        c5_remove.innerHTML = '<span>X</span>'
 
         row.appendChild(c1_image)
         row.appendChild(c2_orig_size)
-        row.appendChild(c3_weight)
-        row.appendChild(c4_remove)
+        row.appendChild(c3_page_size)
+        row.appendChild(c4_weight)
+        row.appendChild(c5_remove)
 
         this.table.querySelector('tbody').append(row)
+
+        if (image_file.site_images.length > 1) {
+            var image_tag_len = image_file.site_images.length
+            file_cells.forEach(function (elem) {
+                elem.rowSpan = image_tag_len
+            })
+            for (let i = 1; i < image_tag_len; i++) {
+                var dop_row = document.createElement('tr')
+                site_image = image_file.site_images[i]
+                var c3_page_size_dop = document.createElement('td')
+                c3_page_size_dop.innerText = site_image.size_text()
+                dop_row.appendChild(c3_page_size_dop)
+                this.table.querySelector('tbody').append(dop_row)
+            }
+        }
+
+    }
+
+    remove_rows(){
+        this.table.querySelector('tbody').replaceChildren()
+    }
+
+
+    drow_files() {
+        this.remove_rows()
+        for (var key in image_files) {
+            var file = image_files[key]
+            if (file.is_need_to_load()) {
+                this.add_image_file(file)
+            }
+        }
     }
 }
 
@@ -80,15 +116,15 @@ class ImageFile {
         this._is_add_in_tool = false;
     }
 
-    add_in_tool(){
+    add_in_tool() {
 
     }
 
-    file_size_text(){
+    file_size_text() {
         return this.backend_data['image']['orig_img_params']['size_text']
     }
 
-    orig_img_size_text(){
+    orig_img_size_text() {
         var w = this.backend_data['image']['orig_img_params']['width']
         var h = this.backend_data['image']['orig_img_params']['height']
         return `${w}x${h}`
@@ -208,6 +244,10 @@ class SiteImage {
 
     image_commpress() {
         return Math.round((this.img.naturalWidth / this.img.width) * 10) / 10
+    }
+
+    size_text() {
+        return `${this.img.width}x${this.img.height}`
     }
 
     get_popover_style_class() {
@@ -389,14 +429,14 @@ function handleImg(myImg, observer) {
 var observer = null;
 
 function HidePopover() {
-    for (src in image_files){
+    for (src in image_files) {
         var image_file = image_files[src]
         image_file.hide_popovers()
     }
 }
 
 function ShowPopover() {
-    for (src in image_files){
+    for (src in image_files) {
         var image_file = image_files[src]
         image_file.show_popovers()
     }
