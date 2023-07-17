@@ -352,11 +352,8 @@
         $('#analize-load p').last().slideDown(300)
       })
 
-
-    console.warn(site.iframe_text_manager, 'xxxx')
-    site.iframe_text_manager = text_manager
-    console.warn(site.iframe_text_manager, 'xxxx')
-
+    site.bigWindowFrame = bigWindow
+    console.warn(site.bigWindowFrame, 'xxxx')
       onActiveDebug() // включить активные дебагрежимы (из настроек)
       setDeviseWidth()  // проставить значение ширины фрейма
       loadBackAnalize(land_code)
@@ -604,9 +601,18 @@
         this.title_elem.innerText = title
       }
 
-      add_content(html_content, clean=true){
-        if (clean){this.clean_content()}
-        this.content.innerHTML = html_content
+      add_content(html_content, append=false){
+        // if (clean){this.clean_content()}
+        this.clean_content()
+        console.log(html_content)
+        console.log('Apend', append)
+        if (append){
+          console.log('APPEND')
+          this.content.appendChild(html_content)
+        } else {
+          console.log('INNER')
+          this.content.innerHTML = html_content
+        }
       }
 
       show_loading(){
@@ -643,6 +649,16 @@
       $(".navigation__add").show();
       let manualLink = $(this).attr('data-manual-link');
       loadDoc(manualLink);
+    })
+
+    // загрузка таблица обрезки картинок
+    $('#crop-images').click(function(e){
+      bigWindow.set_title('Image Crop Tool')
+      bigWindow.open()
+      bigWindow.show_loading()
+      var table = site.image_crop_tool.create_table()
+      bigWindow.add_content(table, append=true)
+      bigWindow.hide_loading()
     })
       // открыть весь список
       $('.tab-content').trigger('click')
