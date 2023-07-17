@@ -289,14 +289,14 @@
               <div class="navigation__add" id="navigation-add">
                 <div class="navigation__add-inner">
                   <div class="add-inner__head">
-                    <div class="add-inner__item">
+                    <div class="add-inner__item" id="big-window-title">
                       Документация
                     </div>
-                    <a class="add-inner__lock" onclick="document.getElementById('navigation-add').style.display = 'none'">
+                    <a class="add-inner__lock" onclick="bigWindow.close()">
                       <i class="fa-solid fa-xmark"></i>
                     </a>
                   </div>
-                  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                  <div class="lds-ellipsis" id="big-window-load"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="manual" >
                   </div>
                 </div>
@@ -541,18 +541,38 @@
 
     // загрузка документации
     function loadDoc(manual_land){
-      $('.navigation__add-inner .lds-ellipsis').show()
-      $('#navigation-add').show()
-      $('#manual').empty()
+      bigWindow.set_title('Документация+')
+      bigWindow.show_loading()
+      bigWindow.open()
+      // $('.navigation__add-inner .lds-ellipsis').show()
+      // $('#navigation-add').show()
+      // $('#manual').empty()
       let url = currentUrl + '/checker_2/doc_page/'
       data = {'manual_land': manual_land}
       $.post(url, data,function(response){
         // $('#for-doc').show()
-          $('#manual').html(response)
-          $('.navigation__add-inner .lds-ellipsis').hide()
+          bigWindow.add_content(response)
+          bigWindow.hide_loading()
+          // $('#manual').html(response)
+          // $('.navigation__add-inner .lds-ellipsis').hide()
           onLazy()
       })
     }
+
+
+    // function loadDoc(manual_land){
+    //   $('.navigation__add-inner .lds-ellipsis').show()
+    //   $('#navigation-add').show()
+    //   $('#manual').empty()
+    //   let url = currentUrl + '/checker_2/doc_page/'
+    //   data = {'manual_land': manual_land}
+    //   $.post(url, data,function(response){
+    //     // $('#for-doc').show()
+    //       $('#manual').html(response)
+    //       $('.navigation__add-inner .lds-ellipsis').hide()
+    //       onLazy()
+    //   })
+    // }
 
     function setDeviseWidth(){
       let elem = $('#devise-width span')
@@ -563,6 +583,58 @@
   </script>
 
   <script>
+    function hide_elem(elem){
+      elem.style.display = 'none'
+    }
+    function show_elem(elem){
+      elem.style.display = 'block'
+    }
+    class BigWindow{
+      constructor(){
+        this.elem = document.getElementById('navigation-add')
+        this.loading_elem = document.getElementById('big-window-load')
+        this.title_elem = document.getElementById('big-window-title')
+        this.content = document.getElementById('manual')
+      }
+
+      clean_content(){
+        this.content.replaceChildren()
+      }
+      set_title(title){
+        this.title_elem.innerText = title
+      }
+
+      add_content(html_content, clean=true){
+        if (clean){this.clean_content()}
+        this.content.innerHTML = html_content
+      }
+
+      show_loading(){
+        this.hide_content()
+        show_elem(this.loading_elem)
+      }
+
+      hide_loading(){
+        hide_elem(this.loading_elem)
+        this.show_content()
+      }
+
+      hide_content(){
+        hide_elem(this.content)
+      }
+      show_content(){
+        show_elem(this.content)
+      }
+
+      close(){
+        hide_elem(this.elem)
+      }
+      open(){
+        show_elem(this.elem)
+      }
+    }
+
+    const bigWindow = new BigWindow()
 
     // загрузка документации при клике на вопросик
     $('#check_list a, #about').click(function(e){
