@@ -1,7 +1,6 @@
 // const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/get-img-info/'
 const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
 const CSRF_TOKEN = getCookie('csrftoken');
-var popover_display = 'show'
 const table = document.getElementById('window-table')
 var image_files = {}
 var RES = null;
@@ -96,10 +95,8 @@ class ImageCropTool {
                     counter = 1
                     c3_page_size.innerText = image_size_text
                 } else {
-                    print('MANY CELLS')
                     var dop_row = document.createElement('tr')
                     var c3_page_size_dop = document.createElement('td')
-                    console.log(size , image_file.crop_size_text)
                     if (size == image_file.crop_size_text){
                         image_size_text = image_size_text + ' xxxx'
                     }
@@ -109,7 +106,6 @@ class ImageCropTool {
                 }
 
             }
-            console.log(size_dict)
         }
 
     }
@@ -167,9 +163,6 @@ class ImageFile {
         return `${this.crop_size['width']}x${this.crop_size['height']}`
     }
 
-    add_in_tool() {
-
-    }
     get length() {
         return this.site_images.length
     }
@@ -378,20 +371,6 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function add_image_in_table(src, orig_size, page_size, weight) {
-    let row = table.insertRow(-1)
-    let c1 = row.insertCell(-1);
-    print(c1)
-    let c2 = row.insertCell(-1);
-    let c3 = row.insertCell(-1);
-    let c4 = row.insertCell(-1);
-    let c5 = row.insertCell(-1);
-    c1.innerText = src
-    c2.innerText = orig_size
-    c3.innerText = page_size
-    c4.innerText = weight
-}
-
 function click(event, popover, img) {
     let title = popover.tip.querySelector('h3')
     print(title)
@@ -450,9 +429,6 @@ function get_position_of_bubble() {
 const ImgSelector = 'body img'
 const ImgNotLoadedSelector = 'body img:not(.load)'
 const IMAGES = document.querySelectorAll('body img')
-
-var POPOVER_DISPLAY = false
-
 const options = {
     root: null,
     rootMargin: '100px',
