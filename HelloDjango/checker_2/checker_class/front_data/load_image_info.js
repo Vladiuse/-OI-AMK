@@ -58,7 +58,7 @@ class ImageCropTool {
 
         c1_image.appendChild(image_tag)
         c2_orig_size.innerText = image_file.orig_img_size_text()
-        c3_page_size.innerText = first_image.size_text()
+        // c3_page_size.innerText = first_image.size_text()
         c4_weight.innerText = image_file.file_size_text()
         c5_remove.innerHTML = '<span>X</span>'
 
@@ -69,26 +69,51 @@ class ImageCropTool {
         row.appendChild(c5_remove)
 
         this.table.querySelector('tbody').append(row)
-
-        if (image_file.site_images.length > 1) {
-            var image_tag_len = image_file.site_images.length
-            file_cells.forEach(function (elem) {
-                elem.rowSpan = image_tag_len
-            })
-            for (let i = 1; i < image_tag_len; i++) {
-                var dop_row = document.createElement('tr')
+        if (image_file.length == 1) {
+            c3_page_size.innerText = first_image.size_text()
+        } else {
+            var size_dict = {}
+            // CREATE size dict
+            for (let i = 0; i < image_file.length; i++) {
                 site_image = image_file.site_images[i]
-                var c3_page_size_dop = document.createElement('td')
-                c3_page_size_dop.innerText = site_image.size_text()
-                dop_row.appendChild(c3_page_size_dop)
-                this.table.querySelector('tbody').append(dop_row)
+                if (site_image.size_text() in size_dict) {
+                    size_dict[site_image.size_text()].push(site_image)
+                } else {
+                    size_dict[site_image.size_text()] = [site_image, ]
+                }
             }
+            // add rowspan
+            file_cells.forEach(function (elem) {
+                elem.rowSpan = Object.keys(size_dict).length
+            })
+            var counter = 0
+            for (var size in size_dict){
+                var curr_zise_images_count = size_dict[size].length
+                if (counter == 0){
+                    counter = 1
+                    c3_page_size.innerText = `${curr_zise_images_count}шт : ${size}`
+                    c3_page_size.style.color = 'green'
+                } else {
+                    print('MANY CELLS')
+                    var dop_row = document.createElement('tr')
+                    var c3_page_size_dop = document.createElement('td')
+                    c3_page_size_dop.innerText = `${curr_zise_images_count}шт : ${size}`
+                    dop_row.appendChild(c3_page_size_dop)
+                    this.table.querySelector('tbody').append(dop_row)
+                }
+
+            }
+            console.log(size_dict)
         }
 
     }
 
-    remove_rows(){
+    remove_rows() {
         this.table.querySelector('tbody').replaceChildren()
+        for (var key in image_files) {
+            var image_file = image_files[key]
+            image_file._is_add_in_tool = false
+        }
     }
 
 
@@ -118,6 +143,9 @@ class ImageFile {
 
     add_in_tool() {
 
+    }
+    get length() {
+        return this.site_images.length
     }
 
     file_size_text() {
