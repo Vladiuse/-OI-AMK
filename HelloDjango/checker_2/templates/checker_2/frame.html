@@ -196,14 +196,24 @@
                     <svg data-icon="Assetpanel" aria-hidden="true" focusable="false" width="20" height="18" viewBox="0 0 20 18" class="bem-Svg" style="display: block;"><path d="M13.557.736a1 1 0 00-1.23-.701L.749 3.137A1 1 0 00.034 4.36l2.332 8.701a1 1 0 001.23.701L4 13.654V6.003A2 2 0 015.994 4h8.437L13.557.736zM7.007 6h11.986A1 1 0 0120 6.996v10.008a1 1 0 01-1.007.996H7.007A1 1 0 016 17.004V6.996A1 1 0 017.007 6zM18 9.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0zM8 12l3.5-3 7 7H8v-4z" fill="currentColor" fill-rule="evenodd"></path></svg>
                   </div>
 
+<!--                   <div class="leftbar__tool-item debug" data-iframe-func="">-->
+<!--                    <i class="fa-solid fa-crop"></i>-->
+<!--                   </div>-->
                   <div class="leftbar__tool-item" data-iframe-func="removeAllDebug" id="clear-debug">
                     <i class="fa-solid fa-xmark"></i>
                   </div>
                   
                 </div>
+<!--                BOTTOM BUTTONS-->
+               <div>
+                  <div class="leftbar__tool-item" id="crop-images" data-manual-link="other.linkchecker">
+                 <i class="fa-solid fa-crop"  style="font-size: 20px;"></i>
+                </div>
                 <div class="leftbar__tool-item" id="about" data-manual-link="other.linkchecker">
                   <i class="fa-solid fa-circle-question" style="font-size: 20px;"></i>
                 </div>
+               </div>
+                <!--                BOTTOM BUTTONS-->
               </div>
 
               <div class="navigation" {%if not user_settings.left_bar %} style="display: none; position:absolute;"{%endif%}>
@@ -307,12 +317,26 @@
   </div>
   <script src="js/main.js"></script>
   <script>
+    class TextManager{
+    constructor(){
+        this.text_block = document.getElementById('text-info')
+    }
+
+    add_text(){
+        var elem = document.createElement('p')
+        elem.innerText = 'Text'
+        this.text_block.appendChild(elem)
+    }
+}
+
+    var text_manager = new TextManager()
+
+
     let currentUrl = window.location.origin;
     const full = location.protocol + '//' + location.host + '/';
     let site = iframe.contentWindow
     let csrftoken = '{{csrf_token}}' // csrfmiddlewaretoken
     let checkedUrl = '{{kma.url|safe}}'
-
     let land_data_from_js = false;
     let get_phone_code_api = false;
     let get_old_analize = false;
@@ -327,6 +351,11 @@
       $('#analize-load p').first().slideUp(300, function(){
         $('#analize-load p').last().slideDown(300)
       })
+
+
+    console.warn(site.iframe_text_manager, 'xxxx')
+    site.iframe_text_manager = text_manager
+    console.warn(site.iframe_text_manager, 'xxxx')
 
       onActiveDebug() // включить активные дебагрежимы (из настроек)
       setDeviseWidth()  // проставить значение ширины фрейма
