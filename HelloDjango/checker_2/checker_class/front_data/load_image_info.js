@@ -25,11 +25,31 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+var bigWindowFrame = null
 
 class ImageCropTool {
     constructor() {
-        this.table = table;
+        this.table = null;
         this.added_files = {}
+    }
+
+    create_table() {
+        var table = document.createElement('table')
+        this.table = table
+        table.id = 'crop-images-table'
+        var thead = document.createElement('thead')
+        var tbody = document.createElement('tbody')
+        var headRow = document.createElement('tr')
+        table.appendChild(thead)
+        table.appendChild(tbody)
+        thead.appendChild(headRow)
+        var colNames = ['Image', 'Orig size', 'Page size', 'Weight', 'Thumb', 'Remove']
+        colNames.forEach(colName => {
+            var headCell = document.createElement('th')
+            headCell.innerText = colName
+            headRow.appendChild(headCell)
+        })
+        return table
     }
 
     add_image_file(image_file) {
@@ -88,16 +108,16 @@ class ImageCropTool {
                 elem.rowSpan = Object.keys(size_dict).length
             })
             var counter = 0
-            for (var size in size_dict){
+            for (var size in size_dict) {
                 var curr_zise_images_count = size_dict[size].length
                 var image_size_text = `${curr_zise_images_count}шт : ${size}`
-                if (counter == 0){
+                if (counter == 0) {
                     counter = 1
                     c3_page_size.innerText = image_size_text
                 } else {
                     var dop_row = document.createElement('tr')
                     var c3_page_size_dop = document.createElement('td')
-                    if (size == image_file.crop_size_text){
+                    if (size == image_file.crop_size_text) {
                         image_size_text = image_size_text + ' xxxx'
                     }
                     c3_page_size_dop.innerText = image_size_text
@@ -143,12 +163,12 @@ class ImageFile {
         this._is_add_in_tool = false;
     }
 
-    get crop_size(){
+    get crop_size() {
         var width = this.site_images[0].img.width
         var height = this.site_images[0].img.height
-        for (var i=1;i < this.length; i++){
+        for (var i = 1; i < this.length; i++) {
             var site_image = this.site_images[i]
-            if (site_image.img.width > width){
+            if (site_image.img.width > width) {
                 width = site_image.img.width
                 height = site_image.img.height
             }
@@ -159,7 +179,7 @@ class ImageFile {
         }
     }
 
-    get crop_size_text(){
+    get crop_size_text() {
         return `${this.crop_size['width']}x${this.crop_size['height']}`
     }
 

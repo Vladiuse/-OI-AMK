@@ -297,7 +297,7 @@
                     </a>
                   </div>
                   <div class="lds-ellipsis" id="big-window-load"><div></div><div></div><div></div><div></div></div>
-                  <div class="add-inner__main content" id="manual" >
+                  <div class="add-inner__main content" id="big-window-content">
                   </div>
                 </div>
               </div>
@@ -388,10 +388,8 @@
     function getPhoneCode() {
       // Получить Маску телефона по стране API
       url = currentUrl + '/kma/get_phone_code/'
-      console.log(url, 'url')
       data = { 'country_code': site.country }
       $.get(url, data, function (response) {
-        console.log(response, 'RESPONSE PHONE CODE')
         if (response['success'] == true) {
           $('#phone-code').text('+' + response['phone_code'])
           PhoneMask = '+' + response['phone_code'];
@@ -414,7 +412,6 @@
 
     // пробегаеться по сообщениям об ошибках с бэка
     function loadImfoItems(items) {
-      console.log(items)
       for (pos in items) {
         let item = items[pos];
         addInfo(item)
@@ -541,35 +538,19 @@
       bigWindow.set_title('Документация+')
       bigWindow.show_loading()
       bigWindow.open()
-      // $('.navigation__add-inner .lds-ellipsis').show()
-      // $('#navigation-add').show()
-      // $('#manual').empty()
       let url = currentUrl + '/checker_2/doc_page/'
       data = {'manual_land': manual_land}
       $.post(url, data,function(response){
-        // $('#for-doc').show()
-          bigWindow.add_content(response)
+          var manual_block = document.createElement('div')
+          manual_block.id = 'manual'
+          manual_block.innerHTML = response
+          bigWindow.add_content(manual_block)
           bigWindow.hide_loading()
-          // $('#manual').html(response)
-          // $('.navigation__add-inner .lds-ellipsis').hide()
           onLazy()
       })
     }
 
 
-    // function loadDoc(manual_land){
-    //   $('.navigation__add-inner .lds-ellipsis').show()
-    //   $('#navigation-add').show()
-    //   $('#manual').empty()
-    //   let url = currentUrl + '/checker_2/doc_page/'
-    //   data = {'manual_land': manual_land}
-    //   $.post(url, data,function(response){
-    //     // $('#for-doc').show()
-    //       $('#manual').html(response)
-    //       $('.navigation__add-inner .lds-ellipsis').hide()
-    //       onLazy()
-    //   })
-    // }
 
     function setDeviseWidth(){
       let elem = $('#devise-width span')
@@ -591,7 +572,7 @@
         this.elem = document.getElementById('navigation-add')
         this.loading_elem = document.getElementById('big-window-load')
         this.title_elem = document.getElementById('big-window-title')
-        this.content = document.getElementById('manual')
+        this.content = document.getElementById('big-window-content')
       }
 
       clean_content(){
@@ -601,18 +582,16 @@
         this.title_elem.innerText = title
       }
 
-      add_content(html_content, append=false){
-        // if (clean){this.clean_content()}
-        this.clean_content()
-        console.log(html_content)
-        console.log('Apend', append)
-        if (append){
-          console.log('APPEND')
-          this.content.appendChild(html_content)
-        } else {
-          console.log('INNER')
-          this.content.innerHTML = html_content
-        }
+      add_content(html_content, clean=true){
+        if (clean){this.clean_content()}
+
+        this.content.appendChild(html_content)
+        // this.clean_content()
+        // if (append){
+        //   this.content.appendChild(html_content)
+        // } else {
+        //   this.content.innerHTML = html_content
+        // }
       }
 
       show_loading(){
@@ -656,8 +635,12 @@
       bigWindow.set_title('Image Crop Tool')
       bigWindow.open()
       bigWindow.show_loading()
+      var image_info_p = document.createElement('h4')
+      image_info_p.innerHTML = Object.keys(site.image_files).length
+      bigWindow.add_content(image_info_p)
       var table = site.image_crop_tool.create_table()
-      bigWindow.add_content(table, append=true)
+      bigWindow.add_content(table, clean=false)
+      site.image_crop_tool.drow_files()
       bigWindow.hide_loading()
     })
       // открыть весь список
@@ -680,7 +663,6 @@
         'csrfmiddlewaretoken': csrftoken,
       }
       $.post(url, data, function (response) {
-        console.log(response)
         if (response['success'] != true) { console.error('Ошибка сохранения чекпоита!') }
         makeCkeckPointAnable(check_point_id)
       })
@@ -698,7 +680,6 @@
 
     // При клике на инпут в чеклисте
     $('#check_list .list-group-item.sub input').click(function () {
-      console.log(123)
       let check_point = $(this).parent()
       if ($(this).attr('disabled') != 'disabled') {
         $(this).prop('disabled', true)
@@ -735,7 +716,6 @@
   $('#clear-debug').click(function(){
     $('.leftbar__tool-item.debug').removeClass('active')
     let cleanFunc = $(this).attr('data-iframe-func')
-    console.log(cleanFunc, 'RUN')
     runFuncIframe(cleanFunc)
 
   })
@@ -998,6 +978,25 @@
         })
     }
   </script>
+  <style>
+    #crop-images-table{
+      width: 100%;
+      color: rgb(205, 216, 228);
+      font-size: 14px;
+    }
+    table, th, td {
+    border: 1px solid rgba(33, 43, 52, 1);;
+    border-collapse: collapse;
+    border-top: none;
+    border-left: none;
+    text-align: center;
+  }
+  #crop-images-table img{
+    max-width: 100px;
+    max-height: 100px;
+    margin: 5px;
+  }
+  </style>
 </body>
 
 </html>
