@@ -52,21 +52,23 @@ class ImageCropTool {
         var c2_orig_size = document.createElement('td')
         var c3_page_size = document.createElement('td')
         var c4_weight = document.createElement('td')
-        var c5_remove = document.createElement('td')
-        var file_cells = [c1_image, c2_orig_size, c4_weight, c5_remove]
-        c5_remove.classList.add('_remove')
+        var c5_thumb = document.createElement('td')
+        var c6_remove = document.createElement('td')
+        var file_cells = [c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
+        c6_remove.classList.add('_remove')
 
         c1_image.appendChild(image_tag)
         c2_orig_size.innerText = image_file.orig_img_size_text()
         // c3_page_size.innerText = first_image.size_text()
         c4_weight.innerText = image_file.file_size_text()
-        c5_remove.innerHTML = '<span>X</span>'
+        c6_remove.innerHTML = '<span>X</span>'
 
         row.appendChild(c1_image)
         row.appendChild(c2_orig_size)
         row.appendChild(c3_page_size)
         row.appendChild(c4_weight)
-        row.appendChild(c5_remove)
+        row.appendChild(c5_thumb)
+        row.appendChild(c6_remove)
 
         this.table.querySelector('tbody').append(row)
         if (image_file.length == 1) {
@@ -89,15 +91,19 @@ class ImageCropTool {
             var counter = 0
             for (var size in size_dict){
                 var curr_zise_images_count = size_dict[size].length
+                var image_size_text = `${curr_zise_images_count}шт : ${size}`
                 if (counter == 0){
                     counter = 1
-                    c3_page_size.innerText = `${curr_zise_images_count}шт : ${size}`
-                    c3_page_size.style.color = 'green'
+                    c3_page_size.innerText = image_size_text
                 } else {
                     print('MANY CELLS')
                     var dop_row = document.createElement('tr')
                     var c3_page_size_dop = document.createElement('td')
-                    c3_page_size_dop.innerText = `${curr_zise_images_count}шт : ${size}`
+                    console.log(size , image_file.crop_size_text)
+                    if (size == image_file.crop_size_text){
+                        image_size_text = image_size_text + ' xxxx'
+                    }
+                    c3_page_size_dop.innerText = image_size_text
                     dop_row.appendChild(c3_page_size_dop)
                     this.table.querySelector('tbody').append(dop_row)
                 }
@@ -139,6 +145,26 @@ class ImageFile {
         this._is_req_error = null;
         this.site_images = [];
         this._is_add_in_tool = false;
+    }
+
+    get crop_size(){
+        var width = this.site_images[0].img.width
+        var height = this.site_images[0].img.height
+        for (var i=1;i < this.length; i++){
+            var site_image = this.site_images[i]
+            if (site_image.img.width > width){
+                width = site_image.img.width
+                height = site_image.img.height
+            }
+        }
+        return {
+            'width': width,
+            'height': height,
+        }
+    }
+
+    get crop_size_text(){
+        return `${this.crop_size['width']}x${this.crop_size['height']}`
     }
 
     add_in_tool() {
