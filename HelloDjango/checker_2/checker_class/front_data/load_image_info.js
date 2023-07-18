@@ -1,4 +1,3 @@
-// const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/get-img-info/'
 const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
 const CSRF_TOKEN = getCookie('csrftoken');
 const table = document.getElementById('window-table')
@@ -30,7 +29,12 @@ var bigWindowFrame = null
 class ImageCropTool {
     constructor() {
         this.table = null;
+        // this.table = document.getElementById('crop-images-table')
         this.added_files = {}
+    }
+
+    set_table(table_elem){
+        this.table = table_elem
     }
 
     create_table() {
@@ -63,6 +67,7 @@ class ImageCropTool {
 
     _add_row(image_file) {
         var row = document.createElement('tr')
+        row.id = 'db-image-'+image_file.back_img_id
         var first_image = image_file.site_images[0]
         var image_tag = document.createElement('img')
         image_tag.src = image_file.src
@@ -177,6 +182,9 @@ class ImageFile {
             'width': width,
             'height': height,
         }
+    }
+    get back_img_id(){
+        return this.backend_data['image']['id']
     }
 
     get crop_size_text() {
