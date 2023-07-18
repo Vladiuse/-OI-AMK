@@ -1,8 +1,6 @@
 const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
 const CSRF_TOKEN = getCookie('csrftoken');
 const table = document.getElementById('window-table')
-var image_files = {}
-var images_tags = []
 var RES = null;
 const domToInstance = new Map();
 
@@ -30,8 +28,9 @@ var bigWindowFrame = null
 class ImageCropTool {
     constructor() {
         this.tool_block = null;
+        this.image_files = {}
+        this.image_tags = []
         this.table = null;
-        // this.table = document.getElementById('crop-images-table')
         this.added_files = {}
     }
 
@@ -46,8 +45,8 @@ class ImageCropTool {
     show_file_img_count(){
         var file_count_block = this.tool_block.querySelector('#files-count')
         var image_tags_count_block = this.tool_block.querySelector('#image-tags-count')
-        file_count_block.innerHTML =   `Файлов найдено: ${Object.keys(image_files).length}шт.`;
-        image_tags_count_block.innerHTML = `Картинок найдено: ${images_tags.length}шт.`
+        file_count_block.innerHTML =   `Файлов найдено: ${Object.keys(image_crop_tool.image_files).length}шт.`;
+        image_tags_count_block.innerHTML = `Картинок найдено: ${image_crop_tool.image_tags.length}шт.`
     }
 
     create_table() {
@@ -92,7 +91,7 @@ class ImageCropTool {
         var c4_weight = document.createElement('td')
         var c5_thumb = document.createElement('td')
         var c6_remove = document.createElement('td')
-        var file_cells = [c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
+        var file_cells = [c0_file_back_id,c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
         c6_remove.classList.add('_remove')
 
         c0_file_back_id.innerText = image_file.back_img_id
@@ -119,7 +118,7 @@ class ImageCropTool {
             var size_dict = {}
             // CREATE size dict
             for (let i = 0; i < image_file.length; i++) {
-                site_image = image_file.site_images[i]
+                var site_image = image_file.site_images[i]
                 if (site_image.size_text() in size_dict) {
                     size_dict[site_image.size_text()].push(site_image)
                 } else {
@@ -155,8 +154,8 @@ class ImageCropTool {
 
     remove_rows() {
         this.table.querySelector('tbody').replaceChildren()
-        for (var key in image_files) {
-            var image_file = image_files[key]
+        for (var key in image_crop_tool.image_files) {
+            var image_file = image_crop_tool.image_files[key]
             image_file._is_add_in_tool = false
         }
     }
@@ -164,8 +163,8 @@ class ImageCropTool {
 
     drow_files() {
         this.remove_rows()
-        for (var key in image_files) {
-            var file = image_files[key]
+        for (var key in image_crop_tool.image_files) {
+            var file = image_crop_tool.image_files[key]
             if (file.is_need_to_load()) {
                 this.add_image_file(file)
             }
@@ -330,7 +329,8 @@ class SiteImage {
         this.file = file;
         this.img = img_tag;
         this.popover = null;
-        images_tags.push(this)
+        // init funcs
+        image_crop_tool.image_tags.push(this)
         domToInstance.set(img_tag, this)
     }
 
@@ -408,11 +408,6 @@ class SiteImage {
 
 }
 
-var gif = document.getElementById('gif')
-
-let site_image = new SiteImage(gif)
-
-
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -488,14 +483,14 @@ function handleImg(myImg, observer) {
             img = myImgSingle.target
             if (!img.classList.contains(image_observed_class)) {
                 img.classList.add(image_observed_class)
-                if (img.src in image_files) {
-                    image_file = image_files[img.src];
+                if (img.src in image_crop_tool.image_files) {
+                    image_file = image_crop_tool.image_files[img.src];
                     image_file.add_image_tag(img)
                 } else {
                     var image_file = new ImageFile(img.src)
                     image_file.add_image_tag(img)
                     image_file.process()
-                    image_files[img.src] = image_file
+                    image_crop_tool.image_files[img.src] = image_file
                 }
             }
         }
@@ -505,15 +500,15 @@ function handleImg(myImg, observer) {
 var observer = null;
 
 function HidePopover() {
-    for (src in image_files) {
-        var image_file = image_files[src]
+    for (src in image_crop_tool.image_files) {
+        var image_file = image_crop_tool.image_files[src]
         image_file.hide_popovers()
     }
 }
 
 function ShowPopover() {
-    for (src in image_files) {
-        var image_file = image_files[src]
+    for (src in image_crop_tool.image_files) {
+        var image_file = image_crop_tool.image_files[src]
         image_file.show_popovers()
     }
 }
