@@ -302,6 +302,12 @@
                     <div id="manual" style="display: none;"></div>
                     <div id="crop-image-tool" style="display: none;">
                     <!-- CROP IMAGE TOOL -->
+                    <div class="add-inner__item">
+                      <h4 id="files-count">Images found: xx</h4>
+                      <h4 id="image-tags-count">Images found: x</h4>
+  
+                    </div>
+
                       <table id="crop-images-table">
                         <thead>
                           <tr>
@@ -373,7 +379,7 @@
 
     site.bigWindowFrame = bigWindow
     console.warn(site.bigWindowFrame, 'xxxx')
-    site.image_crop_tool.set_table(document.getElementById('crop-images-table'))
+    site.image_crop_tool.set_table(document.getElementById('crop-image-tool'))
 
 
       onActiveDebug() // включить активные дебагрежимы (из настроек)
@@ -661,9 +667,10 @@
     $('#crop-images').click(function(e){
       bigWindow.set_title('Image Crop Tool')
       bigWindow.hide_content()
+      site.image_crop_tool.drow_files()
+      site.image_crop_tool.show_file_img_count()
       bigWindow.open()
       bigWindow.show_loading()
-      site.image_crop_tool.drow_files()
       bigWindow.hide_loading()
       bigWindow.show_crop_tool()
     })
@@ -769,12 +776,13 @@
     }
   })
   // при наведении на окно фрейма
-  $('#iframe').hover(function(){
-    if (!$('#navigator').hasClass('active')){
-      $('.navigation, #navigation-add').hide()
-      $('#jeneral-status i').show()
-    }
-  })
+  // $('#iframe').hover(function(){
+  //   console.log('xxxxxx')
+  //   if (!$('#navigator').hasClass('active')){
+  //     $('.navigation, #navigation-add').hide()
+  //     $('#jeneral-status i').show()
+  //   }
+  // })
 
   // переключение класса active на напени устройств
   $('.topbar__item.devises .devise').click(function(){
@@ -1003,15 +1011,16 @@
     }
   </script>
   <style>
+    #crop-image-tool{
+      color: rgb(205, 216, 228);
+    }
     #crop-images-table{
       width: 100%;
-      color: rgb(205, 216, 228);
       font-size: 14px;
     }
     table, th, td {
     border: 1px solid rgba(33, 43, 52, 1);;
     border-collapse: collapse;
-    border-top: none;
     border-left: none;
     text-align: center;
   }

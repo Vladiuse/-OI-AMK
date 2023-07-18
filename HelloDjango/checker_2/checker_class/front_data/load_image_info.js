@@ -2,6 +2,7 @@ const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-image
 const CSRF_TOKEN = getCookie('csrftoken');
 const table = document.getElementById('window-table')
 var image_files = {}
+var images_tags = []
 var RES = null;
 const domToInstance = new Map();
 
@@ -28,13 +29,25 @@ var bigWindowFrame = null
 
 class ImageCropTool {
     constructor() {
+        this.tool_block = null;
         this.table = null;
         // this.table = document.getElementById('crop-images-table')
         this.added_files = {}
     }
 
-    set_table(table_elem){
-        this.table = table_elem
+    set_table(tool_block){
+        this.tool_block = tool_block
+        var table = tool_block.querySelector('#crop-images-table')
+        this.table = table
+        // console.log(table)
+        // console.log(tool_block.querySelector('*'))
+    }
+
+    show_file_img_count(){
+        var file_count_block = this.tool_block.querySelector('#files-count')
+        var image_tags_count_block = this.tool_block.querySelector('#image-tags-count')
+        file_count_block.innerHTML =   `Файлов найдено: ${Object.keys(image_files).length}шт.`;
+        image_tags_count_block.innerHTML = `Картинок найдено: ${images_tags.length}шт.`
     }
 
     create_table() {
@@ -84,6 +97,8 @@ class ImageCropTool {
         c1_image.appendChild(image_tag)
         c2_orig_size.innerText = image_file.orig_img_size_text()
         // c3_page_size.innerText = first_image.size_text()
+
+        c5_thumb.innerText = image_file.crop_size_text
         c4_weight.innerText = image_file.file_size_text()
         c6_remove.innerHTML = '<span>X</span>'
 
@@ -116,15 +131,15 @@ class ImageCropTool {
             for (var size in size_dict) {
                 var curr_zise_images_count = size_dict[size].length
                 var image_size_text = `${curr_zise_images_count}шт : ${size}`
+                if (size == image_file.crop_size_text) {
+                    image_size_text = image_size_text + ' crop size'
+                }
                 if (counter == 0) {
                     counter = 1
                     c3_page_size.innerText = image_size_text
                 } else {
                     var dop_row = document.createElement('tr')
-                    var c3_page_size_dop = document.createElement('td')
-                    if (size == image_file.crop_size_text) {
-                        image_size_text = image_size_text + ' xxxx'
-                    }
+                    var c3_page_size_dop = document.createElement('td')                    
                     c3_page_size_dop.innerText = image_size_text
                     dop_row.appendChild(c3_page_size_dop)
                     this.table.querySelector('tbody').append(dop_row)
@@ -312,7 +327,7 @@ class SiteImage {
         this.file = file;
         this.img = img_tag;
         this.popover = null;
-
+        images_tags.push(this)
         domToInstance.set(img_tag, this)
     }
 
