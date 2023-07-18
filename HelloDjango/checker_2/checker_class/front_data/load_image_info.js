@@ -85,6 +85,7 @@ class ImageCropTool {
         var image_tag = document.createElement('img')
         image_tag.src = image_file.src
 
+        var c0_file_back_id = document.createElement('td')
         var c1_image = document.createElement('td')
         var c2_orig_size = document.createElement('td')
         var c3_page_size = document.createElement('td')
@@ -94,6 +95,7 @@ class ImageCropTool {
         var file_cells = [c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
         c6_remove.classList.add('_remove')
 
+        c0_file_back_id.innerText = image_file.back_img_id
         c1_image.appendChild(image_tag)
         c2_orig_size.innerText = image_file.orig_img_size_text()
         // c3_page_size.innerText = first_image.size_text()
@@ -102,6 +104,7 @@ class ImageCropTool {
         c4_weight.innerText = image_file.file_size_text()
         c6_remove.innerHTML = '<span>X</span>'
 
+        row.appendChild(c0_file_back_id)
         row.appendChild(c1_image)
         row.appendChild(c2_orig_size)
         row.appendChild(c3_page_size)
