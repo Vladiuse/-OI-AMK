@@ -305,7 +305,16 @@
                     <div class="add-inner__item">
                       <h4 id="files-count">Images found: xx</h4>
                       <h4 id="image-tags-count">Images found: x</h4>
-  
+                      <button class="ch-button button-grey">
+                        <i class="fa-solid fa-crop"></i>
+                        Создать архив</button>
+
+                      <div id="arhive-url">
+                        <input type="text" class="ch-input" value="https://some-url.com/">
+                        <button class="ch-button">
+                          <i class="fa-solid fa-download"></i>
+                          Скачать</button>
+                      </div>
                     </div>
 
                       <table id="crop-images-table">
@@ -1030,6 +1039,93 @@
     max-height: 100px;
     margin: 5px;
   }
+  </style>
+  <style>
+    /* IMAGE CROP TOOL */
+    #arhive-url{
+      display: flex;
+    }
+    .ch-button i{
+      margin-right: 5px;
+    }
+    /* IMAGE CROP TOOL */
+    /* CHECKER BUTTONS */
+    .ch-button.button-grey{
+    border-color: rgb(54, 54, 54);
+    outline: 0px;
+    cursor: default;
+    user-select: none;
+    padding: 0px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    border-radius: 2px;
+    color: rgb(235, 235, 235);
+    background: rgb(94, 94, 94);
+    border-width: 1px;
+    border-style: solid;
+    box-sizing: border-box;
+    align-self: center;
+  }
+  .ch-button.button-grey:hover{
+    background: rgb(107, 107, 107);
+  }
+    .ch-button{
+    border-color: rgb(54, 54, 54);
+    outline: 0px;
+    cursor: default;
+    user-select: none;
+    margin-left: 8px;
+    padding: 0px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    border-radius: 2px;
+    color: rgb(255, 255, 255);
+    background: rgb(0, 115, 230);
+    border-width: 1px;
+    border-style: solid;
+    box-sizing: border-box;
+    align-self: center;
+    }
+    .ch-button:hover{
+    color: rgb(246, 246, 246);
+    background: rgb(0, 132, 255);
+    filter: unset;
+    }
+    .ch-input{
+      color: white;
+      height: 30px;
+    font-size: 12px;
+    padding: 0px 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(33, 33, 33);
+    border-radius: 2px;
+    line-height: 22px;
+    background: rgb(43, 43, 43);
+    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px;
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    outline: 0px;
+    }
+    .ch-input:hover{
+      background: rgb(33, 33, 33);
+    }
+    .ch-input:focus{
+      box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px, rgb(36, 150, 255) 0px 0px 0px 1px;
+    }
+    /* CHECKER BUTTONS */
   </style>
 </body>
 
