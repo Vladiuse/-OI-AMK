@@ -584,6 +584,7 @@ i.fa-circle-exclamation{
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid rgba(33, 43, 52, 1);
+  background-color: #4d4d4d;
 }
 .add-inner__main{
   overflow: hidden;
