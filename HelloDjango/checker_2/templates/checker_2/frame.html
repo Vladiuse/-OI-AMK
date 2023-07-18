@@ -77,11 +77,12 @@
               <div class="topbar__item">
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
               </div>
-              <div class="topbar__btn" id="jeneral-status" style="display: {%if user_settings.left_bar %}none;{%else%}flex;{%endif%}">
-
-              </div>
+             
               <div class="topbar__item" id="offer_name" style="display: none;">
                 <div class="topbar__btn">Оффер: <span></span></div>
+              </div>
+               <div class="topbar__btn" id="jeneral-status" style="display: {%if user_settings.left_bar %}none;{%else%}flex;{%endif%}">
+
               </div>
               <div class="topbar__item">
                 <div id="scripts-img">
@@ -298,6 +299,24 @@
                   </div>
                   <div class="lds-ellipsis" id="big-window-load"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="big-window-content">
+                    <div id="manual" style="display: none;"></div>
+                    <div id="crop-image-tool" style="display: none;">
+                    <!-- CROP IMAGE TOOL -->
+                      <table id="crop-images-table">
+                        <thead>
+                          <tr>
+                            <th>Image</th>
+                            <th>Orig size</th>
+                            <th>Page size</th>
+                            <th>Weight</th>
+                            <th>Thumb</th>
+                            <th>Remove</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    <!-- CROP IMAGE TOOL -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -354,6 +373,9 @@
 
     site.bigWindowFrame = bigWindow
     console.warn(site.bigWindowFrame, 'xxxx')
+    site.image_crop_tool.set_table(document.getElementById('crop-images-table'))
+
+
       onActiveDebug() // включить активные дебагрежимы (из настроек)
       setDeviseWidth()  // проставить значение ширины фрейма
       loadBackAnalize(land_code)
@@ -541,11 +563,10 @@
       let url = currentUrl + '/checker_2/doc_page/'
       data = {'manual_land': manual_land}
       $.post(url, data,function(response){
-          var manual_block = document.createElement('div')
-          manual_block.id = 'manual'
-          manual_block.innerHTML = response
-          bigWindow.add_content(manual_block)
+          bigWindow.add_manual_content(response)
+          bigWindow.hide_content()
           bigWindow.hide_loading()
+          bigWindow.show_manual()
           onLazy()
       })
     }
@@ -573,10 +594,13 @@
         this.loading_elem = document.getElementById('big-window-load')
         this.title_elem = document.getElementById('big-window-title')
         this.content = document.getElementById('big-window-content')
+        this.manual = document.getElementById('manual')
+        this.crop_image_tool = document.getElementById('crop-image-tool')
       }
 
       clean_content(){
-        this.content.replaceChildren()
+        this.manual.replaceChildren()
+        this.crop_image_tool.replaceChildren()
       }
       set_title(title){
         this.title_elem.innerText = title
@@ -584,14 +608,7 @@
 
       add_content(html_content, clean=true){
         if (clean){this.clean_content()}
-
         this.content.appendChild(html_content)
-        // this.clean_content()
-        // if (append){
-        //   this.content.appendChild(html_content)
-        // } else {
-        //   this.content.innerHTML = html_content
-        // }
       }
 
       show_loading(){
@@ -601,14 +618,24 @@
 
       hide_loading(){
         hide_elem(this.loading_elem)
-        this.show_content()
       }
 
       hide_content(){
-        hide_elem(this.content)
+        hide_elem(this.manual)
+        hide_elem(this.crop_image_tool)
       }
-      show_content(){
-        show_elem(this.content)
+
+      add_manual_content(content){
+        this.manual.innerHTML = content
+      }
+      show_manual(){
+        show_elem(this.manual)
+      }
+      add_crop_toll_content(){
+      }
+
+      show_crop_tool(){
+        show_elem(this.crop_image_tool)
       }
 
       close(){
@@ -633,15 +660,12 @@
     // загрузка таблица обрезки картинок
     $('#crop-images').click(function(e){
       bigWindow.set_title('Image Crop Tool')
+      bigWindow.hide_content()
       bigWindow.open()
       bigWindow.show_loading()
-      var image_info_p = document.createElement('h4')
-      image_info_p.innerHTML = Object.keys(site.image_files).length
-      bigWindow.add_content(image_info_p)
-      var table = site.image_crop_tool.create_table()
-      bigWindow.add_content(table, clean=false)
       site.image_crop_tool.drow_files()
       bigWindow.hide_loading()
+      bigWindow.show_crop_tool()
     })
       // открыть весь список
       $('.tab-content').trigger('click')
