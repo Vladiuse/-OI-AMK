@@ -210,6 +210,15 @@ class ImageFile {
             'height': height,
         }
     }
+    get natural_size(){
+        return this.site_images[0].natural_size
+    }
+    get crop_compression_status(){
+        var natural_width = this.natural_size['width']
+        var crop_width = this.crop_size['width']
+        var min_file_compression = SiteImage.calculate_image_compression(natural_width,crop_width)
+        return SiteImage.get_compression_status(min_file_compression)
+    }
     get back_img_id() {
         return this.backend_data['image']['id']
     }
