@@ -1133,6 +1133,48 @@
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px, rgb(36, 150, 255) 0px 0px 0px 1px;
     }
     /* CHECKER BUTTONS */
+
+
+  :root {
+  --GREEN: rgba(0, 128, 0, 0.6);
+  --YELLOW: rgba(255, 255, 0, 0.6);
+  --ORANGE: rgba(255, 153, 0, 0.6);
+  --RED: rgba(255, 0, 0, 0.6);
+  }
+
+#crop-image-tool span{
+  padding: 3px;
+  border-radius: 3px;
+}
+/* CROP TOOL  */
+#crop-image-tool span.red{
+  background-color: var(--RED);
+}
+#crop-image-tool span.yellow{
+  background-color: var(--YELLOW);
+  color: #333;
+}
+#crop-image-tool span.orange{
+  background-color: var(--ORANGE);
+  color: #333;
+}
+#crop-image-tool span.green{
+  background-color: var(--GREEN);
+}
+
+#crop-image-tool span.red-outer{
+  border: 2px solid var(--RED);
+}
+#crop-image-tool span.yellow-outer{
+  border: 2px solid var(--YELLOW);
+}
+#crop-image-tool span.orange-outer{
+  border: 2px solid var(--ORANGE);
+}
+#crop-image-tool span.green-outer{
+  border: 2px solid var(--GREEN);
+}
+/* CROP TOOL  */
   </style>
 </body>
 

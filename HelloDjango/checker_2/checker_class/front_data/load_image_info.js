@@ -83,7 +83,7 @@ class ImageCropTool {
         var first_image = image_file.site_images[0]
         var image_tag = document.createElement('img')
         image_tag.src = image_file.src
-
+        // create table cells
         var c0_file_back_id = document.createElement('td')
         var c1_image = document.createElement('td')
         var c2_orig_size = document.createElement('td')
@@ -98,8 +98,10 @@ class ImageCropTool {
         c1_image.appendChild(image_tag)
         c2_orig_size.innerText = image_file.orig_img_size_text()
         // c3_page_size.innerText = first_image.size_text()
-
-        c5_thumb.innerText = image_file.crop_size_text
+        var thumb_elem = document.createElement('span')
+        thumb_elem.classList.add(image_file.crop_compression_status)
+        thumb_elem.innerText = image_file.crop_size_text
+        c5_thumb.appendChild(thumb_elem)
         c4_weight.innerText = image_file.file_size_text()
         c6_remove.innerHTML = '<span>X</span>'
 
@@ -113,7 +115,10 @@ class ImageCropTool {
 
         this.table.querySelector('tbody').append(row)
         if (image_file.length == 1) {
-            c3_page_size.innerText = first_image.size_text()
+            var page_size_elem = document.createElement('span')
+            page_size_elem.classList.add(image_file.crop_compression_status+'-outer')
+            page_size_elem.innerText = first_image.size_text()
+            c3_page_size.appendChild(page_size_elem)
         } else {
             var size_dict = {}
             // CREATE size dict
@@ -132,17 +137,22 @@ class ImageCropTool {
             var counter = 0
             for (var size in size_dict) {
                 var curr_zise_images_count = size_dict[size].length
-                var image_size_text = `${curr_zise_images_count}шт : ${size}`
-                if (size == image_file.crop_size_text) {
-                    image_size_text = image_size_text + ' crop size'
-                }
+                var images_count_text = `${curr_zise_images_count}шт : `
+                var image_size_elem = document.createElement('span')
+                image_size_elem.innerText = size
+                image_size_elem.classList.add(image_file.crop_compression_status+'-outer')
+                // if (size == image_file.crop_size_text) {
+                //     image_size_text = image_size_text + ' crop size'
+                // }
                 if (counter == 0) {
                     counter = 1
-                    c3_page_size.innerText = image_size_text
+                    c3_page_size.innerText = images_count_text
+                    c3_page_size.appendChild(image_size_elem)
                 } else {
                     var dop_row = document.createElement('tr')
                     var c3_page_size_dop = document.createElement('td')
-                    c3_page_size_dop.innerText = image_size_text
+                    c3_page_size_dop.innerText = images_count_text
+                    c3_page_size_dop.appendChild(image_size_elem)
                     dop_row.appendChild(c3_page_size_dop)
                     this.table.querySelector('tbody').append(dop_row)
                 }
@@ -199,6 +209,15 @@ class ImageFile {
             'width': width,
             'height': height,
         }
+    }
+    get natural_size(){
+        return this.site_images[0].natural_size
+    }
+    get crop_compression_status(){
+        var natural_width = this.natural_size['width']
+        var crop_width = this.crop_size['width']
+        var min_file_compression = SiteImage.calculate_image_compression(natural_width,crop_width)
+        return SiteImage.get_compression_status(min_file_compression)
     }
     get back_img_id() {
         return this.backend_data['image']['id']
@@ -335,6 +354,12 @@ class SiteImage {
         this.popover = null;
         // init funcs
         this.__init()
+    }
+    get natural_size(){
+        return {
+            'width': this.img.naturalWidth,
+            'height': this.img.naturalHeight,
+        }
     }
 
     __init(){
