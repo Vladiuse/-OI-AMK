@@ -342,31 +342,34 @@ class SiteImage {
         domToInstance.set(this.img, this)
     }
 
+    static calculate_image_compression(width_1, width_2){
+        return Math.round((width_1 / width_2) * 10) / 10
 
+    }
     image_commpress() {
-        return Math.round((this.img.naturalWidth / this.img.width) * 10) / 10
+        return SiteImage.calculate_image_compression(this.img.naturalWidth,this.img.width)
+        // return Math.round((this.img.naturalWidth / this.img.width) * 10) / 10
     }
 
     size_text() {
         return `${this.img.width}x${this.img.height}`
     }
 
-    get_popover_style_class() {
+    static get_compression_status(compression) {
         let GREEN = 1.3
         let YELLOW = 1.8
         let ORANGE = 3
         let RED = 3
-        let HDiff = this.image_commpress()
-        if (HDiff <= GREEN) {
+        if (compression <= GREEN) {
             return 'green'
         }
-        if (HDiff > GREEN && HDiff <= YELLOW) {
+        if (compression > GREEN && compression <= YELLOW) {
             return 'yellow'
         }
-        if (HDiff > YELLOW && HDiff <= ORANGE) {
+        if (compression > YELLOW && compression <= ORANGE) {
             return 'orange'
         }
-        if (HDiff > ORANGE) {
+        if (compression > ORANGE) {
             return 'red'
         }
     }
@@ -401,7 +404,7 @@ class SiteImage {
         let content_text = [
             page_size, orig_size, img_size
         ].join('<br>')
-        let popover_style = this.get_popover_style_class()
+        let popover_style = SiteImage.get_compression_status(this.image_commpress())
         this.add_popover(coof, content_text, popover_style)
     }
 
