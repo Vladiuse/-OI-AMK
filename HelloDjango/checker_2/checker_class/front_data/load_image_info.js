@@ -1,7 +1,5 @@
 const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
 const CSRF_TOKEN = getCookie('csrftoken');
-const table = document.getElementById('window-table')
-var RES = null;
 const domToInstance = new Map();
 
 function print(...args) {
@@ -23,7 +21,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-var bigWindowFrame = null
+var bigWindowFrame = null // set from site-wrapper
 
 class ImageCropTool {
     constructor() {
@@ -31,10 +29,9 @@ class ImageCropTool {
         this.image_files = {}
         this.image_tags = []
         this.table = null;
-        this.added_files = {}
     }
 
-    set_table(tool_block){
+    set_table(tool_block) { // call from site-wrapper
         this.tool_block = tool_block
         var table = tool_block.querySelector('#crop-images-table')
         this.table = table
@@ -42,14 +39,14 @@ class ImageCropTool {
         // console.log(tool_block.querySelector('*'))
     }
 
-    show_file_img_count(){
+    show_file_img_count() {
         var file_count_block = this.tool_block.querySelector('#files-count')
         var image_tags_count_block = this.tool_block.querySelector('#image-tags-count')
-        file_count_block.innerHTML =   `Файлов найдено: ${Object.keys(image_crop_tool.image_files).length}шт.`;
+        file_count_block.innerHTML = `Файлов найдено: ${Object.keys(image_crop_tool.image_files).length}шт.`;
         image_tags_count_block.innerHTML = `Картинок найдено: ${image_crop_tool.image_tags.length}шт.`
     }
 
-    create_table() {
+    __x__create_table() {
         var table = document.createElement('table')
         this.table = table
         table.id = 'crop-images-table'
@@ -79,7 +76,7 @@ class ImageCropTool {
 
     _add_row(image_file) {
         var row = document.createElement('tr')
-        row.id = 'db-image-'+image_file.back_img_id
+        row.id = 'db-image-' + image_file.back_img_id
         var first_image = image_file.site_images[0]
         var image_tag = document.createElement('img')
         image_tag.src = image_file.src
@@ -91,7 +88,7 @@ class ImageCropTool {
         var c4_weight = document.createElement('td')
         var c5_thumb = document.createElement('td')
         var c6_remove = document.createElement('td')
-        var file_cells = [c0_file_back_id,c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
+        var file_cells = [c0_file_back_id, c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
         c6_remove.classList.add('_remove')
 
         c0_file_back_id.innerText = image_file.back_img_id
@@ -141,7 +138,7 @@ class ImageCropTool {
                     c3_page_size.innerText = image_size_text
                 } else {
                     var dop_row = document.createElement('tr')
-                    var c3_page_size_dop = document.createElement('td')                    
+                    var c3_page_size_dop = document.createElement('td')
                     c3_page_size_dop.innerText = image_size_text
                     dop_row.appendChild(c3_page_size_dop)
                     this.table.querySelector('tbody').append(dop_row)
@@ -200,7 +197,7 @@ class ImageFile {
             'height': height,
         }
     }
-    get back_img_id(){
+    get back_img_id() {
         return this.backend_data['image']['id']
     }
 
@@ -282,6 +279,10 @@ class ImageFile {
         }
         return ALLOWED_IMG_FORMATS.includes(this.image_extension())
     }
+    is_need_to_crop() {
+        ///
+    }
+
     image_extension() {
         var result = 'No exception'
         var href = this.src.toLowerCase()
@@ -330,8 +331,12 @@ class SiteImage {
         this.img = img_tag;
         this.popover = null;
         // init funcs
+        this.__init()
+    }
+
+    __init(){
         image_crop_tool.image_tags.push(this)
-        domToInstance.set(img_tag, this)
+        domToInstance.set(this.img, this)
     }
 
 
@@ -369,6 +374,7 @@ class SiteImage {
             'content': content,
             'title': title,
             'customClass': customClass,
+            'placement': 'left',
         }
         let popover = new bootstrap.Popover(this.img, options)
         this.popover = popover;
