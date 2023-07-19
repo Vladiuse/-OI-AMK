@@ -577,7 +577,7 @@ i.fa-circle-exclamation{
 .add-inner__item,
 .add-inner__lock{
   color: #f1f1f1;
-  cursor: pointer !important; 
+  /* cursor: pointer !important;  */
   padding: 5px 10px;
 }
 .add-inner__head{
