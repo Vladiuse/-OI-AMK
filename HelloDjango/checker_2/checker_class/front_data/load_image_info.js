@@ -28,15 +28,18 @@ class ImageCropTool {
         this.tool_block = null;
         this.image_files = {}
         this.image_tags = []
-        this.table = null;
+        this._table = null;
     }
 
-    set_table(tool_block) { // call from site-wrapper
+    set table(tool_block) { // call from site-wrapper
         this.tool_block = tool_block
         var table = tool_block.querySelector('#crop-images-table')
-        this.table = table
+        this._table = table
         // console.log(table)
         // console.log(tool_block.querySelector('*'))
+    }
+    get table(){
+        return this._table
     }
 
     show_file_img_count() {
@@ -48,7 +51,7 @@ class ImageCropTool {
 
     __x__create_table() {
         var table = document.createElement('table')
-        this.table = table
+        this._table = table
         table.id = 'crop-images-table'
         var thead = document.createElement('thead')
         var tbody = document.createElement('tbody')

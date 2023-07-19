@@ -387,9 +387,9 @@
         $('#analize-load p').last().slideDown(300)
       })
 
-    site.bigWindowFrame = bigWindow
-    console.warn(site.bigWindowFrame, 'xxxx')
-    site.image_crop_tool.set_table(document.getElementById('crop-image-tool'))
+    // site.bigWindowFrame = bigWindow
+    // console.warn(site.bigWindowFrame, 'xxxx')
+    site.image_crop_tool.table = document.getElementById('crop-image-tool')
 
 
       onActiveDebug() // включить активные дебагрежимы (из настроек)
@@ -1028,11 +1028,18 @@
       width: 100%;
       font-size: 14px;
     }
+    #crop-image-tool table thead{
+      background-color: #4d4d4d;
+    }
     table, th, td {
     border: 1px solid rgba(33, 43, 52, 1);;
     border-collapse: collapse;
     border-left: none;
+    border-right: none;
     text-align: center;
+  }
+  #crop-images-table tr:hover{
+    background-color: #4d4d4d;
   }
   #crop-images-table img{
     max-width: 100px;
