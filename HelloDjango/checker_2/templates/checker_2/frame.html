@@ -303,8 +303,11 @@
                     <div id="crop-image-tool" style="display: none;">
                     <!-- CROP IMAGE TOOL -->
                     <div class="add-inner__item">
-                      <h4 id="files-count">Images found: xx</h4>
-                      <h4 id="image-tags-count">Images found: x</h4>
+                     <div class="" id="crop-tool-stats">
+                      <div class="ch-info-blank">Файлов найдено:<span id="files-count">-</span></div>
+                      <div class="ch-info-blank">Картинок найдено:<span id="image-tags-count">-</span></div>
+                      <div class="ch-info-blank">Расмер картинок:<span id="images-weight">-</span></div>
+                     </div>
                       <button class="ch-button button-grey">
                         <i class="fa-solid fa-crop"></i>
                         Создать архив</button>
@@ -1055,6 +1058,12 @@
     .ch-button i{
       margin-right: 5px;
     }
+
+    #crop-tool-stats{
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 5px;
+    }
     /* IMAGE CROP TOOL */
     /* CHECKER BUTTONS */
     .ch-button.button-grey{
@@ -1077,6 +1086,7 @@
     border-style: solid;
     box-sizing: border-box;
     align-self: center;
+    margin:0;
   }
   .ch-button.button-grey:hover{
     background: rgb(107, 107, 107);
@@ -1132,6 +1142,26 @@
     .ch-input:focus{
       box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px, rgb(36, 150, 255) 0px 0px 0px 1px;
     }
+
+
+    .ch-info-blank{
+      display: inline-block;
+      margin-right: 7px;
+      background-color: #4d4d4d;
+      box-shadow: 0 0 0 1px #363636;
+      padding: 3px 9px;
+      border-radius: 2px;
+      color: #ababab;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+    .ch-info-blank span{
+      word-break: break-all;
+    padding-left: 3px;
+    outline: none;
+    color: #d9d9d9;
+    font-size: 15px;
+    }
     /* CHECKER BUTTONS */
 
 
@@ -1142,36 +1172,36 @@
   --RED: rgba(255, 0, 0, 0.6);
   }
 
-#crop-image-tool span{
+#crop-image-tool table span{
   padding: 3px;
   border-radius: 3px;
 }
 /* CROP TOOL  */
-#crop-image-tool span.red{
+#crop-image-tool table span.red{
   background-color: var(--RED);
 }
-#crop-image-tool span.yellow{
+#crop-image-tool table span.yellow{
   background-color: var(--YELLOW);
   color: #333;
 }
-#crop-image-tool span.orange{
+#crop-image-tool table span.orange{
   background-color: var(--ORANGE);
   color: #333;
 }
-#crop-image-tool span.green{
+#crop-image-tool table span.green{
   background-color: var(--GREEN);
 }
 
-#crop-image-tool span.red-outer{
+#crop-image-tool table span.red-outer{
   border: 2px solid var(--RED);
 }
-#crop-image-tool span.yellow-outer{
+#crop-image-tool table span.yellow-outer{
   border: 2px solid var(--YELLOW);
 }
-#crop-image-tool span.orange-outer{
+#crop-image-tool table span.orange-outer{
   border: 2px solid var(--ORANGE);
 }
-#crop-image-tool span.green-outer{
+#crop-image-tool table span.green-outer{
   border: 2px solid var(--GREEN);
 }
 /* CROP TOOL  xx*/

@@ -1,7 +1,7 @@
 const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
-
+var TEST = null
 function print(...args) {
     console.log(...args);
 }
@@ -21,6 +21,20 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function bytes_size_to_text(bytes){
+    var suffix = 'bytes'
+    if (bytes > 1024){
+        bytes = Math.round(bytes / 1024)
+        suffix = 'kb'
+    }
+    if (bytes > 1024){
+        bytes = Math.round(bytes / 1024 * 10) / 10
+        suffix = 'mb'
+    }
+    return bytes+suffix
+}
+
 var bigWindowFrame = null // set from site-wrapper
 
 class ImageCropTool {
@@ -42,11 +56,23 @@ class ImageCropTool {
         return this._table
     }
 
+    get files_weight(){
+        var weight = 0
+        for (var key in this.image_files){
+            var image_file = this.image_files[key]
+            weight = weight + image_file.file_weight
+        }
+        return weight
+    }
+
     show_file_img_count() {
         var file_count_block = this.tool_block.querySelector('#files-count')
         var image_tags_count_block = this.tool_block.querySelector('#image-tags-count')
-        file_count_block.innerHTML = `Файлов найдено: ${Object.keys(image_crop_tool.image_files).length}шт.`;
-        image_tags_count_block.innerHTML = `Картинок найдено: ${image_crop_tool.image_tags.length}шт.`
+        var images_weight_block = this.tool_block.querySelector('#images-weight')
+
+        file_count_block.innerHTML = `${Object.keys(image_crop_tool.image_files).length}шт.`;
+        image_tags_count_block.innerHTML = `${image_crop_tool.image_tags.length}шт.`
+        images_weight_block.innerHTML = bytes_size_to_text(this.files_weight)
     }
 
     __x__create_table() {
@@ -229,6 +255,15 @@ class ImageFile {
 
     get length() {
         return this.site_images.length
+    }
+    get file_weight(){
+        console.log(this.backend_data)
+        TEST = this.backend_data
+        if (this._is_loaded){
+            // return 1
+            return this.backend_data['image']['orig_img_params']['size']
+        }
+        return 0
     }
 
     file_size_text() {
