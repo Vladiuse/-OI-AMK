@@ -311,17 +311,23 @@
                      <div class="crop-tool-items">
                       <button class="ch-button button-grey">
                         <i class="fa-solid fa-crop"></i>
-                        Создать архив</button>
+                        <p>Создать архив</p>
+                      </button>
                         <p>Some request status</p>
+                        <button class="ch-button button-grey">
+                          <div class="lds-ellipsis" id="archive-loading"><div></div><div></div><div></div><div></div></div>
+                          <p>Создание архива</p>
+                        </button>
+                       
                      </div>
-                     
-                      
+                  
 
                       <div id="arhive-url" class="crop-tool-items">
                         <input type="text" class="ch-input" value="https://some-url.com/">
                         <button class="ch-button">
                           <i class="fa-solid fa-download"></i>
-                          Скачать архив</button>
+                          <p>Скачать архив</p>
+                        </button>
                       </div>
                     </div>
 
@@ -1065,8 +1071,8 @@
     #arhive-url{
       /* display: flex; */
     }
-    .ch-button i{
-      margin-right: 5px;
+    .ch-button p{
+      margin-left: 5px;
     }
 
     #crop-tool-stats{
@@ -1079,6 +1085,11 @@
       display: flex;
       margin-bottom: 5px;
     }
+    #archive-loading{
+      margin: 0;
+      margin-top: 0;
+    }
+                     
     /* IMAGE CROP TOOL */
     /* CHECKER BUTTONS */
     .ch-button.button-grey{
