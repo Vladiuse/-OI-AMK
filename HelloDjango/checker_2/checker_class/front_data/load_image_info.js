@@ -65,12 +65,16 @@ class ImageCropTool {
         return weight
     }
 
+    get file_length(){
+        return Object.keys(image_crop_tool.image_files).length
+    }
+
     show_file_img_count() {
         var file_count_block = this.tool_block.querySelector('#files-count')
         var image_tags_count_block = this.tool_block.querySelector('#image-tags-count')
         var images_weight_block = this.tool_block.querySelector('#images-weight')
 
-        file_count_block.innerHTML = `${Object.keys(image_crop_tool.image_files).length}шт.`;
+        file_count_block.innerHTML = `${this.file_length}шт.`;
         image_tags_count_block.innerHTML = `${image_crop_tool.image_tags.length}шт.`
         images_weight_block.innerHTML = bytes_size_to_text(this.files_weight)
     }
@@ -198,7 +202,9 @@ class ImageCropTool {
 
     hide_table_footer(){
         var footer = this._table.querySelector('tfoot')
-        footer.style.display = 'none';
+        if (this.file_length){
+            footer.style.display = 'none';
+        }
     }
 
 

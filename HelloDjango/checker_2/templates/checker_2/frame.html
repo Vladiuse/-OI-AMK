@@ -309,16 +309,20 @@
                       <div class="ch-info-blank">Расмер картинок:<span id="images-weight">-</span></div>
                      </div>
                      <div class="crop-tool-items">
-                      <button class="ch-button button-grey">
+                      <button class="ch-button ch-button-grey">
                         <i class="fa-solid fa-crop"></i>
                         <p>Создать архив</p>
                       </button>
-                        <p>Some request status</p>
-                        <button class="ch-button button-grey">
+                        
+                        <button class="ch-button ch-button-grey">
                           <div class="lds-ellipsis" id="archive-loading"><div></div><div></div><div></div><div></div></div>
                           <p>Создание архива</p>
                         </button>
-                       
+                        <button class="ch-button ch-button-red">
+                          <i class="fa-regular fa-circle-xmark"></i>
+                          <p>Ошибка</p>
+                        </button>
+                        <p class="info-text">Some request status</p>
                      </div>
                   
 
@@ -328,6 +332,7 @@
                           <i class="fa-solid fa-download"></i>
                           <p>Скачать архив</p>
                         </button>
+                        
                       </div>
                     </div>
 
@@ -1080,10 +1085,13 @@
       justify-content: flex-start;
       
     }
-
     .crop-tool-items{
       display: flex;
       margin-bottom: 5px;
+    }
+    .crop-tool-items .info-text{
+      font-size: 16px;
+      margin-left: 5px;
     }
     #archive-loading{
       margin: 0;
@@ -1092,31 +1100,6 @@
                      
     /* IMAGE CROP TOOL */
     /* CHECKER BUTTONS */
-    .ch-button.button-grey{
-    border-color: rgb(54, 54, 54);
-    outline: 0px;
-    cursor: default;
-    user-select: none;
-    padding: 0px 12px;
-    font-family: inherit;
-    font-size: 12px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 32px;
-    border-radius: 2px;
-    color: rgb(235, 235, 235);
-    background: rgb(94, 94, 94);
-    border-width: 1px;
-    border-style: solid;
-    box-sizing: border-box;
-    align-self: center;
-    margin:0;
-  }
-  .ch-button.button-grey:hover{
-    background: rgb(107, 107, 107);
-  }
     .ch-button{
     border-color: rgb(54, 54, 54);
     outline: 0px;
@@ -1139,12 +1122,29 @@
     box-sizing: border-box;
     align-self: center;
     white-space: nowrap;
+    margin: 0;
     }
     .ch-button:hover{
     color: rgb(246, 246, 246);
     background: rgb(0, 132, 255);
     filter: unset;
     }
+    .ch-button-grey{
+    color: rgb(235, 235, 235);
+    background: rgb(94, 94, 94);
+  }
+  .ch-button-grey:hover{
+    background: rgb(107, 107, 107);
+  }
+
+  .ch-button-red{
+    color: rgb(235, 235, 235);
+    background:rgb(167 40 54);
+  }
+  .ch-button-red:hover{
+    background: rgb(185, 45, 61);
+  }
+  
     .ch-input{
       color: white;
       height: 30px;
@@ -1162,6 +1162,7 @@
     width: 100%;
     font-family: inherit;
     outline: 0px;
+    margin-right: 5px;
     }
     .ch-input:hover{
       background: rgb(33, 33, 33);
