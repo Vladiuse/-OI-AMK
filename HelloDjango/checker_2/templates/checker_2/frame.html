@@ -303,20 +303,25 @@
                     <div id="crop-image-tool" style="display: none;">
                     <!-- CROP IMAGE TOOL -->
                     <div class="add-inner__item">
-                     <div class="" id="crop-tool-stats">
+                     <div class="crop-tool-items" id="crop-tool-stats">
                       <div class="ch-info-blank">Файлов найдено:<span id="files-count">-</span></div>
                       <div class="ch-info-blank">Картинок найдено:<span id="image-tags-count">-</span></div>
                       <div class="ch-info-blank">Расмер картинок:<span id="images-weight">-</span></div>
                      </div>
+                     <div class="crop-tool-items">
                       <button class="ch-button button-grey">
                         <i class="fa-solid fa-crop"></i>
                         Создать архив</button>
+                        <p>Some request status</p>
+                     </div>
+                     
+                      
 
-                      <div id="arhive-url">
+                      <div id="arhive-url" class="crop-tool-items">
                         <input type="text" class="ch-input" value="https://some-url.com/">
                         <button class="ch-button">
                           <i class="fa-solid fa-download"></i>
-                          Скачать</button>
+                          Скачать архив</button>
                       </div>
                     </div>
 
@@ -333,6 +338,11 @@
                           </tr>
                         </thead>
                         <tbody></tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="7">Картинки не найдены</td>
+                          </tr>
+                        </tfoot>
                       </table>
                     <!-- CROP IMAGE TOOL -->
                     </div>
@@ -1053,15 +1063,20 @@
   <style>
     /* IMAGE CROP TOOL */
     #arhive-url{
-      display: flex;
+      /* display: flex; */
     }
     .ch-button i{
       margin-right: 5px;
     }
 
     #crop-tool-stats{
-      display: flex;
+      /* display: flex; */
       justify-content: flex-start;
+      
+    }
+
+    .crop-tool-items{
+      display: flex;
       margin-bottom: 5px;
     }
     /* IMAGE CROP TOOL */
@@ -1112,6 +1127,7 @@
     border-style: solid;
     box-sizing: border-box;
     align-self: center;
+    white-space: nowrap;
     }
     .ch-button:hover{
     color: rgb(246, 246, 246);

@@ -196,9 +196,15 @@ class ImageCropTool {
         }
     }
 
+    hide_table_footer(){
+        var footer = this._table.querySelector('tfoot')
+        footer.style.display = 'none';
+    }
+
 
     drow_files() {
         this.remove_rows()
+        this.hide_table_footer()
         for (var key in image_crop_tool.image_files) {
             var file = image_crop_tool.image_files[key]
             if (file.is_need_to_load()) {
