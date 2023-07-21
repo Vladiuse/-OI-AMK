@@ -233,9 +233,6 @@ class ImageCropTool {
                 var image_size_elem = document.createElement('span')
                 image_size_elem.innerText = size
                 image_size_elem.classList.add(image_file.crop_compression_status+'-outer')
-                // if (size == image_file.crop_size_text) {
-                //     image_size_text = image_size_text + ' crop size'
-                // }
                 if (counter == 0) {
                     counter = 1
                     c3_page_size.innerText = images_count_text
@@ -268,17 +265,24 @@ class ImageCropTool {
             footer.style.display = 'none';
         }
     }
+    get files_need_crop(){
+        var files = []
+        for (var key in image_crop_tool.image_files) {
+            var file = image_crop_tool.image_files[key]
+            if (file.is_need_to_crop){
+                files.push(file)
+            }
+        }
+        return files
+    }
 
 
     drow_files() {
         this.remove_rows()
         this.hide_table_footer()
-        for (var key in image_crop_tool.image_files) {
-            var file = image_crop_tool.image_files[key]
-            if (file.is_need_to_load()) {
-                this.add_image_file(file)
-            }
-        }
+        this.files_need_crop.forEach(file => {
+            this.add_image_file(file)
+        })
     }
 }
 
@@ -338,6 +342,11 @@ class ImageFile {
             return this.backend_data['image']['orig_img_params']['size']
         }
         return 0
+    }
+    get is_need_to_crop(){
+        if (this._is_loaded && this._is_req_error==false){
+            return this.crop_compression_status != 'green'
+        }
     }
 
     file_size_text() {
@@ -409,9 +418,6 @@ class ImageFile {
             return false
         }
         return ALLOWED_IMG_FORMATS.includes(this.image_extension())
-    }
-    is_need_to_crop() {
-        ///
     }
 
     image_extension() {
