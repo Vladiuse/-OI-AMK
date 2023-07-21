@@ -43,14 +43,29 @@ class ImageCropTool {
         this.image_files = {}
         this.image_tags = []
         this._table = null;
+
+        this._create_archive_btn = null;
+        this._loading_archive_btn = null;
+        this._error_archive_btn = null;
+        this._archive_msg = null;
+        this._arhive_url = null;
+
     }
 
     set table(tool_block) { // call from site-wrapper
         this.tool_block = tool_block
         var table = tool_block.querySelector('#crop-images-table')
         this._table = table
-        // console.log(table)
-        // console.log(tool_block.querySelector('*'))
+
+        this._create_archive_btn = tool_block.querySelector('#create-archive-btn')
+        this._loading_archive_btn = tool_block.querySelector('#loading-archive-btn')
+        this._error_archive_btn = tool_block.querySelector('#error-archive-btn')
+        this._archive_msg = tool_block.querySelector('#archive-msg')
+        this._arhive_url = tool_block.querySelector('#arhive-url')
+        var _class = this
+        this._create_archive_btn.addEventListener('click', function(){
+            _class.create_crop_archive()
+        })
     }
     get table(){
         return this._table
@@ -67,6 +82,53 @@ class ImageCropTool {
 
     get file_length(){
         return Object.keys(image_crop_tool.image_files).length
+    }
+    _show_loading(){
+        this._create_archive_btn.style.display = 'none'
+        this._loading_archive_btn.style.display = 'flex'
+    }
+    _hide_archive_loading(){
+        this._loading_archive_btn.style.display = 'none'
+    }
+    _show_archive_loaded(){
+        this._arhive_url.querySelector('input').value = 'http://127.0.0.1:8000/media/xxx.zip'
+        this._archive_msg.querySelector('span').innerText = 'Архив создан'
+        this._archive_msg.querySelector('svg').style.display = 'block'
+        this._arhive_url.style.display = 'flex'
+    }
+    _show_archive_error(error_text){
+        this._error_archive_btn.style.display = 'flex'
+        this._archive_msg.querySelector('span').innerText = error_text
+    }
+
+    create_crop_archive(){
+        var url = 'http://127.0.0.1:8000/checker_2/test_api/'
+        var _class = this
+        console.log(this.test)
+        console.log(this._test)
+        console.log(this._show_loading)
+        console.log(this)
+        this._show_loading()
+        var data = {
+            'csrfmiddlewaretoken': CSRF_TOKEN,
+        }
+        $.post(url, data=data)
+        .done(function(response){
+            if (response['status']){
+                _class._show_archive_loaded()
+            } else {
+                var error_text = response['mgs']
+                _class._show_archive_error(error_text)
+            }
+            
+        })
+        .fail(function(response){
+            var rest_text = JSON.stringify(response.responseJSON)
+            _class._show_archive_error(rest_text)
+        })
+        .always(function(){
+            _class._hide_archive_loading()
+        })
     }
 
     show_file_img_count() {
