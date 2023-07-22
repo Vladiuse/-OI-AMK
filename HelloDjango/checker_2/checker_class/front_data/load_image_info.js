@@ -100,17 +100,25 @@ class ImageCropTool {
         this._error_archive_btn.style.display = 'flex'
         this._archive_msg.querySelector('span').innerText = error_text
     }
+    get files_crop_data(){
+        var data = []
+        this.files_need_crop.forEach(file => {
+            var item = {
+                'id': file.back_img_id,
+                ...file.crop_size,
+            }
+            data.push(item)
+        })
+        return data
+    }
 
     create_crop_archive(){
         var url = 'http://127.0.0.1:8000/checker_2/test_api/'
         var _class = this
-        console.log(this.test)
-        console.log(this._test)
-        console.log(this._show_loading)
-        console.log(this)
         this._show_loading()
         var data = {
             'csrfmiddlewaretoken': CSRF_TOKEN,
+            'images_to_crop': JSON.stringify(this.files_crop_data),
         }
         $.post(url, data=data)
         .done(function(response){

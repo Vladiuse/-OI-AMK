@@ -168,6 +168,9 @@ class ActualUserList(models.Model):
             UserSiteCheckPoint.objects.bulk_create(user_check_points)
         return user_list
 
+    def create_thumbs_archive(self,img_qs):
+        pass
+
 
 
 class UserSiteCheckPoint(models.Model):
@@ -282,4 +285,6 @@ class SiteImage(models.Model):
                 'file_name': os.path.basename(field.name),
             }
         return None
+
+
 

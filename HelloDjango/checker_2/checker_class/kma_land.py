@@ -20,7 +20,7 @@ class KMALand(Land):
     LOW_PRICE = 'low_price'
 
     TEST_DOMAINS = [
-        '127.0.0.1',
+        # '127.0.0.1',
         'vladiuse.beget.tech',
         'vim-store.ru',
     ]

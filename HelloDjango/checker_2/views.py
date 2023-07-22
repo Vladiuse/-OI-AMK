@@ -1,3 +1,5 @@
+import time
+import json
 from rest_framework.decorators import api_view, action, permission_classes, authentication_classes
 from .serializers import SiteImagesSerializer, UserSiteSerializer
 from rest_framework.response import Response
@@ -257,5 +259,17 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 @api_view(['GET', 'POST'], )
 @permission_classes([permissions.IsAuthenticated])
 def test_api(request):
-    return Response({'res': str(request.method)})
+    images_to_crop = request.POST['images_to_crop']
+    images_to_crop = json.loads(images_to_crop)
+    print(images_to_crop)
+    time.sleep(0.7)
+    error = {
+        'status': False,
+        'mgs': 'Not created'
+    }
+    success = {
+        'status': True,
+        'archive_url': 'http://127.0.0.1:8000/media/xxx.zip'
+    }
+    return Response(success)
 
