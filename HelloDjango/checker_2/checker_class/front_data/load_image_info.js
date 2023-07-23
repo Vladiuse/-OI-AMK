@@ -42,15 +42,18 @@ class ImageCropTool {
         this.tool_block = null;
         this.image_files = {}
         this.image_tags = []
+        this._checker_full_url = null;
         this._table = null;
 
         this._create_archive_btn = null;
         this._loading_archive_btn = null;
         this._error_archive_btn = null;
+        this._download_archive_button = null;
         this._archive_msg = null;
         this._arhive_url = null;
-
+        this.archive_load_url = null;
     }
+
 
     set table(tool_block) { // call from site-wrapper
         this.tool_block = tool_block
@@ -62,11 +65,24 @@ class ImageCropTool {
         this._error_archive_btn = tool_block.querySelector('#error-archive-btn')
         this._archive_msg = tool_block.querySelector('#archive-msg')
         this._arhive_url = tool_block.querySelector('#arhive-url')
+        this._download_archive_button = tool_block.querySelector('#download-archive')
         var _class = this
         this._create_archive_btn.addEventListener('click', function(){
             _class.create_crop_archive()
         })
+
+        this._download_archive_button.addEventListener('click', function(){
+            _class.download_archive()
+        })
     }
+
+    download_archive(){
+        window.location.href = this.archive_load_url
+    }
+    set checker_full_url(url){
+        this._checker_full_url = url
+    }
+
     get table(){
         return this._table
     }
@@ -90,8 +106,10 @@ class ImageCropTool {
     _hide_archive_loading(){
         this._loading_archive_btn.style.display = 'none'
     }
-    _show_archive_loaded(){
-        this._arhive_url.querySelector('input').value = 'http://127.0.0.1:8000/media/xxx.zip'
+    _show_archive_loaded(archive_url){
+        this.archive_load_url = this._checker_full_url + archive_url
+
+        this._arhive_url.querySelector('input').value = this.archive_load_url
         this._archive_msg.querySelector('span').innerText = 'Архив создан'
         this._archive_msg.querySelector('svg').style.display = 'block'
         this._arhive_url.style.display = 'flex'
@@ -101,13 +119,14 @@ class ImageCropTool {
         this._archive_msg.querySelector('span').innerText = error_text
     }
     get files_crop_data(){
-        var data = []
+        var data = {}
         this.files_need_crop.forEach(file => {
-            var item = {
-                'id': file.back_img_id,
-                ...file.crop_size,
-            }
-            data.push(item)
+            // var item = {
+            //     'id': file.back_img_id,
+            //     ...file.crop_size,
+            // }
+            data[file.back_img_id] = file.crop_size
+            // data.push(item)
         })
         return data
     }
@@ -123,7 +142,7 @@ class ImageCropTool {
         $.post(url, data=data)
         .done(function(response){
             if (response['status']){
-                _class._show_archive_loaded()
+                _class._show_archive_loaded(response['archive_url'])
             } else {
                 var error_text = response['mgs']
                 _class._show_archive_error(error_text)

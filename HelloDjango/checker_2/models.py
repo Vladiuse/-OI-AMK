@@ -247,13 +247,13 @@ class SiteImage(models.Model):
     def ext(self):
         return os.path.splitext(self.orig_img.path)[1]
 
-    def make_thumb(self):
+    def make_thumb(self, size=(50,50)):
         if self.orig_img:
             if self.thumb:
                 remove_file_if_exists(self.thumb.path)
-            size = (self.page_width, self.page_height)
-            if not all(size):
-                size = (50, 50)
+            # size = (self.page_width, self.page_height)
+            # if not all(size):
+            #     size = (50, 50)
             thumb = make_thumb(self.orig_img.path, size)
             blob = io.BytesIO()
             thumb.save(blob, thumb.format)

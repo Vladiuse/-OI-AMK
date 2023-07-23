@@ -333,7 +333,7 @@
 
                       <div id="arhive-url" class="crop-tool-items" style="display: none;">
                         <input type="text" class="ch-input" value="">
-                        <button class="ch-button">
+                        <button class="ch-button" id="download-archive">
                           <i class="fa-solid fa-download"></i>
                           <p>Скачать архив</p>
                         </button>
@@ -419,7 +419,7 @@
     // site.bigWindowFrame = bigWindow
     // console.warn(site.bigWindowFrame, 'xxxx')
     site.image_crop_tool.table = document.getElementById('crop-image-tool')
-
+    site.image_crop_tool.checker_full_url = full;
 
       onActiveDebug() // включить активные дебагрежимы (из настроек)
       setDeviseWidth()  // проставить значение ширины фрейма

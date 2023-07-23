@@ -1,5 +1,7 @@
+import os
 import time
 import json
+import zipfile
 from rest_framework.decorators import api_view, action, permission_classes, authentication_classes
 from .serializers import SiteImagesSerializer, UserSiteSerializer
 from rest_framework.response import Response
@@ -267,9 +269,25 @@ def test_api(request):
         'status': False,
         'mgs': 'Not created'
     }
+    if len(images_to_crop) != SiteImage.objects.filter(pk__in=images_to_crop).count():
+        error = {
+            'status': False,
+            'mgs': 'Count not match'
+        }
+        return Response(error)
+    images = SiteImage.objects.filter(pk__in=images_to_crop)
+
+    for image in images:
+        size = (images_to_crop[str(image.pk)]['width'],images_to_crop[str(image.pk)]['height'])
+        image.make_thumb(size)
+    zip_file_path = os.path.join(settings.MEDIA_ROOT, '_archive', 'test.zip')
+    zip_file = zipfile.ZipFile(zip_file_path, 'w')
+    for image in images:
+        zip_file.write(image.thumb.path, image.thumb.name)
+    zip_file.close()
     success = {
         'status': True,
-        'archive_url': 'http://127.0.0.1:8000/media/xxx.zip'
+        'archive_url': os.path.relpath(zip_file_path, settings.BASE_DIR),
     }
     return Response(success)
 
