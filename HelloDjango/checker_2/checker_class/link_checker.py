@@ -10,9 +10,10 @@ from checker_2.models import CheckPoint, CheckBlock, UserSiteCheckPoint, ActualU
 
 class LinkChecker:
 
-    def __init__(self,  url, user, request=None,source_text=None):
+    def __init__(self,  actual_user_list, user, request=None,source_text=None):
         self.source_text = source_text
-        self.url = url
+        self.actual_user_list  = actual_user_list
+        self.url = self.actual_user_list.url
         self.user = user
         self.messages = list()
         self.request = request
@@ -43,7 +44,7 @@ class LinkChecker:
     def process(self):
         self.land = KMALand(self.source_text, self.url, request=self.request)
         self.land.add_site_attrs()
-        self.check_list = LinkChecker.get_check_list(self.land, self.user)
+        self.check_list = self.get_check_list()
         self.land.find_n_mark_img_doubles()
         self.land.phone_code = self.current_country.phone_code
         try:
@@ -90,11 +91,10 @@ class LinkChecker:
     def current_languages(self):
         return self.current_country.language.all()
 
-    @staticmethod
-    def get_check_list(land, user):
-        user_check_list = ActualUserList.get_or_create(user, land.url)
-        user_check_points = UserSiteCheckPoint.objects.filter(user_list=user_check_list)
-        checks = CheckPoint.filter_check_points(land)
+    def get_check_list(self):
+        # user_check_list = ActualUserList.objects.get((user, land.url)
+        user_check_points = UserSiteCheckPoint.objects.filter(user_list=self.actual_user_list)
+        checks = CheckPoint.filter_check_points(self.land)
         blocks_w_checks = CheckBlock.objects.prefetch_related(
             Prefetch('checkpoint_set', queryset=checks)
         ).prefetch_related(

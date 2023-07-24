@@ -50,5 +50,5 @@ urlpatterns = [
     path('site-images/<int:image_id>/load-make-thumb/', load_make_thumb, name='load-make-thumb'),
     path('', include(router.urls)),
 
-    path('test_api/', views.test_api,),
+    path('test_api/', views.test_api, name='create_crop_archive'),
 ]

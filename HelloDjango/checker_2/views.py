@@ -42,7 +42,8 @@ def check_url(request):
         setting_form.user = request.user
         setting_form.save()
     try:
-        url_checker = LinkChecker(url=url, user=request.user, request=request)
+        actual_user_list = ActualUserList.get_or_create(request.user, url)
+        url_checker = LinkChecker(actual_user_list=actual_user_list, user=request.user, request=request)
         url_checker.load_url()
         url_checker.process()
         content = {
@@ -67,7 +68,8 @@ def analiz_land_text(request):
     try:
         land_text = request.POST['land_text']
         checked_url = request.POST['checked_url']
-        url_checker = LinkChecker(checked_url, request.user, source_text=land_text)
+        actual_user_list = ActualUserList.objects.get(user=request.user, url=checked_url)
+        url_checker = LinkChecker(actual_user_list, request.user, source_text=land_text)
         result = url_checker.text_analiz()
         answer = result
         answer['success'] = True

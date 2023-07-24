@@ -39,7 +39,7 @@ def load_image(modeladmin, request, queryset):
 
 
 class SiteImagesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'domain', 'image_url_short', 'orig_img', 'orig_tag', 'thumb', 'thumb_tag']
+    list_display = ['id', 'domain', 'image_url', 'orig_img', 'orig_tag', 'thumb', 'thumb_tag']
     actions = [load_image, 'make_thumb', 'delete_images']
     list_filter = ['domain']
 

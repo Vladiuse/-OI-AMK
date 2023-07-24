@@ -144,6 +144,9 @@ class ActualUserList(models.Model):
     url = models.CharField(max_length=70)
     date = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.pk}: {self.user}-{self.url}'
+
     class Meta:
         unique_together = ['user', 'url']
 
