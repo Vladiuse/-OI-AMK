@@ -149,6 +149,7 @@ class ActualUserList(models.Model):
 
     class Meta:
         unique_together = ['user', 'url']
+        ordering = ['-pk']
 
     @staticmethod
     def dell_old():

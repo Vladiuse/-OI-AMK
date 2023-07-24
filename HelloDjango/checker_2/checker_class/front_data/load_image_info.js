@@ -566,8 +566,8 @@ class SiteImage {
 
     add_loaded_popover() {
         let coof = `x${this.image_commpress()}`
-        let page_size = `page: ${this.img.naturalWidth}x${this.img.naturalHeight}`
-        let orig_size = `orig: ${this.img.width}x${this.img.height}`
+        let page_size = `page: ${this.img.width}x${this.img.height}`
+        let orig_size = `orig: ${this.img.naturalWidth}x${this.img.naturalHeight}`
         let img_size = `size: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
         let content_text = [
             page_size, orig_size, img_size

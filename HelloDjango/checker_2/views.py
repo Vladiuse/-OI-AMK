@@ -2,6 +2,7 @@ import os
 import time
 import json
 import zipfile
+from urllib.parse import urlparse
 from rest_framework.decorators import api_view, action, permission_classes, authentication_classes
 from .serializers import SiteImagesSerializer, UserSiteSerializer
 from rest_framework.response import Response
@@ -179,7 +180,6 @@ def test(request):
 def image_info(request):
     if request.method == 'GET':
         return JsonResponse({'x':'x'})
-    print(request.POST)
     img_href = request.POST['img_href']
     info = get_image_info(img_href)
     return JsonResponse(info, safe=True)
@@ -210,7 +210,6 @@ class SiteImageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['GET', 'POST'], detail=True)
     def create_or_update(self, request, *args, **kwargs):
-        print(request)
         try:
             site_image = SiteImage.objects.get(
                 domain_id=self.kwargs['domain_id'],
@@ -265,7 +264,6 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 def test_api(request):
     images_to_crop = request.POST['images_to_crop']
     images_to_crop = json.loads(images_to_crop)
-    print(images_to_crop)
     time.sleep(0.7)
     error = {
         'status': False,
@@ -285,7 +283,8 @@ def test_api(request):
     zip_file_path = os.path.join(settings.MEDIA_ROOT, '_archive', 'test.zip')
     zip_file = zipfile.ZipFile(zip_file_path, 'w')
     for image in images:
-        zip_file.write(image.thumb.path, image.thumb.name)
+        img_name_in_zip = urlparse(image.image_url).path
+        zip_file.write(image.thumb.path, img_name_in_zip)
     zip_file.close()
     success = {
         'status': True,
