@@ -1,4 +1,5 @@
-const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
+// const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
+const IMAGE_LOAD_INFO = "http://127.0.0.1:8000/{%url 'checker_2:image-list' actual_user_list.pk %}"
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
 var TEST = null
@@ -132,7 +133,7 @@ class ImageCropTool {
     }
 
     create_crop_archive(){
-        var url = 'http://127.0.0.1:8000/checker_2/test_api/'
+        var url = this._checker_full_url + "{%url 'checker_2:create_crop_archive'%}"
         var _class = this
         this._show_loading()
         var data = {

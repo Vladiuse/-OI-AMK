@@ -9,9 +9,10 @@ class Land(DomFixxerMixin):
 
     TYPES_REL = ['shortcut icon', 'icon', 'apple-touch-icon', 'apple-touch-icon-precomposed', 'image/x-icon']
 
-    def __init__(self, source_text, url, *, parser='html5lib',):
+    def __init__(self, source_text, actual_user_list, *, parser='html5lib',):
         self.source_text = source_text
-        self.url = url
+        self.actual_user_list = actual_user_list
+        self.url = self.actual_user_list.url
         self.soup = BeautifulSoup(self.source_text, parser)
         self._human_text = None
         self._human_land_text_lower = None

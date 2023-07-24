@@ -42,7 +42,7 @@ class LinkChecker:
         self.source_text = res.text
 
     def process(self):
-        self.land = KMALand(self.source_text, self.url, request=self.request)
+        self.land = KMALand(self.source_text, actual_user_list=self.actual_user_list, request=self.request)
         self.land.add_site_attrs()
         self.check_list = self.get_check_list()
         self.land.find_n_mark_img_doubles()
@@ -53,7 +53,7 @@ class LinkChecker:
             self.land.full_lang = 'no lang in BD'
 
     def text_analiz(self):
-        self.land = KMALand(source_text=self.source_text, url=self.url, parser='lxml')
+        self.land = KMALand(source_text=self.source_text, actual_user_list=self.actual_user_list, parser='lxml')
         self.land.drop_tags_from_dom(KMALand.POLICY_IDS)
         for check in KMA_checkers:
             check = check(land=self.land, link_checker=self)

@@ -50,8 +50,8 @@ class KMALand(Land):
         'js': [JS_FILE, LOAD_IMG_JS],
     }
 
-    def __init__(self, source_text, url, request=None,**kwargs):
-        super().__init__(source_text=source_text, url=url, **kwargs)
+    def __init__(self, source_text, actual_user_list, request=None,**kwargs):
+        super().__init__(source_text=source_text, actual_user_list=actual_user_list, **kwargs)
         self.request = request
         self.validate_url()
         self.__kma_script = self._find_kma_back_data()
@@ -185,7 +185,7 @@ class KMALand(Land):
                 with open(file_path, encoding='utf-8') as file:
                     file_text = file.read()
                     template = Template(file_text)
-                    context = RequestContext(self.request,{})
+                    context = RequestContext(self.request,{'actual_user_list': self.actual_user_list})
                     text_to_add = str(template.render(context))
                     func(text_to_add)
 
