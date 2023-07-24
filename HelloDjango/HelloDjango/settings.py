@@ -114,39 +114,52 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-# for MySql local server
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vladiuse_kma',
-        'USER': 'vladiuse_kma',
-        'PASSWORD':  get_secret('vladiuse_kma'),
-        'HOST': 'localhost',
+# MAIN DB
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'vladiuse_kma',
+#         'USER': 'vladiuse_kma',
+#         'PASSWORD':  get_secret('vladiuse_kma'),
+#         'HOST': 'localhost',
+#
+#     }
+# }
+#
+# # MAIN DB remote
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': 'vladiuse_kma',
+#          'USER': 'vladiuse_kma',
+#          'PASSWORD': get_secret('vladiuse_kma'),
+#          'HOST': 'vladiuse.beget.tech',
+#          'PORT': '3306',
+#
+#      }
+#  }
+#
+# # LOCAL KMA DB
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': get_secret('test_kma_db'),
+#          'USER': get_secret('test_kma_user'),
+#          'PASSWORD': get_secret('test_kma_db_pass'),
+#          'HOST': 'localhost',
+#          'PORT': '3306',
+#
+#      }
+#  }
 
-    }
-}
-
-# for MySql database remote server
+# REMOTE KMA TEST DB
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'vladiuse_kma',
-         'USER': 'vladiuse_kma',
-         'PASSWORD': get_secret('vladiuse_kma'),
+         'NAME': get_secret('test_kma_name_remote'),
+         'USER': get_secret('test_kma_name_remote'),
+         'PASSWORD': get_secret('test_kma_name_remote_pass'),
          'HOST': 'vladiuse.beget.tech',
-         'PORT': '3306',
-
-     }
- }
-
-# local kma_db for test
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': get_secret('test_kma_db'),
-         'USER': get_secret('test_kma_user'),
-         'PASSWORD': get_secret('test_kma_db_pass'),
-         'HOST': 'localhost',
          'PORT': '3306',
 
      }
