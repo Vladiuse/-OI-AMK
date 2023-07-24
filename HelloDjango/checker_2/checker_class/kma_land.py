@@ -90,7 +90,8 @@ class KMALand(Land):
         # soup = BeautifulSoup(self.source_text, 'html5')
         # scripts = soup.find_all('script')
         for script in self.scripts:
-            if 'country_list' in script and 'country=' in script:
+            if 'country_list' in script and re.search('country\s?=', script):
+                script = re.sub('\s', '', script)
                 return script
         raise NoAdminSiteDataScript
 
