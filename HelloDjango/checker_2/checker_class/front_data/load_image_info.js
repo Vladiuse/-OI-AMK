@@ -1,5 +1,5 @@
 // const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
-const IMAGE_LOAD_INFO = "http://127.0.0.1:8000/{%url 'checker_2:image-list' actual_user_list.pk %}"
+const IMAGE_LOAD_INFO = "{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:image-list' actual_user_list.pk %}"
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
 var TEST = null
