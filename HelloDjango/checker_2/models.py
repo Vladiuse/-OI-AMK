@@ -141,7 +141,7 @@ class CheckPoint(OrderedModel):
 
 class ActualUserList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    url = models.CharField(max_length=70)
+    url = models.CharField(max_length=255)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
