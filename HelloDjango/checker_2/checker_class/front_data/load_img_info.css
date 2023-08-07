@@ -237,3 +237,17 @@
   color: blue;
   cursor: pointer;
 }
+
+.popover.red .popover-header{
+  color: black !important;
+}
+.popover .popover-header{
+      font-size: 20px;
+      padding: 5px 10px;
+}
+.popover .popover-body{
+  padding: 5px 10px;
+}
+.bs-popover-start > .popover-arrow{
+  height: 20px;
+}
