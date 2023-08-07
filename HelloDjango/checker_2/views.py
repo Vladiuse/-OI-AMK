@@ -284,6 +284,8 @@ def test_api(request):
     zip_file = zipfile.ZipFile(zip_file_path, 'w')
     for image in images:
         img_name_in_zip = urlparse(image.image_url).path
+        if urlparse(image.image_url).query:
+            img_name_in_zip += '?' + urlparse(image.image_url).query
         zip_file.write(image.thumb.path, img_name_in_zip)
     zip_file.close()
     success = {
