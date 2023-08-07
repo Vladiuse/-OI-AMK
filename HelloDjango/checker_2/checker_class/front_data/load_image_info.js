@@ -451,7 +451,7 @@ class ImageFile {
     image_extension() {
         var result = 'No exception'
         var href = this.src.toLowerCase()
-        let extensions = ['.png', '.gif', '.bmp', '.webp', '.jpg', '.jpeg', 'data:image']
+        let extensions = ['.png', '.gif', '.bmp', '.webp', '.jpg', '.jpeg', 'data:image', '.svg']
         extensions.forEach(function (ext) {
             if (href.includes(ext)) {
                 result = ext
@@ -543,8 +543,10 @@ class SiteImage {
     }
 
     add_popover(title, content = '', customClass = '') {
+        this.img.removeAttribute('title')
         const options = {
             'html': true,
+            'template': '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-header"></div><div class="popover-body"></div></div>',
             'content': content,
             'title': title,
             'customClass': customClass,
@@ -553,7 +555,7 @@ class SiteImage {
         let popover = new bootstrap.Popover(this.img, options)
         this.popover = popover;
         popover.show()
-        popover.tip.addEventListener("click", (event) => click(event, popover));
+        // popover.tip.addEventListener("click", (event) => click(event, popover));
     }
 
     hide_popover() {
@@ -569,8 +571,9 @@ class SiteImage {
         let page_size = `page: ${this.img.width}x${this.img.height}`
         let orig_size = `orig: ${this.img.naturalWidth}x${this.img.naturalHeight}`
         let img_size = `size: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
+        let img_ext = `ext: ${this.file.image_extension()}`
         let content_text = [
-            page_size, orig_size, img_size
+            page_size, orig_size, img_size, img_ext
         ].join('<br>')
         let popover_style = SiteImage.get_compression_status(this.image_commpress())
         this.add_popover(coof, content_text, popover_style)
