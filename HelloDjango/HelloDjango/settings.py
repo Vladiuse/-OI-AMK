@@ -140,30 +140,30 @@ TEMPLATES = [
 #  }
 #
 # # LOCAL KMA DB
-# DATABASES = {
-#      'default': {
-#          'ENGINE': 'django.db.backends.mysql',
-#          'NAME': get_secret('test_kma_db'),
-#          'USER': get_secret('test_kma_user'),
-#          'PASSWORD': get_secret('test_kma_db_pass'),
-#          'HOST': 'localhost',
-#          'PORT': '3306',
-#
-#      }
-#  }
-
-# REMOTE KMA TEST DB
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': get_secret('test_kma_name_remote'),
-         'USER': get_secret('test_kma_name_remote'),
-         'PASSWORD': get_secret('test_kma_name_remote_pass'),
-         'HOST': 'vladiuse.beget.tech',
+         'NAME': get_secret('test_kma_db'),
+         'USER': get_secret('test_kma_user'),
+         'PASSWORD': get_secret('test_kma_db_pass'),
+         'HOST': 'localhost',
          'PORT': '3306',
 
      }
  }
+
+# REMOTE KMA TEST DB
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': get_secret('test_kma_name_remote'),
+#          'USER': get_secret('test_kma_name_remote'),
+#          'PASSWORD': get_secret('test_kma_name_remote_pass'),
+#          'HOST': 'vladiuse.beget.tech',
+#          'PORT': '3306',
+#
+#      }
+#  }
 
 
 # Password validation
