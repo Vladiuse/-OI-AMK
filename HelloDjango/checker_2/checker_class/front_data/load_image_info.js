@@ -403,6 +403,12 @@ class ImageFile {
         }
     }
 
+    get is_big(){
+        if (this._is_loaded && this._is_req_error == false) {
+            return this.file_weight > 300*1024
+        }
+    }
+
     file_size_text() {
         return this.backend_data['image']['orig_img_params']['size_text']
     }
@@ -602,41 +608,55 @@ class SiteImage {
 
     image_popover_content_text(){
         let orig_size = `Оригинал: ${this.img.naturalWidth}x${this.img.naturalHeight}`
-        let page_size = `Настранице: ${this.img.width}x${this.img.height}`
+        let page_size = `На странице: ${this.img.width}x${this.img.height}`
         let img_size = `Вес: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
         let img_ext = `Формат: <b>${this.file.image_extension()}</b>`
         let coof_compress = `Сжатие: ${this.image_commpress()}`
         let content_text = [
-            orig_size, page_size, img_size, img_ext, coof_compress,this.is_big_size(), this.is_big_weight()
+            orig_size, page_size, img_size, img_ext, coof_compress,this.is_big_size(), this.file.is_big
         ].join('<br>')
         return content_text
     }
 
+    add_info_popover(){
+        let title =  `x${this.image_commpress()}`
+        let popover_style = 'green'
+        this.add_popover(title, this.image_popover_content_text(), popover_style)
+    }
+
+    add_commpress_popover(){
+        let popover_style = 'orange'
+        var title = `${this.image_commpress()} - можно обрезать`
+        this.add_popover(title, this.image_popover_content_text(), popover_style)
+    }
+
+    add_big_file_popover(){
+        var popover_style = 'red'
+        var title = 'msg'
+        if (this.is_big_size()){
+            title = 'Больше 1000px'
+        }
+        else{
+            title = 'Больше 300kb'
+        }
+        if (this.is_big_size() && this.file.is_big){
+            title = 'Больше 300kb и 1000px'
+        }
+        this.add_popover(title, this.image_popover_content_text(), popover_style)
+    }
 
     add_loaded_popover() {
-        let coof = `x${this.image_commpress()}`
-        let title = coof
-        let popover_style = 'green'
-        if (this.is_big_size() || this.is_big_weight()){
-            if (this.is_big_size()){
-                title = 'Больше 1000px'
-            }
-            else{
-                title = 'Больше 300kb'
-            }
-            if (this.is_big_size() && this.is_big_weight()){
-                title = 'Больше 300kb и 1000px'
-            }
-            popover_style = 'red'
+        if (this.is_big_size() || this.file.is_big){
+            this.add_big_file_popover()
+        } 
+        else if (this.is_need_crop()){
+            this.add_commpress_popover()
         }
-        var content_text = this.image_popover_content_text()
-        // let popover_style = SiteImage.get_compression_status(this.image_commpress())
-        this.add_popover(title, content_text, popover_style)
+        else {
+            this.add_info_popover()
+        }
     }
-    is_big_weight(){
-        console.log(this.file.file_weight, 300*1024)
-        return this.file.file_weight > 300*1024
-    }
+
     is_big_size(){
         return (this.natural_size.width > 1000 || this.natural_size.height > 1000) && this.file.file_weight > 100*1024
     }
