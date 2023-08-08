@@ -1,8 +1,10 @@
 // const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
+console.log('LOAD IMG TOOL SCRIPT')
 const IMAGE_LOAD_INFO = "{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:image-list' actual_user_list.pk %}"
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
 var TEST = null
+
 function print(...args) {
     console.log(...args);
 }
@@ -23,17 +25,17 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function bytes_size_to_text(bytes){
+function bytes_size_to_text(bytes) {
     var suffix = 'bytes'
-    if (bytes > 1024){
+    if (bytes > 1024) {
         bytes = Math.round(bytes / 1024)
         suffix = 'kb'
     }
-    if (bytes > 1024){
+    if (bytes > 1024) {
         bytes = Math.round(bytes / 1024 * 10) / 10
         suffix = 'mb'
     }
-    return bytes+suffix
+    return bytes + suffix
 }
 
 var bigWindowFrame = null // set from site-wrapper
@@ -68,46 +70,46 @@ class ImageCropTool {
         this._arhive_url = tool_block.querySelector('#arhive-url')
         this._download_archive_button = tool_block.querySelector('#download-archive')
         var _class = this
-        this._create_archive_btn.addEventListener('click', function(){
+        this._create_archive_btn.addEventListener('click', function () {
             _class.create_crop_archive()
         })
 
-        this._download_archive_button.addEventListener('click', function(){
+        this._download_archive_button.addEventListener('click', function () {
             _class.download_archive()
         })
     }
 
-    download_archive(){
+    download_archive() {
         window.location.href = this.archive_load_url
     }
-    set checker_full_url(url){
+    set checker_full_url(url) {
         this._checker_full_url = url
     }
 
-    get table(){
+    get table() {
         return this._table
     }
 
-    get files_weight(){
+    get files_weight() {
         var weight = 0
-        for (var key in this.image_files){
+        for (var key in this.image_files) {
             var image_file = this.image_files[key]
             weight = weight + image_file.file_weight
         }
         return weight
     }
 
-    get file_length(){
+    get file_length() {
         return Object.keys(image_crop_tool.image_files).length
     }
-    _show_loading(){
+    _show_loading() {
         this._create_archive_btn.style.display = 'none'
         this._loading_archive_btn.style.display = 'flex'
     }
-    _hide_archive_loading(){
+    _hide_archive_loading() {
         this._loading_archive_btn.style.display = 'none'
     }
-    _show_archive_loaded(archive_url){
+    _show_archive_loaded(archive_url) {
         this.archive_load_url = this._checker_full_url + archive_url
 
         this._arhive_url.querySelector('input').value = this.archive_load_url
@@ -115,24 +117,19 @@ class ImageCropTool {
         this._archive_msg.querySelector('svg').style.display = 'block'
         this._arhive_url.style.display = 'flex'
     }
-    _show_archive_error(error_text){
+    _show_archive_error(error_text) {
         this._error_archive_btn.style.display = 'flex'
         this._archive_msg.querySelector('span').innerText = error_text
     }
-    get files_crop_data(){
+    get files_crop_data() {
         var data = {}
-        this.files_need_crop.forEach(file => {
-            // var item = {
-            //     'id': file.back_img_id,
-            //     ...file.crop_size,
-            // }
+        this.files_need_send_to_crop.forEach(file => {
             data[file.back_img_id] = file.crop_size
-            // data.push(item)
         })
         return data
     }
 
-    create_crop_archive(){
+    create_crop_archive() {
         var url = this._checker_full_url + "{%url 'checker_2:create_crop_archive'%}"
         var _class = this
         this._show_loading()
@@ -140,23 +137,23 @@ class ImageCropTool {
             'csrfmiddlewaretoken': CSRF_TOKEN,
             'images_to_crop': JSON.stringify(this.files_crop_data),
         }
-        $.post(url, data=data)
-        .done(function(response){
-            if (response['status']){
-                _class._show_archive_loaded(response['archive_url'])
-            } else {
-                var error_text = response['mgs']
-                _class._show_archive_error(error_text)
-            }
-            
-        })
-        .fail(function(response){
-            var rest_text = JSON.stringify(response.responseJSON)
-            _class._show_archive_error(rest_text)
-        })
-        .always(function(){
-            _class._hide_archive_loading()
-        })
+        $.post(url, data = data)
+            .done(function (response) {
+                if (response['status']) {
+                    _class._show_archive_loaded(response['archive_url'])
+                } else {
+                    var error_text = response['mgs']
+                    _class._show_archive_error(error_text)
+                }
+
+            })
+            .fail(function (response) {
+                var rest_text = JSON.stringify(response.responseJSON)
+                _class._show_archive_error(rest_text)
+            })
+            .always(function () {
+                _class._hide_archive_loading()
+            })
     }
 
     show_file_img_count() {
@@ -197,6 +194,10 @@ class ImageCropTool {
         }
     }
 
+    check_box(event, image_file, crop_checkbox) {
+        image_file._crop = crop_checkbox.checked
+    }
+
     _add_row(image_file) {
         var row = document.createElement('tr')
         row.id = 'db-image-' + image_file.back_img_id
@@ -210,9 +211,9 @@ class ImageCropTool {
         var c3_page_size = document.createElement('td')
         var c4_weight = document.createElement('td')
         var c5_thumb = document.createElement('td')
-        var c6_remove = document.createElement('td')
-        var file_cells = [c0_file_back_id, c1_image, c2_orig_size, c4_weight, c5_thumb, c6_remove]
-        c6_remove.classList.add('_remove')
+        var c6_crop = document.createElement('td')
+        var file_cells = [c0_file_back_id, c1_image, c2_orig_size, c4_weight, c5_thumb, c6_crop]
+
 
         c0_file_back_id.innerText = image_file.back_img_id
         c1_image.appendChild(image_tag)
@@ -223,7 +224,16 @@ class ImageCropTool {
         thumb_elem.innerText = image_file.crop_size_text
         c5_thumb.appendChild(thumb_elem)
         c4_weight.innerText = image_file.file_size_text()
-        c6_remove.innerHTML = '<span>X</span>'
+
+        var crop_checkbox = document.createElement('input')
+        crop_checkbox.setAttribute("type", "checkbox")
+        crop_checkbox.addEventListener('click', (event) => this.check_box(event, image_file, crop_checkbox))
+        if (image_file.is_croped_ext) {
+            crop_checkbox.checked = image_file._crop;
+        } else {
+            crop_checkbox.disabled = true;
+        }
+        c6_crop.appendChild(crop_checkbox);
 
         row.appendChild(c0_file_back_id)
         row.appendChild(c1_image)
@@ -231,12 +241,12 @@ class ImageCropTool {
         row.appendChild(c3_page_size)
         row.appendChild(c4_weight)
         row.appendChild(c5_thumb)
-        row.appendChild(c6_remove)
+        row.appendChild(c6_crop)
 
         this.table.querySelector('tbody').append(row)
         if (image_file.length == 1) {
             var page_size_elem = document.createElement('span')
-            page_size_elem.classList.add(image_file.crop_compression_status+'-outer')
+            page_size_elem.classList.add(image_file.crop_compression_status + '-outer')
             page_size_elem.innerText = first_image.size_text()
             c3_page_size.appendChild(page_size_elem)
         } else {
@@ -260,7 +270,7 @@ class ImageCropTool {
                 var images_count_text = `${curr_zise_images_count}шт : `
                 var image_size_elem = document.createElement('span')
                 image_size_elem.innerText = size
-                image_size_elem.classList.add(image_file.crop_compression_status+'-outer')
+                image_size_elem.classList.add(image_file.crop_compression_status + '-outer')
                 if (counter == 0) {
                     counter = 1
                     c3_page_size.innerText = images_count_text
@@ -287,23 +297,33 @@ class ImageCropTool {
         }
     }
 
-    hide_table_footer(){
+    hide_table_footer() {
         var footer = this._table.querySelector('tfoot')
-        if (this.file_length){
+        if (this.file_length) {
             footer.style.display = 'none';
         }
     }
-    get files_need_crop(){
+    get files_need_crop() {
         var files = []
         for (var key in image_crop_tool.image_files) {
             var file = image_crop_tool.image_files[key]
-            if (file.is_need_to_crop){
+            if (file.is_need_to_crop) {
                 files.push(file)
             }
         }
         return files
     }
 
+    get files_need_send_to_crop() {
+        var files = []
+        for (var key in image_crop_tool.image_files) {
+            var file = image_crop_tool.image_files[key]
+            if (file.is_croped_ext && file._crop && file.is_need_to_crop) {
+                files.push(file)
+            }
+        }
+        return files
+    }
 
     drow_files() {
         this.remove_rows()
@@ -325,7 +345,10 @@ class ImageFile {
         this._is_req_error = null;
         this.site_images = [];
         this._is_add_in_tool = false;
+        this._crop = true;
     }
+
+
 
     get crop_size() {
         var width = this.site_images[0].img.width
@@ -342,13 +365,13 @@ class ImageFile {
             'height': height,
         }
     }
-    get natural_size(){
+    get natural_size() {
         return this.site_images[0].natural_size
     }
-    get crop_compression_status(){
+    get crop_compression_status() {
         var natural_width = this.natural_size['width']
         var crop_width = this.crop_size['width']
-        var min_file_compression = SiteImage.calculate_image_compression(natural_width,crop_width)
+        var min_file_compression = SiteImage.calculate_image_compression(natural_width, crop_width)
         return SiteImage.get_compression_status(min_file_compression)
     }
     get back_img_id() {
@@ -362,17 +385,20 @@ class ImageFile {
     get length() {
         return this.site_images.length
     }
-    get file_weight(){
-        console.log(this.backend_data)
-        TEST = this.backend_data
-        if (this._is_loaded){
+    get file_weight() {
+        if (this._is_loaded) {
             // return 1
             return this.backend_data['image']['orig_img_params']['size']
         }
         return 0
     }
-    get is_need_to_crop(){
-        if (this._is_loaded && this._is_req_error==false){
+    get is_croped_ext() {
+        var CROP_EXT = ['.jpg', '.jpeg', '.bmp', '.webp', '.png']
+        return CROP_EXT.includes(this.image_extension())
+    }
+
+    get is_need_to_crop() {
+        if (this._is_loaded && this._is_req_error == false) {
             return this.crop_compression_status != 'green'
         }
     }
@@ -422,6 +448,7 @@ class ImageFile {
                 _class.response = res;
                 _class._is_req_error = false
                 _class.backend_data = res
+                _class.set_is_loaded()
                 _class.site_images.forEach(function (site_image) {
                     site_image.add_loaded_popover()
                 })
@@ -433,15 +460,16 @@ class ImageFile {
                 _class.site_images.forEach(function (site_image) {
                     site_image.add_req_error_popover(res)
                 })
+                _class.set_is_loaded()
 
             })
-            .always(function (res) {
-                _class.set_is_loaded()
-            })
+            // .always(function (res) {
+            //     _class.set_is_loaded()
+            // })
     }
 
     is_need_to_load() {
-        var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png']
+        var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png', '.gif']
         if (this.src == '') {
             return false
         }
@@ -498,24 +526,24 @@ class SiteImage {
         // init funcs
         this.__init()
     }
-    get natural_size(){
+    get natural_size() {
         return {
             'width': this.img.naturalWidth,
             'height': this.img.naturalHeight,
         }
     }
 
-    __init(){
+    __init() {
         image_crop_tool.image_tags.push(this)
         domToInstance.set(this.img, this)
     }
 
-    static calculate_image_compression(width_1, width_2){
+    static calculate_image_compression(width_1, width_2) {
         return Math.round((width_1 / width_2) * 10) / 10
 
     }
     image_commpress() {
-        return SiteImage.calculate_image_compression(this.img.naturalWidth,this.img.width)
+        return SiteImage.calculate_image_compression(this.img.naturalWidth, this.img.width)
         // return Math.round((this.img.naturalWidth / this.img.width) * 10) / 10
     }
 
@@ -558,25 +586,63 @@ class SiteImage {
         // popover.tip.addEventListener("click", (event) => click(event, popover));
     }
 
+
+
     hide_popover() {
-        this.popover.hide()
+        if (this.popover) {
+            this.popover.hide()
+        }
+
     }
     show_popover() {
-        this.popover.show()
+        if (this.popover) {
+            this.popover.show()
+        }
+    }
+
+    image_popover_content_text(){
+        let orig_size = `Оригинал: ${this.img.naturalWidth}x${this.img.naturalHeight}`
+        let page_size = `Настранице: ${this.img.width}x${this.img.height}`
+        let img_size = `Вес: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
+        let img_ext = `Формат: <b>${this.file.image_extension()}</b>`
+        let coof_compress = `Сжатие: ${this.image_commpress()}`
+        let content_text = [
+            orig_size, page_size, img_size, img_ext, coof_compress,this.is_big_size(), this.is_big_weight()
+        ].join('<br>')
+        return content_text
     }
 
 
     add_loaded_popover() {
         let coof = `x${this.image_commpress()}`
-        let page_size = `page: ${this.img.width}x${this.img.height}`
-        let orig_size = `orig: ${this.img.naturalWidth}x${this.img.naturalHeight}`
-        let img_size = `size: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
-        let img_ext = `ext: ${this.file.image_extension()}`
-        let content_text = [
-            page_size, orig_size, img_size, img_ext
-        ].join('<br>')
-        let popover_style = SiteImage.get_compression_status(this.image_commpress())
-        this.add_popover(coof, content_text, popover_style)
+        let title = coof
+        let popover_style = 'green'
+        if (this.is_big_size() || this.is_big_weight()){
+            if (this.is_big_size()){
+                title = 'Больше 1000px'
+            }
+            else{
+                title = 'Больше 300kb'
+            }
+            if (this.is_big_size() && this.is_big_weight()){
+                title = 'Больше 300kb и 1000px'
+            }
+            popover_style = 'red'
+        }
+        var content_text = this.image_popover_content_text()
+        // let popover_style = SiteImage.get_compression_status(this.image_commpress())
+        this.add_popover(title, content_text, popover_style)
+    }
+    is_big_weight(){
+        console.log(this.file.file_weight, 300*1024)
+        return this.file.file_weight > 300*1024
+    }
+    is_big_size(){
+        return (this.natural_size.width > 1000 || this.natural_size.height > 1000) && this.file.file_weight > 100*1024
+    }
+
+    is_need_crop(){
+        return this.image_commpress() > 5 && this.file.file_weight > 100*1024
     }
 
     add_not_loaded_popover() {
@@ -653,7 +719,7 @@ function get_position_of_bubble() {
 const ImgSelector = 'body img'
 const ImgNotLoadedSelector = 'body img:not(.load)'
 const IMAGES = document.querySelectorAll('body img')
-const options = {
+const observer_options = {
     root: null,
     rootMargin: '100px',
     threshold: 0.1,
@@ -680,7 +746,7 @@ function handleImg(myImg, observer) {
     })
 }
 
-var observer = null;
+var crop_observer = null;
 
 function HidePopover() {
     for (src in image_crop_tool.image_files) {
@@ -699,22 +765,22 @@ function ShowPopover() {
 function On() {
     console.log('ON')
     var images = document.querySelectorAll(ImgNotLoadedSelector)
-    observer = new IntersectionObserver(handleImg, options);
+    crop_observer = new IntersectionObserver(handleImg, observer_options);
 
     images.forEach(img => {
-        observer.observe(img)
+        crop_observer.observe(img)
 
     })
     ShowPopover()
 }
 
 function Off() {
-    if (observer) {
+    if (crop_observer) {
         console.log('OFF')
         IMAGES.forEach(img => {
-            observer.unobserve(img)
+            crop_observer.unobserve(img)
         })
-        observer.disconnect();
+        crop_observer.disconnect();
         HidePopover()
     }
 }

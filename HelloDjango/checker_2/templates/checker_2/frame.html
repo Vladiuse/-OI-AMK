@@ -193,7 +193,7 @@
                     <svg data-icon="Commercepanel" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path d="M3.122 2H0V0h4.878L5.4 4H19v6.82L4.647 13.69 3.122 2zM18 20a2 2 0 110-4 2 2 0 010 4zM6 20a2 2 0 110-4 2 2 0 010 4z" fill="currentColor"></path></svg>
                   </div>
 
-                  <div class="leftbar__tool-item debug" data-iframe-func="On">
+                  <div class="leftbar__tool-item debug active" data-iframe-func="On">
                     <svg data-icon="Assetpanel" aria-hidden="true" focusable="false" width="20" height="18" viewBox="0 0 20 18" class="bem-Svg" style="display: block;"><path d="M13.557.736a1 1 0 00-1.23-.701L.749 3.137A1 1 0 00.034 4.36l2.332 8.701a1 1 0 001.23.701L4 13.654V6.003A2 2 0 015.994 4h8.437L13.557.736zM7.007 6h11.986A1 1 0 0120 6.996v10.008a1 1 0 01-1.007.996H7.007A1 1 0 016 17.004V6.996A1 1 0 017.007 6zM18 9.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0zM8 12l3.5-3 7 7H8v-4z" fill="currentColor" fill-rule="evenodd"></path></svg>
                   </div>
 
@@ -350,7 +350,7 @@
                             <th>Page size</th>
                             <th>Weight</th>
                             <th>Thumb</th>
-                            <th>Remove</th>
+                            <th>Crop</th>
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -408,6 +408,7 @@
     let recordIframeScroll = true
 
     iframe.onload = function () {
+      console.log('ONLOAD')
       if (land_data_from_js) { loadLandParams() }
       if (get_phone_code_api) { getPhoneCode() }
 
@@ -418,6 +419,8 @@
 
     // site.bigWindowFrame = bigWindow
     // console.warn(site.bigWindowFrame, 'xxxx')
+    console.log(document.getElementById('crop-image-tool'))
+    console.log(site.image_crop_tool)
     site.image_crop_tool.table = document.getElementById('crop-image-tool')
     site.image_crop_tool.checker_full_url = full;
 
@@ -509,6 +512,7 @@
 
 
     function loadBackAnalize(land_code) {
+      console.log('LOAD BACK')
       // Загрузда данных анализа текста API
       $('#text-info').empty()
       $('#analize-load').show()
