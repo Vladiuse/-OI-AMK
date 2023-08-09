@@ -316,8 +316,8 @@ class ImageCropTool {
 
     get files_need_send_to_crop() {
         var files = []
-        this.files_need_crop.forEach(file =>{
-            if (file._crop){
+        this.files_need_crop.forEach(file => {
+            if (file._crop) {
                 files.push(file)
             }
         })
@@ -348,7 +348,7 @@ class ImageFile {
         this._add_to_crop_tool = true;
     }
 
-    set add_to_crop(bool){
+    set add_to_crop(bool) {
         this._add_to_crop_tool = this._add_to_crop_tool * bool
     }
 
@@ -407,9 +407,9 @@ class ImageFile {
         }
     }
 
-    get is_big(){
+    get is_big() {
         if (this._is_loaded && this._is_req_error == false) {
-            return this.file_weight > 300*1024
+            return this.file_weight > 300 * 1024
         }
     }
 
@@ -454,28 +454,38 @@ class ImageFile {
         console.warn('LOAD', this.src)
         $.post(IMAGE_LOAD_INFO, data = data, )
             .done(function (res, ) {
-                print('DONE')
-                _class.response = res;
-                _class._is_req_error = false
-                _class.backend_data = res
-                _class.set_is_loaded()
-                _class.site_images.forEach(function (site_image) {
-                    site_image.add_loaded_popover()
-                })
+                print(res)
+                if (res['load_result']['status']) {
+                    _class.response = res;
+                    _class._is_req_error = false
+                    _class.backend_data = res
+                    _class.set_is_loaded()
+                    _class.site_images.forEach(function (site_image) {
+                        site_image.add_loaded_popover()
+                    })
+                } else {
+                    print('FAIL back')
+                    _class.response = res;
+                    _class._is_req_error = true
+                    _class.site_images.forEach(function (site_image) {
+                        site_image.add_req_error_popover(res, 'Изображение не загружено')
+                    })
+                    _class.set_is_loaded()
+                }
             })
             .fail(function (res) {
                 print('FAIL')
                 _class.response = res;
                 _class._is_req_error = true
                 _class.site_images.forEach(function (site_image) {
-                    site_image.add_req_error_popover(res)
+                    site_image.add_req_error_popover(res, 'Api REQ Error')
                 })
                 _class.set_is_loaded()
 
             })
-            // .always(function (res) {
-            //     _class.set_is_loaded()
-            // })
+        // .always(function (res) {
+        //     _class.set_is_loaded()
+        // })
     }
 
     is_need_to_load() {
@@ -542,8 +552,8 @@ class SiteImage {
             'height': this.img.naturalHeight,
         }
     }
-    get is_avatar(){
-        return this.img.width <=150 && this.img.height <= 150
+    get is_avatar() {
+        return this.img.width <= 150 && this.img.height <= 150
     }
 
     __init() {
@@ -613,66 +623,64 @@ class SiteImage {
         }
     }
 
-    image_popover_content_text(){
+    image_popover_content_text() {
         let orig_size = `Оригинал: ${this.img.naturalWidth}x${this.img.naturalHeight}`
         let page_size = `На странице: ${this.img.width}x${this.img.height}`
         let img_size = `Вес: ${this.file.backend_data['image']['orig_img_params']['size_text']}`
         let img_ext = `Формат: <b>${this.file.image_extension()}</b>`
         let coof_compress = `Сжатие: ${this.image_commpress()}`
         let content_text = [
-            orig_size, page_size, img_size, img_ext, coof_compress,this.is_big_size(), this.file.is_big
+            orig_size, page_size, img_size, img_ext, coof_compress, 
+            // this.is_big_size(), this.file.is_big
         ].join('<br>')
         return content_text
     }
 
-    add_info_popover(){
-        let title =  `x${this.image_commpress()}`
+    add_info_popover() {
+        let title = `x${this.image_commpress()}`
         let popover_style = 'green'
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
-    add_commpress_popover(){
+    add_commpress_popover() {
         let popover_style = 'orange'
         var title = `${this.image_commpress()} - можно обрезать`
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
-    add_big_file_popover(){
+    add_big_file_popover() {
         var popover_style = 'red'
         var title = 'msg'
-        if (this.is_big_size()){
+        if (this.is_big_size()) {
             title = 'Больше 1000px'
-        }
-        else{
+        } else {
             title = 'Больше 300kb'
         }
-        if (this.is_big_size() && this.file.is_big){
+        if (this.is_big_size() && this.file.is_big) {
             title = 'Больше 300kb и 1000px'
         }
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
     add_loaded_popover() {
-        if (this.is_big_size() || this.file.is_big){
+        if (this.is_big_size() || this.file.is_big) {
             this.add_big_file_popover()
             this.file.add_to_crop = true
-        } 
-        else if (this.is_need_crop()){
+        } else if (this.is_need_crop()) {
             this.add_commpress_popover()
             this.file.add_to_crop = true
-        }
-        else {
+        } else {
             this.add_info_popover()
             this.file.add_to_crop = false
         }
     }
 
-    is_big_size(){
-        return (this.natural_size.width > 1000 || this.natural_size.height > 1000) && this.file.file_weight > 100*1024
+    is_big_size() {
+        return (this.natural_size.width > 1000 || this.natural_size.height > 1000) && this.file.file_weight > 100 * 1024
     }
 
-    is_need_crop(){
-        return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > 60*1024
+    is_need_crop() {
+        return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > 60 * 1024
     }
 
     add_not_loaded_popover() {
@@ -680,9 +688,9 @@ class SiteImage {
         this.add_popover(title)
     }
 
-    add_req_error_popover(req_error) {
+    add_req_error_popover(req_error, title) {
         let text = JSON.stringify(req_error)
-        this.add_popover('Error REQ', text, 'red')
+        this.add_popover(title, text, 'red')
     }
 
 }
