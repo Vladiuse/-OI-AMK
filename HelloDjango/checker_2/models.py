@@ -199,19 +199,19 @@ class CheckerUserSetting(models.Model):
 
 
 
-def image_path(instanse, filename):
+def image_path_site_image(instanse, filename):
     domain_name = instanse.domain.url.replace('http://', '')
     return f'{domain_name}/{filename}'
 
 
 class SiteImage(models.Model):
     domain = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
-    image_url = models.URLField()
-    page_width = models.IntegerField(blank=True, null=True)
-    page_height = models.IntegerField(blank=True, null=True)
-    orig_img = models.ImageField(blank=True, upload_to=image_path, )
-    thumb = models.ImageField(blank=True, upload_to=image_path, )
-    thumb_compress = models.ImageField(blank=True, upload_to=image_path, )
+    image_url = models.URLField(max_length=255)
+    # page_width = models.IntegerField(blank=True, null=True)
+    # page_height = models.IntegerField(blank=True, null=True)
+    orig_img = models.ImageField(blank=True, upload_to=image_path_site_image, )
+    thumb = models.ImageField(blank=True, upload_to=image_path_site_image, )
+    thumb_compress = models.ImageField(blank=True, upload_to=image_path_site_image, )
 
     class Meta:
         unique_together = ['domain', 'image_url']
@@ -255,13 +255,10 @@ class SiteImage(models.Model):
         if self.orig_img:
             if self.thumb:
                 remove_file_if_exists(self.thumb.path)
-            # size = (self.page_width, self.page_height)
-            # if not all(size):
-            #     size = (50, 50)
             thumb = make_thumb(self.orig_img.path, size)
             blob = io.BytesIO()
             thumb.save(blob, thumb.format)
-            ext = os.path.splitext(self.image_url)[1]
+            ext = os.path.splitext(str(self.image_url))[1]
             self.thumb = ImageFile(blob, name=f'THUMB{ext}')
             self.save()
 
@@ -290,5 +287,37 @@ class SiteImage(models.Model):
             }
         return None
 
+class CropTask(models.Model):
+    domain = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_crop_task(domain, qs, crop_data):
+        task = CropTask.objects.create(domain=domain)
+        crop_images = []
+        for site_image in qs:
+            img_file = open(site_image.orig_img.path, 'rb')
+            img_file_name = os.path.basename(site_image.orig_img.name)
+            crop_image = CropImage(
+                task=task,
+                orig_img=ImageFile(site_image.orig_img, name=img_file_name),
+                page_width=50,
+                page_height=50,
+            )
+            crop_images.append(crop_image)
+            img_file.close()
+        CropImage.objects.bulk_create(crop_images)
+        return task
 
 
+
+def image_path_crop_image(instanse, filename):
+    print(filename)
+    return f'{instanse.MEDIA_PATH}/{instanse.task.pk}/{filename}'
+
+class CropImage(models.Model):
+    MEDIA_PATH = 'crop_images'
+    task = models.ForeignKey(CropTask, on_delete=models.CASCADE)
+    orig_img = models.ImageField(upload_to=image_path_crop_image, )
+    thumb = models.ImageField(blank=True, upload_to=image_path_crop_image, )
+    page_width = models.PositiveIntegerField()
+    page_height = models.PositiveIntegerField()

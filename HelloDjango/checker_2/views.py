@@ -13,7 +13,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting, SiteImage
+from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting, SiteImage, CropTask, CropImage
 from .checker_class.link_checker import LinkChecker
 from django.template import Template
 from django.template import RequestContext
@@ -294,3 +294,11 @@ def test_api(request):
     }
     return Response(success)
 
+def crop_task(request, task_id):
+    task = CropTask.objects.get(pk=task_id)
+    crop_images = CropImage.objects.filter(task=task)
+    content = {
+        'task': task,
+        'crop_images': crop_images,
+    }
+    return render(request, 'checker_2/task.html', content)

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Task #{{task.pk}}</h1>
+<p>Domain: {{task.domain.url|urlize}}</p>
+{%for crop_img in crop_images%}
+<img src="{{crop_img.orig_img.url}}">
+{%endfor%}
+</body>
+</html>
