@@ -395,6 +395,14 @@ class ImageFile {
         }
         return 0
     }
+
+    get file_weight_text(){
+        if (this._is_loaded) {
+            // return 1
+            return bytes_size_to_text(this.backend_data['image']['orig_img_params']['size'])
+        }
+        return '-'
+    }
     get is_croped_ext() {
         var CROP_EXT = ['.jpg', '.jpeg', '.bmp', '.webp', '.png']
         return CROP_EXT.includes(this.image_extension())
@@ -637,7 +645,7 @@ class SiteImage {
     }
 
     add_info_popover() {
-        let title = `x${this.image_commpress()}`
+        let title = `x${this.image_commpress()} ${this.file.file_weight_text}`
         let popover_style = 'green'
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
