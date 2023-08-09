@@ -46,7 +46,7 @@ def load_img_http(url):
 
 def make_thumb(image_path, size: tuple, compress=False):
     image = Image.open(image_path)
-    image.thumbnail(size)
+    image.thumbnail(size, reducing_gap=3.0)
     return image
 
 
