@@ -316,12 +316,11 @@ class ImageCropTool {
 
     get files_need_send_to_crop() {
         var files = []
-        for (var key in image_crop_tool.image_files) {
-            var file = image_crop_tool.image_files[key]
-            if (file.is_croped_ext && file._crop && file.is_need_to_crop) {
+        this.files_need_crop.forEach(file =>{
+            if (file._crop){
                 files.push(file)
             }
-        }
+        })
         return files
     }
 
@@ -346,8 +345,12 @@ class ImageFile {
         this.site_images = [];
         this._is_add_in_tool = false;
         this._crop = true;
+        this._add_to_crop_tool = true;
     }
 
+    set add_to_crop(bool){
+        this._add_to_crop_tool = this._add_to_crop_tool * bool
+    }
 
 
     get crop_size() {
@@ -399,7 +402,8 @@ class ImageFile {
 
     get is_need_to_crop() {
         if (this._is_loaded && this._is_req_error == false) {
-            return this.crop_compression_status != 'green'
+            // return this.crop_compression_status != 'green'
+            return this._add_to_crop_tool
         }
     }
 
@@ -410,7 +414,7 @@ class ImageFile {
     }
 
     file_size_text() {
-        return this.backend_data['image']['orig_img_params']['size_text']
+        return bytes_size_to_text(this.backend_data['image']['orig_img_params']['size'])
     }
 
     orig_img_size_text() {
@@ -538,6 +542,9 @@ class SiteImage {
             'height': this.img.naturalHeight,
         }
     }
+    get is_avatar(){
+        return this.img.width <=150 && this.img.height <= 150
+    }
 
     __init() {
         image_crop_tool.image_tags.push(this)
@@ -648,12 +655,15 @@ class SiteImage {
     add_loaded_popover() {
         if (this.is_big_size() || this.file.is_big){
             this.add_big_file_popover()
+            this.file.add_to_crop = true
         } 
         else if (this.is_need_crop()){
             this.add_commpress_popover()
+            this.file.add_to_crop = true
         }
         else {
             this.add_info_popover()
+            this.file.add_to_crop = false
         }
     }
 
@@ -662,7 +672,7 @@ class SiteImage {
     }
 
     is_need_crop(){
-        return this.image_commpress() > 5 && this.file.file_weight > 100*1024
+        return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > 60*1024
     }
 
     add_not_loaded_popover() {
