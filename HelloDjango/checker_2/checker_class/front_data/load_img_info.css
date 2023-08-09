@@ -251,3 +251,6 @@
 .bs-popover-start > .popover-arrow{
   height: 20px;
 }
+.popover b{
+  font-weight: bold !important;
+}
