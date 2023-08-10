@@ -3,6 +3,7 @@ import time
 import json
 import zipfile
 from urllib.parse import urlparse
+from django.urls import reverse
 from rest_framework.decorators import api_view, action, permission_classes, authentication_classes
 from .serializers import SiteImagesSerializer, UserSiteSerializer
 from rest_framework.response import Response
@@ -261,7 +262,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 
 @api_view(['GET', 'POST'], )
 @permission_classes([permissions.IsAuthenticated])
-def test_api(request):
+def crop_images(request, domain_id):
     images_to_crop = request.POST['images_to_crop']
     images_to_crop = json.loads(images_to_crop)
     time.sleep(0.7)
@@ -276,21 +277,23 @@ def test_api(request):
         }
         return Response(error)
     images = SiteImage.objects.filter(pk__in=images_to_crop)
-
-    for image in images:
-        size = (images_to_crop[str(image.pk)]['width'],images_to_crop[str(image.pk)]['height'])
-        image.make_thumb(size)
-    zip_file_path = os.path.join(settings.MEDIA_ROOT, '_archive', 'test.zip')
-    zip_file = zipfile.ZipFile(zip_file_path, 'w')
-    for image in images:
-        img_name_in_zip = urlparse(image.image_url).path
-        if urlparse(image.image_url).query:
-            img_name_in_zip += '?' + urlparse(image.image_url).query
-        zip_file.write(image.thumb.path, img_name_in_zip)
-    zip_file.close()
+    domain = ActualUserList.objects.get(pk=domain_id)
+    task = CropTask.create_crop_task(domain, images,images_to_crop)
+    # for image in images:
+    #     size = (images_to_crop[str(image.pk)]['width'],images_to_crop[str(image.pk)]['height'])
+    #     image.make_thumb(size)
+    # zip_file_path = os.path.join(settings.MEDIA_ROOT, '_archive', 'test.zip')
+    # zip_file = zipfile.ZipFile(zip_file_path, 'w')
+    # for image in images:
+    #     img_name_in_zip = urlparse(image.image_url).path
+    #     if urlparse(image.image_url).query:
+    #         img_name_in_zip += '?' + urlparse(image.image_url).query
+    #     zip_file.write(image.thumb.path, img_name_in_zip)
+    # zip_file.close()
     success = {
         'status': True,
-        'archive_url': os.path.relpath(zip_file_path, settings.BASE_DIR),
+        # 'archive_url': os.path.relpath(zip_file_path, settings.BASE_DIR),
+        'archive_url': reverse('checker_2:crop_task', args=[task.pk,]),
     }
     return Response(success)
 

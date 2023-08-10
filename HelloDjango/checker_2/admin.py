@@ -4,7 +4,7 @@ import re
 import os
 
 from django.contrib import admin
-from .models import CheckPoint, CheckBlock, CheckerUserSetting
+from .models import CheckPoint, CheckBlock, CheckerUserSetting, CropTask, CropImage
 from ordered_model.admin import OrderedModelAdmin
 
 
@@ -70,3 +70,5 @@ admin.site.register(SiteImage, SiteImagesAdmin)
 admin.site.register(CheckPoint, CheckPointAdmin)
 admin.site.register(CheckBlock, CheckBlockAdmin)
 admin.site.register(CheckerUserSetting, CheckerUserSettingAdmin)
+admin.site.register(CropTask)
+admin.site.register(CropImage)

@@ -130,7 +130,7 @@ class ImageCropTool {
     }
 
     create_crop_archive() {
-        var url = this._checker_full_url + "{%url 'checker_2:create_crop_archive'%}"
+        var url = this._checker_full_url + "{%url 'checker_2:create_crop_images' actual_user_list.pk%}"
         var _class = this
         this._show_loading()
         var data = {
@@ -232,6 +232,7 @@ class ImageCropTool {
             crop_checkbox.checked = image_file._crop;
         } else {
             crop_checkbox.disabled = true;
+            image_file._crop = false;
         }
         c6_crop.appendChild(crop_checkbox);
 
@@ -326,10 +327,13 @@ class ImageCropTool {
 
     drow_files() {
         this.remove_rows()
-        this.hide_table_footer()
-        this.files_need_crop.forEach(file => {
-            this.add_image_file(file)
-        })
+        var files_to_add = this.files_need_crop 
+        if (files_to_add.length != 0){
+            this.hide_table_footer()
+            this.files_need_crop.forEach(file => {
+                this.add_image_file(file)
+            })
+        }    
     }
 }
 
@@ -389,7 +393,7 @@ class ImageFile {
         return this.site_images.length
     }
     get file_weight() {
-        if (this._is_loaded) {
+        if (this._is_loaded && this._is_req_error == false) {
             // return 1
             return this.backend_data['image']['orig_img_params']['size']
         }
@@ -397,7 +401,7 @@ class ImageFile {
     }
 
     get file_weight_text(){
-        if (this._is_loaded) {
+        if (this._is_loaded && this._is_req_error == false) {
             // return 1
             return bytes_size_to_text(this.backend_data['image']['orig_img_params']['size'])
         }
@@ -697,7 +701,8 @@ class SiteImage {
     }
 
     add_req_error_popover(req_error, title) {
-        let text = JSON.stringify(req_error)
+        // let dic = JSON.stringify(req_error)
+        var text = req_error['load_result']['mgs']
         this.add_popover(title, text, 'red')
     }
 
