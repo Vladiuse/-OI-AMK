@@ -51,10 +51,10 @@ class ImageCropTool {
         this._create_archive_btn = null;
         this._loading_archive_btn = null;
         this._error_archive_btn = null;
-        this._download_archive_button = null;
+        this._open_link_button = null;
         this._archive_msg = null;
         this._arhive_url = null;
-        this.archive_load_url = null;
+        this.crop_task_url = null;
     }
 
 
@@ -68,19 +68,22 @@ class ImageCropTool {
         this._error_archive_btn = tool_block.querySelector('#error-archive-btn')
         this._archive_msg = tool_block.querySelector('#archive-msg')
         this._arhive_url = tool_block.querySelector('#arhive-url')
-        this._download_archive_button = tool_block.querySelector('#download-archive')
+        this._open_link_button = tool_block.querySelector('#create-link')
         var _class = this
         this._create_archive_btn.addEventListener('click', function () {
             _class.create_crop_archive()
         })
 
-        this._download_archive_button.addEventListener('click', function () {
-            _class.download_archive()
+        this._open_link_button.addEventListener('click', function () {
+            _class.open_task()
         })
     }
 
-    download_archive() {
-        window.location.href = this.archive_load_url
+    open_task() {
+        window.open(
+            this.crop_task_url,
+            '_blank'
+          );
     }
     set checker_full_url(url) {
         this._checker_full_url = url
@@ -110,9 +113,9 @@ class ImageCropTool {
         this._loading_archive_btn.style.display = 'none'
     }
     _show_archive_loaded(archive_url) {
-        this.archive_load_url = this._checker_full_url + archive_url
+        this.crop_task_url = this._checker_full_url + archive_url
 
-        this._arhive_url.querySelector('input').value = this.archive_load_url
+        this._arhive_url.querySelector('input').value = this.crop_task_url
         this._archive_msg.querySelector('span').innerText = 'Архив создан'
         this._archive_msg.querySelector('svg').style.display = 'block'
         this._arhive_url.style.display = 'flex'
