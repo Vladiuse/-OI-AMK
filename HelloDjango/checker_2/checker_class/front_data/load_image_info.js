@@ -116,7 +116,7 @@ class ImageCropTool {
         this.crop_task_url = this._checker_full_url + archive_url
 
         this._arhive_url.querySelector('input').value = this.crop_task_url
-        this._archive_msg.querySelector('span').innerText = 'Архив создан'
+        this._archive_msg.querySelector('span').innerText = 'Ссылка готова'
         this._archive_msg.querySelector('svg').style.display = 'block'
         this._arhive_url.style.display = 'flex'
     }
@@ -127,7 +127,8 @@ class ImageCropTool {
     get files_crop_data() {
         var data = {}
         this.files_need_send_to_crop.forEach(file => {
-            data[file.back_img_id] = file.crop_size
+            data[file.back_img_id] = file.crop_size;
+            data[file.back_img_id]['status_text'] = file.status_text
         })
         return data
     }
@@ -353,6 +354,7 @@ class ImageFile {
         this._is_add_in_tool = false;
         this._crop = true;
         this._add_to_crop_tool = true;
+        this.status_text = ''
     }
 
     set add_to_crop(bool) {
@@ -660,6 +662,7 @@ class SiteImage {
     add_commpress_popover() {
         let popover_style = 'orange'
         var title = `${this.image_commpress()} - можно обрезать`
+        this.file.status_text = title
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
@@ -668,11 +671,14 @@ class SiteImage {
         var title = 'msg'
         if (this.is_big_size()) {
             title = 'Больше 1000px'
+            this.file.status_text = title
         } else {
             title = 'Больше 300kb'
+            this.file.status_text = title
         }
         if (this.is_big_size() && this.file.is_big) {
             title = 'Больше 300kb и 1000px'
+            this.file.status_text = title
         }
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }

@@ -258,6 +258,7 @@ class SiteImageViewSet(viewsets.ModelViewSet):
 def crop_images(request, domain_id):
     images_to_crop = request.POST['images_to_crop']
     images_to_crop = json.loads(images_to_crop)
+    print(images_to_crop)
     if not images_to_crop:
         return Response({
             'status': False,
