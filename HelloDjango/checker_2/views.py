@@ -1,8 +1,5 @@
-import os
 import time
 import json
-import zipfile
-from urllib.parse import urlparse
 from django.urls import reverse
 from rest_framework.decorators import api_view, action, permission_classes, authentication_classes
 from .serializers import SiteImagesSerializer, UserSiteSerializer
@@ -203,9 +200,6 @@ class SiteImageViewSet(viewsets.ModelViewSet):
     lookup_field = 'image_id'
     lookup_url_kwarg = 'image_id'
 
-    # def domain(self):
-    #     return ActualUserList.objects.get(pk=self.kwargs['domain_id'])
-
     def get_queryset(self):
         return SiteImage.objects.filter(domain_id=self.kwargs['domain_id'])
 
@@ -248,16 +242,15 @@ class SiteImageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(obj)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['GET'])
-    def load_make_thumb(self, request, image_id):
-        obj = self.get_object()
-        res = obj.load_make_thumb()
-        serializer = self.get_serializer(obj)
-        return Response({
-            'result': res,
-            'image': serializer.data
-        })
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+    # @action(detail=True, methods=['GET'])
+    # def load_make_thumb(self, request, image_id):
+    #     obj = self.get_object()
+    #     res = obj.load_make_thumb()
+    #     serializer = self.get_serializer(obj)
+    #     return Response({
+    #         'result': res,
+    #         'image': serializer.data
+    #     })
 
 
 @api_view(['GET', 'POST'], )
@@ -284,20 +277,8 @@ def crop_images(request, domain_id):
     images = SiteImage.objects.filter(pk__in=images_to_crop)
     domain = ActualUserList.objects.get(pk=domain_id)
     task = CropTask.create_crop_task(domain, images,images_to_crop)
-    # for image in images:
-    #     size = (images_to_crop[str(image.pk)]['width'],images_to_crop[str(image.pk)]['height'])
-    #     image.make_thumb(size)
-    # zip_file_path = os.path.join(settings.MEDIA_ROOT, '_archive', 'test.zip')
-    # zip_file = zipfile.ZipFile(zip_file_path, 'w')
-    # for image in images:
-    #     img_name_in_zip = urlparse(image.image_url).path
-    #     if urlparse(image.image_url).query:
-    #         img_name_in_zip += '?' + urlparse(image.image_url).query
-    #     zip_file.write(image.thumb.path, img_name_in_zip)
-    # zip_file.close()
     success = {
         'status': True,
-        # 'archive_url': os.path.relpath(zip_file_path, settings.BASE_DIR),
         'archive_url': reverse('checker_2:crop_task', args=[task.pk,]),
     }
     return Response(success)
