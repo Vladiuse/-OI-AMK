@@ -313,13 +313,15 @@ class CropTask(models.Model):
 
             page_width = crop_data[str(site_image.pk)]['width']
             page_height = crop_data[str(site_image.pk)]['height']
+            status_text =  crop_data[str(site_image.pk)]['status_text']
             crop_image = CropImage(
                 task=task,
                 site_image=site_image,
                 orig_img=ImageFile(site_image.orig_img, name=img_file_name),
                 page_width=page_width,
                 page_height=page_height,
-                thumb=make_thumb(site_image.orig_img.path, (page_width,page_height))
+                thumb=make_thumb(site_image.orig_img.path, (page_width,page_height)),
+                status_text=status_text,
             )
             crop_images.append(crop_image)
             img_file.close()
@@ -363,6 +365,10 @@ class CropImage(models.Model):
     thumb = models.ImageField(blank=True, upload_to=image_path_crop_image, )
     page_width = models.PositiveIntegerField()
     page_height = models.PositiveIntegerField()
+    status_text = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ['-status_text']
 
     def make_thumb(self, save=True):
         size = (self.page_width, self.page_height)
@@ -384,4 +390,5 @@ class CropImage(models.Model):
     def weight_diff_percent(self):
         if self.orig_img and self.thumb:
             return round((1 - self.thumb.size / self.orig_img.size)*100, 1)
+
 
