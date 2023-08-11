@@ -15,60 +15,69 @@
   <div class="container">
     <h1>Task #{{task.pk}}</h1>
 <p>Domain: {{task.domain.url|urlize}}</p>
-<p>Общий размер: {{task.files_size.images_size|filesizeformat}}</p>
-<p>Размер thumb: {{task.files_size.thumb_size|filesizeformat}}</p>
-<p>Разница: {{task.files_size.diff_size|filesizeformat}}</p>
-<p>Экономия: {{task.files_size.diff_percent}}%</p>
+<p>Общий размер: {{task.files_size.images_size|filesizeformat}}, у миниатюр {{task.files_size.thumb_size|filesizeformat}}</p>
+<p>Экономия: {{task.files_size.diff_size|filesizeformat}} ({{task.files_size.diff_percent}}%)</p>
 <a href="{{task.archive.url}}">Скачать архив</a>
   </div>
-  <div class="container-fluid">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Compress</th>
-      <th scope="col">Orig</th>
-      <th scope="col">Thumb</th>
-      <th scope="col">Orig params</th>
-      <th scope="col">Thumb params</th>
-      <th scope="col">On page</th>
-      <th scope="col">weight diff</th>
-    </tr>
-  </thead>
-  <tbody>
-  {%for crop_img in crop_images%}
-    <tr>
-      <th scope="row">{{crop_img.pk}}</th>
-      <td>
-        x{{crop_img.page_compression}}
-      </td>
-      <td>
-          <img src="{{crop_img.orig_img.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
-      </td>
-      <td>
-          {%if crop_img.thumb%}
-          <img src="{{crop_img.thumb.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
-          {%endif%}
-      </td>
-      <td>
-        {{crop_img.orig_img.width}}x{{crop_img.orig_img.height}}<br>
-        {{crop_img.orig_img.size|filesizeformat}}
-      </td>
-      <td>
-        {{crop_img.thumb.width}}x{{crop_img.thumb.height}}<br>
-        {{crop_img.thumb.size|filesizeformat}}
-      </td>
-      <td>
-        {{crop_img.page_width}}x{{crop_img.page_height}}
-      </td>
-      <td>
-        {{crop_img.weight_diff|filesizeformat}} ({{crop_img.weight_diff_percent}}%)
-      </td>
+<style>
+  .row img{
+    /* width: 100%; */
+    max-width: 100%;
+  }
+  [class^='col']{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+  <div class="container-xl">
+    <div class="row">
+      {%for crop_img in crop_images%}
+      <div class="col-2">
+        <table class="table">
+          <tr>
+            <td>Id</td>
+            <td>{{crop_img.pk}}</td>
+          </tr>
+          <tr>
+            <td>Сжатие</td>
+            <td>x{{crop_img.page_compression}}</td>
+          </tr>
+          <tr>
+            <td>Оригинал</td>
+            <td>{{crop_img.orig_img.width}}x{{crop_img.orig_img.height}}
+                <br>{{crop_img.orig_img.size|filesizeformat}}
+            </td>
+          </tr>
+          <tr>
+            <td>На странице</td>
+            <td>{{crop_img.thumb.width}}x{{crop_img.thumb.height}}
 
-    </tr>
-  {%endfor%}
-  </tbody>
-</table>
+            </td>
+          </tr>
+          <tr>
+            <td>Thumb</td>
+            <td>
+              {{crop_img.thumb.width}}x{{crop_img.thumb.height}}<br>
+        {{crop_img.thumb.size|filesizeformat}}
+            </td>
+          </tr>
+          <tr>
+            <td>Экономия</td>
+            <td>
+              {{crop_img.weight_diff|filesizeformat}} ({{crop_img.weight_diff_percent}}%)
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-5">
+        <img src="{{crop_img.orig_img.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
+      </div>
+      <div class="col-5">
+        <img src="{{crop_img.thumb.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
+      </div>
+      {%endfor%}
+    </div>
   </div>
 </body>
 </html>
