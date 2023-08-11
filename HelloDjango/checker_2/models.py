@@ -309,7 +309,6 @@ class CropTask(models.Model):
 
     @staticmethod
     def create_crop_task(domain, qs, crop_data):
-        print(crop_data)
         task = CropTask.objects.create(domain=domain)
         crop_images = []
         for site_image in qs:

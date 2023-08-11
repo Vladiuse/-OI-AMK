@@ -265,6 +265,11 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 def crop_images(request, domain_id):
     images_to_crop = request.POST['images_to_crop']
     images_to_crop = json.loads(images_to_crop)
+    if not images_to_crop:
+        return Response({
+            'status': False,
+            'mgs': 'No images to crop'
+        })
     time.sleep(0.7)
     error = {
         'status': False,
