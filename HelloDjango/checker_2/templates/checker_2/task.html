@@ -50,8 +50,8 @@
             <td>Id</td>
             <td>{{crop_img.pk}}</td>
           </tr>
-          <tr class="table-{%if 'Больше' in crop_img.status_text%}danger{%else%}warning{%endif%}">
-            <td><span class="badge bg-{%if 'Больше' in crop_img.status_text%}danger{%else%}warning{%endif%}">Статус</span></td>
+          <tr class="table-{%if crop_img.crop_type == 'over_size'%}danger{%else%}warning{%endif%}">
+            <td><span class="badge bg-{%if crop_img.crop_type == 'over_size'%}danger{%else%}warning{%endif%}">Статус</span></td>
             <td>
               {{crop_img.status_text}}
               </td>
@@ -77,7 +77,7 @@
       <div class="col-5 orig-img">
         {{crop_img.orig_img.width}}x{{crop_img.orig_img.height}} 
                 ({{crop_img.orig_img.size|filesizeformat}})
-        {%if 'Больше' in crop_img.status_text%}
+        {%if crop_img.crop_type == 'over_size'%}
         <img src="{{crop_img.orig_img.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
         {%else%}
         <img src="{{crop_img.orig_img.url}}" width="{{crop_img.orig_img.width}}" height="{{crop_img.orig_img.height}}">

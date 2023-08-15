@@ -83,7 +83,7 @@ class ImageCropTool {
         window.open(
             this.crop_task_url,
             '_blank'
-          );
+        );
     }
     set checker_full_url(url) {
         this._checker_full_url = url
@@ -128,7 +128,7 @@ class ImageCropTool {
         var data = {}
         this.files_need_send_to_crop.forEach(file => {
             data[file.back_img_id] = file.crop_size;
-            data[file.back_img_id]['status_text'] = file.status_text
+            data[file.back_img_id]['front_status'] = file.front_status
         })
         return data
     }
@@ -331,13 +331,13 @@ class ImageCropTool {
 
     drow_files() {
         this.remove_rows()
-        var files_to_add = this.files_need_crop 
-        if (files_to_add.length != 0){
+        var files_to_add = this.files_need_crop
+        if (files_to_add.length != 0) {
             this.hide_table_footer()
             this.files_need_crop.forEach(file => {
                 this.add_image_file(file)
             })
-        }    
+        }
     }
 }
 
@@ -354,11 +354,17 @@ class ImageFile {
         this._is_add_in_tool = false;
         this._crop = true;
         this._add_to_crop_tool = true;
-        this.status_text = ''
+        this.front_status = ''
     }
 
     set add_to_crop(bool) {
         this._add_to_crop_tool = this._add_to_crop_tool * bool
+    }
+
+    get text_status() {
+        if (this._is_loaded && this._is_req_error == false) {
+            return this.backend_data['image']['is_over_size']
+        }
     }
 
 
@@ -405,7 +411,7 @@ class ImageFile {
         return 0
     }
 
-    get file_weight_text(){
+    get file_weight_text() {
         if (this._is_loaded && this._is_req_error == false) {
             // return 1
             return bytes_size_to_text(this.backend_data['image']['orig_img_params']['size'])
@@ -570,7 +576,8 @@ class SiteImage {
         }
     }
     get is_avatar() {
-        return this.img.width <= 150 && this.img.height <= 150
+        var AVATAR_MAX_SIZE = 100;
+        return this.img.width <= AVATAR_MAX_SIZE && this.img.height <= AVATAR_MAX_SIZE
     }
 
     __init() {
@@ -647,7 +654,7 @@ class SiteImage {
         let img_ext = `Формат: <b>${this.file.image_extension()}</b>`
         let coof_compress = `Сжатие: ${this.image_commpress()}`
         let content_text = [
-            orig_size, page_size, img_size, img_ext, coof_compress, 
+            orig_size, page_size, img_size, img_ext, coof_compress,
             // this.is_big_size(), this.file.is_big
         ].join('<br>')
         return content_text
@@ -662,34 +669,22 @@ class SiteImage {
     add_commpress_popover() {
         let popover_style = 'orange'
         var title = `${this.image_commpress()} - можно обрезать`
-        this.file.status_text = title
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
     add_big_file_popover() {
         var popover_style = 'red'
-        var title = 'msg'
-        if (this.is_big_size()) {
-            title = 'Больше 1000px'
-            this.file.status_text = title
-        } else {
-            title = 'Больше 300kb'
-            this.file.status_text = title
-        }
-        if (this.is_big_size() && this.file.is_big) {
-            title = 'Больше 300kb и 1000px'
-            this.file.status_text = title
-        }
-        this.add_popover(title, this.image_popover_content_text(), popover_style)
+        this.add_popover(this.file.text_status, this.image_popover_content_text(), popover_style)
     }
 
     add_loaded_popover() {
-        if (this.is_big_size() || this.file.is_big) {
+        if (this.file.text_status) {
             this.add_big_file_popover()
-            this.file.add_to_crop = true
-        } else if (this.is_need_crop()) {
+        }
+        else if (this.is_need_crop()) {
             this.add_commpress_popover()
             this.file.add_to_crop = true
+            this.file.front_status = 'commpress'
         } else {
             this.add_info_popover()
             this.file.add_to_crop = false
@@ -701,6 +696,7 @@ class SiteImage {
     }
 
     is_need_crop() {
+        // IS AVATAR
         return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > 60 * 1024
     }
 

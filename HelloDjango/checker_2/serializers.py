@@ -42,6 +42,7 @@ class SiteImagesSerializer(serializers.ModelSerializer):
         read_only=True,
     )
     orig_img_params = serializers.ReadOnlyField()
+    is_over_size = serializers.ReadOnlyField()
     class Meta:
         model = SiteImage
         fields = '__all__'

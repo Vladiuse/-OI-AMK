@@ -218,6 +218,8 @@ def image_path_site_image(instanse, filename):
 class SiteImage(models.Model):
 
     MEDIA_PATH = 'site_images'
+    OVER_300_KB = 'Больше 300kb'
+    OVER_1000_PX = 'Больше 1000px'
 
     domain = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
     image_url = models.URLField(max_length=255)
@@ -303,6 +305,16 @@ class SiteImage(models.Model):
              img_name_in_zip += '?' + urlparse(self.image_url).query
         return img_name_in_zip
 
+    def is_over_size(self):
+        if self.orig_img:
+            if self.orig_img.size > 300 * 1024:
+                return self.OVER_300_KB
+            elif (self.orig_img.width > 1000 or self.orig_img.height > 1000) and self.orig_img.size > 100 * 1024:
+                return self.OVER_1000_PX
+            else:
+                return ''
+        return ''
+
 class CropTask(models.Model):
     domain = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
     archive = models.FileField(upload_to='_archive', blank=True)
@@ -311,25 +323,37 @@ class CropTask(models.Model):
     def create_crop_task(domain, qs, crop_data):
         task = CropTask.objects.create(domain=domain)
         crop_images = []
+        files = []
         for site_image in qs:
-            img_file = open(site_image.orig_img.path, 'rb')
-            img_file_name = os.path.basename(site_image.orig_img.name)
-
             page_width = crop_data[str(site_image.pk)]['width']
             page_height = crop_data[str(site_image.pk)]['height']
-            status_text =  crop_data[str(site_image.pk)]['status_text']
+            status_text = 's'
+            crop_type = 'c'
+            if site_image.is_over_size():
+                status_text = site_image.is_over_size()
+                crop_type = CropImage.OVER_SIZE
+            else:
+                status_text = crop_data[str(site_image.pk)]['front_status']
+                crop_type = CropImage.NEED_CROP
+
+            img_file = open(site_image.orig_img.path, 'rb')
+            img_file_name = os.path.basename(site_image.orig_img.name)
+            img = ImageFile(img_file, name=img_file_name)
             crop_image = CropImage(
                 task=task,
                 site_image=site_image,
-                orig_img=ImageFile(site_image.orig_img, name=img_file_name),
+                # orig_img=ImageFile(site_image.orig_img, name=img_file_name),
+                orig_img=img,
                 page_width=page_width,
                 page_height=page_height,
                 thumb=make_thumb(site_image.orig_img.path, (page_width,page_height)),
                 status_text=status_text,
+                crop_type=crop_type,
             )
             crop_images.append(crop_image)
-            img_file.close()
+            files.append(img_file)
         CropImage.objects.bulk_create(crop_images)
+        [file.close() for file in files]
         task.create_zip()
         return task
 
@@ -363,6 +387,12 @@ def image_path_crop_image(instanse, filename):
 
 class CropImage(models.Model):
     MEDIA_PATH = 'crop_images'
+    OVER_SIZE = 'over_size'
+    NEED_CROP = 'need_crop'
+    CROP_TYPE = (
+        (OVER_SIZE, OVER_SIZE),
+        (NEED_CROP, NEED_CROP),
+    )
     task = models.ForeignKey(CropTask, on_delete=models.CASCADE)
     site_image = models.ForeignKey(SiteImage, on_delete=models.CASCADE)
     orig_img = models.ImageField(upload_to=image_path_crop_image, )
@@ -371,6 +401,7 @@ class CropImage(models.Model):
     page_width = models.PositiveIntegerField()
     page_height = models.PositiveIntegerField()
     status_text = models.CharField(max_length=100)
+    crop_type = models.CharField(max_length=50, choices=CROP_TYPE, default='123')
 
     class Meta:
         ordering = ['-status_text']
