@@ -220,6 +220,7 @@ class SiteImage(models.Model):
     MEDIA_PATH = 'site_images'
     OVER_300_KB = 'Больше 300kb'
     OVER_1000_PX = 'Больше 1000px'
+    MAY_BE_CROP = 'Можно обрезать'
 
     domain = models.ForeignKey(ActualUserList, on_delete=models.CASCADE)
     image_url = models.URLField(max_length=255)
@@ -333,7 +334,7 @@ class CropTask(models.Model):
                 status_text = site_image.is_over_size()
                 crop_type = CropImage.OVER_SIZE
             else:
-                status_text = crop_data[str(site_image.pk)]['front_status']
+                status_text = SiteImage.MAY_BE_CROP
                 crop_type = CropImage.NEED_CROP
 
             img_file = open(site_image.orig_img.path, 'rb')
@@ -403,7 +404,7 @@ class CropImage(models.Model):
     crop_type = models.CharField(max_length=50, choices=CROP_TYPE, default='123')
 
     class Meta:
-        ordering = ['-status_text']
+        ordering = ['-crop_type']
 
     def make_thumb(self, save=True):
         size = (self.page_width, self.page_height)
@@ -424,6 +425,6 @@ class CropImage(models.Model):
 
     def weight_diff_percent(self):
         if self.orig_img and self.thumb:
-            return round((self.orig_img.size - self.thumb.size) / self.orig_img.size ** 100)
+            return round((self.orig_img.size - self.thumb.size) / self.orig_img.size * 100)
 
 

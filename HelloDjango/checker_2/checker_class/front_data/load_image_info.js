@@ -211,23 +211,25 @@ class ImageCropTool {
         // create table cells
         var c0_file_back_id = document.createElement('td')
         var c1_image = document.createElement('td')
-        var c2_orig_size = document.createElement('td')
-        var c3_page_size = document.createElement('td')
-        var c4_weight = document.createElement('td')
-        var c5_thumb = document.createElement('td')
-        var c6_crop = document.createElement('td')
-        var file_cells = [c0_file_back_id, c1_image, c2_orig_size, c4_weight, c5_thumb, c6_crop]
+        var c2_img_crop_status = document.createElement('td')
+        var c3_orig_size = document.createElement('td')
+        var c4_page_size = document.createElement('td')
+        var c5_weight = document.createElement('td')
+        var c6_thumb = document.createElement('td')
+        var c7_crop = document.createElement('td')
+        var file_cells = [c0_file_back_id, c1_image, c2_img_crop_status,c3_orig_size, c5_weight, c6_thumb, c7_crop]
 
 
         c0_file_back_id.innerText = image_file.back_img_id
         c1_image.appendChild(image_tag)
-        c2_orig_size.innerText = image_file.orig_img_size_text()
-        // c3_page_size.innerText = first_image.size_text()
+        c2_img_crop_status.innerText = image_file.result_crop_status
+        c3_orig_size.innerText = image_file.orig_img_size_text()
+        // c4_page_size.innerText = first_image.size_text()
         var thumb_elem = document.createElement('span')
         thumb_elem.classList.add(image_file.crop_compression_status)
         thumb_elem.innerText = image_file.crop_size_text
-        c5_thumb.appendChild(thumb_elem)
-        c4_weight.innerText = image_file.file_size_text()
+        c6_thumb.appendChild(thumb_elem)
+        c5_weight.innerText = image_file.file_size_text()
 
         var crop_checkbox = document.createElement('input')
         crop_checkbox.setAttribute("type", "checkbox")
@@ -238,22 +240,23 @@ class ImageCropTool {
             crop_checkbox.disabled = true;
             image_file._crop = false;
         }
-        c6_crop.appendChild(crop_checkbox);
+        c7_crop.appendChild(crop_checkbox);
 
         row.appendChild(c0_file_back_id)
         row.appendChild(c1_image)
-        row.appendChild(c2_orig_size)
-        row.appendChild(c3_page_size)
-        row.appendChild(c4_weight)
-        row.appendChild(c5_thumb)
-        row.appendChild(c6_crop)
+        row.appendChild(c2_img_crop_status)
+        row.appendChild(c3_orig_size)
+        row.appendChild(c4_page_size)
+        row.appendChild(c5_weight)
+        row.appendChild(c6_thumb)
+        row.appendChild(c7_crop)
 
         this.table.querySelector('tbody').append(row)
         if (image_file.length == 1) {
             var page_size_elem = document.createElement('span')
             page_size_elem.classList.add(image_file.crop_compression_status + '-outer')
             page_size_elem.innerText = first_image.size_text()
-            c3_page_size.appendChild(page_size_elem)
+            c4_page_size.appendChild(page_size_elem)
         } else {
             var size_dict = {}
             // CREATE size dict
@@ -278,14 +281,14 @@ class ImageCropTool {
                 image_size_elem.classList.add(image_file.crop_compression_status + '-outer')
                 if (counter == 0) {
                     counter = 1
-                    c3_page_size.innerText = images_count_text
-                    c3_page_size.appendChild(image_size_elem)
+                    c4_page_size.innerText = images_count_text
+                    c4_page_size.appendChild(image_size_elem)
                 } else {
                     var dop_row = document.createElement('tr')
-                    var c3_page_size_dop = document.createElement('td')
-                    c3_page_size_dop.innerText = images_count_text
-                    c3_page_size_dop.appendChild(image_size_elem)
-                    dop_row.appendChild(c3_page_size_dop)
+                    var c4_page_size_dop = document.createElement('td')
+                    c4_page_size_dop.innerText = images_count_text
+                    c4_page_size_dop.appendChild(image_size_elem)
+                    dop_row.appendChild(c4_page_size_dop)
                     this.table.querySelector('tbody').append(dop_row)
                 }
 
@@ -361,10 +364,18 @@ class ImageFile {
         this._add_to_crop_tool = this._add_to_crop_tool * bool
     }
 
-    get text_status() {
+    get back_crop_status() {
         if (this._is_loaded && this._is_req_error == false) {
             return this.backend_data['image']['is_over_size']
         }
+        return undefined
+    }
+
+    get result_crop_status(){
+        if (this.back_crop_status){
+            return this.back_crop_status
+        }
+        return this.front_status
     }
 
 
@@ -512,7 +523,9 @@ class ImageFile {
     }
 
     is_need_to_load() {
-        var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png', '.gif']
+        var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png', 
+        // '.gif'
+    ]
         if (this.src == '') {
             return false
         }
@@ -674,17 +687,17 @@ class SiteImage {
 
     add_big_file_popover() {
         var popover_style = 'red'
-        this.add_popover(this.file.text_status, this.image_popover_content_text(), popover_style)
+        this.add_popover(this.file.back_crop_status, this.image_popover_content_text(), popover_style)
     }
 
     add_loaded_popover() {
-        if (this.file.text_status) {
+        if (this.file.back_crop_status) {
             this.add_big_file_popover()
         }
         else if (this.is_need_crop()) {
             this.add_commpress_popover()
             this.file.add_to_crop = true
-            this.file.front_status = 'commpress'
+            this.file.front_status = 'Можно обрезать'
         } else {
             this.add_info_popover()
             this.file.add_to_crop = false
