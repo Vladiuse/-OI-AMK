@@ -8,25 +8,18 @@
   <script src="https://kit.fontawesome.com/da43c2ea11.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<style>
-  /* img{
-    max-width: 250px;
-    max-height: 250px;
-  } */
-</style>
 <body>
-  <div class="container">
+  <div class="container-fluid">
     <h1>Task #{{task.pk}}</h1>
 <p>Domain: {{task.domain.url|urlize}}</p>
 <p>Общий размер: {{task.files_size.images_size|filesizeformat}}, у миниатюр {{task.files_size.thumb_size|filesizeformat}}</p>
 <p>Экономия: {{task.files_size.diff_size|filesizeformat}} ({{task.files_size.diff_percent}}%)</p>
 <a class="btn btn-primary" href="{{task.archive.url}}" role="button">
-  <i class="fa-solid fa-download"></i> Скачать архив</a>
+  <i class="fa-solid fa-download"></i> Скачать архив c миниатюрами</a>
 </div>
 <br>
 <style>
-  .row img{
-    /* width: 100%; */
+  .orig-img img{
     max-width: 100%;
   }
   .badge{
@@ -36,9 +29,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
   }
   .image-row{
-    border-top: 2px;
+    border-top: 1px solid rgb(117, 117, 117);
   }
 </style>
   <div class="container-fluid">
@@ -47,8 +41,9 @@
       <div class="col-5"><h3>Оригинал</h3></div>
       <div class="col-5"><h3>Миниатюра</h3></div>
     </div>
-    <div class="row image-row">
+
       {%for crop_img in crop_images%}
+      <div class="row image-row">
       <div class="col-2">
         <table class="table">
           <tr class="table-primary">
@@ -61,33 +56,14 @@
               {{crop_img.status_text}}
               </td>
           </tr>
-          <tr >
-            <td>Статус</td>
-            <td>
-              <span class="badge bg-{%if 'Больше' in crop_img.status_text%}danger{%else%}warning{%endif%}">{{crop_img.status_text}}</span>
-              </td>
-          </tr>
           <tr>
             <td>Сжатие</td>
             <td>x{{crop_img.page_compression}}</td>
           </tr>
           <tr>
-            <td>Оригинал</td>
-            <td>{{crop_img.orig_img.width}}x{{crop_img.orig_img.height}}
-                <br>{{crop_img.orig_img.size|filesizeformat}}
-            </td>
-          </tr>
-          <tr>
             <td>На странице</td>
             <td>{{crop_img.thumb.width}}x{{crop_img.thumb.height}}
 
-            </td>
-          </tr>
-          <tr>
-            <td>Thumb</td>
-            <td>
-              {{crop_img.thumb.width}}x{{crop_img.thumb.height}}<br>
-        {{crop_img.thumb.size|filesizeformat}}
             </td>
           </tr>
           <tr>
@@ -98,18 +74,24 @@
           </tr>
         </table>
       </div>
-      <div class="col-5">
+      <div class="col-5 orig-img">
+        {{crop_img.orig_img.width}}x{{crop_img.orig_img.height}} 
+                ({{crop_img.orig_img.size|filesizeformat}})
         {%if 'Больше' in crop_img.status_text%}
         <img src="{{crop_img.orig_img.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
         {%else%}
         <img src="{{crop_img.orig_img.url}}" width="{{crop_img.orig_img.width}}" height="{{crop_img.orig_img.height}}">
         {%endif%}
       </div>
-      <div class="col-5">
+      <div class="col-5 thumb-img">
+        {{crop_img.thumb.width}}x{{crop_img.thumb.height}}
+        ({{crop_img.thumb.size|filesizeformat}})
         <img src="{{crop_img.thumb.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
       </div>
-      {%endfor%}
+
     </div>
+      {%endfor%}
+
   </div>
 </body>
 </html>

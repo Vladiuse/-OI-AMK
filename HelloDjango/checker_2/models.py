@@ -1,6 +1,7 @@
 import zipfile
 import io
 import os.path
+import random as r
 from datetime import date, timedelta
 from django.db import models
 from django.contrib.auth.models import User
@@ -22,6 +23,9 @@ def get_file_size_text(size):
         mb = round(kb // 1024, 2)
         return f'{mb}MB'
 
+def _r():
+    import string
+    return ''.join(r.choices(string.ascii_uppercase,k=3))
 
 def remove_file_if_exists(file_path: str):
     if os.path.exists(file_path):
@@ -53,7 +57,7 @@ def make_thumb(image_path, size: tuple):
     blob = io.BytesIO()
     image.save(blob, image.format, quality=95)
     ext = os.path.splitext(image_path)[1]
-    thumb = ImageFile(blob, name=f'THUMB{ext}')
+    thumb = ImageFile(blob, name=f'THUMB{_r()}{ext}')
     return thumb
 
 
@@ -363,6 +367,7 @@ class CropImage(models.Model):
     site_image = models.ForeignKey(SiteImage, on_delete=models.CASCADE)
     orig_img = models.ImageField(upload_to=image_path_crop_image, )
     thumb = models.ImageField(blank=True, upload_to=image_path_crop_image, )
+    compressed = models.ImageField(blank=True, upload_to=image_path_crop_image, )
     page_width = models.PositiveIntegerField()
     page_height = models.PositiveIntegerField()
     status_text = models.CharField(max_length=100)
