@@ -342,7 +342,6 @@ class CropTask(models.Model):
             crop_image = CropImage(
                 task=task,
                 site_image=site_image,
-                # orig_img=ImageFile(site_image.orig_img, name=img_file_name),
                 orig_img=img,
                 page_width=page_width,
                 page_height=page_height,
@@ -371,12 +370,12 @@ class CropTask(models.Model):
     def files_size(self):
         images = self.cropimage_set.all()
         images_size = sum(img.orig_img.size for img in images)
-        thumb_size = sum(img.thumb.size for img in images)
-        diff_size = images_size - thumb_size
-        diff_percent = round((1-  thumb_size / diff_size)*100 )
+        thumbs_size = sum(img.thumb.size for img in images)
+        diff_size = images_size - thumbs_size
+        diff_percent = round((images_size-  thumbs_size )/ images_size*100 )
         return {
             'images_size': images_size,
-            'thumb_size': thumb_size,
+            'thumb_size': thumbs_size,
             'diff_size': diff_size,
             'diff_percent': diff_percent,
         }
@@ -425,6 +424,6 @@ class CropImage(models.Model):
 
     def weight_diff_percent(self):
         if self.orig_img and self.thumb:
-            return round((1 - self.thumb.size / self.orig_img.size)*100, 1)
+            return round((self.orig_img.size - self.thumb.size) / self.orig_img.size ** 100)
 
 
