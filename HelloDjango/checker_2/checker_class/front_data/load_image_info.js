@@ -132,9 +132,11 @@ class ImageCropTool {
         this._archive_msg_block.querySelector('span').innerText = 'Ссылка готова'
         this._archive_msg_block.querySelector('svg').style.display = 'block'
         this._arhive_url_block.style.display = 'flex'
+        this._archive_msg_block.style.display = 'flex';
     }
     _show_archive_error(error_text) {
         this._error_archive_btn.style.display = 'flex'
+        this._archive_msg_block.style.display = 'flex';
         this._archive_msg_block.querySelector('span').innerText = error_text
     }
     get files_crop_data() {
