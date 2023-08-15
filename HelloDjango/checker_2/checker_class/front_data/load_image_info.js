@@ -245,9 +245,9 @@ class ImageCropTool {
         c2_img_crop_status.appendChild(crop_status_elem)
 
         c3_orig_size.innerText = image_file.orig_img_size_text()
-        // c4_page_size.innerText = first_image.size_text()
         var thumb_elem = document.createElement('span')
-        thumb_elem.classList.add(image_file.crop_compression_status)
+
+        // thumb_elem.classList.add(image_file.crop_compression_status)
         thumb_elem.innerText = image_file.crop_size_text
         c6_thumb.appendChild(thumb_elem)
         c5_weight.innerText = image_file.file_size_text()
@@ -275,7 +275,7 @@ class ImageCropTool {
         this.table.querySelector('tbody').append(row)
         if (image_file.length == 1) {
             var page_size_elem = document.createElement('span')
-            page_size_elem.classList.add(image_file.crop_compression_status + '-outer')
+            // page_size_elem.classList.add(image_file.crop_compression_status + '-outer')
             page_size_elem.innerText = first_image.size_text()
             c4_page_size.appendChild(page_size_elem)
         } else {
@@ -299,7 +299,7 @@ class ImageCropTool {
                 var images_count_text = `${curr_zise_images_count}шт : `
                 var image_size_elem = document.createElement('span')
                 image_size_elem.innerText = size
-                image_size_elem.classList.add(image_file.crop_compression_status + '-outer')
+                // image_size_elem.classList.add(image_file.crop_compression_status + '-outer')
                 if (counter == 0) {
                     counter = 1
                     c4_page_size.innerText = images_count_text
