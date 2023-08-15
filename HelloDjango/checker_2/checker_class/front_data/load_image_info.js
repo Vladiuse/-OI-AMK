@@ -238,7 +238,12 @@ class ImageCropTool {
 
         c0_file_back_id.innerText = image_file.back_img_id
         c1_image.appendChild(image_tag)
-        c2_img_crop_status.innerText = image_file.result_crop_status
+
+        var crop_status_elem = document.createElement('span')
+        crop_status_elem.innerText = image_file.result_crop_status
+        crop_status_elem.classList.add(image_file.result_crop_status_style_class)
+        c2_img_crop_status.appendChild(crop_status_elem)
+
         c3_orig_size.innerText = image_file.orig_img_size_text()
         // c4_page_size.innerText = first_image.size_text()
         var thumb_elem = document.createElement('span')
@@ -397,6 +402,12 @@ class ImageFile {
             return this.back_crop_status
         }
         return this.front_status
+    }
+
+    get result_crop_status_style_class(){
+        if (this.back_crop_status){return '_over-size'}else{
+            return '_can-be-crop'
+        }
     }
 
 
