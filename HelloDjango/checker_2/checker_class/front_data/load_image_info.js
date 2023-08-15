@@ -1,10 +1,7 @@
-// const IMAGE_LOAD_INFO = 'http://127.0.0.1:8000/checker_2/domains/3062/site-images/'
-console.log('LOAD IMG TOOL SCRIPT')
 const IMAGE_LOAD_INFO = "{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:image-list' actual_user_list.pk %}"
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
-var TEST = null
-
+console.log('LOAD IMG TOOL SCRIPT', IMAGE_LOAD_INFO)
 function print(...args) {
     console.log(...args);
 }
@@ -52,7 +49,9 @@ class ImageCropTool {
         this._loading_archive_btn = null;
         this._error_archive_btn = null;
         this._open_link_button = null;
-        this._archive_msg = null;
+        this._arhive_url_block = null;
+        this._archive_msg_block = null;
+
         this._arhive_url = null;
         this.crop_task_url = null;
     }
@@ -66,8 +65,8 @@ class ImageCropTool {
         this._create_archive_btn = tool_block.querySelector('#create-archive-btn')
         this._loading_archive_btn = tool_block.querySelector('#loading-archive-btn')
         this._error_archive_btn = tool_block.querySelector('#error-archive-btn')
-        this._archive_msg = tool_block.querySelector('#archive-msg')
-        this._arhive_url = tool_block.querySelector('#arhive-url')
+        this._archive_msg_block = tool_block.querySelector('#archive-msg')
+        this._arhive_url_block = tool_block.querySelector('#arhive-url')
         this._open_link_button = tool_block.querySelector('#create-link')
         var _class = this
         this._create_archive_btn.addEventListener('click', function () {
@@ -77,6 +76,20 @@ class ImageCropTool {
         this._open_link_button.addEventListener('click', function () {
             _class.open_task()
         })
+    }
+
+    get is_link_created(){
+        if (this.crop_task_url){return true}
+        return false
+    }
+
+    drop_created_link(){
+        console.log('DROP CREATEd')
+        this._archive_msg_block.style.display = 'none';
+        this._arhive_url_block.style.display = 'none';
+        this._create_archive_btn.style.display = 'flex'
+
+        this.crop_task_url = null;
     }
 
     open_task() {
@@ -115,14 +128,14 @@ class ImageCropTool {
     _show_archive_loaded(archive_url) {
         this.crop_task_url = this._checker_full_url + archive_url
 
-        this._arhive_url.querySelector('input').value = this.crop_task_url
-        this._archive_msg.querySelector('span').innerText = 'Ссылка готова'
-        this._archive_msg.querySelector('svg').style.display = 'block'
-        this._arhive_url.style.display = 'flex'
+        this._arhive_url_block.querySelector('input').value = this.crop_task_url
+        this._archive_msg_block.querySelector('span').innerText = 'Ссылка готова'
+        this._archive_msg_block.querySelector('svg').style.display = 'block'
+        this._arhive_url_block.style.display = 'flex'
     }
     _show_archive_error(error_text) {
         this._error_archive_btn.style.display = 'flex'
-        this._archive_msg.querySelector('span').innerText = error_text
+        this._archive_msg_block.querySelector('span').innerText = error_text
     }
     get files_crop_data() {
         var data = {}
@@ -196,6 +209,7 @@ class ImageCropTool {
         } else {
             console.warn('Image already in tool', image_file)
         }
+
     }
 
     check_box(event, image_file, crop_checkbox) {
@@ -304,6 +318,10 @@ class ImageCropTool {
             image_file._is_add_in_tool = false
         }
     }
+    show_create_link_button(){
+        if (!this.is_link_created)
+        {this._create_archive_btn.style.display = 'flex'}
+    }
 
     hide_table_footer() {
         var footer = this._table.querySelector('tfoot')
@@ -337,6 +355,7 @@ class ImageCropTool {
         var files_to_add = this.files_need_crop
         if (files_to_add.length != 0) {
             this.hide_table_footer()
+            this.show_create_link_button()
             this.files_need_crop.forEach(file => {
                 this.add_image_file(file)
             })
@@ -473,6 +492,10 @@ class ImageFile {
         if (this.is_need_to_load() == false) {
             site_image.add_not_loaded_popover()
         }
+
+        if (image_crop_tool.is_link_created){
+            image_crop_tool.drop_created_link()
+        }
     }
 
     set_is_loaded() {
@@ -481,14 +504,13 @@ class ImageFile {
 
     load_back_info() {
         let _class = this
-        var data = {
+        var _image_data = {
             'image_url': this.full_src(),
             'csrfmiddlewaretoken': CSRF_TOKEN,
         }
         console.warn('LOAD', this.src)
-        $.post(IMAGE_LOAD_INFO, data = data, )
+        $.post(IMAGE_LOAD_INFO, _image_data,)
             .done(function (res, ) {
-                print(res)
                 if (res['load_result']['status']) {
                     _class.response = res;
                     _class._is_req_error = false
@@ -512,14 +534,14 @@ class ImageFile {
                 _class.response = res;
                 _class._is_req_error = true
                 _class.site_images.forEach(function (site_image) {
-                    site_image.add_req_error_popover(res, 'Api REQ Error')
+                    site_image.add_req_error_popover(res, 'REQ Error')
                 })
                 _class.set_is_loaded()
 
             })
-        // .always(function (res) {
-        //     _class.set_is_loaded()
-        // })
+        .always(function (res) {
+            // print('RES',res)
+        })
     }
 
     is_need_to_load() {
@@ -719,9 +741,10 @@ class SiteImage {
     }
 
     add_req_error_popover(req_error, title) {
-        // let dic = JSON.stringify(req_error)
-        var text = req_error['load_result']['mgs']
-        this.add_popover(title, text, 'red')
+        var res_error = JSON.stringify(req_error)
+        console.log(res_error)
+        console.log(res_error['load_result']['mgs'])
+        this.add_popover(title,)
     }
 
 }
