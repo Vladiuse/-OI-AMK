@@ -588,10 +588,10 @@ class ImageFile {
     process() {
         if (this.is_need_to_load()) {
             this.load_back_info()
-        } else {
-            this.site_images.forEach(function (site_image) {
-                site_image.add_not_loaded_popover()
-            })
+        // } else {
+        //     this.site_images.forEach(function (site_image) {
+        //         site_image.add_not_loaded_popover()
+        //     })
         }
     }
 
