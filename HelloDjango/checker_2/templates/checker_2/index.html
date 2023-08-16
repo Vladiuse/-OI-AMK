@@ -19,10 +19,6 @@
             <label>Url для проверки:</label>
             {% csrf_token %}
             <input type="url" name="url" class="form-control" required placeholder="Введите url">
-            <input type="hidden" id="checker_leftbar" value="{{user_settings.left_bar}}" name="checker_leftbar">
-            <input type="hidden" id="checker_clickelems" value="{{user_settings.click_elem}}" name="checker_clickelems">
-            <input type="hidden" id="checker_other_elems" value="{{user_settings.other}}" name="checker_other_elems">
-            <input type="hidden" id="checker_other_elems" value="{{user_settings.image_crop}}" name="checker_image_crop">
             <div id="form-buttons">
                  <button class="btn btn-primary" style="width: 100%">Проверить</button>
                 {% if user.is_superuser %}
