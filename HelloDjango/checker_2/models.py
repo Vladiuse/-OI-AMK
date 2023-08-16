@@ -204,6 +204,7 @@ class CheckerUserSetting(models.Model):
     left_bar = models.BooleanField(default=True, verbose_name='Показывать боковую панель')
     click_elem = models.BooleanField(default=False, verbose_name='Показывать клик элементы')
     other = models.BooleanField(default=True, verbose_name='Показывать даты, формы')
+    image_crop = models.BooleanField(default=True, verbose_name='показывать размеры картинок')
 
     def __str__(self):
         return f'{self.user}-{self.left_bar}-{self.click_elem}-{self.other}'

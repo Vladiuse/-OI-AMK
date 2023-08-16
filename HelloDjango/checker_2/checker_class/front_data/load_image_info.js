@@ -557,7 +557,7 @@ class ImageFile {
 
     is_need_to_load() {
         var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png', 
-        // '.gif'
+        '.gif'
     ]
         if (this.src == '') {
             return false
