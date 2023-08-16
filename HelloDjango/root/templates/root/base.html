@@ -50,7 +50,7 @@
                 <a class="nav-link" href="{% url 'kma:phones' %}">Номера</a>
               </li>
                                    <li class="nav-item">
-                <a class="nav-link" href="{% url 'checker_2:index' %}" id="checker-url">LinkChecker</a>
+                <a class="nav-link" href="{% url 'checker_2:check_url' %}" id="checker-url">LinkChecker</a>
               </li>
                                                              <li class="nav-item">
                 <a class="nav-link" href="{% url 'manual:index' %}">Мануал</a>
@@ -104,7 +104,7 @@
 {% endblock %}
 <script>
   let domain = 'http://' + location.host + '';
-  let checker_url = domain + {% url 'checker_2:index' %}
+  let checker_url = domain + {% url 'checker_2:check_url' %}
   $('#checker-url').attr('href', checker_url)
 </script>
 </body>

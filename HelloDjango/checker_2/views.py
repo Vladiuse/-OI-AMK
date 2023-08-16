@@ -22,43 +22,51 @@ from .img_info import get_image_info
 from django.views.decorators.http import require_http_methods
 from rest_framework import permissions
 
-@login_required
-def index(request):
-    settings = CheckerUserSetting.objects.get(user=request.user)
-    settings_form = CheckerUserSettingsForm(instance=settings, prefix='ch_set')
-    content = {
-        'settings_form':settings_form,
-    }
-    return render(request, 'checker_2/index.html', content)
+# @login_required
+# def index(request):
+#     settings = CheckerUserSetting.objects.get(user=request.user)
+#     settings_form = CheckerUserSettingsForm(instance=settings, prefix='ch_set')
+#     content = {
+#         'settings_form':settings_form,
+#     }
+#     return render(request, 'checker_2/index.html', content)
 
 @login_required
 def check_url(request):
-    # получения кода для iframe
-    url = request.POST['url']
-    settings = CheckerUserSetting.objects.get(user=request.user)
-    setting_form = CheckerUserSettingsForm(request.POST, instance=settings, prefix='ch_set')
-    if setting_form.is_valid():
-        setting_form.user = request.user
-        setting_form.save()
-    try:
-        actual_user_list = ActualUserList.get_or_create(request.user, url)
-        url_checker = LinkChecker(actual_user_list=actual_user_list, user=request.user, request=request)
-        url_checker.load_url()
-        url_checker.process()
+    if request.method == 'GET':
+        settings = CheckerUserSetting.objects.get(user=request.user)
+        settings_form = CheckerUserSettingsForm(instance=settings, prefix='ch_set')
         content = {
-            'checker': url_checker,
-            'kma': url_checker.land,
-            'user_settings': settings,
-        }
-        if 'no-iframe' in request.POST:
-            return HttpResponse(url_checker.land.iframe_srcdoc)
-        return render(request, 'checker_2/frame.html', content)
-    except CheckerError as error:
-        content = {
-            'error_text': error.__doc__,
-            'user_settings':settings,
+            'settings_form': settings_form,
         }
         return render(request, 'checker_2/index.html', content)
+    else:
+        # получения кода для iframe
+        url = request.POST['url']
+        settings = CheckerUserSetting.objects.get(user=request.user)
+        setting_form = CheckerUserSettingsForm(request.POST, instance=settings, prefix='ch_set')
+        if setting_form.is_valid():
+            setting_form.user = request.user
+            setting_form.save()
+        try:
+            actual_user_list = ActualUserList.get_or_create(request.user, url)
+            url_checker = LinkChecker(actual_user_list=actual_user_list, user=request.user, request=request)
+            url_checker.load_url()
+            url_checker.process()
+            content = {
+                'checker': url_checker,
+                'kma': url_checker.land,
+                'user_settings': settings,
+            }
+            if 'no-iframe' in request.POST:
+                return HttpResponse(url_checker.land.iframe_srcdoc)
+            return render(request, 'checker_2/frame.html', content)
+        except CheckerError as error:
+            content = {
+                'error_text': error.__doc__,
+                'user_settings':settings,
+            }
+            return render(request, 'checker_2/index.html', content)
 
 
 @login_required

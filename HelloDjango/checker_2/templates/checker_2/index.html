@@ -15,7 +15,7 @@
         </div>
         {%endif%}
        
-        <form action="{% url 'checker_2:check_url' %}" method="POST" target1="_blank" id="url-for-check">
+        <form  method="POST" target1="_blank" id="url-for-check">
             <label>Url для проверки:</label>
             {% csrf_token %}
             <input type="url" name="url" class="form-control" required placeholder="Введите url">
