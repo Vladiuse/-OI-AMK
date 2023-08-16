@@ -2,3 +2,6 @@
 *.sqlite3
 venv
 media
+.htaccess
+HelloDjango/passenger_wsgi.py
+HelloDjango/asgi.py
