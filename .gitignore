@@ -3,5 +3,5 @@
 venv
 media
 .htaccess
-HelloDjango/passenger_wsgi.py
-HelloDjango/asgi.py
+./HelloDjango/HelloDjango/passenger_wsgi.py
+./HelloDjango/HelloDjango/asgi.py
