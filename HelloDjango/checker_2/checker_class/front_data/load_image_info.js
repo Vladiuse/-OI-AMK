@@ -1,7 +1,6 @@
 const IMAGE_LOAD_INFO = "{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:image-list' actual_user_list.pk %}"
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
-console.log('LOAD IMG TOOL SCRIPT', IMAGE_LOAD_INFO)
 function print(...args) {
     console.log(...args);
 }
@@ -84,7 +83,6 @@ class ImageCropTool {
     }
 
     drop_created_link(){
-        console.log('DROP CREATEd')
         this._archive_msg_block.style.display = 'none';
         this._arhive_url_block.style.display = 'none';
         this._create_archive_btn.style.display = 'flex'
@@ -749,14 +747,13 @@ class SiteImage {
     }
 
     add_not_loaded_popover() {
+        print('add_not_loaded_popover')
         let title = this.file.image_extension()
         this.add_popover(title)
     }
 
     add_req_error_popover(req_error, title) {
         var res_error = JSON.stringify(req_error)
-        console.log(res_error)
-        console.log(res_error['load_result']['mgs'])
         this.add_popover(title,)
     }
 

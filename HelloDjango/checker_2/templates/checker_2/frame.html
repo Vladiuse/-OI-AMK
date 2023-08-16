@@ -409,7 +409,6 @@
     let recordIframeScroll = true
 
     iframe.onload = function () {
-      console.log('ONLOAD')
       if (land_data_from_js) { loadLandParams() }
       if (get_phone_code_api) { getPhoneCode() }
 
@@ -420,8 +419,6 @@
 
     // site.bigWindowFrame = bigWindow
     // console.warn(site.bigWindowFrame, 'xxxx')
-    console.log(document.getElementById('crop-image-tool'))
-    console.log(site.image_crop_tool)
     site.image_crop_tool.table = document.getElementById('crop-image-tool')
     site.image_crop_tool.checker_full_url = full;
 
@@ -513,7 +510,6 @@
 
 
     function loadBackAnalize(land_code) {
-      console.log('LOAD BACK')
       // Загрузда данных анализа текста API
       $('#text-info').empty()
       $('#analize-load').show()
@@ -521,7 +517,7 @@
       data = { 'land_text': land_code , 'checked_url': checkedUrl}
       $.post(url, data, function (response) {
         let analiz_response = response;
-        console.log(analiz_response)
+        console.warn(analiz_response)
         if (response['success']) {
           $('#analize-load').hide()
 
