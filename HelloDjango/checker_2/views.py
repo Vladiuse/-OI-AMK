@@ -44,10 +44,10 @@ def check_url(request):
         # получения кода для iframe
         url = request.POST['url']
         settings = CheckerUserSetting.objects.get(user=request.user)
-        setting_form = CheckerUserSettingsForm(request.POST, instance=settings, prefix='ch_set')
-        if setting_form.is_valid():
-            setting_form.user = request.user
-            setting_form.save()
+        settings_form = CheckerUserSettingsForm(request.POST, instance=settings, prefix='ch_set')
+        if settings_form.is_valid():
+            settings_form.user = request.user
+            settings_form.save()
         try:
             actual_user_list = ActualUserList.get_or_create(request.user, url)
             url_checker = LinkChecker(actual_user_list=actual_user_list, user=request.user, request=request)
@@ -65,6 +65,7 @@ def check_url(request):
             content = {
                 'error_text': error.__doc__,
                 'user_settings':settings,
+                'settings_form': settings_form,
             }
             return render(request, 'checker_2/index.html', content)
 
