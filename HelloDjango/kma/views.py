@@ -73,6 +73,8 @@ def test_rekl(requests):
         countrys_list = countrys.split(',')
         test_name = requests.POST['test_name']
         offer_id = requests.POST['offer_id']
+        print(test_name)
+        raise ZeroDivisionError
         country_phones = Country.get_country_phone(*countrys_list)
         user_api_key = UserApiKey.objects.get(user=requests.user)
         kma = KmaAPITest(user_api_key.token,offer_id, country_phones, test_name)

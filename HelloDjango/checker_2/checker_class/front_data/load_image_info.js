@@ -622,8 +622,8 @@ class SiteImage {
         }
     }
     get is_avatar() {
-        var AVATAR_MAX_SIZE = 100;
-        return this.img.width <= AVATAR_MAX_SIZE && this.img.height <= AVATAR_MAX_SIZE
+        var AVATAR_MAX_SIZE_PX = 100;
+        return this.img.width <= AVATAR_MAX_SIZE_PX && this.img.height <= AVATAR_MAX_SIZE_PX
     }
 
     __init() {
@@ -743,7 +743,8 @@ class SiteImage {
 
     is_need_crop() {
         // IS AVATAR
-        return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > 60 * 1024
+        var AVATAR_BYTES_SIZE = 100 * 1024;
+        return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > AVATAR_BYTES_SIZE
     }
 
     add_not_loaded_popover() {

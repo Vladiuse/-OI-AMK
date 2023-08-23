@@ -10,10 +10,12 @@ from django.core.files.images import ImageFile
 from ordered_model.models import OrderedModel
 import requests as req
 from requests.exceptions import RequestException
-from PIL import Image
+from PIL import Image,ImageOps
 from urllib.parse import urlparse
 
 
+def get_file_ext(file_path):
+    return os.path.splitext(file_path)[1]
 
 def get_file_size_text(size):
     kb = size // 1024
@@ -53,6 +55,10 @@ def load_img_http(url):
 
 def make_thumb(image_path, size: tuple):
     image = Image.open(image_path)
+    print(image, image.size)
+    pil = ImageOps.exif_transpose(image)
+    print(pil, pil.size)
+    print('-----')
     image.thumbnail(size, reducing_gap=2.0)
     blob = io.BytesIO()
     image.save(blob, image.format, quality=95)
@@ -218,6 +224,9 @@ def image_path_site_image(instanse, filename):
 
 class SiteImage(models.Model):
 
+    OVER_SIZE_BYTES = 300 * 1024
+    OVER_SIZE_1000_BYTES = 150 * 1024
+
     MEDIA_PATH = 'site_images'
     OVER_300_KB = 'Больше 300kb'
     OVER_1000_PX = 'Больше 1000px'
@@ -309,9 +318,9 @@ class SiteImage(models.Model):
 
     def is_over_size(self):
         if self.orig_img:
-            if self.orig_img.size > 300 * 1024:
+            if self.orig_img.size > SiteImage.OVER_SIZE_BYTES:
                 return self.OVER_300_KB
-            elif (self.orig_img.width > 1000 or self.orig_img.height > 1000) and self.orig_img.size > 100 * 1024:
+            elif (self.orig_img.width > 1000 or self.orig_img.height > 1000) and self.orig_img.size >SiteImage.OVER_SIZE_1000_BYTES:
                 return self.OVER_1000_PX
             else:
                 return ''
