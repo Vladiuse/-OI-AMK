@@ -1,9 +1,19 @@
 const IMAGE_LOAD_INFO = "{{ request.scheme }}://{{ request.META.HTTP_HOST }}{%url 'checker_2:image-list' actual_user_list.pk %}"
 const CSRF_TOKEN = getCookie('csrftoken');
 const domToInstance = new Map();
+
 function print(...args) {
     console.log(...args);
 }
+
+// SETTINGS POPOVERS
+const SHOW_NOT_LOADED_POPOVER = true;
+const SHOW_INFO_POPOVER = true
+const SHOW_BIG_SIZE_IMAGE_POPOVER = true;
+const SHOW_BIG_AVATAR_POPOVER = true;
+
+// FORMAT_SETTINGS
+const LOAD_GIF_IMAGES = true;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -77,12 +87,14 @@ class ImageCropTool {
         })
     }
 
-    get is_link_created(){
-        if (this.crop_task_url){return true}
+    get is_link_created() {
+        if (this.crop_task_url) {
+            return true
+        }
         return false
     }
 
-    drop_created_link(){
+    drop_created_link() {
         this._archive_msg_block.style.display = 'none';
         this._arhive_url_block.style.display = 'none';
         this._create_archive_btn.style.display = 'flex'
@@ -231,7 +243,7 @@ class ImageCropTool {
         var c5_weight = document.createElement('td')
         var c6_thumb = document.createElement('td')
         var c7_crop = document.createElement('td')
-        var file_cells = [c0_file_back_id, c1_image, c2_img_crop_status,c3_orig_size, c5_weight, c6_thumb, c7_crop]
+        var file_cells = [c0_file_back_id, c1_image, c2_img_crop_status, c3_orig_size, c5_weight, c6_thumb, c7_crop]
 
 
         c0_file_back_id.innerText = image_file.back_img_id
@@ -323,9 +335,10 @@ class ImageCropTool {
             image_file._is_add_in_tool = false
         }
     }
-    show_create_link_button(){
-        if (!this.is_link_created)
-        {this._create_archive_btn.style.display = 'flex'}
+    show_create_link_button() {
+        if (!this.is_link_created) {
+            this._create_archive_btn.style.display = 'flex'
+        }
     }
 
     hide_table_footer() {
@@ -395,15 +408,17 @@ class ImageFile {
         return undefined
     }
 
-    get result_crop_status(){
-        if (this.back_crop_status){
+    get result_crop_status() {
+        if (this.back_crop_status) {
             return this.back_crop_status
         }
         return this.front_status
     }
 
-    get result_crop_status_style_class(){
-        if (this.back_crop_status){return '_over-size'}else{
+    get result_crop_status_style_class() {
+        if (this.back_crop_status) {
+            return '_over-size'
+        } else {
             return '_can-be-crop'
         }
     }
@@ -504,7 +519,7 @@ class ImageFile {
             site_image.add_not_loaded_popover()
         }
 
-        if (image_crop_tool.is_link_created){
+        if (image_crop_tool.is_link_created) {
             image_crop_tool.drop_created_link()
         }
     }
@@ -520,7 +535,7 @@ class ImageFile {
             'csrfmiddlewaretoken': CSRF_TOKEN,
         }
         console.warn('LOAD', this.src)
-        $.post(IMAGE_LOAD_INFO, _image_data,)
+        $.post(IMAGE_LOAD_INFO, _image_data, )
             .done(function (res, ) {
                 if (res['load_result']['status']) {
                     _class.response = res;
@@ -550,15 +565,16 @@ class ImageFile {
                 _class.set_is_loaded()
 
             })
-        .always(function (res) {
-            // print('RES',res)
-        })
+            .always(function (res) {
+                // print('RES',res)
+            })
     }
 
     is_need_to_load() {
-        var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png', 
-        '.gif'
-    ]
+        var ALLOWED_IMG_FORMATS = ['.jpg', '.jpeg', '.bmp', '.webp', '.png']
+        if (LOAD_GIF_IMAGES) {
+            ALLOWED_IMG_FORMATS.push('.gif')
+        }
         if (this.src == '') {
             return false
         }
@@ -588,10 +604,10 @@ class ImageFile {
     process() {
         if (this.is_need_to_load()) {
             this.load_back_info()
-        // } else {
-        //     this.site_images.forEach(function (site_image) {
-        //         site_image.add_not_loaded_popover()
-        //     })
+            // } else {
+            //     this.site_images.forEach(function (site_image) {
+            //         site_image.add_not_loaded_popover()
+            //     })
         }
     }
 
@@ -663,7 +679,7 @@ class SiteImage {
         }
     }
 
-    add_popover(title, content = '', customClass = '') {
+    _add_popover(title, content = '', customClass = '') {
         this.img.removeAttribute('title')
         const options = {
             'html': true,
@@ -707,27 +723,32 @@ class SiteImage {
     }
 
     add_info_popover() {
-        let title = `x${this.image_commpress()} ${this.file.file_weight_text}`
-        let popover_style = 'green'
-        this.add_popover(title, this.image_popover_content_text(), popover_style)
+        if (SHOW_INFO_POPOVER) {
+            let title = `x${this.image_commpress()} ${this.file.file_weight_text}`
+            let popover_style = 'green'
+            this._add_popover(title, this.image_popover_content_text(), popover_style)
+        }
     }
 
     add_big_avatar_popover() {
-        let popover_style = 'orange'
-        var title = `можно побрезать`
-        this.add_popover(title, this.image_popover_content_text(), popover_style)
+        if (SHOW_BIG_AVATAR_POPOVER) {
+            let popover_style = 'orange'
+            var title = `можно побрезать`
+            this._add_popover(title, this.image_popover_content_text(), popover_style)
+        }
     }
 
     add_big_file_popover() {
-        var popover_style = 'red'
-        this.add_popover(this.file.back_crop_status, this.image_popover_content_text(), popover_style)
+        if (SHOW_BIG_SIZE_IMAGE_POPOVER) {
+            var popover_style = 'red'
+            this._add_popover(this.file.back_crop_status, this.image_popover_content_text(), popover_style)
+        }
     }
 
     add_loaded_popover() {
         if (this.file.back_crop_status) {
             this.add_big_file_popover()
-        }
-        else if (this.is_big_avatar()) {
+        } else if (this.is_big_avatar()) {
             this.add_big_avatar_popover()
             this.file.add_to_crop = true
             this.file.front_status = 'Можно обрезать'
@@ -750,12 +771,12 @@ class SiteImage {
     add_not_loaded_popover() {
         print('add_not_loaded_popover')
         let title = this.file.image_extension()
-        this.add_popover(title)
+        this._add_popover(title)
     }
 
     add_req_error_popover(req_error, title) {
         var res_error = JSON.stringify(req_error)
-        this.add_popover(title,)
+        this._add_popover(title, )
     }
 
 }
