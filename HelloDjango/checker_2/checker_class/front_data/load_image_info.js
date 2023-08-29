@@ -712,9 +712,9 @@ class SiteImage {
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
-    add_commpress_popover() {
+    add_big_avatar_popover() {
         let popover_style = 'orange'
-        var title = `${this.image_commpress()} - можно обрезать`
+        var title = `можно побрезать`
         this.add_popover(title, this.image_popover_content_text(), popover_style)
     }
 
@@ -727,8 +727,8 @@ class SiteImage {
         if (this.file.back_crop_status) {
             this.add_big_file_popover()
         }
-        else if (this.is_need_crop()) {
-            this.add_commpress_popover()
+        else if (this.is_big_avatar()) {
+            this.add_big_avatar_popover()
             this.file.add_to_crop = true
             this.file.front_status = 'Можно обрезать'
         } else {
@@ -741,7 +741,7 @@ class SiteImage {
         return (this.natural_size.width > 1000 || this.natural_size.height > 1000) && this.file.file_weight > 100 * 1024
     }
 
-    is_need_crop() {
+    is_big_avatar() {
         // IS AVATAR
         var AVATAR_BYTES_SIZE = 100 * 1024;
         return this.is_avatar && this.image_commpress() > 5 && this.file.file_weight > AVATAR_BYTES_SIZE

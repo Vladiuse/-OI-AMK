@@ -15,8 +15,8 @@
 <p>Domain: {{task.domain.url|urlize}}</p>
 <p>Общий размер: {{task.files_size.images_size|filesizeformat}}, у миниатюр {{task.files_size.thumb_size|filesizeformat}}</p>
 <p>Экономия: {{task.files_size.diff_size|filesizeformat}} ({{task.files_size.diff_percent}}%)</p>
-<a class="btn btn-primary" href="{{task.archive.url}}" role="button">
-  <i class="fa-solid fa-download"></i> Скачать архив c миниатюрами</a>
+<!-- <a class="btn btn-primary" href="{{task.archive.url}}" role="button">
+  <i class="fa-solid fa-download"></i> Скачать архив c миниатюрами</a> -->
 </div>
 <br>
 <style>
@@ -78,7 +78,9 @@
           <tr>
             <td>Экономия</td>
             <td>
+              {%if crop_img.is_thumb_optimized%}
               {{crop_img.weight_diff|filesizeformat}} ({{crop_img.weight_diff_percent}}%)
+              {%endif%}
             </td>
           </tr>
           <tr>
@@ -98,11 +100,10 @@
         <h4><span class="badge bg-secondary">{{crop_img.orig_img.width}}x{{crop_img.orig_img.height}} ({{crop_img.orig_img.size|filesizeformat}})</span></h4>
       </div>
       <div class="col-5 thumb-img">
-        
-       
-        
+        {%if crop_img.is_thumb_optimized%}
         <img src="{{crop_img.thumb.url}}" width="{{crop_img.page_width}}" height="{{crop_img.page_height}}">
         <h4><span class="badge bg-success"> {{crop_img.thumb.width}}x{{crop_img.thumb.height}} ({{crop_img.thumb.size|filesizeformat}})</span></h4>
+        {%endif%}
       </div>
 
     </div>

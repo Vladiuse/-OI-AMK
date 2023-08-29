@@ -55,10 +55,7 @@ def load_img_http(url):
 
 def make_thumb(image_path, size: tuple):
     image = Image.open(image_path)
-    print(image, image.size)
     pil = ImageOps.exif_transpose(image)
-    print(pil, pil.size)
-    print('-----')
     image.thumbnail(size, reducing_gap=2.0)
     blob = io.BytesIO()
     image.save(blob, image.format, quality=95)
@@ -380,6 +377,7 @@ class CropTask(models.Model):
 
     def files_size(self):
         images = self.cropimage_set.all()
+        images = [img for img in images if img.is_thumb_optimized()]
         images_size = sum(img.orig_img.size for img in images)
         thumbs_size = sum(img.thumb.size for img in images)
         diff_size = images_size - thumbs_size
@@ -412,6 +410,9 @@ class CropImage(models.Model):
     page_height = models.PositiveIntegerField()
     status_text = models.CharField(max_length=100)
     crop_type = models.CharField(max_length=50, choices=CROP_TYPE, default='123')
+
+    def is_thumb_optimized(self):
+        return self.weight_diff_percent() > 20
 
     class Meta:
         ordering = ['-crop_type']
