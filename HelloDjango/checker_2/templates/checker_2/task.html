@@ -13,8 +13,10 @@
   <div class="container-fluid">
     <h1>Task #{{task.pk}}</h1>
 <p>Domain: {{task.domain.url|urlize}}</p>
+{%if task.files_size%}
 <p>Общий размер: {{task.files_size.images_size|filesizeformat}}, у миниатюр {{task.files_size.thumb_size|filesizeformat}}</p>
 <p>Экономия: {{task.files_size.diff_size|filesizeformat}} ({{task.files_size.diff_percent}}%)</p>
+{%endif%}
 <!-- <a class="btn btn-primary" href="{{task.archive.url}}" role="button">
   <i class="fa-solid fa-download"></i> Скачать архив c миниатюрами</a> -->
 </div>

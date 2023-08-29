@@ -378,16 +378,18 @@ class CropTask(models.Model):
     def files_size(self):
         images = self.cropimage_set.all()
         images = [img for img in images if img.is_thumb_optimized()]
-        images_size = sum(img.orig_img.size for img in images)
-        thumbs_size = sum(img.thumb.size for img in images)
-        diff_size = images_size - thumbs_size
-        diff_percent = round((images_size-  thumbs_size )/ images_size*100 )
-        return {
-            'images_size': images_size,
-            'thumb_size': thumbs_size,
-            'diff_size': diff_size,
-            'diff_percent': diff_percent,
-        }
+        if images:
+            images_size = sum(img.orig_img.size for img in images)
+            thumbs_size = sum(img.thumb.size for img in images)
+            diff_size = images_size - thumbs_size
+            diff_percent = round((images_size-  thumbs_size )/ images_size*100 )
+            return {
+                'images_size': images_size,
+                'thumb_size': thumbs_size,
+                'diff_size': diff_size,
+                'diff_percent': diff_percent,
+            }
+        return  {}
 
 
 def image_path_crop_image(instanse, filename):
