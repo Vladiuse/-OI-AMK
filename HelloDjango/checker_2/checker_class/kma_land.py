@@ -25,7 +25,7 @@ class KMALand(Land):
         'vim-store.ru',
     ]
     PRE_LAND_DOMAINS = ['blog-feed.org', 'blogs-info.info', 'previewpreland.pro', 'feed-news.org',
-                        'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org', 'thirstday-news.org', 'monday-news.org', 'atirs-news.org', 'calm-shop.org', 'newproblog.name', 'hiblock.name'] + TEST_DOMAINS
+                        'blogs-feed.org', 'feed-themes.org', 'feedz-newz.org', 'thirstday-news.org', 'monday-news.org', 'atirs-news.org', 'calm-shop.org', 'newproblog.name', 'hiblock.name', 'happy-shop.org'] + TEST_DOMAINS
     INCORRECT_PRE_LAND_URLS = [
         # 'previewpreland.pro',
     ]
