@@ -29,7 +29,7 @@
     <table >
      <tr>
         <td> Все найденые ошибки приходят по API и отобратываются в интерфейсе</td>
-    <td> <img src="https://portfolio.vim-store.ru/static/terminal/screens/checker_4.png" alt="Logo" width="100%" ></td>
+    <td> <img src="https://i.ibb.co/ysNJQjs/2024-07-04-18-03.png" alt="Logo" width="100%" ></td>
      </tr>
     </table>
 </div>
